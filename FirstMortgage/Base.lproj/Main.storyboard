@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="IAa-Zu-aX0">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--Initial View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="InitialViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,11 +16,183 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="8lL-iv-hUO"/>
+                    <connections>
+                        <segue destination="eej-C9-Buj" kind="show" identifier="createAccountViewController" id="Guf-5a-mUz"/>
+                        <segue destination="9p0-aR-IBO" kind="show" identifier="homeViewController" id="co5-Ef-rdh"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1306" y="477"/>
+        </scene>
+        <!--Home View Controller-->
+        <scene sceneID="hgg-8N-VTr">
+            <objects>
+                <viewController id="9p0-aR-IBO" customClass="HomeViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="QHi-Rn-J8b"/>
+                        <viewControllerLayoutGuide type="bottom" id="p8H-Tl-73g"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uo7-wK-4rh">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="Qda-ha-LEX" kind="show" id="a3N-fD-XZ6"/>
+                        <segue destination="MUy-2W-QPS" kind="show" id="Kze-Tm-IIt"/>
+                        <segue destination="WC7-sR-FnP" kind="show" identifier="calculatorsViewController" id="3i0-TD-4wl"/>
+                        <segue destination="WjO-Qv-XXm" kind="show" id="wdS-jz-ihI"/>
+                        <segue destination="FIe-Pm-iPn" kind="show" id="g4H-Vx-XtG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Oh5-aP-mbl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2204" y="867"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="UV0-9j-DD4">
+            <objects>
+                <viewController id="FIe-Pm-iPn" customClass="WebViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="CYQ-jJ-NYk"/>
+                        <viewControllerLayoutGuide type="bottom" id="cg5-z2-w1P"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yDf-Pt-cHj">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KiD-LO-fi9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3050" y="3483"/>
+        </scene>
+        <!--Find Branch View Controller-->
+        <scene sceneID="5aV-m5-Zil">
+            <objects>
+                <viewController id="WjO-Qv-XXm" customClass="FindBranchViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uFt-p4-tp8"/>
+                        <viewControllerLayoutGuide type="bottom" id="Fwq-o1-kTu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="WIy-zj-3Hs">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yf7-Jr-nqc" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3050" y="2761"/>
+        </scene>
+        <!--Calculators View Controller-->
+        <scene sceneID="Emx-6B-KoP">
+            <objects>
+                <viewController id="WC7-sR-FnP" customClass="CalculatorsViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="RQD-fj-c2j"/>
+                        <viewControllerLayoutGuide type="bottom" id="QqJ-S2-nHM"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Nqd-sz-abZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GDc-nL-rcS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3050" y="2052"/>
+        </scene>
+        <!--My Homes View Controller-->
+        <scene sceneID="vR0-VA-2Vm">
+            <objects>
+                <viewController id="Qda-ha-LEX" customClass="MyHomesViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="X5o-eD-i5i"/>
+                        <viewControllerLayoutGuide type="bottom" id="RV1-dA-fFV"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="fVb-Gh-LuZ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4ES-60-oa4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3050" y="603"/>
+        </scene>
+        <!--Add Home View Controller-->
+        <scene sceneID="fqS-Ov-f7L">
+            <objects>
+                <viewController id="MUy-2W-QPS" customClass="AddHomeViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="iLL-tl-UNP"/>
+                        <viewControllerLayoutGuide type="bottom" id="lkT-BB-ix4"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="e1h-DW-iaw">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tpd-uK-sV0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3050" y="1354"/>
+        </scene>
+        <!--Create Account View Controller-->
+        <scene sceneID="zHZ-6D-5P1">
+            <objects>
+                <viewController id="eej-C9-Buj" customClass="CreateAccountViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bJH-Ch-aR3"/>
+                        <viewControllerLayoutGuide type="bottom" id="a7e-1u-cdp"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="uXo-gM-cV0">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <connections>
+                        <segue destination="9p0-aR-IBO" kind="show" identifier="userLoggedIn" id="NgR-rr-hyG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="C32-9R-J4X" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2204" y="108"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="phJ-wO-Vqr">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="IAa-Zu-aX0" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5u4-Ll-jLv">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="Ewg-2t-Y4i"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7jX-ob-mxG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="546" y="477"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="NgR-rr-hyG"/>
+    </inferredMetricsTieBreakers>
 </document>

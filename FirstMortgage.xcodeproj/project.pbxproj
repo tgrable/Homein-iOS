@@ -8,12 +8,37 @@
 
 /* Begin PBXBuildFile section */
 		4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */; };
-		4FAF3CD41BE106EB00A89A9A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD31BE106EB00A89A9A /* ViewController.swift */; };
 		4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD51BE106EB00A89A9A /* Main.storyboard */; };
 		4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */; };
 		4FAF3CDC1BE106EB00A89A9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CDA1BE106EB00A89A9A /* LaunchScreen.storyboard */; };
 		4FAF3CE71BE106EB00A89A9A /* FirstMortgageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CE61BE106EB00A89A9A /* FirstMortgageTests.swift */; };
 		4FAF3CF21BE106EB00A89A9A /* FirstMortgageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CF11BE106EB00A89A9A /* FirstMortgageUITests.swift */; };
+		4FAF3D001BE1081700A89A9A /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CFF1BE1081700A89A9A /* InitialViewController.swift */; };
+		4FAF3D021BE1084200A89A9A /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D011BE1084200A89A9A /* CreateAccountViewController.swift */; };
+		4FAF3D041BE1085400A89A9A /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D031BE1085400A89A9A /* HomeViewController.swift */; };
+		4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D051BE1093600A89A9A /* MyHomesViewController.swift */; };
+		4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */; };
+		4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */; };
+		4FAF3D0C1BE10A9000A89A9A /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D0B1BE10A9000A89A9A /* WebViewController.swift */; };
+		4FAF3D0E1BE10AAE00A89A9A /* FindBranchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */; };
+		4FAF3D121BE10CF200A89A9A /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D101BE10CF200A89A9A /* Bolts.framework */; };
+		4FAF3D131BE10CF200A89A9A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D111BE10CF200A89A9A /* Parse.framework */; };
+		4FAF3D151BE10D1100A89A9A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D141BE10D1100A89A9A /* AudioToolbox.framework */; };
+		4FAF3D171BE10D1900A89A9A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D161BE10D1900A89A9A /* CFNetwork.framework */; };
+		4FAF3D191BE10D2100A89A9A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D181BE10D2100A89A9A /* CoreGraphics.framework */; };
+		4FAF3D1B1BE10D2800A89A9A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D1A1BE10D2800A89A9A /* CoreLocation.framework */; };
+		4FAF3D1D1BE10D3100A89A9A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D1C1BE10D3100A89A9A /* QuartzCore.framework */; };
+		4FAF3D1F1BE10D3E00A89A9A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D1E1BE10D3E00A89A9A /* Security.framework */; };
+		4FAF3D211BE10D4500A89A9A /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D201BE10D4500A89A9A /* StoreKit.framework */; };
+		4FAF3D231BE10D5500A89A9A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D221BE10D5500A89A9A /* SystemConfiguration.framework */; };
+		4FAF3D251BE10D5D00A89A9A /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D241BE10D5D00A89A9A /* libz.tbd */; };
+		4FAF3D271BE10D6600A89A9A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D261BE10D6600A89A9A /* libsqlite3.tbd */; };
+		4FAF3D291BE10D6F00A89A9A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D281BE10D6F00A89A9A /* Accounts.framework */; };
+		4FAF3D2B1BE10D7500A89A9A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D2A1BE10D7500A89A9A /* Social.framework */; };
+		4FAF3D2F1BE11BEC00A89A9A /* blue_check.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D2D1BE11BEC00A89A9A /* blue_check.png */; };
+		4FAF3D301BE11BEC00A89A9A /* white_check.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D2E1BE11BEC00A89A9A /* white_check.png */; };
+		4FAF3D341BE14BA200A89A9A /* fmc_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D331BE14BA200A89A9A /* fmc_logo.png */; };
+		4FAF3D361BE151DA00A89A9A /* homebackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D351BE151DA00A89A9A /* homebackground.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +61,6 @@
 /* Begin PBXFileReference section */
 		4FAF3CCE1BE106EB00A89A9A /* FirstMortgage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirstMortgage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4FAF3CD31BE106EB00A89A9A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		4FAF3CD61BE106EB00A89A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4FAF3CDB1BE106EB00A89A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,6 +71,32 @@
 		4FAF3CED1BE106EB00A89A9A /* FirstMortgageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FirstMortgageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FAF3CF11BE106EB00A89A9A /* FirstMortgageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMortgageUITests.swift; sourceTree = "<group>"; };
 		4FAF3CF31BE106EB00A89A9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4FAF3CFF1BE1081700A89A9A /* InitialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
+		4FAF3D011BE1084200A89A9A /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
+		4FAF3D031BE1085400A89A9A /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		4FAF3D051BE1093600A89A9A /* MyHomesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyHomesViewController.swift; sourceTree = "<group>"; };
+		4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddHomeViewController.swift; sourceTree = "<group>"; };
+		4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorsViewController.swift; sourceTree = "<group>"; };
+		4FAF3D0B1BE10A9000A89A9A /* WebViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindBranchViewController.swift; sourceTree = "<group>"; };
+		4FAF3D101BE10CF200A89A9A /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = frameworks/Bolts.framework; sourceTree = "<group>"; };
+		4FAF3D111BE10CF200A89A9A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = frameworks/Parse.framework; sourceTree = "<group>"; };
+		4FAF3D141BE10D1100A89A9A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		4FAF3D161BE10D1900A89A9A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		4FAF3D181BE10D2100A89A9A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		4FAF3D1A1BE10D2800A89A9A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		4FAF3D1C1BE10D3100A89A9A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		4FAF3D1E1BE10D3E00A89A9A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		4FAF3D201BE10D4500A89A9A /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		4FAF3D221BE10D5500A89A9A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		4FAF3D241BE10D5D00A89A9A /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4FAF3D261BE10D6600A89A9A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		4FAF3D281BE10D6F00A89A9A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		4FAF3D2A1BE10D7500A89A9A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		4FAF3D2D1BE11BEC00A89A9A /* blue_check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blue_check.png; path = images/blue_check.png; sourceTree = "<group>"; };
+		4FAF3D2E1BE11BEC00A89A9A /* white_check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = white_check.png; path = images/white_check.png; sourceTree = "<group>"; };
+		4FAF3D331BE14BA200A89A9A /* fmc_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fmc_logo.png; path = images/fmc_logo.png; sourceTree = "<group>"; };
+		4FAF3D351BE151DA00A89A9A /* homebackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = homebackground.png; path = images/homebackground.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +104,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FAF3D2B1BE10D7500A89A9A /* Social.framework in Frameworks */,
+				4FAF3D291BE10D6F00A89A9A /* Accounts.framework in Frameworks */,
+				4FAF3D271BE10D6600A89A9A /* libsqlite3.tbd in Frameworks */,
+				4FAF3D251BE10D5D00A89A9A /* libz.tbd in Frameworks */,
+				4FAF3D231BE10D5500A89A9A /* SystemConfiguration.framework in Frameworks */,
+				4FAF3D211BE10D4500A89A9A /* StoreKit.framework in Frameworks */,
+				4FAF3D1F1BE10D3E00A89A9A /* Security.framework in Frameworks */,
+				4FAF3D1D1BE10D3100A89A9A /* QuartzCore.framework in Frameworks */,
+				4FAF3D1B1BE10D2800A89A9A /* CoreLocation.framework in Frameworks */,
+				4FAF3D191BE10D2100A89A9A /* CoreGraphics.framework in Frameworks */,
+				4FAF3D171BE10D1900A89A9A /* CFNetwork.framework in Frameworks */,
+				4FAF3D151BE10D1100A89A9A /* AudioToolbox.framework in Frameworks */,
+				4FAF3D131BE10CF200A89A9A /* Parse.framework in Frameworks */,
+				4FAF3D121BE10CF200A89A9A /* Bolts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +145,8 @@
 				4FAF3CE51BE106EB00A89A9A /* FirstMortgageTests */,
 				4FAF3CF01BE106EB00A89A9A /* FirstMortgageUITests */,
 				4FAF3CCF1BE106EB00A89A9A /* Products */,
+				4FAF3D2C1BE119E200A89A9A /* Images */,
+				4FAF3D0F1BE10CB700A89A9A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,7 +164,14 @@
 			isa = PBXGroup;
 			children = (
 				4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */,
-				4FAF3CD31BE106EB00A89A9A /* ViewController.swift */,
+				4FAF3CFF1BE1081700A89A9A /* InitialViewController.swift */,
+				4FAF3D011BE1084200A89A9A /* CreateAccountViewController.swift */,
+				4FAF3D031BE1085400A89A9A /* HomeViewController.swift */,
+				4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */,
+				4FAF3D051BE1093600A89A9A /* MyHomesViewController.swift */,
+				4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */,
+				4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */,
+				4FAF3D0B1BE10A9000A89A9A /* WebViewController.swift */,
 				4FAF3CD51BE106EB00A89A9A /* Main.storyboard */,
 				4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */,
 				4FAF3CDA1BE106EB00A89A9A /* LaunchScreen.storyboard */,
@@ -123,6 +196,38 @@
 				4FAF3CF31BE106EB00A89A9A /* Info.plist */,
 			);
 			path = FirstMortgageUITests;
+			sourceTree = "<group>";
+		};
+		4FAF3D0F1BE10CB700A89A9A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4FAF3D2A1BE10D7500A89A9A /* Social.framework */,
+				4FAF3D281BE10D6F00A89A9A /* Accounts.framework */,
+				4FAF3D261BE10D6600A89A9A /* libsqlite3.tbd */,
+				4FAF3D241BE10D5D00A89A9A /* libz.tbd */,
+				4FAF3D221BE10D5500A89A9A /* SystemConfiguration.framework */,
+				4FAF3D201BE10D4500A89A9A /* StoreKit.framework */,
+				4FAF3D1E1BE10D3E00A89A9A /* Security.framework */,
+				4FAF3D1C1BE10D3100A89A9A /* QuartzCore.framework */,
+				4FAF3D1A1BE10D2800A89A9A /* CoreLocation.framework */,
+				4FAF3D181BE10D2100A89A9A /* CoreGraphics.framework */,
+				4FAF3D161BE10D1900A89A9A /* CFNetwork.framework */,
+				4FAF3D141BE10D1100A89A9A /* AudioToolbox.framework */,
+				4FAF3D101BE10CF200A89A9A /* Bolts.framework */,
+				4FAF3D111BE10CF200A89A9A /* Parse.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4FAF3D2C1BE119E200A89A9A /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				4FAF3D351BE151DA00A89A9A /* homebackground.png */,
+				4FAF3D331BE14BA200A89A9A /* fmc_logo.png */,
+				4FAF3D2D1BE11BEC00A89A9A /* blue_check.png */,
+				4FAF3D2E1BE11BEC00A89A9A /* white_check.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +298,7 @@
 				TargetAttributes = {
 					4FAF3CCD1BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = BS4LR4L547;
 					};
 					4FAF3CE11BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
@@ -231,6 +337,10 @@
 			files = (
 				4FAF3CDC1BE106EB00A89A9A /* LaunchScreen.storyboard in Resources */,
 				4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */,
+				4FAF3D301BE11BEC00A89A9A /* white_check.png in Resources */,
+				4FAF3D341BE14BA200A89A9A /* fmc_logo.png in Resources */,
+				4FAF3D2F1BE11BEC00A89A9A /* blue_check.png in Resources */,
+				4FAF3D361BE151DA00A89A9A /* homebackground.png in Resources */,
 				4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -256,8 +366,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FAF3CD41BE106EB00A89A9A /* ViewController.swift in Sources */,
+				4FAF3D041BE1085400A89A9A /* HomeViewController.swift in Sources */,
+				4FAF3D0C1BE10A9000A89A9A /* WebViewController.swift in Sources */,
+				4FAF3D021BE1084200A89A9A /* CreateAccountViewController.swift in Sources */,
+				4FAF3D001BE1081700A89A9A /* InitialViewController.swift in Sources */,
+				4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */,
+				4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */,
+				4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */,
 				4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */,
+				4FAF3D0E1BE10AAE00A89A9A /* FindBranchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,7 +465,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -387,7 +504,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -399,7 +516,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/frameworks",
+				);
 				INFOPLIST_FILE = FirstMortgage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -410,7 +533,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/frameworks",
+				);
 				INFOPLIST_FILE = FirstMortgage/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
