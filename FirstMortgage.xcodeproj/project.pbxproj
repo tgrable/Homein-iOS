@@ -1,0 +1,507 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */; };
+		4FAF3CD41BE106EB00A89A9A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD31BE106EB00A89A9A /* ViewController.swift */; };
+		4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD51BE106EB00A89A9A /* Main.storyboard */; };
+		4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */; };
+		4FAF3CDC1BE106EB00A89A9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CDA1BE106EB00A89A9A /* LaunchScreen.storyboard */; };
+		4FAF3CE71BE106EB00A89A9A /* FirstMortgageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CE61BE106EB00A89A9A /* FirstMortgageTests.swift */; };
+		4FAF3CF21BE106EB00A89A9A /* FirstMortgageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CF11BE106EB00A89A9A /* FirstMortgageUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4FAF3CE31BE106EB00A89A9A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FAF3CC61BE106EB00A89A9A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FAF3CCD1BE106EB00A89A9A;
+			remoteInfo = FirstMortgage;
+		};
+		4FAF3CEE1BE106EB00A89A9A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4FAF3CC61BE106EB00A89A9A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4FAF3CCD1BE106EB00A89A9A;
+			remoteInfo = FirstMortgage;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4FAF3CCE1BE106EB00A89A9A /* FirstMortgage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirstMortgage.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		4FAF3CD31BE106EB00A89A9A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		4FAF3CD61BE106EB00A89A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		4FAF3CDB1BE106EB00A89A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4FAF3CDD1BE106EB00A89A9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4FAF3CE21BE106EB00A89A9A /* FirstMortgageTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FirstMortgageTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FAF3CE61BE106EB00A89A9A /* FirstMortgageTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMortgageTests.swift; sourceTree = "<group>"; };
+		4FAF3CE81BE106EB00A89A9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4FAF3CED1BE106EB00A89A9A /* FirstMortgageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FirstMortgageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4FAF3CF11BE106EB00A89A9A /* FirstMortgageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMortgageUITests.swift; sourceTree = "<group>"; };
+		4FAF3CF31BE106EB00A89A9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4FAF3CCB1BE106EB00A89A9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FAF3CDF1BE106EB00A89A9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FAF3CEA1BE106EB00A89A9A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4FAF3CC51BE106EB00A89A9A = {
+			isa = PBXGroup;
+			children = (
+				4FAF3CD01BE106EB00A89A9A /* FirstMortgage */,
+				4FAF3CE51BE106EB00A89A9A /* FirstMortgageTests */,
+				4FAF3CF01BE106EB00A89A9A /* FirstMortgageUITests */,
+				4FAF3CCF1BE106EB00A89A9A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4FAF3CCF1BE106EB00A89A9A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4FAF3CCE1BE106EB00A89A9A /* FirstMortgage.app */,
+				4FAF3CE21BE106EB00A89A9A /* FirstMortgageTests.xctest */,
+				4FAF3CED1BE106EB00A89A9A /* FirstMortgageUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4FAF3CD01BE106EB00A89A9A /* FirstMortgage */ = {
+			isa = PBXGroup;
+			children = (
+				4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */,
+				4FAF3CD31BE106EB00A89A9A /* ViewController.swift */,
+				4FAF3CD51BE106EB00A89A9A /* Main.storyboard */,
+				4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */,
+				4FAF3CDA1BE106EB00A89A9A /* LaunchScreen.storyboard */,
+				4FAF3CDD1BE106EB00A89A9A /* Info.plist */,
+			);
+			path = FirstMortgage;
+			sourceTree = "<group>";
+		};
+		4FAF3CE51BE106EB00A89A9A /* FirstMortgageTests */ = {
+			isa = PBXGroup;
+			children = (
+				4FAF3CE61BE106EB00A89A9A /* FirstMortgageTests.swift */,
+				4FAF3CE81BE106EB00A89A9A /* Info.plist */,
+			);
+			path = FirstMortgageTests;
+			sourceTree = "<group>";
+		};
+		4FAF3CF01BE106EB00A89A9A /* FirstMortgageUITests */ = {
+			isa = PBXGroup;
+			children = (
+				4FAF3CF11BE106EB00A89A9A /* FirstMortgageUITests.swift */,
+				4FAF3CF31BE106EB00A89A9A /* Info.plist */,
+			);
+			path = FirstMortgageUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4FAF3CCD1BE106EB00A89A9A /* FirstMortgage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FAF3CF61BE106EB00A89A9A /* Build configuration list for PBXNativeTarget "FirstMortgage" */;
+			buildPhases = (
+				4FAF3CCA1BE106EB00A89A9A /* Sources */,
+				4FAF3CCB1BE106EB00A89A9A /* Frameworks */,
+				4FAF3CCC1BE106EB00A89A9A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FirstMortgage;
+			productName = FirstMortgage;
+			productReference = 4FAF3CCE1BE106EB00A89A9A /* FirstMortgage.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4FAF3CE11BE106EB00A89A9A /* FirstMortgageTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FAF3CF91BE106EB00A89A9A /* Build configuration list for PBXNativeTarget "FirstMortgageTests" */;
+			buildPhases = (
+				4FAF3CDE1BE106EB00A89A9A /* Sources */,
+				4FAF3CDF1BE106EB00A89A9A /* Frameworks */,
+				4FAF3CE01BE106EB00A89A9A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4FAF3CE41BE106EB00A89A9A /* PBXTargetDependency */,
+			);
+			name = FirstMortgageTests;
+			productName = FirstMortgageTests;
+			productReference = 4FAF3CE21BE106EB00A89A9A /* FirstMortgageTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4FAF3CEC1BE106EB00A89A9A /* FirstMortgageUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FAF3CFC1BE106EB00A89A9A /* Build configuration list for PBXNativeTarget "FirstMortgageUITests" */;
+			buildPhases = (
+				4FAF3CE91BE106EB00A89A9A /* Sources */,
+				4FAF3CEA1BE106EB00A89A9A /* Frameworks */,
+				4FAF3CEB1BE106EB00A89A9A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4FAF3CEF1BE106EB00A89A9A /* PBXTargetDependency */,
+			);
+			name = FirstMortgageUITests;
+			productName = FirstMortgageUITests;
+			productReference = 4FAF3CED1BE106EB00A89A9A /* FirstMortgageUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4FAF3CC61BE106EB00A89A9A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
+				ORGANIZATIONNAME = "Trekk Design";
+				TargetAttributes = {
+					4FAF3CCD1BE106EB00A89A9A = {
+						CreatedOnToolsVersion = 7.1;
+					};
+					4FAF3CE11BE106EB00A89A9A = {
+						CreatedOnToolsVersion = 7.1;
+						TestTargetID = 4FAF3CCD1BE106EB00A89A9A;
+					};
+					4FAF3CEC1BE106EB00A89A9A = {
+						CreatedOnToolsVersion = 7.1;
+						TestTargetID = 4FAF3CCD1BE106EB00A89A9A;
+					};
+				};
+			};
+			buildConfigurationList = 4FAF3CC91BE106EB00A89A9A /* Build configuration list for PBXProject "FirstMortgage" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4FAF3CC51BE106EB00A89A9A;
+			productRefGroup = 4FAF3CCF1BE106EB00A89A9A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4FAF3CCD1BE106EB00A89A9A /* FirstMortgage */,
+				4FAF3CE11BE106EB00A89A9A /* FirstMortgageTests */,
+				4FAF3CEC1BE106EB00A89A9A /* FirstMortgageUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4FAF3CCC1BE106EB00A89A9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FAF3CDC1BE106EB00A89A9A /* LaunchScreen.storyboard in Resources */,
+				4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */,
+				4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FAF3CE01BE106EB00A89A9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FAF3CEB1BE106EB00A89A9A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4FAF3CCA1BE106EB00A89A9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FAF3CD41BE106EB00A89A9A /* ViewController.swift in Sources */,
+				4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FAF3CDE1BE106EB00A89A9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FAF3CE71BE106EB00A89A9A /* FirstMortgageTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4FAF3CE91BE106EB00A89A9A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FAF3CF21BE106EB00A89A9A /* FirstMortgageUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4FAF3CE41BE106EB00A89A9A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FAF3CCD1BE106EB00A89A9A /* FirstMortgage */;
+			targetProxy = 4FAF3CE31BE106EB00A89A9A /* PBXContainerItemProxy */;
+		};
+		4FAF3CEF1BE106EB00A89A9A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4FAF3CCD1BE106EB00A89A9A /* FirstMortgage */;
+			targetProxy = 4FAF3CEE1BE106EB00A89A9A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4FAF3CD51BE106EB00A89A9A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4FAF3CD61BE106EB00A89A9A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4FAF3CDA1BE106EB00A89A9A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4FAF3CDB1BE106EB00A89A9A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4FAF3CF41BE106EB00A89A9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4FAF3CF51BE106EB00A89A9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4FAF3CF71BE106EB00A89A9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = FirstMortgage/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgage;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4FAF3CF81BE106EB00A89A9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = FirstMortgage/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgage;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		4FAF3CFA1BE106EB00A89A9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = FirstMortgageTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgageTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FirstMortgage.app/FirstMortgage";
+			};
+			name = Debug;
+		};
+		4FAF3CFB1BE106EB00A89A9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = FirstMortgageTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgageTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FirstMortgage.app/FirstMortgage";
+			};
+			name = Release;
+		};
+		4FAF3CFD1BE106EB00A89A9A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = FirstMortgageUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgageUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = FirstMortgage;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		4FAF3CFE1BE106EB00A89A9A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = FirstMortgageUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgageUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = FirstMortgage;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4FAF3CC91BE106EB00A89A9A /* Build configuration list for PBXProject "FirstMortgage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FAF3CF41BE106EB00A89A9A /* Debug */,
+				4FAF3CF51BE106EB00A89A9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FAF3CF61BE106EB00A89A9A /* Build configuration list for PBXNativeTarget "FirstMortgage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FAF3CF71BE106EB00A89A9A /* Debug */,
+				4FAF3CF81BE106EB00A89A9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4FAF3CF91BE106EB00A89A9A /* Build configuration list for PBXNativeTarget "FirstMortgageTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FAF3CFA1BE106EB00A89A9A /* Debug */,
+				4FAF3CFB1BE106EB00A89A9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		4FAF3CFC1BE106EB00A89A9A /* Build configuration list for PBXNativeTarget "FirstMortgageUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FAF3CFD1BE106EB00A89A9A /* Debug */,
+				4FAF3CFE1BE106EB00A89A9A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4FAF3CC61BE106EB00A89A9A /* Project object */;
+}
