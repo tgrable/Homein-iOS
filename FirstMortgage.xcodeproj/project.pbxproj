@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */; };
+		4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */; };
+		4F5AD5F21BFA3547000AF1A2 /* btn-calculate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5AD5F11BFA3547000AF1A2 /* btn-calculate.png */; };
+		4F5AD5F41BFA354D000AF1A2 /* btn-calculate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5AD5F31BFA354D000AF1A2 /* btn-calculate@2x.png */; };
 		4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */; };
 		4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD51BE106EB00A89A9A /* Main.storyboard */; };
 		4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */; };
@@ -39,6 +43,7 @@
 		4FAF3D301BE11BEC00A89A9A /* white_check.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D2E1BE11BEC00A89A9A /* white_check.png */; };
 		4FAF3D341BE14BA200A89A9A /* fmc_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D331BE14BA200A89A9A /* fmc_logo.png */; };
 		4FAF3D361BE151DA00A89A9A /* homebackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D351BE151DA00A89A9A /* homebackground.png */; };
+		4FB616311BFB76440057414C /* ShadowEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB616301BFB76440057414C /* ShadowEffect.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +64,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicCell.swift; path = FirstMortgage/BasicCell.swift; sourceTree = "<group>"; };
+		4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndividualHomeViewController.swift; sourceTree = "<group>"; };
+		4F5AD5F11BFA3547000AF1A2 /* btn-calculate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn-calculate.png"; path = "images/btn-calculate.png"; sourceTree = "<group>"; };
+		4F5AD5F31BFA354D000AF1A2 /* btn-calculate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn-calculate@2x.png"; path = "images/btn-calculate@2x.png"; sourceTree = "<group>"; };
 		4FAF3CCE1BE106EB00A89A9A /* FirstMortgage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirstMortgage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FAF3CD61BE106EB00A89A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -97,6 +106,7 @@
 		4FAF3D2E1BE11BEC00A89A9A /* white_check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = white_check.png; path = images/white_check.png; sourceTree = "<group>"; };
 		4FAF3D331BE14BA200A89A9A /* fmc_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fmc_logo.png; path = images/fmc_logo.png; sourceTree = "<group>"; };
 		4FAF3D351BE151DA00A89A9A /* homebackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = homebackground.png; path = images/homebackground.png; sourceTree = "<group>"; };
+		4FB616301BFB76440057414C /* ShadowEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShadowEffect.swift; path = FirstMortgage/ShadowEffect.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				4FAF3CD01BE106EB00A89A9A /* FirstMortgage */,
+				4FB616321BFB764B0057414C /* Supporting Classes */,
 				4FAF3CE51BE106EB00A89A9A /* FirstMortgageTests */,
 				4FAF3CF01BE106EB00A89A9A /* FirstMortgageUITests */,
 				4FAF3CCF1BE106EB00A89A9A /* Products */,
@@ -167,8 +178,9 @@
 				4FAF3CFF1BE1081700A89A9A /* InitialViewController.swift */,
 				4FAF3D011BE1084200A89A9A /* CreateAccountViewController.swift */,
 				4FAF3D031BE1085400A89A9A /* HomeViewController.swift */,
-				4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */,
 				4FAF3D051BE1093600A89A9A /* MyHomesViewController.swift */,
+				4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */,
+				4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */,
 				4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */,
 				4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */,
 				4FAF3D0B1BE10A9000A89A9A /* WebViewController.swift */,
@@ -222,12 +234,23 @@
 		4FAF3D2C1BE119E200A89A9A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4F5AD5F11BFA3547000AF1A2 /* btn-calculate.png */,
+				4F5AD5F31BFA354D000AF1A2 /* btn-calculate@2x.png */,
 				4FAF3D351BE151DA00A89A9A /* homebackground.png */,
 				4FAF3D331BE14BA200A89A9A /* fmc_logo.png */,
 				4FAF3D2D1BE11BEC00A89A9A /* blue_check.png */,
 				4FAF3D2E1BE11BEC00A89A9A /* white_check.png */,
 			);
 			name = Images;
+			sourceTree = "<group>";
+		};
+		4FB616321BFB764B0057414C /* Supporting Classes */ = {
+			isa = PBXGroup;
+			children = (
+				4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */,
+				4FB616301BFB76440057414C /* ShadowEffect.swift */,
+			);
+			name = "Supporting Classes";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,8 +359,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FAF3CDC1BE106EB00A89A9A /* LaunchScreen.storyboard in Resources */,
+				4F5AD5F41BFA354D000AF1A2 /* btn-calculate@2x.png in Resources */,
 				4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */,
 				4FAF3D301BE11BEC00A89A9A /* white_check.png in Resources */,
+				4F5AD5F21BFA3547000AF1A2 /* btn-calculate.png in Resources */,
 				4FAF3D341BE14BA200A89A9A /* fmc_logo.png in Resources */,
 				4FAF3D2F1BE11BEC00A89A9A /* blue_check.png in Resources */,
 				4FAF3D361BE151DA00A89A9A /* homebackground.png in Resources */,
@@ -370,10 +395,13 @@
 				4FAF3D0C1BE10A9000A89A9A /* WebViewController.swift in Sources */,
 				4FAF3D021BE1084200A89A9A /* CreateAccountViewController.swift in Sources */,
 				4FAF3D001BE1081700A89A9A /* InitialViewController.swift in Sources */,
+				4FB616311BFB76440057414C /* ShadowEffect.swift in Sources */,
 				4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */,
 				4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */,
 				4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */,
+				4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */,
 				4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */,
+				4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */,
 				4FAF3D0E1BE10AAE00A89A9A /* FindBranchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -613,6 +641,7 @@
 				4FAF3CF81BE106EB00A89A9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4FAF3CF91BE106EB00A89A9A /* Build configuration list for PBXNativeTarget "FirstMortgageTests" */ = {
 			isa = XCConfigurationList;
@@ -621,6 +650,7 @@
 				4FAF3CFB1BE106EB00A89A9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4FAF3CFC1BE106EB00A89A9A /* Build configuration list for PBXNativeTarget "FirstMortgageUITests" */ = {
 			isa = XCConfigurationList;
@@ -629,6 +659,7 @@
 				4FAF3CFE1BE106EB00A89A9A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
