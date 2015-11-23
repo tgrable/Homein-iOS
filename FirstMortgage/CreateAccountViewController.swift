@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
+class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
 
     // MARK:
     // MARK: Properties
@@ -18,10 +18,24 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     
     // Login View
-    let registerView = UIView() as UIView
-    let userNameRegister = UITextField() as UITextField
-    let passwordRegister = UITextField() as UITextField
-    let emailRegister = UITextField() as UITextField
+    let registerView = UIView()
+    
+    // UITextField
+    let userNameRegister = UITextField()
+    let firstlastNameRegister = UITextField()
+    let passwordRegister = UITextField()
+    let emailRegister = UITextField()
+    
+    // UITextView
+    let addressRegister = UITextView()
+    
+    // Bool
+    var optionOne = Bool()
+    var optionTwo = Bool()
+    var optionThree = Bool()
+    
+    // ShadowEffet
+    var shadow = ShadowEffect()
     
     var imageView = UIImageView() as UIImageView
     
@@ -29,6 +43,21 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        
+        // UIImage
+        let fmcLogo = UIImage(named: "fmc_logo") as UIImage?
+        
+        // UIImageView
+        imageView.frame = ( frame: CGRectMake(40, 35, self.view.bounds.size.width - 80, 40) )
+        imageView.image = fmcLogo
+        self.view.addSubview(imageView)
+        
+        self.view.backgroundColor = lightGrayColor
+        
+        optionOne = true
+        optionTwo = true
+        optionThree = true
+        
         buildCreateAccountView()
         buildRegisterView()
     }
@@ -39,18 +68,12 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func buildCreateAccountView() {
-        registerView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width * 2, self.view.bounds.size.height))
+        registerView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width * 2, self.view.bounds.size.height - 75))
         registerView.backgroundColor = lightGrayColor
         registerView.hidden = false
         self.view.addSubview(registerView)
         
-        let fmcLogo = UIImage(named: "fmc_logo") as UIImage?
-        // UIImageView
-        imageView.frame = ( frame: CGRectMake(40, 35, self.view.bounds.size.width - 80, 40) )
-        imageView.image = fmcLogo
-        registerView.addSubview(imageView)
-        
-        let createAccountButton = UIButton (frame: CGRectMake(15, 100, self.view.bounds.size.width - 30, 40))
+        let createAccountButton = UIButton (frame: CGRectMake(15, 50, self.view.bounds.size.width - 30, 40))
         createAccountButton.setTitle("Create Account", forState: .Normal)
         createAccountButton.addTarget(self, action: "showCreateAccount:", forControlEvents: .TouchUpInside)
         createAccountButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
@@ -58,7 +81,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
         createAccountButton.tag = 0
         registerView.addSubview(createAccountButton)
         
-        let descLabel = UILabel (frame: CGRectMake(15, 150, self.view.bounds.size.width - 30, 40))
+        let descLabel = UILabel (frame: CGRectMake(15, 100, self.view.bounds.size.width - 30, 40))
         descLabel.textAlignment = NSTextAlignment.Left
         descLabel.text = "Bacon ipsum dolor amet ribeye ball tip andouille, tail chuck t-bone turducken. Hamburger capicola prosciutto tenderloin."
         descLabel.numberOfLines = 0
@@ -66,55 +89,55 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
         registerView.addSubview(descLabel)
         
         let checkMarkImage = UIImage(named: "blue_check") as UIImage?
-        let optionOneButton = UIButton (frame: CGRectMake(30, descLabel.bounds.size.height + 170, 40, 40))
+        let optionOneButton = UIButton (frame: CGRectMake(30, descLabel.bounds.size.height + 120, 40, 40))
         optionOneButton.setBackgroundImage(checkMarkImage, forState: .Normal)
         optionOneButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
         optionOneButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        optionOneButton.tag = 0
+        optionOneButton.tag = 1
         registerView.addSubview(optionOneButton)
         
-        let optionOneLabel = UILabel (frame: CGRectMake(80, descLabel.bounds.size.height + 170, self.view.bounds.size.width - 100, 40))
+        let optionOneLabel = UILabel (frame: CGRectMake(80, descLabel.bounds.size.height + 120, self.view.bounds.size.width - 100, 40))
         optionOneLabel.textAlignment = NSTextAlignment.Left
         optionOneLabel.text = "Sausage drumstick salami"
         optionOneLabel.numberOfLines = 0
         optionOneLabel.sizeToFit()
         registerView.addSubview(optionOneLabel)
 
-        let optionTwoButton = UIButton (frame: CGRectMake(30, descLabel.bounds.size.height + 220, 40, 40))
+        let optionTwoButton = UIButton (frame: CGRectMake(30, descLabel.bounds.size.height + 180, 40, 40))
         optionTwoButton.setBackgroundImage(checkMarkImage, forState: .Normal)
         optionTwoButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
         optionTwoButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        optionTwoButton.tag = 0
+        optionTwoButton.tag = 2
         registerView.addSubview(optionTwoButton)
         
-        let optionTwoLabel = UILabel (frame: CGRectMake(80, descLabel.bounds.size.height + 220, self.view.bounds.size.width - 100, 40))
+        let optionTwoLabel = UILabel (frame: CGRectMake(80, descLabel.bounds.size.height + 180, self.view.bounds.size.width - 100, 40))
         optionTwoLabel.textAlignment = NSTextAlignment.Left
         optionTwoLabel.text = "t-bone porchetta fatback jowl"
         optionTwoLabel.numberOfLines = 0
         optionTwoLabel.sizeToFit()
         registerView.addSubview(optionTwoLabel)
         
-        let optionThreeButton = UIButton (frame: CGRectMake(30, descLabel.bounds.size.height + 270, 40, 40))
+        let optionThreeButton = UIButton (frame: CGRectMake(30, descLabel.bounds.size.height + 230, 40, 40))
         optionThreeButton.setBackgroundImage(checkMarkImage, forState: .Normal)
         optionThreeButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
         optionThreeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        optionThreeButton.tag = 0
+        optionThreeButton.tag = 3
         registerView.addSubview(optionThreeButton)
         
-        let optionThreeLabel = UILabel (frame: CGRectMake(80, descLabel.bounds.size.height + 270, self.view.bounds.size.width - 100, 40))
+        let optionThreeLabel = UILabel (frame: CGRectMake(80, descLabel.bounds.size.height + 230, self.view.bounds.size.width - 100, 40))
         optionThreeLabel.textAlignment = NSTextAlignment.Left
         optionThreeLabel.text = "Prosciutto andouille biltong"
         optionThreeLabel.numberOfLines = 0
         optionThreeLabel.sizeToFit()
         registerView.addSubview(optionThreeLabel)
         
-        let getStartedButton = UIButton (frame: CGRectMake(15, descLabel.bounds.size.height + 320, self.view.bounds.size.width - 30, 40))
+        let getStartedButton = UIButton (frame: CGRectMake(15, descLabel.bounds.size.height + 290, self.view.bounds.size.width - 30, 40))
         getStartedButton.setTitle("Get Started", forState: .Normal)
         getStartedButton.addTarget(self, action: "showCreateAccount:", forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         registerView.addSubview(getStartedButton)
         
-        let continueWithoutButton = UIButton (frame: CGRectMake(15, descLabel.bounds.size.height + 370, self.view.bounds.size.width - 30, 40))
+        let continueWithoutButton = UIButton (frame: CGRectMake(15, descLabel.bounds.size.height + 330, self.view.bounds.size.width - 30, 40))
         continueWithoutButton.setTitle("Continue Without", forState: .Normal)
         continueWithoutButton.addTarget(self, action: "continueWithoutLogin:", forControlEvents: .TouchUpInside)
         continueWithoutButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
@@ -122,89 +145,159 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func buildRegisterView() {
-        let backButton = UIButton (frame: CGRectMake(self.view.bounds.size.width + 15, 50, self.view.bounds.size.width - 30, 40))
+        
+        let bannerView = UIView(frame: CGRectMake(self.view.bounds.size.width, 15, registerView.bounds.size.width, 50))
+        bannerView.backgroundColor = UIColor.orangeColor()
+        bannerView.hidden = false
+        registerView.addSubview(bannerView)
+        
+        let registerScrollView = UIScrollView(frame: CGRectMake(self.view.bounds.size.width + 15, 65, self.view.bounds.size.width - 30, registerView.bounds.size.height - 150))
+        registerScrollView.backgroundColor = UIColor.whiteColor()
+        registerView.addSubview(registerScrollView)
+        
+        // UIView
+        let shadowView = UIView(frame: CGRectMake(self.view.bounds.size.width + 15, (registerView.bounds.size.height - 150) + 65, registerScrollView.bounds.size.width, 2))
+        shadowView.backgroundColor = UIColor.clearColor()
+        registerView.addSubview(shadowView)
+        shadow.applyCurvedShadow(shadowView)
+
+        userNameRegister.frame = (frame: CGRectMake(15, 15, registerScrollView.bounds.size.width - 30, 40))
+        userNameRegister.placeholder = "Profile Name"
+        userNameRegister.backgroundColor = lightGrayColor
+        userNameRegister.tag = 1
+        userNameRegister.autocapitalizationType = UITextAutocapitalizationType.None
+        userNameRegister.autocorrectionType = UITextAutocorrectionType.No;
+        userNameRegister.spellCheckingType = UITextSpellCheckingType.No;
+        userNameRegister.keyboardType = UIKeyboardType.Default;
+        userNameRegister.delegate = self
+        userNameRegister.returnKeyType = .Done
+        registerScrollView.addSubview(userNameRegister)
+        
+        firstlastNameRegister.frame = (frame: CGRectMake(15, 65, registerScrollView.bounds.size.width - 30, 40))
+        firstlastNameRegister.placeholder = "Your Name"
+        firstlastNameRegister.backgroundColor = lightGrayColor
+        firstlastNameRegister.tag = 1
+        firstlastNameRegister.autocapitalizationType = UITextAutocapitalizationType.Words
+        firstlastNameRegister.autocorrectionType = UITextAutocorrectionType.No;
+        firstlastNameRegister.spellCheckingType = UITextSpellCheckingType.No;
+        firstlastNameRegister.keyboardType = UIKeyboardType.Default;
+        firstlastNameRegister.delegate = self
+        firstlastNameRegister.returnKeyType = .Done
+        registerScrollView.addSubview(firstlastNameRegister)
+        
+        emailRegister.frame = (frame: CGRectMake(15, 115, registerScrollView.bounds.size.width - 30, 40))
+        emailRegister.placeholder = "Email"
+        emailRegister.backgroundColor = lightGrayColor
+        emailRegister.tag = 1
+        emailRegister.autocapitalizationType = UITextAutocapitalizationType.None
+        emailRegister.autocorrectionType = UITextAutocorrectionType.No;
+        emailRegister.spellCheckingType = UITextSpellCheckingType.No;
+        userNameRegister.keyboardType = UIKeyboardType.EmailAddress;
+        userNameRegister.delegate = self
+        userNameRegister.returnKeyType = .Done
+        registerScrollView.addSubview(emailRegister)
+        
+        addressRegister.frame = (frame : CGRectMake(15, 165, registerScrollView.bounds.size.width - 30, 140))
+        addressRegister.backgroundColor = lightGrayColor
+        addressRegister.autocorrectionType = .Yes
+        registerScrollView.addSubview(addressRegister)
+        
+        passwordRegister.frame = (frame: CGRectMake(15, 315, registerScrollView.bounds.size.width - 30, 40))
+        passwordRegister.placeholder = "Account Password"
+        passwordRegister.backgroundColor = lightGrayColor
+        passwordRegister.tag = 1
+        passwordRegister.autocapitalizationType = UITextAutocapitalizationType.None
+        passwordRegister.autocorrectionType = UITextAutocorrectionType.No;
+        passwordRegister.spellCheckingType = UITextSpellCheckingType.No;
+        passwordRegister.keyboardType = UIKeyboardType.EmailAddress;
+        passwordRegister.returnKeyType = .Done
+        passwordRegister.delegate = self
+        passwordRegister.secureTextEntry = true
+        registerScrollView.addSubview(passwordRegister)
+        
+        let loanOfficerLabel = UILabel (frame: CGRectMake(15, 365, registerScrollView.bounds.size.width - 30, 40))
+        loanOfficerLabel.textAlignment = NSTextAlignment.Left
+        loanOfficerLabel.text = "ARE YOU CURRENTLY WORKING WITH A LOAN OFFICER?"
+        loanOfficerLabel.numberOfLines = 0
+        loanOfficerLabel.sizeToFit()
+        registerScrollView.addSubview(loanOfficerLabel)
+        
+        let loYesButton = UIButton (frame: CGRectMake(15, 415, registerScrollView.bounds.size.width - 30, 30))
+        loYesButton.setTitle("YES", forState: .Normal)
+        loYesButton.addTarget(self, action: "loYesNo", forControlEvents: .TouchUpInside)
+        loYesButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        loYesButton.layer.borderWidth = 1
+        loYesButton.layer.borderColor = lightGrayColor.CGColor
+        loYesButton.tag = 0
+        registerScrollView.addSubview(loYesButton)
+        
+        let loNoButton = UIButton (frame: CGRectMake(15, 445, registerScrollView.bounds.size.width - 30, 30))
+        loNoButton.setTitle("NO", forState: .Normal)
+        loNoButton.addTarget(self, action: "loYesNo", forControlEvents: .TouchUpInside)
+        loNoButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        loNoButton.layer.borderWidth = 1
+        loNoButton.layer.borderColor = lightGrayColor.CGColor
+        loNoButton.tag = 1
+        registerScrollView.addSubview(loNoButton)
+        
+        registerScrollView.contentSize = CGSize(width: self.view.bounds.size.width - 30, height: 775)
+
+        let submitButton = UIButton (frame: CGRectMake(self.view.bounds.size.width + 15, (registerView.bounds.size.height - 150) + 75, self.view.bounds.size.width - 30, 40))
+        submitButton.setTitle("SAVE", forState: .Normal)
+        submitButton.addTarget(self, action: "registerUser:", forControlEvents: .TouchUpInside)
+        submitButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        registerView.addSubview(submitButton)
+        
+        let backButton = UIButton (frame: CGRectMake(self.view.bounds.size.width + 15, (registerView.bounds.size.height - 150) + 125, self.view.bounds.size.width - 30, 40))
         backButton.setTitle("Back", forState: .Normal)
         backButton.addTarget(self, action: "showCreateAccount:", forControlEvents: .TouchUpInside)
         backButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         backButton.titleLabel?.textAlignment = .Left
         backButton.tag = 1
         registerView.addSubview(backButton)
-        
-        userNameRegister.frame = (frame: CGRectMake(self.view.bounds.size.width + 15, 100, self.view.bounds.size.width - 30, 40))
-        userNameRegister.placeholder = "User Name"
-        userNameRegister.borderStyle = UITextBorderStyle.RoundedRect
-        userNameRegister.layer.borderColor = UIColor.lightGrayColor().CGColor
-        userNameRegister.tag = 1
-        userNameRegister.autocapitalizationType = UITextAutocapitalizationType.None
-        userNameRegister.autocorrectionType = UITextAutocorrectionType.No;
-        userNameRegister.spellCheckingType = UITextSpellCheckingType.No;
-        userNameRegister.keyboardType = UIKeyboardType.Default;
-        registerView.addSubview(userNameRegister)
-        
-        passwordRegister.frame = (frame: CGRectMake(self.view.bounds.size.width + 15, 150, self.view.bounds.size.width - 30, 40))
-        passwordRegister.placeholder = "Password"
-        passwordRegister.borderStyle = UITextBorderStyle.RoundedRect
-        passwordRegister.layer.borderColor = UIColor.lightGrayColor().CGColor
-        passwordRegister.tag = 1
-        passwordRegister.secureTextEntry = true
-        registerView.addSubview(passwordRegister)
-        
-        emailRegister.frame = (frame: CGRectMake(self.view.bounds.size.width + 15, 200, self.view.bounds.size.width - 30, 40))
-        emailRegister.placeholder = "Email"
-        emailRegister.borderStyle = UITextBorderStyle.RoundedRect
-        emailRegister.layer.borderColor = UIColor.lightGrayColor().CGColor
-        emailRegister.tag = 1
-        emailRegister.autocapitalizationType = UITextAutocapitalizationType.None
-        emailRegister.autocorrectionType = UITextAutocorrectionType.No;
-        emailRegister.spellCheckingType = UITextSpellCheckingType.No;
-        userNameRegister.keyboardType = UIKeyboardType.EmailAddress;
-        registerView.addSubview(emailRegister)
-        
-        let submitButton = UIButton (frame: CGRectMake(self.view.bounds.size.width + 15, 250, self.view.bounds.size.width - 30, 40))
-        submitButton.setTitle("Register", forState: .Normal)
-        submitButton.addTarget(self, action: "registerUser", forControlEvents: .TouchUpInside)
-        submitButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        registerView.addSubview(submitButton)
     }
 
     func showCreateAccount(sender: UIButton) {
         switch sender.tag {
             case 0:
                 UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseOut, animations: {
-                    self.registerView.frame = ( frame: CGRectMake(self.view.bounds.size.width * -1, 0, self.view.bounds.size.width * 2, self.view.bounds.size.height) )
+                    self.registerView.frame = ( frame: CGRectMake(self.view.bounds.size.width * -1, 75, self.view.bounds.size.width * 2, self.view.bounds.size.height - 75) )
                     }, completion: { finished in
                 })
             case 1:
                 UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseOut, animations: {
-                    self.registerView.frame = ( frame: CGRectMake(0, 0, self.view.bounds.size.width * 2, self.view.bounds.size.height) )
+                    self.registerView.frame = ( frame: CGRectMake(0, 75, self.view.bounds.size.width * 2, self.view.bounds.size.height - 75) )
                     }, completion: { finished in
                 })
-                registerView.frame = ( frame: CGRectMake(0, 0, self.view.bounds.size.width * 2, self.view.bounds.size.height) )
             default:
                 UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseOut, animations: {
-                    self.registerView.frame = ( frame: CGRectMake(0, 0, self.view.bounds.size.width * 2, self.view.bounds.size.height) )
+                    self.registerView.frame = ( frame: CGRectMake(0, 75, self.view.bounds.size.width * 2, self.view.bounds.size.height - 75) )
                     }, completion: { finished in
                 })
             
         }
     }
     
-    func registerUser() {
+    func registerUser(sender: UIButton) {
         let user = PFUser()
         user.username = userNameRegister.text
-        user.password = passwordRegister.text
-        user.email = emailRegister.text
         user["searchableUserName"] = userNameRegister.text!.lowercaseString
+        user["name"] = firstlastNameRegister.text
+        user.email = emailRegister.text
+        user["address"] = addressRegister.text
+        user.password = passwordRegister.text
+        user["optionOne"] = optionOne
+        user["optionTwo"] = optionTwo
+        user["optionThree"] = optionThree
         
         user.signUpInBackgroundWithBlock {
             (succeeded: Bool, error: NSError?) -> Void in
-            if let error = error {
-                _ = error.userInfo["error"] as? NSString
-                // Show the errorString somewhere and let the user try again.
+            if succeeded {
+                // Do stuff after successful login.
+                self.performSegueWithIdentifier("userLoggedIn", sender: self)
             } else {
-                // Hooray! Let them use the app now.
-                //NSNotificationCenter.defaultCenter().postNotificationName("loginRegisterWasSuccessful", object: nil)
-                print("Hooray")
+                // The login failed. Check error to see why.
+                print(error!.userInfo["error"])
             }
         }
     }
@@ -212,6 +305,40 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
     func optionChecked(sender: UIButton) {
         let checkMarkCheckedImage = UIImage(named: "blue_check") as UIImage?
         let checkMarkUncheckedImage = UIImage(named: "white_check") as UIImage?
+        
+        switch sender.tag {
+        case 1:
+            if optionOne {
+                sender.setBackgroundImage(checkMarkUncheckedImage, forState: .Normal)
+                optionOne = false
+            }
+            else {
+                sender.setBackgroundImage(checkMarkCheckedImage, forState: .Normal)
+                optionOne = true
+            }
+        case 2:
+            if optionTwo {
+                sender.setBackgroundImage(checkMarkUncheckedImage, forState: .Normal)
+                optionTwo = false
+            }
+            else {
+                sender.setBackgroundImage(checkMarkCheckedImage, forState: .Normal)
+                optionTwo = true
+            }
+        case 3:
+            if optionThree {
+                sender.setBackgroundImage(checkMarkUncheckedImage, forState: .Normal)
+                optionThree = false
+            }
+            else {
+                sender.setBackgroundImage(checkMarkCheckedImage, forState: .Normal)
+                optionThree = true
+            }
+        default:
+            print("")
+            
+        }
+        
         if (sender.tag == 0) {
             sender.tag = 1
             sender.setBackgroundImage(checkMarkUncheckedImage, forState: .Normal)
@@ -224,6 +351,17 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate {
 
     func continueWithoutLogin(sender: UIButton) {
         performSegueWithIdentifier("userLoggedIn", sender: self)
+    }
+    
+    // MARK:
+    // MARK: UITextFieldDelegate
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func textFieldDidEndEditing(textField: UITextField) {
+        
     }
     
     /*

@@ -17,14 +17,25 @@ class HomeViewController: UIViewController {
     // Custom Color
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     
-    let homeView = UIView() as UIView
+    let homeView = UIView()
     
-    var imageView = UIImageView() as UIImageView
+    var imageView = UIImageView()
 
-    var isMortgageCalc = Bool() as Bool
+    var isMortgageCalc = Bool()
+    let whiteBar = UIView()
+    
+    // UIButton
+    let myHomesButton = UIButton()
+    let addAHomeButton = UIButton()
+    let mortgageCalculatorButton = UIButton()
+    let refiCalculatorButton = UIButton()
+    let findBranchButton = UIButton()
+    let preQualifiedButton = UIButton()
+    let userButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         buildHomeView()
     }
 
@@ -45,7 +56,7 @@ class HomeViewController: UIViewController {
         imageView.image = fmcLogo
         homeView.addSubview(imageView)
         
-        let whiteBar = UIView(frame: CGRectMake(0, 85, self.view.bounds.size.width, 50))
+        whiteBar.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, 50))
         whiteBar.backgroundColor = UIColor.whiteColor()
         homeView.addSubview(whiteBar)
         
@@ -78,7 +89,7 @@ class HomeViewController: UIViewController {
         myHomesView.addSubview(myHomesLabel)
         
         // UIButton
-        let myHomesButton = UIButton (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
+        myHomesButton.frame = (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
         myHomesButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         myHomesButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         myHomesButton.backgroundColor = UIColor.clearColor()
@@ -102,7 +113,7 @@ class HomeViewController: UIViewController {
         addHomesLabel.sizeToFit()
         addHomesView.addSubview(addHomesLabel)
         
-        let addAHomeButton = UIButton (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
+        addAHomeButton.frame = (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
         addAHomeButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         addAHomeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         addAHomeButton.backgroundColor = UIColor.clearColor()
@@ -129,7 +140,7 @@ class HomeViewController: UIViewController {
         mortgageCalculatorView.addSubview(mortgageCalculatorLabel)
         
         // UIButton
-        let mortgageCalculatorButton = UIButton (frame: CGRectMake(0, 0, mortgageCalculatorView.bounds.size.width, mortgageCalculatorView.bounds.size.height))
+        mortgageCalculatorButton.frame = (frame: CGRectMake(0, 0, mortgageCalculatorView.bounds.size.width, mortgageCalculatorView.bounds.size.height))
         mortgageCalculatorButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         mortgageCalculatorButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         mortgageCalculatorButton.backgroundColor = UIColor.clearColor()
@@ -153,7 +164,7 @@ class HomeViewController: UIViewController {
         refiCalculatorLabel.sizeToFit()
         refiCalculatorView.addSubview(refiCalculatorLabel)
         
-        let refiCalculatorButton = UIButton (frame: CGRectMake(0, 0, refiCalculatorView.bounds.size.width, refiCalculatorView.bounds.size.height))
+        refiCalculatorButton.frame = (frame: CGRectMake(0, 0, refiCalculatorView.bounds.size.width, refiCalculatorView.bounds.size.height))
         refiCalculatorButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         refiCalculatorButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         refiCalculatorButton.backgroundColor = UIColor.clearColor()
@@ -179,7 +190,7 @@ class HomeViewController: UIViewController {
         findBranchLabel.sizeToFit()
         findBranchView.addSubview(findBranchLabel)
         
-        let findBranchButton = UIButton (frame: CGRectMake(0, 0, findBranchView.bounds.size.width, findBranchView.bounds.size.height))
+        findBranchButton.frame = (frame: CGRectMake(0, 0, findBranchView.bounds.size.width, findBranchView.bounds.size.height))
         findBranchButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         findBranchButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         findBranchButton.backgroundColor = UIColor.clearColor()
@@ -203,7 +214,7 @@ class HomeViewController: UIViewController {
         preQualifiedLabel.sizeToFit()
         preQualifiedView.addSubview(preQualifiedLabel)
         
-        let preQualifiedButton = UIButton (frame: CGRectMake(0, 0, preQualifiedView.bounds.size.width, preQualifiedView.bounds.size.height))
+        preQualifiedButton.frame = (frame: CGRectMake(0, 0, preQualifiedView.bounds.size.width, preQualifiedView.bounds.size.height))
         preQualifiedButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         preQualifiedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         preQualifiedButton.backgroundColor = UIColor.clearColor()
@@ -214,17 +225,83 @@ class HomeViewController: UIViewController {
         
         scrollView.contentSize = CGSize(width: self.view.bounds.size.width, height: ((self.view.bounds.size.width / 2) * 2) + (135 + 15))
         
+        userButton.frame = (frame: CGRectMake(10, 0, self.view.bounds.size.width - 20, 50))
+        userButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
+        userButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        userButton.backgroundColor = UIColor.clearColor()
+        userButton.contentHorizontalAlignment = .Right
+        whiteBar.addSubview(userButton)
+        
+        checkIfLoggedIn()
+    }
+    
+    func buildLoginView() {
+        //1. Create the alert controller.
+        let alert = UIAlertController(title: "First Mortgage", message: "Login", preferredStyle: .Alert)
+        
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
+            textField.placeholder = "User Name"
+        })
+        
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
+            textField.placeholder = "Password"
+            textField.secureTextEntry = true
+        })
+        
+        //3. Grab the value from the text field, and print it when the user clicks OK.
+        alert.addAction(UIAlertAction(title: "Login", style: .Default, handler: { (action) -> Void in
+            let unTextField = alert.textFields![0] as UITextField
+            print("User Name Text field: \(unTextField.text)")
+            
+            let pwTextField = alert.textFields![1] as UITextField
+            print("Password Text field: \(pwTextField.text)")
+            
+            PFUser.logInWithUsernameInBackground(unTextField.text!, password:pwTextField.text!) {
+                (user: PFUser?, error: NSError?) -> Void in
+                if user != nil {
+                    // Do stuff after successful login.
+                    self.checkIfLoggedIn()
+                } else {
+                    // The login failed. Check error to see why.
+                    print(error)
+                }
+            }
+        }))
+        
+        //3. Grab the value from the text field, and print it when the user clicks OK.
+        alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) -> Void in
+            
+        }))
+        
+        // 4. Present the alert.
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    func checkIfLoggedIn() {
         if ((PFUser.currentUser()) == nil) {
-            let loginButton = UIButton (frame: CGRectMake(self.view.bounds.size.width - 100, 0, 100, 50))
-            loginButton.setTitle("Login", forState: .Normal)
-            loginButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
-            loginButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-            loginButton.backgroundColor = UIColor.clearColor()
-            loginButton.tag = 0
-            whiteBar.addSubview(loginButton)
+            userButton.setTitle("Login", forState: .Normal)
+            userButton.tag = 6
+            
+            myHomesButton.enabled = false
+            addAHomeButton.enabled = false
+            preQualifiedButton.enabled = false
+        }
+        else {
+            let user = PFUser.currentUser()
+            let firstName = user!["name"] as! String
+            userButton.setTitle(String(format: "%@'S PROFILE >", firstName.uppercaseString), forState: .Normal)
+            userButton.tag = 7
+            
+            myHomesButton.enabled = true
+            addAHomeButton.enabled = true
+            preQualifiedButton.enabled = true
         }
     }
     
+    // MARK:
+    // MARK: Actions
     func navigateToOtherViews(sender: UIButton) {
         switch sender.tag {
         case 0:
@@ -245,7 +322,11 @@ class HomeViewController: UIViewController {
         case 5:
             let cvc = self.storyboard!.instantiateViewControllerWithIdentifier("webViewController") as! WebViewController
             self.navigationController!.pushViewController(cvc, animated: true)
-        
+        case 6:
+            print("Login Pressed")
+            buildLoginView()
+        case 7:
+            print("View Profile")
         default:
             print("Default")
         }

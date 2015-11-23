@@ -8,20 +8,44 @@
 
 import UIKit
 
-class WebViewController: UIViewController {
+class WebViewController: UIViewController, UIWebViewDelegate {
+
+    // MARK:
+    // MARK: Properties
+    @IBOutlet weak var fmcWebView: UIWebView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        let urlPath: String = "http://www.firstmortgageco.com"
+        fmcWebView.loadRequest(NSURLRequest(URL: NSURL(string: urlPath)!))
+        fmcWebView.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
+    // MARK:
+    // MARK: Actions
+    @IBAction func goBack(sender: UIButton) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func webView(webView: UIWebView, didFailLoadWithError error: NSError?) {
+        print("Webview fail with error \(error)");
+    }
+    func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest, navigationType: UIWebViewNavigationType) -> Bool {
+        return true
+    }
+    func webViewDidStartLoad(webView: UIWebView) {
+        print("Webview started Loading")
+    }
+    func webViewDidFinishLoad(webView: UIWebView) {
+        print("Webview did finish load")
+    }
+    
     /*
     // MARK: - Navigation
 

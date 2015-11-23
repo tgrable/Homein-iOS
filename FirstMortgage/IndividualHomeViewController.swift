@@ -252,12 +252,15 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         vertDividerThreeView.hidden = false
         scrollView.addSubview(vertDividerThreeView)
         
-        let homeSqft = homeObject["footage"] as! Double
-        let attributedHomeSqft = NSMutableAttributedString(
-            string: String(format: "%.1f",homeSqft),
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
-                name: "Arial",
-                size: 12.0)!])
+        var attributedHomeSqft = NSMutableAttributedString()
+        if let homeSqft = homeObject["footage"] as? Double {
+            attributedHomeSqft = NSMutableAttributedString(
+                string: String(format: "%.1f", homeSqft),
+                attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
+                    name: "Arial",
+                    size: 12.0)!])
+        }
+        
         
         // UITextField
         sqFeetTxtField.frame = (frame: CGRectMake(scrollView.bounds.size.width - 50, 300, 40, 30))
