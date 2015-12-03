@@ -8,6 +8,8 @@
 
 import UIKit
 import CoreLocation
+import AddressBook
+import MapKit
 
 class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
 
@@ -23,11 +25,19 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     
     let locationManager = CLLocationManager()
     
-    let currentLocation = CLLocation()
+    var currentLocation = CLLocation()
+    var coords: CLLocationCoordinate2D?
+    
+    var dictionary = Dictionary<String, String>()
+    
+    var branchArray = [Branch]()
+    
+    var activityIndicator = UIActivityIndicatorView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //creatStateDictionary()
         buildView()
         
         locationManager.delegate = self
@@ -36,8 +46,12 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         locationManager.startUpdatingLocation()
 
         // Do any additional setup after loading the view.
+        
     }
     
+    override func viewDidAppear(animated: Bool) {
+        getBranchJson()
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -67,82 +81,143 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         homeButton.backgroundColor = UIColor.clearColor()
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        activityIndicator.center = view.center
+        activityIndicator.startAnimating()
+        view.addSubview(activityIndicator)
+        addHomeView.addSubview(activityIndicator)
     }
-    
-    func navigateBackHome(sender: UIButton) {
-        navigationController?.popViewControllerAnimated(true)
-    }
-    
+
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        //print(locations)
         locationManager.stopUpdatingLocation()
         
-        /*//My location
-        let myLocation = CLLocation(latitude: 59.244696, longitude: 17.813868)
-        
-        //My buddy's location
-        let myBuddysLocation = CLLocation(latitude: 59.326354, longitude: 18.072310)
-        
-        //Measuring my distance to my buddy's (in km)
-        let distance = myLocation.distanceFromLocation(myBuddysLocation) / 1000
-        
-        //Display the result in km
-        print(String(format: "The distance to my buddy is %.01fkm", distance))*/
- 
-        
-        let address = "3322 Carolina Ave, IL, USA"
-        let geocoder = CLGeocoder()
-        
-        
-        geocoder.geocodeAddressString(address, completionHandler: {(placemarks, error) -> Void in
-            if((error) != nil){
-                print("Error", error)
-            }
-            if let placemark = placemarks?.first {
-                let lat = placemark.location!.coordinate.latitude
-                let long = placemark.location!.coordinate.longitude
-                
-                let clObj = CLLocation(latitude: lat, longitude: long)
-                
-                print(clObj)
-            }
-        })
-        
-        /*CLGeocoder().reverseGeocodeLocation(manager.location!, completionHandler: {(placemarks, error)->Void in
-            if (error != nil) {
-                print("Reverse geocoder failed with error" + error!.localizedDescription)
-                return
-            }
-            
-            if placemarks!.count > 0 {
-                let pm = placemarks![0] as CLPlacemark
-                self.displayLocationInfo(pm)
-            } else {
-                print("Problem with the data received from geocoder")
-            }
-        })*/
+        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Authorized) {                currentLocation = locationManager.location!
+        }
     }
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error while updating location " + error.localizedDescription)
     }
     
-    func displayLocationInfo(placemark: CLPlacemark) {
-        //stop updating location to save battery life
-        locationManager.stopUpdatingLocation()
+    func getBranchJson() {
         
-        //print(placemark)
+        let endpoint = NSURL(string: "http://fmc.dev.192.168.100.186.xip.io/branch-json")
+        //let endpoint = NSURL(string: "http://www.trekkdev1.com/branch-json")
+        let jsondata = NSData(contentsOfURL: endpoint!)
         
-        print(placemark.locality)
-        print(placemark.postalCode)
-        print(placemark.administrativeArea)
-        print(placemark.country)
-        print(placemark.location!.coordinate.longitude.description)
-        print(placemark.location!.coordinate.latitude.description)
+        //let jsondata = data.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        do {
+            let json = try NSJSONSerialization.JSONObjectWithData(jsondata!, options: .AllowFragments)
+            if let nodes = json as? NSDictionary {
+                if let nodeArray = nodes["nodes"] as? NSArray {
+                    for node in nodeArray {
+                        if let nd = node as? NSDictionary {
+                            if let n = nd["node"] as? NSDictionary {
+                                if let checkState = n["State"] as? String {
+                                    if (!checkState.isEmpty) {
+                                        let branch = Branch()
+                                        if let streetName = n["Street"] as? String {
+                                            branch.address = streetName
+                                        }
+                                        if let city = n["City"] as? String {
+                                            branch.city = city
+                                        }
+                                        if let state = n["State"] as? String {
+                                            branch.state = state
+                                        }
+                                        branchArray.append(branch)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            print(branchArray.count)
+            calcDistance()
+        }
+        catch {
+            print("error serializing JSON: \(error)")
+        }
+    }
+    
+    func calcDistance() {
+        var count = 1;
+        for branch in branchArray {
+            let geocoder = CLGeocoder()
+            let branchLocation = String(format: "%@, %@, USA", branch.address, branch.state)
+            var distance = 0.0
+            
+            geocoder.geocodeAddressString(branchLocation, completionHandler: {(placemarks, error) -> Void in
+                if((error) != nil){
+                    print("Error", error)
+                }
+                if let placemark = placemarks?.first {
+                    let lat = placemark.location!.coordinate.latitude
+                    let long = placemark.location!.coordinate.longitude
+                    
+                    let clObj = CLLocation(latitude: lat, longitude: long)
+                    distance = self.currentLocation.distanceFromLocation(clObj) / 1000
+                    branch.distanceFromMe = distance
+                    branch.lat = lat
+                    branch.long = long
+                    count++
+                    
+                    if (count == self.branchArray.count) {
+                        self.branchArray.sortInPlace({ $0.distanceFromMe < $1.distanceFromMe })
+                        self.printLocations()
+                    }
+                }
+            })
+        }
+    }
+    
+    func printLocations() {
+        var yOffset = 15
         
-        /*print(placemark.locality ? placemark.locality : "")
-        print(placemark.postalCode ? placemark.postalCode : "")
-        print(placemark.administrativeArea ? placemark.administrativeArea : "")
-        print(placemark.country ? placemark.country : "")*/
+        let scrollView = UIScrollView(frame: CGRectMake(0, 135.0, addHomeView.bounds.size.width, addHomeView.bounds.size.height - 135.0))
+        addHomeView.addSubview(scrollView)
+        
+        //for branch in branchArray {
+        for i in 0...4 {
+            let branch = branchArray[i]
+            
+            let addressLabel = UILabel (frame: CGRectMake(15, CGFloat(yOffset), self.view.bounds.size.width - 30, 24))
+            addressLabel.textAlignment = NSTextAlignment.Left
+            addressLabel.text = String(format: "%@", branch.address)
+            addressLabel.numberOfLines = 1
+            addressLabel.font = UIFont.boldSystemFontOfSize(24.0)
+            addressLabel.sizeToFit()
+            scrollView.addSubview(addressLabel)
+            
+            let cityStateLabel = UILabel (frame: CGRectMake(15, CGFloat(yOffset + 34), self.view.bounds.size.width - 30, 24))
+            cityStateLabel.textAlignment = NSTextAlignment.Left
+            cityStateLabel.text = String(format: "%@, %@", branch.city, branch.state)
+            cityStateLabel.numberOfLines = 1
+            cityStateLabel.font = cityStateLabel.font.fontWithSize(18.0)
+            cityStateLabel.sizeToFit()
+            scrollView.addSubview(cityStateLabel)
+            
+            let milesLabel = UILabel (frame: CGRectMake(15, CGFloat(yOffset + 58), self.view.bounds.size.width - 30, 24))
+            milesLabel.textAlignment = NSTextAlignment.Left
+            milesLabel.text = String(format: "%.2f Miles", branch.distanceFromMe)
+            milesLabel.numberOfLines = 1
+            milesLabel.font = cityStateLabel.font.fontWithSize(18.0)
+            milesLabel.sizeToFit()
+            scrollView.addSubview(milesLabel)
+            
+            let locationButton = UIButton(frame: CGRectMake(15, CGFloat(yOffset), self.view.bounds.size.width - 30, 100))
+            locationButton.addTarget(self, action: "mapButtonPressed:", forControlEvents: .TouchUpInside)
+            locationButton.backgroundColor = UIColor.clearColor()
+            locationButton.tag = i
+            scrollView.addSubview(locationButton)
+            
+            yOffset += 110
+        }
+        
+        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: 675)
+        activityIndicator.stopAnimating()
     }
     /*
     // MARK: - Navigation
@@ -153,5 +228,23 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         // Pass the selected object to the new view controller.
     }
     */
-
+    
+    func navigateBackHome(sender: UIButton) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func mapButtonPressed(sender: UIButton) {
+        let branch = branchArray[sender.tag]
+        openMapForPlace(branch)
+    }
+    
+    func openMapForPlace(branch: Branch) {
+        let coords = CLLocationCoordinate2DMake(branch.lat, branch.long)
+        
+        let address : [String : AnyObject] = [kABPersonAddressStreetKey as String: branch.address, kABPersonAddressCityKey as String: branch.city, kABPersonAddressStateKey as String: branch.state, kABPersonAddressCountryCodeKey as String: "US"]
+        
+        let place = MKPlacemark(coordinate: coords, addressDictionary: address)
+        let mapItem = MKMapItem(placemark: place)
+        mapItem.openInMapsWithLaunchOptions(nil)
+    }
 }

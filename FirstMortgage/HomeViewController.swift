@@ -15,9 +15,17 @@ class HomeViewController: UIViewController {
     // MARK: Properties
     
     // Custom Color
+    let blueColor = UIColor(red: 54/255, green: 104/255, blue: 160/255, alpha: 1)
+    let redColor = UIColor(red: 231.0/255.0, green: 85.0/255.0, blue: 88.0/255.0, alpha: 1)
+    let greenColor = UIColor(red: 185.0/255.0, green: 190.0/255.0, blue: 71.0/255.0, alpha: 1)
+    let orangeColor = UIColor(red: 238/255, green: 155/255, blue: 79/255, alpha: 1)
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     
+    let lightBlueColor = UIColor(red: 83/255, green: 135/255, blue: 186/255, alpha: 1)
+    let darkBlueColor = UIColor(red: 53/255, green: 103/255, blue: 160/255, alpha: 1)
+    
     let homeView = UIView()
+    
     
     var imageView = UIImageView()
 
@@ -75,17 +83,28 @@ class HomeViewController: UIViewController {
         
         /********************************************************* My Homes Button ********************************************************************/
         // UIView
+        
+        
         let myHomesView = UIView(frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
-        myHomesView.backgroundColor = UIColor.blueColor()
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.frame = myHomesView.bounds
+        gradientLayer.colors = [lightBlueColor, darkBlueColor]
+        myHomesView.layer.insertSublayer(gradientLayer, atIndex: 0)
+        myHomesView.layer.addSublayer(gradientLayer)
         scrollView.addSubview(myHomesView)
         
+        let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let homeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 25, 36, 36))
+        homeIcon.image = homeIcn
+        myHomesView.addSubview(homeIcon)
+        
         // UILabel
-        let myHomesLabel = UILabel(frame: CGRectMake(15, 15, myHomesView.bounds.size.width, 0))
+        let myHomesLabel = UILabel(frame: CGRectMake(0, 75, myHomesView.bounds.size.width, 24))
         myHomesLabel.text = "MY HOMES"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        myHomesLabel.font = UIFont(name: "forza-light", size: 18)
         myHomesLabel.textAlignment = NSTextAlignment.Center
-        myHomesLabel.numberOfLines = 0
-        myHomesLabel.sizeToFit()
+        myHomesLabel.textColor = UIColor.whiteColor()
+        myHomesLabel.numberOfLines = 1
         myHomesView.addSubview(myHomesLabel)
         
         // UIButton
@@ -101,16 +120,21 @@ class HomeViewController: UIViewController {
         /********************************************************* Add Homes Button ********************************************************************/
         // UIView
         let addHomesView = UIView(frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
-        addHomesView.backgroundColor = UIColor.blueColor()
+        addHomesView.backgroundColor = blueColor
         scrollView.addSubview(addHomesView)
         
+        let addIcn = UIImage(named: "add_icon") as UIImage?
+        let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 35, 26, 26))
+        addHomeIcon.image = addIcn
+        addHomesView.addSubview(addHomeIcon)
+        
         // UILabel
-        let addHomesLabel = UILabel(frame: CGRectMake(15, 15, myHomesView.bounds.size.width, 0))
-        addHomesLabel.text = "Add A\nHOME"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        let addHomesLabel = UILabel(frame: CGRectMake(0, 75, myHomesView.bounds.size.width, 48))
+        addHomesLabel.text = "ADD A\nHOME"
+        addHomesLabel.font = UIFont(name: "forza-light", size: 18)
         addHomesLabel.textAlignment = NSTextAlignment.Center
-        addHomesLabel.numberOfLines = 0
-        addHomesLabel.sizeToFit()
+        addHomesLabel.textColor = UIColor.whiteColor()
+        addHomesLabel.numberOfLines = 2
         addHomesView.addSubview(addHomesLabel)
         
         addAHomeButton.frame = (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
@@ -127,16 +151,21 @@ class HomeViewController: UIViewController {
         /********************************************************* Mortgage Calculator Button ********************************************************************/
         // UIView
         let mortgageCalculatorView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        mortgageCalculatorView.backgroundColor = UIColor.blueColor()
+        mortgageCalculatorView.backgroundColor = greenColor
         scrollView.addSubview(mortgageCalculatorView)
         
+        let calcIcn = UIImage(named: "icn-calculator") as UIImage?
+        let calcIcon = UIImageView(frame: CGRectMake((mortgageCalculatorView.bounds.size.width / 2) - 18, 25, 36, 36))
+        calcIcon.image = calcIcn
+        mortgageCalculatorView.addSubview(calcIcon)
+        
         // UILabel
-        let mortgageCalculatorLabel = UILabel(frame: CGRectMake(15, 15, mortgageCalculatorView.bounds.size.width, 0))
+        let mortgageCalculatorLabel = UILabel(frame: CGRectMake(0, 75, mortgageCalculatorView.bounds.size.width, 48))
         mortgageCalculatorLabel.text = "MORTGAGE\nCALCULATOR"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        mortgageCalculatorLabel.font = UIFont(name: "forza-light", size: 18)
         mortgageCalculatorLabel.textAlignment = NSTextAlignment.Center
-        mortgageCalculatorLabel.numberOfLines = 0
-        mortgageCalculatorLabel.sizeToFit()
+        mortgageCalculatorLabel.numberOfLines = 2
+        mortgageCalculatorLabel.textColor = UIColor.whiteColor()
         mortgageCalculatorView.addSubview(mortgageCalculatorLabel)
         
         // UIButton
@@ -152,16 +181,20 @@ class HomeViewController: UIViewController {
         /********************************************************* Refinance Calculator Button ********************************************************************/
         // UIView
         let refiCalculatorView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        refiCalculatorView.backgroundColor = UIColor.blueColor()
+        refiCalculatorView.backgroundColor = orangeColor
         scrollView.addSubview(refiCalculatorView)
         
+        let calcIconTwo = UIImageView(frame: CGRectMake((refiCalculatorView.bounds.size.width / 2) - 18, 25, 36, 36))
+        calcIconTwo.image = calcIcn
+        refiCalculatorView.addSubview(calcIconTwo)
+        
         // UILabel
-        let refiCalculatorLabel = UILabel(frame: CGRectMake(15, 15, refiCalculatorView.bounds.size.width, 0))
+        let refiCalculatorLabel = UILabel(frame: CGRectMake(0, 75, refiCalculatorView.bounds.size.width, 48))
         refiCalculatorLabel.text = "REFINANCING\nCALCULATOR"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        refiCalculatorLabel.font = UIFont(name: "forza-light", size: 18)
         refiCalculatorLabel.textAlignment = NSTextAlignment.Center
-        refiCalculatorLabel.numberOfLines = 0
-        refiCalculatorLabel.sizeToFit()
+        refiCalculatorLabel.numberOfLines = 2
+        refiCalculatorLabel.textColor = UIColor.whiteColor()
         refiCalculatorView.addSubview(refiCalculatorLabel)
         
         refiCalculatorButton.frame = (frame: CGRectMake(0, 0, refiCalculatorView.bounds.size.width, refiCalculatorView.bounds.size.height))
@@ -178,16 +211,21 @@ class HomeViewController: UIViewController {
         /********************************************************* Find Branch Button ********************************************************************/
         // UIView
         let findBranchView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        findBranchView.backgroundColor = UIColor.blueColor()
+        findBranchView.backgroundColor = redColor
         scrollView.addSubview(findBranchView)
         
+        let brnchIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let branchIcon = UIImageView(frame: CGRectMake((findBranchView.bounds.size.width / 2) - 18, 25, 36, 36))
+        branchIcon.image = brnchIcn
+        findBranchView.addSubview(branchIcon)
+        
         // UILabel
-        let findBranchLabel = UILabel(frame: CGRectMake(15, 15, findBranchView.bounds.size.width, 0))
+        let findBranchLabel = UILabel(frame: CGRectMake(0, 75, findBranchView.bounds.size.width, 72))
         findBranchLabel.text = "FIND THE\nCLOSEST\nBRANCH"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        findBranchLabel.font = UIFont(name: "forza-light", size: 18)
         findBranchLabel.textAlignment = NSTextAlignment.Center
-        findBranchLabel.numberOfLines = 0
-        findBranchLabel.sizeToFit()
+        findBranchLabel.numberOfLines = 3
+        findBranchLabel.textColor = UIColor.whiteColor()
         findBranchView.addSubview(findBranchLabel)
         
         findBranchButton.frame = (frame: CGRectMake(0, 0, findBranchView.bounds.size.width, findBranchView.bounds.size.height))
@@ -202,16 +240,21 @@ class HomeViewController: UIViewController {
         /********************************************************* Get Prequalified Button ********************************************************************/
          // UIView
         let preQualifiedView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        preQualifiedView.backgroundColor = UIColor.blueColor()
+        preQualifiedView.backgroundColor = blueColor
         scrollView.addSubview(preQualifiedView)
         
+        let checkIcn = UIImage(named: "icn-applyOnline") as UIImage?
+        let checkIcon = UIImageView(frame: CGRectMake((preQualifiedView.bounds.size.width / 2) - 18, 25, 36, 36))
+        checkIcon.image = checkIcn
+        preQualifiedView.addSubview(checkIcon)
+        
         // UILabel
-        let preQualifiedLabel = UILabel(frame: CGRectMake(15, 15, preQualifiedView.bounds.size.width, 0))
+        let preQualifiedLabel = UILabel(frame: CGRectMake(0, 75, preQualifiedView.bounds.size.width, 48))
         preQualifiedLabel.text = "GET\nPREQUALIFIED"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        preQualifiedLabel.font = UIFont(name: "forza-light", size: 18)
         preQualifiedLabel.textAlignment = NSTextAlignment.Center
-        preQualifiedLabel.numberOfLines = 0
-        preQualifiedLabel.sizeToFit()
+        preQualifiedLabel.numberOfLines = 2
+        preQualifiedLabel.textColor = UIColor.whiteColor()
         preQualifiedView.addSubview(preQualifiedLabel)
         
         preQualifiedButton.frame = (frame: CGRectMake(0, 0, preQualifiedView.bounds.size.width, preQualifiedView.bounds.size.height))
@@ -227,7 +270,7 @@ class HomeViewController: UIViewController {
         
         userButton.frame = (frame: CGRectMake(10, 0, self.view.bounds.size.width - 20, 50))
         userButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
-        userButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        userButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         userButton.backgroundColor = UIColor.clearColor()
         userButton.contentHorizontalAlignment = .Right
         whiteBar.addSubview(userButton)
@@ -290,10 +333,14 @@ class HomeViewController: UIViewController {
         }
         else {
             let user = PFUser.currentUser()
-            let firstName = user!["name"] as! String
-            userButton.setTitle(String(format: "%@'S PROFILE >", firstName.uppercaseString), forState: .Normal)
-            userButton.tag = 7
+            if let firstName = user!["name"] {
+                userButton.setTitle(String(format: "%@'S PROFILE >", firstName.uppercaseString), forState: .Normal)
+            }
+            else {
+                userButton.setTitle("PROFILE >", forState: .Normal)
+            }
             
+            userButton.tag = 7
             myHomesButton.enabled = true
             addAHomeButton.enabled = true
             preQualifiedButton.enabled = true

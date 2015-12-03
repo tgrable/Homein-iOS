@@ -15,6 +15,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Properties
     
     // Custom Color
+    let blueColor = UIColor(red: 54/255, green: 104/255, blue: 160/255, alpha: 1)
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     let greenColor = UIColor(red: 185/255, green: 190/255, blue: 71/255, alpha: 1)
 
@@ -72,7 +73,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         let homeButton = UIButton (frame: CGRectMake(0, 0, 75, 45))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
         homeButton.setTitle("Back", forState: .Normal)
-        homeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        homeButton.setTitleColor(blueColor, forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
@@ -81,7 +82,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         let addButton = UIButton (frame: CGRectMake(whiteBar.bounds.size.width - 75, 0, 75, 45))
         addButton.addTarget(self, action: "addNewHome:", forControlEvents: .TouchUpInside)
         addButton.setTitle("Add", forState: .Normal)
-        addButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        addButton.setTitleColor(blueColor, forState: .Normal)
         addButton.backgroundColor = UIColor.clearColor()
         addButton.tag = 0
         whiteBar.addSubview(addButton)

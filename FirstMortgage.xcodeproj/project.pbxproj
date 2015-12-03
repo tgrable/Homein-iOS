@@ -11,6 +11,20 @@
 		4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */; };
 		4F5AD5F21BFA3547000AF1A2 /* btn-calculate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5AD5F11BFA3547000AF1A2 /* btn-calculate.png */; };
 		4F5AD5F41BFA354D000AF1A2 /* btn-calculate@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5AD5F31BFA354D000AF1A2 /* btn-calculate@2x.png */; };
+		4F8815711C04B192001488C1 /* Branch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8815701C04B192001488C1 /* Branch.swift */; };
+		4F8F92FD1C061C0F00639F55 /* icn-calculator.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F92FC1C061C0F00639F55 /* icn-calculator.png */; };
+		4F8F92FF1C061C1400639F55 /* icn-calculator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F92FE1C061C1400639F55 /* icn-calculator@2x.png */; };
+		4F8F93021C061E0B00639F55 /* icn-firstTime.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F93001C061E0B00639F55 /* icn-firstTime.png */; };
+		4F8F93031C061E0B00639F55 /* icn-firstTime@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F93011C061E0B00639F55 /* icn-firstTime@2x.png */; };
+		4F8F93061C06238E00639F55 /* icn-applyOnline.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F93041C06238E00639F55 /* icn-applyOnline.png */; };
+		4F8F93071C06238E00639F55 /* icn-applyOnline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F93051C06238E00639F55 /* icn-applyOnline@2x.png */; };
+		4FADCA631C0E2798000186A8 /* edit_icon_onstate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA611C0E2798000186A8 /* edit_icon_onstate.png */; };
+		4FADCA641C0E2798000186A8 /* edit_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA621C0E2798000186A8 /* edit_icon.png */; };
+		4FADCA661C0E27A0000186A8 /* edit-128_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA651C0E27A0000186A8 /* edit-128_blue.png */; };
+		4FADCA691C0E27B1000186A8 /* camera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA671C0E27B1000186A8 /* camera_icon.png */; };
+		4FADCA6A1C0E27B1000186A8 /* add_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA681C0E27B1000186A8 /* add_icon.png */; };
+		4FADCA6B1C0E2A29000186A8 /* FORZA-LIGHT.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA5B1C0DEC26000186A8 /* FORZA-LIGHT.OTF */; };
+		4FADCA6D1C0E2B7E000186A8 /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FADCA6C1C0E2B7E000186A8 /* model.swift */; };
 		4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */; };
 		4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD51BE106EB00A89A9A /* Main.storyboard */; };
 		4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */; };
@@ -68,6 +82,31 @@
 		4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndividualHomeViewController.swift; sourceTree = "<group>"; };
 		4F5AD5F11BFA3547000AF1A2 /* btn-calculate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn-calculate.png"; path = "images/btn-calculate.png"; sourceTree = "<group>"; };
 		4F5AD5F31BFA354D000AF1A2 /* btn-calculate@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn-calculate@2x.png"; path = "images/btn-calculate@2x.png"; sourceTree = "<group>"; };
+		4F8815701C04B192001488C1 /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branch.swift; path = FirstMortgage/Branch.swift; sourceTree = "<group>"; };
+		4F8F92FC1C061C0F00639F55 /* icn-calculator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-calculator.png"; path = "images/icn-calculator.png"; sourceTree = "<group>"; };
+		4F8F92FE1C061C1400639F55 /* icn-calculator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-calculator@2x.png"; path = "images/icn-calculator@2x.png"; sourceTree = "<group>"; };
+		4F8F93001C061E0B00639F55 /* icn-firstTime.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-firstTime.png"; path = "images/icn-firstTime.png"; sourceTree = "<group>"; };
+		4F8F93011C061E0B00639F55 /* icn-firstTime@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-firstTime@2x.png"; path = "images/icn-firstTime@2x.png"; sourceTree = "<group>"; };
+		4F8F93041C06238E00639F55 /* icn-applyOnline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-applyOnline.png"; path = "images/icn-applyOnline.png"; sourceTree = "<group>"; };
+		4F8F93051C06238E00639F55 /* icn-applyOnline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-applyOnline@2x.png"; path = "images/icn-applyOnline@2x.png"; sourceTree = "<group>"; };
+		4FADCA551C0DEC26000186A8 /* FORZA-BLACK.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BLACK.OTF"; path = "fonts/FORZA-BLACK.OTF"; sourceTree = "<group>"; };
+		4FADCA561C0DEC26000186A8 /* FORZA-BLACKITALIC.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BLACKITALIC.OTF"; path = "fonts/FORZA-BLACKITALIC.OTF"; sourceTree = "<group>"; };
+		4FADCA571C0DEC26000186A8 /* FORZA-BOLD.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BOLD.OTF"; path = "fonts/FORZA-BOLD.OTF"; sourceTree = "<group>"; };
+		4FADCA581C0DEC26000186A8 /* FORZA-BOLDITALIC.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BOLDITALIC.OTF"; path = "fonts/FORZA-BOLDITALIC.OTF"; sourceTree = "<group>"; };
+		4FADCA591C0DEC26000186A8 /* FORZA-BOOK.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BOOK.OTF"; path = "fonts/FORZA-BOOK.OTF"; sourceTree = "<group>"; };
+		4FADCA5A1C0DEC26000186A8 /* FORZA-BOOKITALIC.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BOOKITALIC.OTF"; path = "fonts/FORZA-BOOKITALIC.OTF"; sourceTree = "<group>"; };
+		4FADCA5B1C0DEC26000186A8 /* FORZA-LIGHT.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-LIGHT.OTF"; path = "fonts/FORZA-LIGHT.OTF"; sourceTree = "<group>"; };
+		4FADCA5C1C0DEC26000186A8 /* FORZA-LIGHTITALIC.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-LIGHTITALIC.OTF"; path = "fonts/FORZA-LIGHTITALIC.OTF"; sourceTree = "<group>"; };
+		4FADCA5D1C0DEC26000186A8 /* FORZA-MEDIUM.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-MEDIUM.OTF"; path = "fonts/FORZA-MEDIUM.OTF"; sourceTree = "<group>"; };
+		4FADCA5E1C0DEC26000186A8 /* FORZA-MEDIUMITALIC.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-MEDIUMITALIC.OTF"; path = "fonts/FORZA-MEDIUMITALIC.OTF"; sourceTree = "<group>"; };
+		4FADCA5F1C0DEC26000186A8 /* FORZA-THIN.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-THIN.OTF"; path = "fonts/FORZA-THIN.OTF"; sourceTree = "<group>"; };
+		4FADCA601C0DEC26000186A8 /* FORZA-THINITALIC.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-THINITALIC.OTF"; path = "fonts/FORZA-THINITALIC.OTF"; sourceTree = "<group>"; };
+		4FADCA611C0E2798000186A8 /* edit_icon_onstate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = edit_icon_onstate.png; path = images/edit_icon_onstate.png; sourceTree = "<group>"; };
+		4FADCA621C0E2798000186A8 /* edit_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = edit_icon.png; path = images/edit_icon.png; sourceTree = "<group>"; };
+		4FADCA651C0E27A0000186A8 /* edit-128_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "edit-128_blue.png"; path = "images/edit-128_blue.png"; sourceTree = "<group>"; };
+		4FADCA671C0E27B1000186A8 /* camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera_icon.png; path = images/camera_icon.png; sourceTree = "<group>"; };
+		4FADCA681C0E27B1000186A8 /* add_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_icon.png; path = images/add_icon.png; sourceTree = "<group>"; };
+		4FADCA6C1C0E2B7E000186A8 /* model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = model.swift; path = FirstMortgage/model.swift; sourceTree = "<group>"; };
 		4FAF3CCE1BE106EB00A89A9A /* FirstMortgage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirstMortgage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FAF3CD61BE106EB00A89A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -148,6 +187,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4FADCA541C0DEBF6000186A8 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				4FADCA551C0DEC26000186A8 /* FORZA-BLACK.OTF */,
+				4FADCA561C0DEC26000186A8 /* FORZA-BLACKITALIC.OTF */,
+				4FADCA571C0DEC26000186A8 /* FORZA-BOLD.OTF */,
+				4FADCA581C0DEC26000186A8 /* FORZA-BOLDITALIC.OTF */,
+				4FADCA591C0DEC26000186A8 /* FORZA-BOOK.OTF */,
+				4FADCA5A1C0DEC26000186A8 /* FORZA-BOOKITALIC.OTF */,
+				4FADCA5B1C0DEC26000186A8 /* FORZA-LIGHT.OTF */,
+				4FADCA5C1C0DEC26000186A8 /* FORZA-LIGHTITALIC.OTF */,
+				4FADCA5D1C0DEC26000186A8 /* FORZA-MEDIUM.OTF */,
+				4FADCA5E1C0DEC26000186A8 /* FORZA-MEDIUMITALIC.OTF */,
+				4FADCA5F1C0DEC26000186A8 /* FORZA-THIN.OTF */,
+				4FADCA601C0DEC26000186A8 /* FORZA-THINITALIC.OTF */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		4FAF3CC51BE106EB00A89A9A = {
 			isa = PBXGroup;
 			children = (
@@ -157,6 +215,7 @@
 				4FAF3CF01BE106EB00A89A9A /* FirstMortgageUITests */,
 				4FAF3CCF1BE106EB00A89A9A /* Products */,
 				4FAF3D2C1BE119E200A89A9A /* Images */,
+				4FADCA541C0DEBF6000186A8 /* Fonts */,
 				4FAF3D0F1BE10CB700A89A9A /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -234,6 +293,17 @@
 		4FAF3D2C1BE119E200A89A9A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4FADCA671C0E27B1000186A8 /* camera_icon.png */,
+				4FADCA681C0E27B1000186A8 /* add_icon.png */,
+				4FADCA651C0E27A0000186A8 /* edit-128_blue.png */,
+				4FADCA611C0E2798000186A8 /* edit_icon_onstate.png */,
+				4FADCA621C0E2798000186A8 /* edit_icon.png */,
+				4F8F93041C06238E00639F55 /* icn-applyOnline.png */,
+				4F8F93051C06238E00639F55 /* icn-applyOnline@2x.png */,
+				4F8F93001C061E0B00639F55 /* icn-firstTime.png */,
+				4F8F93011C061E0B00639F55 /* icn-firstTime@2x.png */,
+				4F8F92FC1C061C0F00639F55 /* icn-calculator.png */,
+				4F8F92FE1C061C1400639F55 /* icn-calculator@2x.png */,
 				4F5AD5F11BFA3547000AF1A2 /* btn-calculate.png */,
 				4F5AD5F31BFA354D000AF1A2 /* btn-calculate@2x.png */,
 				4FAF3D351BE151DA00A89A9A /* homebackground.png */,
@@ -248,7 +318,9 @@
 			isa = PBXGroup;
 			children = (
 				4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */,
+				4F8815701C04B192001488C1 /* Branch.swift */,
 				4FB616301BFB76440057414C /* ShadowEffect.swift */,
+				4FADCA6C1C0E2B7E000186A8 /* model.swift */,
 			);
 			name = "Supporting Classes";
 			sourceTree = "<group>";
@@ -358,14 +430,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4FADCA691C0E27B1000186A8 /* camera_icon.png in Resources */,
+				4FADCA6A1C0E27B1000186A8 /* add_icon.png in Resources */,
+				4FADCA661C0E27A0000186A8 /* edit-128_blue.png in Resources */,
+				4FADCA631C0E2798000186A8 /* edit_icon_onstate.png in Resources */,
+				4FADCA641C0E2798000186A8 /* edit_icon.png in Resources */,
+				4F8F93031C061E0B00639F55 /* icn-firstTime@2x.png in Resources */,
 				4FAF3CDC1BE106EB00A89A9A /* LaunchScreen.storyboard in Resources */,
 				4F5AD5F41BFA354D000AF1A2 /* btn-calculate@2x.png in Resources */,
 				4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */,
 				4FAF3D301BE11BEC00A89A9A /* white_check.png in Resources */,
 				4F5AD5F21BFA3547000AF1A2 /* btn-calculate.png in Resources */,
 				4FAF3D341BE14BA200A89A9A /* fmc_logo.png in Resources */,
+				4F8F92FD1C061C0F00639F55 /* icn-calculator.png in Resources */,
+				4F8F93071C06238E00639F55 /* icn-applyOnline@2x.png in Resources */,
+				4F8F93061C06238E00639F55 /* icn-applyOnline.png in Resources */,
+				4F8F92FF1C061C1400639F55 /* icn-calculator@2x.png in Resources */,
 				4FAF3D2F1BE11BEC00A89A9A /* blue_check.png in Resources */,
 				4FAF3D361BE151DA00A89A9A /* homebackground.png in Resources */,
+				4F8F93021C061E0B00639F55 /* icn-firstTime.png in Resources */,
+				4FADCA6B1C0E2A29000186A8 /* FORZA-LIGHT.OTF in Resources */,
 				4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,7 +480,9 @@
 				4FAF3D021BE1084200A89A9A /* CreateAccountViewController.swift in Sources */,
 				4FAF3D001BE1081700A89A9A /* InitialViewController.swift in Sources */,
 				4FB616311BFB76440057414C /* ShadowEffect.swift in Sources */,
+				4FADCA6D1C0E2B7E000186A8 /* model.swift in Sources */,
 				4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */,
+				4F8815711C04B192001488C1 /* Branch.swift in Sources */,
 				4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */,
 				4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */,
 				4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */,

@@ -756,7 +756,7 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         let r = intRate / 1200
         let n = term * 12
-        let rPower = pow(1+r, n)
+        let rPower = pow(1 + r, n)
         
         let monthlyPayment = loanAmount * r * rPower / (rPower - 1)
         estimatedPaymentDefault = monthlyPayment + (((Double(taxesTxtField.text!)! / 100) * Double(loanAmountTxtField.text!)!) / 12)
