@@ -15,14 +15,19 @@ class HomeViewController: UIViewController {
     // MARK: Properties
     
     // Custom Color
-    let blueColor = UIColor(red: 54/255, green: 104/255, blue: 160/255, alpha: 1)
-    let redColor = UIColor(red: 231.0/255.0, green: 85.0/255.0, blue: 88.0/255.0, alpha: 1)
-    let greenColor = UIColor(red: 185.0/255.0, green: 190.0/255.0, blue: 71.0/255.0, alpha: 1)
-    let orangeColor = UIColor(red: 238/255, green: 155/255, blue: 79/255, alpha: 1)
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     
     let lightBlueColor = UIColor(red: 83/255, green: 135/255, blue: 186/255, alpha: 1)
     let darkBlueColor = UIColor(red: 53/255, green: 103/255, blue: 160/255, alpha: 1)
+    
+    let lightOrangeColor = UIColor(red: 238/255, green: 155/255, blue: 78/255, alpha: 1)
+    let darkOrangeColor = UIColor(red: 222/255, green: 123/255, blue: 37/255, alpha: 1)
+    
+    let lightGreenColor = UIColor(red: 184.0/255.0, green: 189.0/255.0, blue: 70.0/255.0, alpha: 1)
+    let darkGreenColor = UIColor(red: 154.0/255.0, green: 166.0/255.0, blue: 65.0/255.0, alpha: 1)
+    
+    let lightRedColor = UIColor(red: 204.0/255.0, green: 69.0/255.0, blue: 67.0/255.0, alpha: 1)
+    let darkRedColor = UIColor(red: 174.0/255.0, green: 58.0/255.0, blue: 55.0/255.0, alpha: 1)
     
     let homeView = UIView()
     
@@ -53,14 +58,14 @@ class HomeViewController: UIViewController {
     }
     
     func buildHomeView() {
-        homeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width * 2, self.view.bounds.size.height))
+        homeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         homeView.backgroundColor = lightGrayColor
         homeView.hidden = false
         self.view.addSubview(homeView)
         
-        let fmcLogo = UIImage(named: "fmc_logo") as UIImage?
+        let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
-        imageView.frame = (frame: CGRectMake(40, 35, self.view.bounds.size.width - 80, 40))
+        imageView.frame = (frame: CGRectMake((homeView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
         imageView.image = fmcLogo
         homeView.addSubview(imageView)
         
@@ -83,14 +88,12 @@ class HomeViewController: UIViewController {
         
         /********************************************************* My Homes Button ********************************************************************/
         // UIView
-        
-        
         let myHomesView = UIView(frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = myHomesView.bounds
-        gradientLayer.colors = [lightBlueColor, darkBlueColor]
-        myHomesView.layer.insertSublayer(gradientLayer, atIndex: 0)
-        myHomesView.layer.addSublayer(gradientLayer)
+        let myHomesGradientLayer = CAGradientLayer()
+        myHomesGradientLayer.frame = myHomesView.bounds
+        myHomesGradientLayer.colors = [lightBlueColor.CGColor, darkBlueColor.CGColor]
+        myHomesView.layer.insertSublayer(myHomesGradientLayer, atIndex: 0)
+        myHomesView.layer.addSublayer(myHomesGradientLayer)
         scrollView.addSubview(myHomesView)
         
         let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
@@ -120,9 +123,13 @@ class HomeViewController: UIViewController {
         /********************************************************* Add Homes Button ********************************************************************/
         // UIView
         let addHomesView = UIView(frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
-        addHomesView.backgroundColor = blueColor
+        let addHomesGradientLayer = CAGradientLayer()
+        addHomesGradientLayer.frame = addHomesView.bounds
+        addHomesGradientLayer.colors = [lightBlueColor.CGColor, darkBlueColor.CGColor]
+        addHomesView.layer.insertSublayer(addHomesGradientLayer, atIndex: 0)
+        addHomesView.layer.addSublayer(addHomesGradientLayer)
         scrollView.addSubview(addHomesView)
-        
+ 
         let addIcn = UIImage(named: "add_icon") as UIImage?
         let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 35, 26, 26))
         addHomeIcon.image = addIcn
@@ -151,7 +158,11 @@ class HomeViewController: UIViewController {
         /********************************************************* Mortgage Calculator Button ********************************************************************/
         // UIView
         let mortgageCalculatorView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        mortgageCalculatorView.backgroundColor = greenColor
+        let mortgageCalculatorGradientLayer = CAGradientLayer()
+        mortgageCalculatorGradientLayer.frame = mortgageCalculatorView.bounds
+        mortgageCalculatorGradientLayer.colors = [lightGreenColor.CGColor, darkGreenColor.CGColor]
+        mortgageCalculatorView.layer.insertSublayer(mortgageCalculatorGradientLayer, atIndex: 0)
+        mortgageCalculatorView.layer.addSublayer(mortgageCalculatorGradientLayer)
         scrollView.addSubview(mortgageCalculatorView)
         
         let calcIcn = UIImage(named: "icn-calculator") as UIImage?
@@ -181,7 +192,11 @@ class HomeViewController: UIViewController {
         /********************************************************* Refinance Calculator Button ********************************************************************/
         // UIView
         let refiCalculatorView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        refiCalculatorView.backgroundColor = orangeColor
+        let refiCalculatorGradientLayer = CAGradientLayer()
+        refiCalculatorGradientLayer.frame = refiCalculatorView.bounds
+        refiCalculatorGradientLayer.colors = [lightOrangeColor.CGColor, darkOrangeColor.CGColor]
+        refiCalculatorView.layer.insertSublayer(refiCalculatorGradientLayer, atIndex: 0)
+        refiCalculatorView.layer.addSublayer(refiCalculatorGradientLayer)
         scrollView.addSubview(refiCalculatorView)
         
         let calcIconTwo = UIImageView(frame: CGRectMake((refiCalculatorView.bounds.size.width / 2) - 18, 25, 36, 36))
@@ -211,7 +226,11 @@ class HomeViewController: UIViewController {
         /********************************************************* Find Branch Button ********************************************************************/
         // UIView
         let findBranchView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        findBranchView.backgroundColor = redColor
+        let findBranchGradientLayer = CAGradientLayer()
+        findBranchGradientLayer.frame = findBranchView.bounds
+        findBranchGradientLayer.colors = [lightRedColor.CGColor, darkRedColor.CGColor]
+        findBranchView.layer.insertSublayer(findBranchGradientLayer, atIndex: 0)
+        findBranchView.layer.addSublayer(findBranchGradientLayer)
         scrollView.addSubview(findBranchView)
         
         let brnchIcn = UIImage(named: "icn-firstTime") as UIImage?
@@ -240,7 +259,11 @@ class HomeViewController: UIViewController {
         /********************************************************* Get Prequalified Button ********************************************************************/
          // UIView
         let preQualifiedView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        preQualifiedView.backgroundColor = blueColor
+        let preQualifiedGradientLayer = CAGradientLayer()
+        preQualifiedGradientLayer.frame = preQualifiedView.bounds
+        preQualifiedGradientLayer.colors = [lightBlueColor.CGColor, darkBlueColor.CGColor]
+        preQualifiedView.layer.insertSublayer(preQualifiedGradientLayer, atIndex: 0)
+        preQualifiedView.layer.addSublayer(preQualifiedGradientLayer)
         scrollView.addSubview(preQualifiedView)
         
         let checkIcn = UIImage(named: "icn-applyOnline") as UIImage?
@@ -272,6 +295,7 @@ class HomeViewController: UIViewController {
         userButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         userButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         userButton.backgroundColor = UIColor.clearColor()
+        userButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         userButton.contentHorizontalAlignment = .Right
         whiteBar.addSubview(userButton)
         
@@ -325,6 +349,7 @@ class HomeViewController: UIViewController {
     func checkIfLoggedIn() {
         if ((PFUser.currentUser()) == nil) {
             userButton.setTitle("Login", forState: .Normal)
+            
             userButton.tag = 6
             
             myHomesButton.enabled = false
@@ -334,10 +359,10 @@ class HomeViewController: UIViewController {
         else {
             let user = PFUser.currentUser()
             if let firstName = user!["name"] {
-                userButton.setTitle(String(format: "%@'S PROFILE >", firstName.uppercaseString), forState: .Normal)
+                userButton.setTitle(String(format: "%@'S PROFILE", firstName.uppercaseString), forState: .Normal)
             }
             else {
-                userButton.setTitle("PROFILE >", forState: .Normal)
+                userButton.setTitle("PROFILE", forState: .Normal)
             }
             
             userButton.tag = 7

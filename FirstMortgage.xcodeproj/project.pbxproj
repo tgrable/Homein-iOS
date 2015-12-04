@@ -24,7 +24,7 @@
 		4FADCA691C0E27B1000186A8 /* camera_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA671C0E27B1000186A8 /* camera_icon.png */; };
 		4FADCA6A1C0E27B1000186A8 /* add_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA681C0E27B1000186A8 /* add_icon.png */; };
 		4FADCA6B1C0E2A29000186A8 /* FORZA-LIGHT.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA5B1C0DEC26000186A8 /* FORZA-LIGHT.OTF */; };
-		4FADCA6D1C0E2B7E000186A8 /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FADCA6C1C0E2B7E000186A8 /* model.swift */; };
+		4FADCA6D1C0E2B7E000186A8 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FADCA6C1C0E2B7E000186A8 /* Model.swift */; };
 		4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */; };
 		4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD51BE106EB00A89A9A /* Main.storyboard */; };
 		4FAF3CD91BE106EB00A89A9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */; };
@@ -58,6 +58,8 @@
 		4FAF3D341BE14BA200A89A9A /* fmc_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D331BE14BA200A89A9A /* fmc_logo.png */; };
 		4FAF3D361BE151DA00A89A9A /* homebackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3D351BE151DA00A89A9A /* homebackground.png */; };
 		4FB616311BFB76440057414C /* ShadowEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FB616301BFB76440057414C /* ShadowEffect.swift */; };
+		4FD6F4291C12381A004FDDC0 /* Star_empty-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD6F4281C12381A004FDDC0 /* Star_empty-01.png */; };
+		4FE275A51C11FF2200385449 /* home_in.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FE275A41C11FF2200385449 /* home_in.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,7 +108,7 @@
 		4FADCA651C0E27A0000186A8 /* edit-128_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "edit-128_blue.png"; path = "images/edit-128_blue.png"; sourceTree = "<group>"; };
 		4FADCA671C0E27B1000186A8 /* camera_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = camera_icon.png; path = images/camera_icon.png; sourceTree = "<group>"; };
 		4FADCA681C0E27B1000186A8 /* add_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_icon.png; path = images/add_icon.png; sourceTree = "<group>"; };
-		4FADCA6C1C0E2B7E000186A8 /* model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = model.swift; path = FirstMortgage/model.swift; sourceTree = "<group>"; };
+		4FADCA6C1C0E2B7E000186A8 /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Model.swift; path = FirstMortgage/Model.swift; sourceTree = "<group>"; };
 		4FAF3CCE1BE106EB00A89A9A /* FirstMortgage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirstMortgage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4FAF3CD61BE106EB00A89A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -146,6 +148,8 @@
 		4FAF3D331BE14BA200A89A9A /* fmc_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = fmc_logo.png; path = images/fmc_logo.png; sourceTree = "<group>"; };
 		4FAF3D351BE151DA00A89A9A /* homebackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = homebackground.png; path = images/homebackground.png; sourceTree = "<group>"; };
 		4FB616301BFB76440057414C /* ShadowEffect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ShadowEffect.swift; path = FirstMortgage/ShadowEffect.swift; sourceTree = "<group>"; };
+		4FD6F4281C12381A004FDDC0 /* Star_empty-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Star_empty-01.png"; path = "images/Star_empty-01.png"; sourceTree = "<group>"; };
+		4FE275A41C11FF2200385449 /* home_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home_in.png; path = images/home_in.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -293,6 +297,8 @@
 		4FAF3D2C1BE119E200A89A9A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4FD6F4281C12381A004FDDC0 /* Star_empty-01.png */,
+				4FE275A41C11FF2200385449 /* home_in.png */,
 				4FADCA671C0E27B1000186A8 /* camera_icon.png */,
 				4FADCA681C0E27B1000186A8 /* add_icon.png */,
 				4FADCA651C0E27A0000186A8 /* edit-128_blue.png */,
@@ -320,7 +326,7 @@
 				4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */,
 				4F8815701C04B192001488C1 /* Branch.swift */,
 				4FB616301BFB76440057414C /* ShadowEffect.swift */,
-				4FADCA6C1C0E2B7E000186A8 /* model.swift */,
+				4FADCA6C1C0E2B7E000186A8 /* Model.swift */,
 			);
 			name = "Supporting Classes";
 			sourceTree = "<group>";
@@ -335,6 +341,7 @@
 				4FAF3CCA1BE106EB00A89A9A /* Sources */,
 				4FAF3CCB1BE106EB00A89A9A /* Frameworks */,
 				4FAF3CCC1BE106EB00A89A9A /* Resources */,
+				4FD6F42A1C1242D8004FDDC0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -431,6 +438,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FADCA691C0E27B1000186A8 /* camera_icon.png in Resources */,
+				4FE275A51C11FF2200385449 /* home_in.png in Resources */,
 				4FADCA6A1C0E27B1000186A8 /* add_icon.png in Resources */,
 				4FADCA661C0E27A0000186A8 /* edit-128_blue.png in Resources */,
 				4FADCA631C0E2798000186A8 /* edit_icon_onstate.png in Resources */,
@@ -451,6 +459,7 @@
 				4F8F93021C061E0B00639F55 /* icn-firstTime.png in Resources */,
 				4FADCA6B1C0E2A29000186A8 /* FORZA-LIGHT.OTF in Resources */,
 				4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */,
+				4FD6F4291C12381A004FDDC0 /* Star_empty-01.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -470,6 +479,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4FD6F42A1C1242D8004FDDC0 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:|FIXME:\"\nfind \"${SRCROOT}\" \\( -name \"*.h\" -or -name \"*.m\" -or -name \"*.swift\" \\) -print0 | xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" | perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4FAF3CCA1BE106EB00A89A9A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -480,7 +505,7 @@
 				4FAF3D021BE1084200A89A9A /* CreateAccountViewController.swift in Sources */,
 				4FAF3D001BE1081700A89A9A /* InitialViewController.swift in Sources */,
 				4FB616311BFB76440057414C /* ShadowEffect.swift in Sources */,
-				4FADCA6D1C0E2B7E000186A8 /* model.swift in Sources */,
+				4FADCA6D1C0E2B7E000186A8 /* Model.swift in Sources */,
 				4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */,
 				4F8815711C04B192001488C1 /* Branch.swift in Sources */,
 				4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */,

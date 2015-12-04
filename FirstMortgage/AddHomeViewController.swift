@@ -14,6 +14,8 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     // MARK:
     // MARK: Properties
     
+    let model = Model()
+    
     // Custom Color
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     let greenColor = UIColor(red: 185/255, green: 190/255, blue: 71/255, alpha: 1)
@@ -92,9 +94,9 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         addHomeView.hidden = false
         self.view.addSubview(addHomeView)
         
-        let fmcLogo = UIImage(named: "fmc_logo") as UIImage?
+        let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
-        logoImageView.frame = (frame: CGRectMake(40, 35, self.view.bounds.size.width - 80, 40))
+        let logoImageView = UIImageView(frame: CGRectMake((addHomeView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
         logoImageView.image = fmcLogo
         addHomeView.addSubview(logoImageView)
         
@@ -105,9 +107,10 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 75, 45))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("Home", forState: .Normal)
-        homeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        homeButton.setTitle("HOME", forState: .Normal)
+        homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
+        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         
@@ -115,42 +118,51 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         let addButton = UIButton (frame: CGRectMake(whiteBar.bounds.size.width - 75, 0, 75, 45))
         addButton.addTarget(self, action: "addNewHome:", forControlEvents: .TouchUpInside)
         addButton.setTitle("Add", forState: .Normal)
-        addButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        addButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         addButton.backgroundColor = UIColor.clearColor()
+        addButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         addButton.tag = 0
         whiteBar.addSubview(addButton)
         
         let addHomeBannerView = UIView(frame: CGRectMake(0, 135, addHomeView.bounds.size.width, 50))
-        addHomeBannerView.backgroundColor = UIColor.blueColor()
+        let addHomeBannerGradientLayer = CAGradientLayer()
+        addHomeBannerGradientLayer.frame = addHomeBannerView.bounds
+        addHomeBannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+        addHomeBannerView.layer.insertSublayer(addHomeBannerGradientLayer, atIndex: 0)
+        addHomeBannerView.layer.addSublayer(addHomeBannerGradientLayer)
         addHomeBannerView.hidden = false
         addHomeView.addSubview(addHomeBannerView)
         
         let labelFontSize = isSmallerScreen ? 20.0 : 24.0;
         
+        //UIImageView
+        let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 100), 12.5, 25, 25))
+        homeIcon.image = homeIcn
+        addHomeBannerView.addSubview(homeIcon)
+        
         // UILabel
-        let bannerLabel = UILabel(frame: CGRectMake(65, 10, addHomeBannerView.bounds.size.width - 65, 0))
+        let bannerLabel = UILabel(frame: CGRectMake(0, 0, addHomeBannerView.bounds.size.width, 50))
         bannerLabel.text = "ADD A HOME"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        bannerLabel.textAlignment = NSTextAlignment.Left
-        bannerLabel.numberOfLines = 0
+        bannerLabel.textAlignment = NSTextAlignment.Center
         bannerLabel.font = bannerLabel.font.fontWithSize(CGFloat(labelFontSize))
         bannerLabel.textColor = UIColor.whiteColor()
-        bannerLabel.sizeToFit()
+        bannerLabel.font = UIFont(name: "forza-light", size: 25)
         addHomeBannerView.addSubview(bannerLabel)
         
         scrollView.frame = (frame: CGRectMake(0, 185, addHomeView.bounds.size.width, addHomeView.bounds.size.height - 135))
         scrollView.backgroundColor = UIColor.clearColor()
         addHomeView.addSubview(scrollView)
         
+        let cameraImage = UIImage(named: "camera_icon") as UIImage?
         // UIImageView
-        imageView.frame = ( frame: CGRectMake(35, 25, 250, 175) )
-        imageView.backgroundColor = UIColor.lightGrayColor()
+        imageView.frame = ( frame: CGRectMake((scrollView.bounds.size.width / 2) - 62.5, 59, 135, 118))
+        imageView.image = cameraImage
         scrollView.addSubview(imageView)
         
         // UIButton
-        let addHomePhotoButton = UIButton (frame: CGRectMake(35, 25, 250, 175))
+        let addHomePhotoButton = UIButton (frame: CGRectMake((scrollView.bounds.size.width / 2) - 125, 25, 250, 175))
         addHomePhotoButton.addTarget(self, action: "selectWhereToGetImage:", forControlEvents: .TouchUpInside)
-        addHomePhotoButton.setTitle("Home", forState: .Normal)
         addHomePhotoButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         addHomePhotoButton.backgroundColor = UIColor.clearColor()
         addHomePhotoButton.layer.borderWidth = 1.0
@@ -158,9 +170,14 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         addHomePhotoButton.tag = 0
         scrollView.addSubview(addHomePhotoButton)
         
+        let attributes = [
+            NSForegroundColorAttributeName: UIColor.darkTextColor(),
+            NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
+        ]
+        
         // UITextField
         homeNameTxtField.frame = (frame: CGRectMake(10, 200, addHomeView.bounds.size.width - 20, 30))
-        homeNameTxtField.placeholder = "Name Your Home"
+        homeNameTxtField.attributedPlaceholder = NSAttributedString(string: "NAME YOUR HOME", attributes:attributes)
         homeNameTxtField.backgroundColor = UIColor.clearColor()
         homeNameTxtField.delegate = self
         homeNameTxtField.returnKeyType = .Done
@@ -169,21 +186,21 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         
         // UITextField
         homePriceTxtField.frame = (frame: CGRectMake(10, 230, addHomeView.bounds.size.width - 20, 30))
-        homePriceTxtField.placeholder = "$Price"
+        homePriceTxtField.attributedPlaceholder = NSAttributedString(string: "$Price", attributes:attributes)
         homePriceTxtField.backgroundColor = UIColor.clearColor()
         homePriceTxtField.delegate = self
         homePriceTxtField.returnKeyType = .Done
         homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
         scrollView.addSubview(homePriceTxtField)
         
+        let starImage = UIImage(named: "Star_empty-01") as UIImage?
         var xOffset = 0
         for i in 1...4 {
             // UIButton
             let ratingButtonPhotoButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), 263, 30, 30))
             ratingButtonPhotoButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
-            ratingButtonPhotoButton.backgroundColor = UIColor.blueColor()
-            ratingButtonPhotoButton.layer.borderWidth = 1.0
-            ratingButtonPhotoButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+            ratingButtonPhotoButton.backgroundColor = model.darkBlueColor
+            ratingButtonPhotoButton.setImage(starImage, forState: .Normal)
             ratingButtonPhotoButton.tag = i
             scrollView.addSubview(ratingButtonPhotoButton)
             
@@ -198,14 +215,11 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         scrollView.addSubview(bedRoomPicker)
         
         // UILabel
-        let bedLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2), 290, 40, 40))
+        let bedLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2), 290, 40, 10))
         bedLabel.text = "Beds"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        bedLabel.font = UIFont(name: "Arial", size: 8)
         bedLabel.textAlignment = NSTextAlignment.Left
-        bedLabel.numberOfLines = 0
-        bedLabel.font = bannerLabel.font.fontWithSize(8)
-        bedLabel.textColor = UIColor.blackColor()
-        bedLabel.sizeToFit()
+        bedLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(bedLabel)
         
         // UIPickerView
@@ -216,14 +230,12 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         scrollView.addSubview(bathRoomPicker)
         
         // UILabel
-        let bathLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2) + 60, 290, 100, 40))
+        let bathLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2) + 60, 290, 100, 10))
         bathLabel.text = "Baths"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        bathLabel.font = UIFont(name: "Arial", size: 8)
         bathLabel.textAlignment = NSTextAlignment.Left
         bathLabel.numberOfLines = 0
-        bathLabel.font = bannerLabel.font.fontWithSize(8)
-        bathLabel.textColor = UIColor.blackColor()
-        bathLabel.sizeToFit()
+        bathLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(bathLabel)
         
         // UITextField
@@ -236,24 +248,21 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         scrollView.addSubview(sqFeetTxtField)
         
         // UILabel
-        let sqFeetLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2) + 100, 290, 100, 40))
+        let sqFeetLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2) + 100, 290, 100, 10))
         sqFeetLabel.text = "Sq. Ft."
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        sqFeetLabel.font = UIFont(name: "Arial", size: 8)
         sqFeetLabel.textAlignment = NSTextAlignment.Left
-        sqFeetLabel.numberOfLines = 0
-        sqFeetLabel.font = bannerLabel.font.fontWithSize(8)
-        sqFeetLabel.textColor = UIColor.blackColor()
-        sqFeetLabel.sizeToFit()
+        sqFeetLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(sqFeetLabel)
         
-        let dividerView = UIView(frame: CGRectMake(10, 300, addHomeView.bounds.size.width - 20, 1))
+        let dividerView = UIView(frame: CGRectMake(10, 305, addHomeView.bounds.size.width - 20, 1))
         dividerView.backgroundColor = UIColor.darkGrayColor()
         dividerView.hidden = false
         scrollView.addSubview(dividerView)
         
         // UITextField
-        homeAddressTxtField.frame = (frame: CGRectMake(10, 300, addHomeView.bounds.size.width - 20, 40))
-        homeAddressTxtField.placeholder = "Address"
+        homeAddressTxtField.frame = (frame: CGRectMake(10, 305, addHomeView.bounds.size.width - 20, 40))
+        homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: "ADDRESS", attributes:attributes)
         homeAddressTxtField.backgroundColor = UIColor.clearColor()
         homeAddressTxtField.delegate = self
         homeAddressTxtField.returnKeyType = .Done

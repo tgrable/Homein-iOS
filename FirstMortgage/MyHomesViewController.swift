@@ -14,16 +14,14 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK:
     // MARK: Properties
     
-    // Custom Color
-    let blueColor = UIColor(red: 54/255, green: 104/255, blue: 160/255, alpha: 1)
-    let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
-    let greenColor = UIColor(red: 185/255, green: 190/255, blue: 71/255, alpha: 1)
+    let model = Model()
 
     @IBOutlet weak var homeTableView: UITableView!
     let basicCellIdentifier = "BasicCell"
     
     let myHomesView = UIView()
     let sortTrayView = UIView()
+    let sortTrayGradientLayer = CAGradientLayer()
     
     var imageView = UIImageView()
     
@@ -55,13 +53,13 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func buildView() {
         myHomesView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, 185))
-        myHomesView.backgroundColor = lightGrayColor
+        myHomesView.backgroundColor = model.lightGrayColor
         myHomesView.hidden = false
         self.view.addSubview(myHomesView)
         
-        let fmcLogo = UIImage(named: "fmc_logo") as UIImage?
+        let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
-        imageView.frame = (frame: CGRectMake(40, 35, self.view.bounds.size.width - 80, 40))
+        imageView.frame = (frame: CGRectMake((myHomesView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
         imageView.image = fmcLogo
         myHomesView.addSubview(imageView)
         
@@ -70,11 +68,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         myHomesView.addSubview(whiteBar)
         
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(0, 0, 75, 45))
+        let homeButton = UIButton (frame: CGRectMake(10, 0, 75, 45))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("Back", forState: .Normal)
-        homeButton.setTitleColor(blueColor, forState: .Normal)
+        homeButton.setTitle("HOME", forState: .Normal)
+        homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
+        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         
@@ -82,13 +81,18 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         let addButton = UIButton (frame: CGRectMake(whiteBar.bounds.size.width - 75, 0, 75, 45))
         addButton.addTarget(self, action: "addNewHome:", forControlEvents: .TouchUpInside)
         addButton.setTitle("Add", forState: .Normal)
-        addButton.setTitleColor(blueColor, forState: .Normal)
+        addButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         addButton.backgroundColor = UIColor.clearColor()
+        addButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         addButton.tag = 0
         whiteBar.addSubview(addButton)
         
         let addHomeBannerView = UIView(frame: CGRectMake(0, 135, myHomesView.bounds.size.width, 50))
-        addHomeBannerView.backgroundColor = UIColor.blueColor()
+        let addHomeBannerGradientLayer = CAGradientLayer()
+        addHomeBannerGradientLayer.frame = addHomeBannerView.bounds
+        addHomeBannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+        addHomeBannerView.layer.insertSublayer(addHomeBannerGradientLayer, atIndex: 0)
+        addHomeBannerView.layer.addSublayer(addHomeBannerGradientLayer)
         addHomeBannerView.hidden = false
         myHomesView.addSubview(addHomeBannerView)
         
@@ -103,21 +107,28 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortButton.tag = 0
         addHomeBannerView.addSubview(sortButton)
         
+        //UIImageView
+        let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 100), 12.5, 25, 25))
+        homeIcon.image = homeIcn
+        addHomeBannerView.addSubview(homeIcon)
+        
         // UILabel
-        let bannerLabel = UILabel(frame: CGRectMake(65, 10, addHomeBannerView.bounds.size.width - 65, 0))
+        let bannerLabel = UILabel(frame: CGRectMake(0, 0, addHomeBannerView.bounds.size.width, 50))
         bannerLabel.text = "MY HOMES"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        bannerLabel.textAlignment = NSTextAlignment.Left
-        bannerLabel.numberOfLines = 0
+        bannerLabel.textAlignment = NSTextAlignment.Center
         bannerLabel.font = bannerLabel.font.fontWithSize(CGFloat(labelFontSize))
         bannerLabel.textColor = UIColor.whiteColor()
-        bannerLabel.sizeToFit()
+        bannerLabel.font = UIFont(name: "forza-light", size: 25)
         addHomeBannerView.addSubview(bannerLabel)
     }
     
     func showSortTray() {
         sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 195))
-        sortTrayView.backgroundColor = greenColor
+        sortTrayGradientLayer.frame = sortTrayView.bounds
+        sortTrayGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
+        sortTrayView.layer.insertSublayer(sortTrayGradientLayer, atIndex: 0)
+        sortTrayView.layer.addSublayer(sortTrayGradientLayer)
         sortTrayView.hidden = false
         self.view.addSubview(sortTrayView)
         
@@ -147,14 +158,22 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortNameButton.tag = 0
         sortTrayView.addSubview(sortNameButton)
         
+        
+        let starImage = UIImage(named: "Star_empty-01") as UIImage?
+        // UIImageView
+        let ratingImageView = UIImageView(frame: CGRectMake(15, 95, 30, 30))
+        ratingImageView.image = starImage
+        sortTrayView.addSubview(ratingImageView)
+        
         // UIButton
-        let sortRatingButton = UIButton (frame: CGRectMake(0, 95, sortTrayView.bounds.size.width, 40))
+        let sortRatingButton = UIButton (frame: CGRectMake(50, 100, sortTrayView.bounds.size.width - 50, 40))
         sortRatingButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortRatingButton.setTitle("RATING", forState: .Normal)
         sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         sortRatingButton.backgroundColor = UIColor.clearColor()
-        sortRatingButton.titleLabel?.textAlignment = .Left
+        sortRatingButton.contentHorizontalAlignment = .Left
         sortRatingButton.tag = 0
+        sortRatingButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortRatingButton)
         
         // UIButton
@@ -172,6 +191,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         if (!isSortTrayOpen) {
             UIView.animateWithDuration(0.4, animations: {
                 self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height - 195, self.view.bounds.size.width, 195))
+                self.sortTrayGradientLayer.frame = self.sortTrayGradientLayer.bounds
                 }, completion: {
                     (value: Bool) in
                     self.isSortTrayOpen = true
@@ -180,6 +200,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         else {
             UIView.animateWithDuration(0.4, animations: {
                 self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 195))
+                self.sortTrayGradientLayer.frame = self.sortTrayGradientLayer.bounds
                 }, completion: {
                     (value: Bool) in
                     self.isSortTrayOpen = false
@@ -274,7 +295,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
         let price = item["price"] as! Double
-        cell.priceLabel?.text = String(format:"$%.2f", price) as String
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .CurrencyStyle
+        formatter.locale = NSLocale(localeIdentifier: "en_US")
+        cell.priceLabel?.text = formatter.stringFromNumber(price)
+        
+        //cell.priceLabel?.text = String(format:"$%.0f", price) as String
     }
     func setAddressForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
@@ -308,6 +334,30 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         let item = self.userHomes[row] as PFObject
         home = item
         performSegueWithIdentifier("individualHomeSegue", sender: self)
+    }
+    
+    // called when a row deletion action is confirmed
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+            switch editingStyle {
+            case .Delete:
+                // remove the deleted item from the model
+                //TODO: Need to implement delete method
+                
+                // remove the deleted item from the `UITableView`
+                homeTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+            default:
+                return
+            }
+    }
+    
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .Destructive, title: "Delete") { (action, indexPath) in
+            // delete item at indexPath
+        }
+        
+        delete.backgroundColor = model.darkOrangeColor
+        
+        return [delete]
     }
     
     // MARK:

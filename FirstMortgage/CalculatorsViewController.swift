@@ -17,6 +17,12 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     let greenColor = UIColor(red: 185/255, green: 190/255, blue: 71/255, alpha: 1)
     
+    let lightBlueColor = UIColor(red: 83/255, green: 135/255, blue: 186/255, alpha: 1)
+    let darkBlueColor = UIColor(red: 53/255, green: 103/255, blue: 160/255, alpha: 1)
+    
+    let lightGreenColor = UIColor(red: 184.0/255.0, green: 189.0/255.0, blue: 70.0/255.0, alpha: 1)
+    let darkGreenColor = UIColor(red: 154.0/255.0, green: 166.0/255.0, blue: 65.0/255.0, alpha: 1)
+    
     // UIView
     let calcView = UIView() as UIView
     let calcWindowView = UIView() as UIView
@@ -70,6 +76,8 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        getCurrentYear()
+        
         isSmallerScreen = false
         if (self.view.bounds.size.width == 320) {
             isSmallerScreen = true
@@ -79,15 +87,19 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
 
         mortgageTermPicker.delegate = self
         mortgageTermPicker.dataSource = self
+        mortgageTermPicker.selectRow(1, inComponent: 0, animated: true)
         
         interestRatePicker.delegate = self
         interestRatePicker.dataSource = self
+        interestRatePicker.selectRow(4, inComponent: 0, animated: true)
         
         newMortgageTermPicker.delegate = self
         newMortgageTermPicker.dataSource = self
+        newMortgageTermPicker.selectRow(1, inComponent: 0, animated: true)
         
         newInterestRatePicker.delegate = self
         newInterestRatePicker.dataSource = self
+        newInterestRatePicker.selectRow(2, inComponent: 0, animated: true)
         
         if (isMortgageCalc) {
             buildMortgageCalcView()
@@ -111,9 +123,9 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         calcView.hidden = false
         self.view.addSubview(calcView)
         
-        let fmcLogo = UIImage(named: "fmc_logo") as UIImage?
+        let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
-        imageView.frame = (frame: CGRectMake(40, 35, self.view.bounds.size.width - 80, 40))
+        imageView.frame = (frame: CGRectMake((calcView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
         imageView.image = fmcLogo
         calcView.addSubview(imageView)
         
@@ -124,16 +136,26 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 75, 45))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("Home", forState: .Normal)
-        homeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        homeButton.setTitle("HOME", forState: .Normal)
+        homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
+        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         
         let calcBannerView = UIView(frame: CGRectMake(0, 135, calcView.bounds.size.width, 50))
-        calcBannerView.backgroundColor = greenColor
+        let calcBannerGradientLayer = CAGradientLayer()
+        calcBannerGradientLayer.frame = calcBannerView.bounds
+        calcBannerGradientLayer.colors = [lightGreenColor.CGColor, darkGreenColor.CGColor]
+        calcBannerView.layer.insertSublayer(calcBannerGradientLayer, atIndex: 0)
+        calcBannerView.layer.addSublayer(calcBannerGradientLayer)
         calcBannerView.hidden = false
         calcView.addSubview(calcBannerView)
+        
+        let calcIcn = UIImage(named: "icn-calculator") as UIImage?
+        let calcIcon = UIImageView(frame: CGRectMake(15, 12.5, 25, 25))
+        calcIcon.image = calcIcn
+        calcBannerView.addSubview(calcIcon)
         
         if (isMortgageCalc) {
             titleLabel = "MORTGAGE CALCULATOR"
@@ -145,15 +167,13 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         let labelFontSize = isSmallerScreen ? 20.0 : 24.0;
         print(isSmallerScreen)
         print(CGFloat(labelFontSize))
-        // UILabel
-        let bannerLabel = UILabel(frame: CGRectMake(65, 10, calcBannerView.bounds.size.width - 65, 0))
+        
+        // UILabel font =
+        let bannerLabel = UILabel(frame: CGRectMake(50, 0, calcBannerView.bounds.size.width - 50, 50))
         bannerLabel.text = titleLabel
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        bannerLabel.font = UIFont(name: "forza-light", size: 25)
         bannerLabel.textAlignment = NSTextAlignment.Left
-        bannerLabel.numberOfLines = 0
-        bannerLabel.font = paymentLabel.font.fontWithSize(CGFloat(labelFontSize))
         bannerLabel.textColor = UIColor.whiteColor()
-        bannerLabel.sizeToFit()
         calcBannerView.addSubview(bannerLabel)
         
         scrollView.frame = (frame: CGRectMake(0, 185, calcView.bounds.size.width, calcView.bounds.size.height - 135))
@@ -183,28 +203,21 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         /********************************************************* Loan Amount ********************************************************************/
         // UILabel
-        let loanAmountLabel = UILabel(frame: CGRectMake(10, 35, (mortgageCalcView.bounds.size.width / 2) - 20, 0))
-        loanAmountLabel.text = "LOAN AMOUNT"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        loanAmountLabel.textAlignment = NSTextAlignment.Left
-        loanAmountLabel.numberOfLines = 0
-        loanAmountLabel.font = paymentLabel.font.fontWithSize(CGFloat(fontSize))
-        loanAmountLabel.sizeToFit()
+        let loanAmountLabel = UILabel(frame: CGRectMake(10, 25, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        loanAmountLabel.text = "LOAN AMOUNT = "
+        loanAmountLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
+        loanAmountLabel.textAlignment = NSTextAlignment.Right
+        loanAmountLabel.textColor = UIColor.darkTextColor()
         mortgageCalcView.addSubview(loanAmountLabel)
         
-        // UILabel
-        let equalOneLabel = UILabel(frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) - 20, 35, 20, 0))
-        equalOneLabel.text = " = "
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        equalOneLabel.textAlignment = NSTextAlignment.Right
-        equalOneLabel.numberOfLines = 0
-        equalOneLabel.sizeToFit()
-        mortgageCalcView.addSubview(equalOneLabel)
-        
         // UITextField
+        let loanAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
         loanAmountTxtField.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 25,(mortgageCalcView.bounds.size.width / 2) - 20, 40));
-        loanAmountTxtField.borderStyle = UITextBorderStyle.Line
         loanAmountTxtField.layer.borderColor = lightGrayColor.CGColor
+        loanAmountTxtField.layer.borderWidth = 1.0
+        loanAmountTxtField.layer.cornerRadius = 2.0
+        loanAmountTxtField.leftView = loanAmountPaddingView
+        loanAmountTxtField.leftViewMode = UITextFieldViewMode.Always
         loanAmountTxtField.placeholder = "$250,000"
         loanAmountTxtField.backgroundColor = UIColor.clearColor()
         loanAmountTxtField.delegate = self
@@ -214,50 +227,27 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         /********************************************************* Mortgage Term ********************************************************************/
         // UILabel
-        let mTermLabel = UILabel(frame: CGRectMake(10, 85, (mortgageCalcView.bounds.size.width / 2) - 20, 0))
-        mTermLabel.text = "MORTGAGE TERM"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        mTermLabel.textAlignment = NSTextAlignment.Left
-        mTermLabel.numberOfLines = 0
-        mTermLabel.font = paymentLabel.font.fontWithSize(CGFloat(fontSize))
-        mTermLabel.sizeToFit()
+        let mTermLabel = UILabel(frame: CGRectMake(10, 75, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        mTermLabel.text = "MORTGAGE TERM = "
+        mTermLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
+        mTermLabel.textAlignment = NSTextAlignment.Right
+        mTermLabel.textColor = UIColor.darkTextColor()
         mortgageCalcView.addSubview(mTermLabel)
-        
-        // UILabel
-        let equalTwoLabel = UILabel(frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) - 20, 85, 20, 0))
-        equalTwoLabel.text = " = "
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        equalTwoLabel.textAlignment = NSTextAlignment.Right
-        equalTwoLabel.numberOfLines = 0
-        equalTwoLabel.sizeToFit()
-        mortgageCalcView.addSubview(equalTwoLabel)
         
         // UITextField
         mortgageTermPicker.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 75,(mortgageCalcView.bounds.size.width / 2) - 20, 50));
         mortgageTermPicker.backgroundColor = UIColor.clearColor()
-        mortgageTermPicker.layer.borderColor = lightGrayColor.CGColor
         mortgageTermPicker.tag = 0
         mortgageCalcView.addSubview(mortgageTermPicker)
         
         /********************************************************* Interest Rate ********************************************************************/
         // UILabel
-        let interestRateLabel = UILabel(frame: CGRectMake(10, 135, (mortgageCalcView.bounds.size.width / 2) - 20, 0))
-        interestRateLabel.text = "INTEREST RATE"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        interestRateLabel.textAlignment = NSTextAlignment.Left
-        interestRateLabel.numberOfLines = 0
-        interestRateLabel.font = paymentLabel.font.fontWithSize(CGFloat(fontSize))
-        interestRateLabel.sizeToFit()
+        let interestRateLabel = UILabel(frame: CGRectMake(10, 125, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        interestRateLabel.text = "INTEREST RATE = "
+        interestRateLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
+        interestRateLabel.textAlignment = NSTextAlignment.Right
+        interestRateLabel.textColor = UIColor.darkTextColor()
         mortgageCalcView.addSubview(interestRateLabel)
-        
-        // UILabel
-        let equalThreeLabel = UILabel(frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) - 20, 135, 20, 0))
-        equalThreeLabel.text = " = "
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        equalThreeLabel.textAlignment = NSTextAlignment.Right
-        equalThreeLabel.numberOfLines = 0
-        equalThreeLabel.sizeToFit()
-        mortgageCalcView.addSubview(equalThreeLabel)
         
         // UITextField
         interestRatePicker.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 125,(mortgageCalcView.bounds.size.width / 2) - 20, 50));
@@ -268,28 +258,21 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         /********************************************************* Down Payment ********************************************************************/
         // UILabel
-        let downPaymentLabel = UILabel(frame: CGRectMake(10, 185, (mortgageCalcView.bounds.size.width / 2) - 20, 0))
-        downPaymentLabel.text = "DOWNPAYMENT"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        downPaymentLabel.textAlignment = NSTextAlignment.Left
-        downPaymentLabel.numberOfLines = 0
-        downPaymentLabel.font = paymentLabel.font.fontWithSize(CGFloat(fontSize))
-        downPaymentLabel.sizeToFit()
+        let downPaymentLabel = UILabel(frame: CGRectMake(10, 175, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        downPaymentLabel.text = "DOWNPAYMENT = "
+        downPaymentLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
+        downPaymentLabel.textAlignment = NSTextAlignment.Right
+        downPaymentLabel.textColor = UIColor.darkTextColor()
         mortgageCalcView.addSubview(downPaymentLabel)
-        
-        // UILabel
-        let equalFourLabel = UILabel(frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) - 20, 185, 20, 0))
-        equalFourLabel.text = " = "
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        equalFourLabel.textAlignment = NSTextAlignment.Right
-        equalFourLabel.numberOfLines = 0
-        equalFourLabel.sizeToFit()
-        mortgageCalcView.addSubview(equalFourLabel)
-        
+
         // UITextField
+        let downPaymentPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
         downPaymentTxtField.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 175,(mortgageCalcView.bounds.size.width / 2) - 20, 40));
-        downPaymentTxtField.borderStyle = UITextBorderStyle.Line
         downPaymentTxtField.layer.borderColor = lightGrayColor.CGColor
+        downPaymentTxtField.layer.borderWidth = 1.0
+        downPaymentTxtField.layer.cornerRadius = 2.0
+        downPaymentTxtField.leftView = downPaymentPaddingView
+        downPaymentTxtField.leftViewMode = UITextFieldViewMode.Always
         downPaymentTxtField.placeholder = "$5,000"
         downPaymentTxtField.backgroundColor = UIColor.clearColor()
         downPaymentTxtField.delegate = self
@@ -299,42 +282,45 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         /********************************************************* Property Taxes ********************************************************************/
         // UILabel
-        let taxesLabel = UILabel(frame: CGRectMake(10, 235, (mortgageCalcView.bounds.size.width / 2) - 20, 0))
-        taxesLabel.text = "PROPERTY TAXES"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        taxesLabel.textAlignment = NSTextAlignment.Left
-        taxesLabel.numberOfLines = 0
-        taxesLabel.font = paymentLabel.font.fontWithSize(CGFloat(fontSize))
-        taxesLabel.sizeToFit()
+        let taxesLabel = UILabel(frame: CGRectMake(10, 225, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        taxesLabel.text = "PROPERTY TAXES = "
+        taxesLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
+        taxesLabel.textAlignment = NSTextAlignment.Right
+        taxesLabel.textColor = UIColor.darkTextColor()
         mortgageCalcView.addSubview(taxesLabel)
         
-        // UILabel
-        let equalFiveLabel = UILabel(frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) - 20, 235, 20, 0))
-        equalFiveLabel.text = " = "
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        equalFiveLabel.textAlignment = NSTextAlignment.Right
-        equalFiveLabel.numberOfLines = 0
-        equalFiveLabel.sizeToFit()
-        mortgageCalcView.addSubview(equalFiveLabel)
-        
         // UITextField
+        let taxesPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
         taxesTxtField.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 225,(mortgageCalcView.bounds.size.width / 2) - 20, 40));
-        taxesTxtField.borderStyle = UITextBorderStyle.Line
         taxesTxtField.layer.borderColor = lightGrayColor.CGColor
+        taxesTxtField.layer.borderWidth = 1.0
+        taxesTxtField.layer.cornerRadius = 2.0
         taxesTxtField.placeholder = "3.750%"
+        taxesTxtField.leftView = taxesPaddingView
+        taxesTxtField.leftViewMode = UITextFieldViewMode.Always
         taxesTxtField.backgroundColor = UIColor.clearColor()
         taxesTxtField.delegate = self
         taxesTxtField.returnKeyType = .Done
         taxesTxtField.keyboardType = UIKeyboardType.DecimalPad
         mortgageCalcView.addSubview(taxesTxtField)
         
-        let calculateImage = UIImage(named: "btn-calculate")
+        // UIView
+        let calculateView = UIView(frame: CGRectMake(25, 325, scrollView.bounds.size.width - 50, 50))
+        let calcGradientLayer = CAGradientLayer()
+        calcGradientLayer.frame = calculateView.bounds
+        calcGradientLayer.colors = [lightBlueColor.CGColor, darkBlueColor.CGColor]
+        calculateView.layer.insertSublayer(calcGradientLayer, atIndex: 0)
+        calculateView.layer.addSublayer(calcGradientLayer)
+        scrollView.addSubview(calculateView)
         
         // UIButton
-        let calculateButton = UIButton (frame: CGRectMake(25, 325, 178, 56))
-        calculateButton.addTarget(self, action: "calculateMortgagePayment:", forControlEvents: .TouchUpInside)
-        calculateButton.setBackgroundImage(calculateImage, forState: .Normal)
+        let calculateButton = UIButton (frame: CGRectMake(50, 325, calculateView.bounds.size.width - 25, 50))
+        calculateButton.addTarget(self, action: "calculateMortgagePaymentButtonPress:", forControlEvents: .TouchUpInside)
+        calculateButton.setTitle("CALCULATE", forState: .Normal)
+        calculateButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         calculateButton.backgroundColor = UIColor.clearColor()
+        calculateButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        calculateButton.contentHorizontalAlignment = .Left
         calculateButton.tag = 0
         scrollView.addSubview(calculateButton)
         
@@ -349,18 +335,19 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         // UIView
         let paymentView = UIView(frame: CGRectMake(25, 425, calcView.bounds.size.width - 50, 50))
-        paymentView.backgroundColor = greenColor
+        let paymentGradientLayer = CAGradientLayer()
+        paymentGradientLayer.frame = paymentView.bounds
+        paymentGradientLayer.colors = [lightGreenColor.CGColor, darkGreenColor.CGColor]
+        paymentView.layer.insertSublayer(paymentGradientLayer, atIndex: 0)
+        paymentView.layer.addSublayer(paymentGradientLayer)
         scrollView.addSubview(paymentView)
         
         // UILabel
-        paymentLabel.frame = (frame: CGRectMake(25, 10, paymentView.bounds.size.width, 0))
+        paymentLabel.frame = (frame: CGRectMake(0, 0, paymentView.bounds.size.width, 50))
         paymentLabel.text = String(format:"$%.2f / MONTH", estimatedPaymentDefault)
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        paymentLabel.font = paymentLabel.font.fontWithSize(24)
+        paymentLabel.font = UIFont(name: "forza-light", size: 25)
         paymentLabel.textColor = UIColor.whiteColor()
         paymentLabel.textAlignment = NSTextAlignment.Center
-        paymentLabel.numberOfLines = 0
-        paymentLabel.sizeToFit()
         paymentView.addSubview(paymentLabel)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
@@ -620,7 +607,7 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
         
         // UIButton
         let calculateButton = UIButton (frame: CGRectMake(25, 550, 178, 56))
-        calculateButton.addTarget(self, action: "calculateMortgagePayment:", forControlEvents: .TouchUpInside)
+        calculateButton.addTarget(self, action: "calculateRefinanceButtonPress:", forControlEvents: .TouchUpInside)
         calculateButton.setBackgroundImage(calculateImage, forState: .Normal)
         calculateButton.backgroundColor = UIColor.clearColor()
         calculateButton.tag = 0
@@ -748,19 +735,75 @@ class CalculatorsViewController: UIViewController, UIPickerViewDataSource, UIPic
     
     // MARK:
     // MARK: Action Methods
-
-    func calculateMortgagePayment(sender: UIButton) {
+    func calculateMortgagePaymentButtonPress(sender: UIButton) {
+        paymentLabel.text = String(format:"$%.2f / MONTH", calculateMortgagePayment())
+    }
+    
+    func calculateRefinanceButtonPress(sender: UIButton) {
+        paymentLabel.text = String(format:"$%.2f / MONTH", calculateBalancePaid())
+    }
+    
+    // MARK:
+    // MARK: Caluclations
+    func calculateBalancePaid() -> Double {
         let loanAmount = Double(loanAmountTxtField.text!)!
+        let intRate = interestDefault
+        let currentMonthlyPayment = calculateMortgagePayment()
+        let r = Double(intRate) / 100
+        let monthsPaid = (getCurrentYear() - Double(currentYearTxtField.text!)!) * 12
+        let rPower = pow(1 + r / 12.0, monthsPaid)
+        let balPaid = ((12 * currentMonthlyPayment / r - loanAmount) * (rPower - 1))
+        
+        return balPaid
+    }
+    
+    func calculateMortgagePayment() -> Double {
+        let loanAmount = Double(loanAmountTxtField.text!)!
+        let taxes = 0.0
         let intRate = interestDefault
         let term  = mortgageDefault
         
-        let r = intRate / 1200
-        let n = term * 12
+        let r = Double(intRate) / 1200
+        let n = Double(term) * 12
         let rPower = pow(1 + r, n)
         
         let monthlyPayment = loanAmount * r * rPower / (rPower - 1)
-        estimatedPaymentDefault = monthlyPayment + (((Double(taxesTxtField.text!)! / 100) * Double(loanAmountTxtField.text!)!) / 12)
-        paymentLabel.text = String(format:"$%.2f / MONTH", estimatedPaymentDefault)
+        estimatedPaymentDefault = monthlyPayment + (((taxes / 100) * loanAmount) / 12)
+        
+        return estimatedPaymentDefault
+    }
+    
+    func calculateRefinance() -> Double {
+        /*let currentMonthlyPayment = calculateMortgagePayment()
+        let monthsPaid = (getCurrentYear() - Double(currentYearTxtField.text!)!) * 12
+        let newTerm = newMortgageDefault
+        let remainingBalance = calculateBalancePaid()
+        let currentMonthlyPayment = calculateMortgagePayment()
+        */
+        
+        let loanAmount = Double(newLoanAmountTxtField.text!)!
+        
+        let newInterest = newInterestDefault
+        let r = Double(newInterest) / 1200
+        
+        let term  = mortgageDefault
+        let n = Double(term) * 12
+        
+        let rPower = pow(1 + r, n)
+        
+        //A = P [ r(1 + r)n / ((1 + r)n – 1) ]
+        let newPayment = loanAmount * ((r * rPower) / (rPower - 1))
+        
+        return newPayment
+    }
+    
+    func getCurrentYear() -> Double {
+        let date = NSDate()
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy"
+        let defaultTimeZoneStr = formatter.stringFromDate(date);
+        
+        return Double(defaultTimeZoneStr)!
     }
     
     // MARK:
