@@ -36,17 +36,13 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //creatStateDictionary()
+
         buildView()
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-
-        // Do any additional setup after loading the view.
-        
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -88,7 +84,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         view.addSubview(activityIndicator)
         addHomeView.addSubview(activityIndicator)
     }
-
+    
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         locationManager.stopUpdatingLocation()
         
@@ -101,39 +97,30 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     
     func getBranchJson() {
         
-        let endpoint = NSURL(string: "http://fmc.dev.192.168.100.186.xip.io/branch-json")
-        //let endpoint = NSURL(string: "http://www.trekkdev1.com/branch-json")
-        let jsondata = NSData(contentsOfURL: endpoint!)
-        
-        //let jsondata = data.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        let endpoint = NSURL(string: "http://www.trekkdev1.com/branch-json")
+        let data = NSData(contentsOfURL: endpoint!)
         do {
-            let json = try NSJSONSerialization.JSONObjectWithData(jsondata!, options: .AllowFragments)
-            if let nodes = json as? NSDictionary {
-                if let nodeArray = nodes["nodes"] as? NSArray {
-                    for node in nodeArray {
-                        if let nd = node as? NSDictionary {
-                            if let n = nd["node"] as? NSDictionary {
-                                if let checkState = n["State"] as? String {
-                                    if (!checkState.isEmpty) {
-                                        let branch = Branch()
-                                        if let streetName = n["Street"] as? String {
-                                            branch.address = streetName
-                                        }
-                                        if let city = n["City"] as? String {
-                                            branch.city = city
-                                        }
-                                        if let state = n["State"] as? String {
-                                            branch.state = state
-                                        }
-                                        branchArray.append(branch)
-                                    }
-                                }
-                            }
+            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
+            if let nodes = json as? NSArray {
+                for node in nodes {
+                    if let nodeDict = node as? NSDictionary {
+                        let branch = Branch()
+                        if let streetName = nodeDict["street"] as? String {
+                            branch.address = streetName
                         }
+                        if let city = nodeDict["city"] as? String {
+                            branch.city = city
+                        }
+                        if let state = nodeDict["state"] as? String {
+                            branch.state = state
+                        }
+                        if let phone = nodeDict["phone"] as? String {
+                            branch.phone = cleanPhoneNumnerString(phone)
+                        }
+                        branchArray.append(branch)
                     }
                 }
             }
-            
             print(branchArray.count)
             calcDistance()
         }
@@ -175,60 +162,88 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     
     func printLocations() {
         var yOffset = 15
+        var count = 0
         
         let scrollView = UIScrollView(frame: CGRectMake(0, 135.0, addHomeView.bounds.size.width, addHomeView.bounds.size.height - 135.0))
         addHomeView.addSubview(scrollView)
         
-        //for branch in branchArray {
-        for i in 0...4 {
-            let branch = branchArray[i]
+        for branch in branchArray {
             
-            let addressLabel = UILabel (frame: CGRectMake(15, CGFloat(yOffset), self.view.bounds.size.width - 30, 24))
+            let branchView = UIView(frame: CGRectMake(15, CGFloat(yOffset), self.view.bounds.size.width - 30, 100))
+            branchView.backgroundColor = UIColor.whiteColor()
+            scrollView.addSubview(branchView)
+            
+            let addressLabel = UILabel (frame: CGRectMake(15, 10, branchView.bounds.size.width - 30, 24))
             addressLabel.textAlignment = NSTextAlignment.Left
             addressLabel.text = String(format: "%@", branch.address)
             addressLabel.numberOfLines = 1
-            addressLabel.font = UIFont.boldSystemFontOfSize(24.0)
-            addressLabel.sizeToFit()
-            scrollView.addSubview(addressLabel)
+            addressLabel.font = UIFont.boldSystemFontOfSize(22.0)
+            branchView.addSubview(addressLabel)
             
-            let cityStateLabel = UILabel (frame: CGRectMake(15, CGFloat(yOffset + 34), self.view.bounds.size.width - 30, 24))
+            let cityStateLabel = UILabel (frame: CGRectMake(15, 35, branchView.bounds.size.width - 30, 24))
             cityStateLabel.textAlignment = NSTextAlignment.Left
             cityStateLabel.text = String(format: "%@, %@", branch.city, branch.state)
             cityStateLabel.numberOfLines = 1
             cityStateLabel.font = cityStateLabel.font.fontWithSize(18.0)
             cityStateLabel.sizeToFit()
-            scrollView.addSubview(cityStateLabel)
+            branchView.addSubview(cityStateLabel)
             
-            let milesLabel = UILabel (frame: CGRectMake(15, CGFloat(yOffset + 58), self.view.bounds.size.width - 30, 24))
+            let milesLabel = UILabel (frame: CGRectMake(15, 55, branchView.bounds.size.width - 30, 24))
             milesLabel.textAlignment = NSTextAlignment.Left
             milesLabel.text = String(format: "%.2f Miles", branch.distanceFromMe)
             milesLabel.numberOfLines = 1
             milesLabel.font = cityStateLabel.font.fontWithSize(18.0)
             milesLabel.sizeToFit()
-            scrollView.addSubview(milesLabel)
+            branchView.addSubview(milesLabel)
             
-            let locationButton = UIButton(frame: CGRectMake(15, CGFloat(yOffset), self.view.bounds.size.width - 30, 100))
+            let pl = (branch.phone.characters.count > 0) ? formatPhoneString(branch.phone) : ""
+            let phoneLabel = UILabel (frame: CGRectMake(15, 75, branchView.bounds.size.width - 30, 24))
+            phoneLabel.textAlignment = NSTextAlignment.Left
+            phoneLabel.text = String(format: "%@", pl)
+            phoneLabel.numberOfLines = 1
+            phoneLabel.font = cityStateLabel.font.fontWithSize(18.0)
+            phoneLabel.sizeToFit()
+            branchView.addSubview(phoneLabel)
+            
+            let locationButton = UIButton(frame: CGRectMake(0, 0, branchView.bounds.size.width, 75))
             locationButton.addTarget(self, action: "mapButtonPressed:", forControlEvents: .TouchUpInside)
             locationButton.backgroundColor = UIColor.clearColor()
-            locationButton.tag = i
-            scrollView.addSubview(locationButton)
+            locationButton.tag = count
+            branchView.addSubview(locationButton)
+            
+            let btnEnabled = (branch.phone.characters.count > 0) ? true : false
+            let phoneButton = UIButton(frame: CGRectMake(0, 75, branchView.bounds.size.width, 25))
+            phoneButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
+            phoneButton.backgroundColor = UIColor.clearColor()
+            phoneButton.tag = count
+            phoneButton.enabled = btnEnabled
+            branchView.addSubview(phoneButton)
             
             yOffset += 110
+            count++
         }
         
-        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: 675)
-        activityIndicator.stopAnimating()
+        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(branchArray.count * 110))
     }
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
+    // MARK:
+    // MARK: - Utility Methods
+    func cleanPhoneNumnerString(phoneNumber: String) -> String {
+        let stringArray = phoneNumber.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+        let newString = stringArray.joinWithSeparator("")
+        return newString
+    }
+    
+    func formatPhoneString(phoneString: String) -> String {
+        let areaCode = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(0), end: phoneString.endIndex.advancedBy(-7)))
+        let prefix = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(3), end: phoneString.endIndex.advancedBy(-4)))
+        let number = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(6), end: phoneString.endIndex.advancedBy(0)))
+        
+        return String(format: "(%@) %@-%@", areaCode, prefix, number)
+    }
+    
+    // MARK:
+    // MARK: - Navigation
     func navigateBackHome(sender: UIButton) {
         navigationController?.popViewControllerAnimated(true)
     }
@@ -236,6 +251,11 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     func mapButtonPressed(sender: UIButton) {
         let branch = branchArray[sender.tag]
         openMapForPlace(branch)
+    }
+    
+    func phoneButtonPressed(sender: UIButton) {
+        let branch = branchArray[sender.tag]
+        openPhoneApp(branch.phone)
     }
     
     func openMapForPlace(branch: Branch) {
@@ -247,4 +267,18 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         let mapItem = MKMapItem(placemark: place)
         mapItem.openInMapsWithLaunchOptions(nil)
     }
+    
+    func openPhoneApp(phoneNumber: String) {
+        print(phoneNumber)
+        UIApplication.sharedApplication().openURL(NSURL(string: phoneNumber)!)
+    }
+    
+    /*
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController.
+        // Pass the selected object to the new view controller.
+    }
+    */
+
 }

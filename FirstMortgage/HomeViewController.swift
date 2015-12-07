@@ -31,7 +31,6 @@ class HomeViewController: UIViewController {
     
     let homeView = UIView()
     
-    
     var imageView = UIImageView()
 
     var isMortgageCalc = Bool()

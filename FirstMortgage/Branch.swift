@@ -13,6 +13,7 @@ class Branch: NSObject {
     var address = String()
     var city = String()
     var state = String()
+    var phone = String()
     var lat = Double()
     var long = Double()
     var distanceFromMe = Double()

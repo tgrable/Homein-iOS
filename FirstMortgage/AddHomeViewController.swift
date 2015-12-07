@@ -260,7 +260,7 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         dividerView.hidden = false
         scrollView.addSubview(dividerView)
         
-        // UITextField
+        //UITextField
         homeAddressTxtField.frame = (frame: CGRectMake(10, 305, addHomeView.bounds.size.width - 20, 40))
         homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: "ADDRESS", attributes:attributes)
         homeAddressTxtField.backgroundColor = UIColor.clearColor()

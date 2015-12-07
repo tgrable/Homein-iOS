@@ -13,15 +13,14 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     // MARK:
     // MARK: Properties
-    
-    // Custom Color
-    let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
+    let model = Model()
     
     // UIView
     let myHomesView = UIView()
     
     // UIScrollView
     let scrollView = UIScrollView()
+    let imageScollView = UIScrollView()
     
     // UITextField
     let homeNameTxtField = UITextField()
@@ -38,6 +37,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     var homeObject: PFObject!
     
     var imageView = UIImageView()
+    let defaultImageView = UIImageView()
     
     var isSmallerScreen = Bool()
     var isTextFieldEnabled = Bool()
@@ -49,6 +49,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         // Do any additional setup after loading the view.
     }
     
+    override func viewDidAppear(animated: Bool) {
+        setDefaultImage()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -56,14 +60,13 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     func buildView() {
         myHomesView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        myHomesView.backgroundColor = lightGrayColor
+        myHomesView.backgroundColor = model.lightGrayColor
         myHomesView.hidden = false
         self.view.addSubview(myHomesView)
         
-        let fmcLogo = UIImage(named: "fmc_logo") as UIImage?
-        
+        let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
-        imageView.frame = (frame: CGRectMake(40, 35, self.view.bounds.size.width - 80, 40))
+        imageView.frame = (frame: CGRectMake((myHomesView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
         imageView.image = fmcLogo
         myHomesView.addSubview(imageView)
         
@@ -74,81 +77,57 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 75, 45))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("Back", forState: .Normal)
-        homeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        homeButton.setTitle("HOME", forState: .Normal)
+        homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
+        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         
         let addHomeBannerView = UIView(frame: CGRectMake(0, 135, myHomesView.bounds.size.width, 50))
-        addHomeBannerView.backgroundColor = UIColor.blueColor()
+        let addHomeBannerGradientLayer = CAGradientLayer()
+        addHomeBannerGradientLayer.frame = addHomeBannerView.bounds
+        addHomeBannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+        addHomeBannerView.layer.insertSublayer(addHomeBannerGradientLayer, atIndex: 0)
+        addHomeBannerView.layer.addSublayer(addHomeBannerGradientLayer)
         addHomeBannerView.hidden = false
         myHomesView.addSubview(addHomeBannerView)
         
         let labelFontSize = isSmallerScreen ? 20.0 : 24.0;
         
+        //UIImageView
+        let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 100), 12.5, 25, 25))
+        homeIcon.image = homeIcn
+        addHomeBannerView.addSubview(homeIcon)
+        
         // UILabel
-        let bannerLabel = UILabel(frame: CGRectMake(65, 10, addHomeBannerView.bounds.size.width - 65, 0))
+        let bannerLabel = UILabel(frame: CGRectMake(0, 0, addHomeBannerView.bounds.size.width, 50))
         bannerLabel.text = "MY HOMES"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        bannerLabel.textAlignment = NSTextAlignment.Left
-        bannerLabel.numberOfLines = 0
+        bannerLabel.textAlignment = NSTextAlignment.Center
         bannerLabel.font = bannerLabel.font.fontWithSize(CGFloat(labelFontSize))
         bannerLabel.textColor = UIColor.whiteColor()
-        bannerLabel.sizeToFit()
+        bannerLabel.font = UIFont(name: "forza-light", size: 25)
         addHomeBannerView.addSubview(bannerLabel)
         
         scrollView.frame = (frame: CGRectMake(0, 185, myHomesView.bounds.size.width, myHomesView.bounds.size.height - 185))
         scrollView.backgroundColor = UIColor.clearColor()
         myHomesView.addSubview(scrollView)
         
-        let imageScollView = UIScrollView(frame: CGRectMake(0, 0, scrollView.bounds.size.width, 250))
-        imageScollView.backgroundColor = UIColor.clearColor()
-        scrollView.addSubview(imageScollView)
+        defaultImageView.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, 250))
+        scrollView.addSubview(defaultImageView)
         
-        if (homeObject["imageArray"] != nil) {
-            var imageArray: [PFFile] = []
-            imageArray = homeObject["imageArray"] as! [PFFile]
-            var xLocation = 0.0
-            
-            for img: PFFile in imageArray {
-                img.getDataInBackgroundWithBlock {
-                    (imageData: NSData?, error: NSError?) -> Void in
-                    if error == nil {
-                        let homeImageView = UIImageView(frame: CGRectMake(CGFloat(xLocation), 0, self.scrollView.bounds.size.width, 250))
-                        homeImageView.backgroundColor = UIColor.clearColor()
-                        imageScollView.addSubview(homeImageView)
-                        
-                        if let imageData = imageData {
-                            let image = UIImage(data:imageData)
-                            homeImageView.image = image
-                        }
-                        
-                        xLocation += Double(self.scrollView.bounds.size.width)
-                    }
-                }
-            }
-            imageScollView.contentSize = CGSize(width: CGFloat(Int(scrollView.bounds.size.width) * imageArray.count), height: 250)
-        }
-        else {
-            let defaultImageView = UIImageView(frame: CGRectMake(0, 0, scrollView.bounds.size.width, 250))
-            imageScollView.addSubview(defaultImageView)
-            let fillerImage = UIImage(named: "homebackground") as UIImage?
-            defaultImageView.image = fillerImage
-        }
-        
+        let attributes = [
+            NSForegroundColorAttributeName: UIColor.darkTextColor(),
+            NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
+        ]
+
         let homeName = homeObject["name"] as! NSString
-        var attributedHomeName = NSMutableAttributedString()
-        attributedHomeName = NSMutableAttributedString(
-            string: homeName as String,
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor()])
-        
         // UITextField
         homeNameTxtField.frame = (frame: CGRectMake(10, 250, scrollView.bounds.size.width - 20, 30))
-        homeNameTxtField.attributedPlaceholder = attributedHomeName
+        homeNameTxtField.attributedPlaceholder = NSAttributedString(string: homeName as String, attributes:attributes)
         homeNameTxtField.backgroundColor = UIColor.clearColor()
         homeNameTxtField.delegate = self
-        homeNameTxtField.enabled = false
         homeNameTxtField.returnKeyType = .Done
         homeNameTxtField.keyboardType = UIKeyboardType.Default
         scrollView.addSubview(homeNameTxtField)
@@ -159,34 +138,30 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         formatter.numberStyle = .CurrencyStyle
         let homePrice = formatter.stringFromNumber(price)! as String
 
-        var attributedHomePrice = NSMutableAttributedString()
-        attributedHomePrice = NSMutableAttributedString(
-            string: homePrice as String,
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor()])
-        
         // UITextField
         homePriceTxtField.frame = (frame: CGRectMake(10, 275, scrollView.bounds.size.width - 90, 30))
-        homePriceTxtField.attributedPlaceholder = attributedHomePrice
+        homePriceTxtField.attributedPlaceholder = NSAttributedString(string: homePrice as String, attributes:attributes)
         homePriceTxtField.backgroundColor = UIColor.clearColor()
         homePriceTxtField.delegate = self
-        homePriceTxtField.enabled = false
         homePriceTxtField.returnKeyType = .Done
         homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
         scrollView.addSubview(homePriceTxtField)
 
         // UIButton
-        let addImagesButton = UIButton (frame: CGRectMake(scrollView.bounds.size.width - 120, 250, 80, 30))
+        let addIcn = UIImage(named: "camera_icon") as UIImage?
+        let addImagesButton = UIButton (frame: CGRectMake(scrollView.bounds.size.width - 120, 260, 50, 35))
         addImagesButton.addTarget(self, action: "arraytest:", forControlEvents: .TouchUpInside)
-        addImagesButton.setTitle("Add Images", forState: .Normal)
+        addImagesButton.setBackgroundImage(addIcn, forState: .Normal)
         addImagesButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         addImagesButton.backgroundColor = UIColor.clearColor()
         addImagesButton.tag = 0
         scrollView.addSubview(addImagesButton)
         
         // UIButton
-        let editButton = UIButton (frame: CGRectMake(scrollView.bounds.size.width - 50, 250, 40, 40))
+        let editIcn = UIImage(named: "edit_icon") as UIImage?
+        let editButton = UIButton (frame: CGRectMake(scrollView.bounds.size.width - 50, 260, 35, 35))
         editButton.addTarget(self, action: "allowEdit:", forControlEvents: .TouchUpInside)
-        editButton.setTitle("Edit", forState: .Normal)
+        editButton.setBackgroundImage(editIcn, forState: .Normal)
         editButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         editButton.backgroundColor = UIColor.clearColor()
         editButton.tag = 0
@@ -280,36 +255,36 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         sqFeetLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(sqFeetLabel)
         
+        let starImage = UIImage(named: "Star_empty-01") as UIImage?
         var xOffset = 0
         for i in 1...4 {
             // UIButton
             let ratingButtonPhotoButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), 315, 30, 30))
             ratingButtonPhotoButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
-            ratingButtonPhotoButton.backgroundColor = UIColor.blueColor()
-            ratingButtonPhotoButton.layer.borderWidth = 1.0
-            ratingButtonPhotoButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+            ratingButtonPhotoButton.backgroundColor = model.darkBlueColor
+            ratingButtonPhotoButton.setImage(starImage, forState: .Normal)
             ratingButtonPhotoButton.tag = i
             scrollView.addSubview(ratingButtonPhotoButton)
             
             xOffset += 35
         }
-        
+
         let dividerView = UIView(frame: CGRectMake(10, 359, scrollView.bounds.size.width - 20, 1))
         dividerView.backgroundColor = UIColor.darkGrayColor()
         dividerView.hidden = false
         scrollView.addSubview(dividerView)
         
-        let homeAddress = homeObject["address"] as! NSString
-        let attributedHomeAddress = NSMutableAttributedString(
-            string: homeAddress as String,
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor()])
+        let arialAttributes = [
+            NSForegroundColorAttributeName: UIColor.darkTextColor(),
+            NSFontAttributeName : UIFont(name: "Arial", size: 18)!
+        ]
         
-        // UITextField
+        let homeAddress = homeObject["address"] as! NSString
+        //UITextField
         homeAddressTxtField.frame = (frame: CGRectMake(10, 370, scrollView.bounds.size.width - 20, 30))
-        homeAddressTxtField.attributedPlaceholder = attributedHomeAddress
+        homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: homeAddress as String, attributes:arialAttributes)
         homeAddressTxtField.backgroundColor = UIColor.clearColor()
         homeAddressTxtField.delegate = self
-        homeAddressTxtField.enabled = false
         homeAddressTxtField.returnKeyType = .Done
         homeAddressTxtField.keyboardType = UIKeyboardType.Default
         scrollView.addSubview(homeAddressTxtField)
@@ -323,6 +298,71 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         scrollView.addSubview(descTxtView)
         
         scrollView.contentSize = CGSize(width: myHomesView.bounds.size.width, height: 775)
+    }
+    
+    func setDefaultImage() {
+        if (homeObject["imageArray"] != nil) {
+            var imageArray: [PFFile] = []
+            imageArray = homeObject["imageArray"] as! [PFFile]
+            
+            let img = imageArray[0] as PFFile
+            img.getDataInBackgroundWithBlock {
+                (imageData: NSData?, error: NSError?) -> Void in
+                if error == nil {
+                    if let imageData = imageData {
+                        let image = UIImage(data:imageData)
+                        self.defaultImageView.image = image
+                        
+                        let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
+                        overlayButton.backgroundColor = UIColor.clearColor()
+                        overlayButton.addTarget(self, action: "showImageOverlay:", forControlEvents: .TouchUpInside)
+                        self.scrollView.addSubview(overlayButton)
+                        
+                        self.imageOverlay(imageArray)
+                    }
+                }
+            }
+        }
+        else {
+            let fillerImage = UIImage(named: "homebackground") as UIImage?
+            defaultImageView.image = fillerImage
+        }
+    }
+    
+    func showImageOverlay(sender: UIButton) {
+        print("wtf")
+        imageScollView.hidden = false
+    }
+    
+    func imageOverlay(imageArray: Array<PFFile>) {
+        
+        let overlayColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.6)
+        
+        imageScollView.frame = (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
+        imageScollView.backgroundColor = overlayColor
+        imageScollView.hidden = true
+        scrollView.addSubview(imageScollView)
+        var xLocation = 0.0
+        
+        for img: PFFile in imageArray {
+            img.getDataInBackgroundWithBlock {
+                (imageData: NSData?, error: NSError?) -> Void in
+                if error == nil {
+                    let homeImageView = UIImageView(frame: CGRectMake(CGFloat(xLocation), 0, self.scrollView.bounds.size.width, 250))
+                    homeImageView.backgroundColor = UIColor.clearColor()
+                    self.imageScollView.addSubview(homeImageView)
+                    
+                    if let imageData = imageData {
+                        let image = UIImage(data:imageData)
+                        homeImageView.image = image
+                    }
+                    
+                    xLocation += Double(self.scrollView.bounds.size.width)
+                }
+            }
+        }
+        
+        imageScollView.contentSize = CGSize(width: CGFloat(Int(scrollView.bounds.size.width) * imageArray.count), height: 250)
     }
     
     // MARK:

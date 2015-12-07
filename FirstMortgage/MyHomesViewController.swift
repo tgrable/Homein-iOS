@@ -124,7 +124,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func showSortTray() {
-        sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 195))
+        sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 175))
         sortTrayGradientLayer.frame = sortTrayView.bounds
         sortTrayGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
         sortTrayView.layer.insertSublayer(sortTrayGradientLayer, atIndex: 0)
@@ -133,12 +133,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         self.view.addSubview(sortTrayView)
         
         // UILabel
-        let sortByLabel = UILabel(frame: CGRectMake(65, 10, sortTrayView.bounds.size.width - 65, 0))
+        let sortByLabel = UILabel(frame: CGRectMake(15, 10, sortTrayView.bounds.size.width - 65, 0))
         sortByLabel.text = "SORT BY"
         //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
         sortByLabel.textAlignment = NSTextAlignment.Left
         sortByLabel.numberOfLines = 0
-        sortByLabel.font = sortByLabel.font.fontWithSize(18)
+        sortByLabel.font = UIFont(name: "forza-light", size: 25)
         sortByLabel.textColor = UIColor.whiteColor()
         sortByLabel.sizeToFit()
         sortTrayView.addSubview(sortByLabel)
@@ -148,25 +148,31 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         dividerView.hidden = false
         sortTrayView.addSubview(dividerView)
         
+        let nameImage = UIImage(named: "Star_empty-01") as UIImage?
+        // UIImageView
+        let nameImageView = UIImageView(frame: CGRectMake(15, 45, 30, 30))
+        nameImageView.image = nameImage
+        sortTrayView.addSubview(nameImageView)
+        
         // UIButton
-        let sortNameButton = UIButton (frame: CGRectMake(0, 40, sortTrayView.bounds.size.width, 40))
+        let sortNameButton = UIButton (frame: CGRectMake(50, 40, sortTrayView.bounds.size.width - 50, 40))
         sortNameButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortNameButton.setTitle("NAME", forState: .Normal)
         sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         sortNameButton.backgroundColor = UIColor.clearColor()
-        sortNameButton.titleLabel?.textAlignment = .Left
+        sortNameButton.contentHorizontalAlignment = .Left
         sortNameButton.tag = 0
+        sortNameButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortNameButton)
-        
         
         let starImage = UIImage(named: "Star_empty-01") as UIImage?
         // UIImageView
-        let ratingImageView = UIImageView(frame: CGRectMake(15, 95, 30, 30))
+        let ratingImageView = UIImageView(frame: CGRectMake(15, 90, 30, 30))
         ratingImageView.image = starImage
         sortTrayView.addSubview(ratingImageView)
         
         // UIButton
-        let sortRatingButton = UIButton (frame: CGRectMake(50, 100, sortTrayView.bounds.size.width - 50, 40))
+        let sortRatingButton = UIButton (frame: CGRectMake(50, 85, sortTrayView.bounds.size.width - 50, 40))
         sortRatingButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortRatingButton.setTitle("RATING", forState: .Normal)
         sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -176,21 +182,29 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortRatingButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortRatingButton)
         
+        
+        let priceImage = UIImage(named: "Star_empty-01") as UIImage?
+        // UIImageView
+        let priceImageView = UIImageView(frame: CGRectMake(15, 135, 30, 30))
+        priceImageView.image = priceImage
+        sortTrayView.addSubview(priceImageView)
+        
         // UIButton
-        let sortPriceButton = UIButton (frame: CGRectMake(0, 145, sortTrayView.bounds.size.width, 40))
+        let sortPriceButton = UIButton (frame: CGRectMake(50, 130, sortTrayView.bounds.size.width, 40))
         sortPriceButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortPriceButton.setTitle("PRICE", forState: .Normal)
         sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         sortPriceButton.backgroundColor = UIColor.clearColor()
-        sortPriceButton.titleLabel?.textAlignment = .Left
+        sortPriceButton.contentHorizontalAlignment = .Left
         sortPriceButton.tag = 0
+        sortPriceButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortPriceButton)
     }
 
     func showHideSortTray(sender: UIButton) {
         if (!isSortTrayOpen) {
             UIView.animateWithDuration(0.4, animations: {
-                self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height - 195, self.view.bounds.size.width, 195))
+                self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height - 175, self.view.bounds.size.width, 175))
                 self.sortTrayGradientLayer.frame = self.sortTrayGradientLayer.bounds
                 }, completion: {
                     (value: Bool) in
@@ -199,7 +213,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         else {
             UIView.animateWithDuration(0.4, animations: {
-                self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 195))
+                self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 175))
                 self.sortTrayGradientLayer.frame = self.sortTrayGradientLayer.bounds
                 }, completion: {
                     (value: Bool) in
