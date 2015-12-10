@@ -67,8 +67,13 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         whiteBar.backgroundColor = UIColor.whiteColor()
         myHomesView.addSubview(whiteBar)
         
+        let backIcn = UIImage(named: "backbutton_icon") as UIImage?
+        let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+        backIcon.image = backIcn
+        whiteBar.addSubview(backIcon)
+        
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(10, 0, 75, 45))
+        let homeButton = UIButton (frame: CGRectMake(50, 0, 75, 45))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
         homeButton.setTitle("HOME", forState: .Normal)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
@@ -97,12 +102,15 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         myHomesView.addSubview(addHomeBannerView)
         
         let labelFontSize = isSmallerScreen ? 20.0 : 24.0;
+
+        let sortIcn = UIImage(named: "sortby_icon") as UIImage?
+        let sortIconView = UIImageView(frame: CGRectMake(20, 12.5, 5.25, 25))
+        sortIconView.image = sortIcn
+        addHomeBannerView.addSubview(sortIconView)
         
         // UIButton
         let sortButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
         sortButton.addTarget(self, action: "showHideSortTray:", forControlEvents: .TouchUpInside)
-        sortButton.setTitle(":", forState: .Normal)
-        sortButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         sortButton.backgroundColor = UIColor.clearColor()
         sortButton.tag = 0
         addHomeBannerView.addSubview(sortButton)
@@ -352,27 +360,37 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     // called when a row deletion action is confirmed
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-            switch editingStyle {
-            case .Delete:
-                // remove the deleted item from the model
-                //TODO: Need to implement delete method
-                
-                // remove the deleted item from the `UITableView`
-                homeTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
-            default:
-                return
-            }
+        if editingStyle == UITableViewCellEditingStyle.Delete {
+            let homeObj = self.userHomes[indexPath.row] as PFObject
+            deleteHomeObject(homeObj)
+            
+            self.userHomes.removeAtIndex(indexPath.row)
+            homeTableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+        }
     }
     
-    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+    func deleteHomeObject(homeObject: PFObject) {
+        
+        homeObject.deleteInBackgroundWithBlock {
+            (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                print("The object was deleted")
+                
+            } else {
+                // There was a problem, check error.description
+                print("error: %@", error)
+            }
+        }
+    }
+    
+    /*func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         let delete = UITableViewRowAction(style: .Destructive, title: "Delete") { (action, indexPath) in
             // delete item at indexPath
         }
         
         delete.backgroundColor = model.darkOrangeColor
-        
         return [delete]
-    }
+    }*/
     
     // MARK:
     // MARK: Navigation

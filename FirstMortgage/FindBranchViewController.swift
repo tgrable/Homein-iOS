@@ -54,14 +54,14 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func buildView() {
-        addHomeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width * 2, self.view.bounds.size.height))
+        addHomeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         addHomeView.backgroundColor = lightGrayColor
         addHomeView.hidden = false
         self.view.addSubview(addHomeView)
         
-        let fmcLogo = UIImage(named: "fmc_logo") as UIImage?
+        let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
-        imageView.frame = (frame: CGRectMake(40, 35, self.view.bounds.size.width - 80, 40))
+        imageView.frame = (frame: CGRectMake((addHomeView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
         imageView.image = fmcLogo
         addHomeView.addSubview(imageView)
         
@@ -69,12 +69,18 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         whiteBar.backgroundColor = UIColor.whiteColor()
         addHomeView.addSubview(whiteBar)
         
+        let backIcn = UIImage(named: "backbutton_icon") as UIImage?
+        let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+        backIcon.image = backIcn
+        whiteBar.addSubview(backIcon)
+        
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(0, 0, 75, 45))
+        let homeButton = UIButton (frame: CGRectMake(50, 0, 75, 45))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("Home", forState: .Normal)
-        homeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        homeButton.setTitle("HOME", forState: .Normal)
+        homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
+        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         
@@ -88,9 +94,11 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         locationManager.stopUpdatingLocation()
         
-        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Authorized) {                currentLocation = locationManager.location!
+        if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways) {
+            currentLocation = locationManager.location!
         }
     }
+    
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error while updating location " + error.localizedDescription)
     }
@@ -121,7 +129,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
                     }
                 }
             }
-            print(branchArray.count)
             calcDistance()
         }
         catch {
@@ -130,33 +137,43 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     }
     
     func calcDistance() {
-        var count = 1;
+        var count = 0;
+        branchArray.removeAtIndex(0)
+        branchArray.removeAtIndex(1)
+
         for branch in branchArray {
-            let geocoder = CLGeocoder()
-            let branchLocation = String(format: "%@, %@, USA", branch.address, branch.state)
-            var distance = 0.0
-            
-            geocoder.geocodeAddressString(branchLocation, completionHandler: {(placemarks, error) -> Void in
-                if((error) != nil){
-                    print("Error", error)
+            if (count < 25) {
+                let geocoder = CLGeocoder()
+                let branchLocation = String(format: "%@, %@, USA", branch.address, branch.state)
+                var distance = 0.0
+                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                    geocoder.geocodeAddressString(branchLocation, completionHandler: {(placemarks, error) -> Void in
+                        print(branchLocation)
+                        if((error) != nil){
+                            print("Geocoder Error", error)
+                            count++
+                        }
+                        
+                        if let placemark = placemarks?.first {
+                            let lat = placemark.location!.coordinate.latitude
+                            let long = placemark.location!.coordinate.longitude
+                            
+                            let clObj = CLLocation(latitude: lat, longitude: long)
+                            distance = self.currentLocation.distanceFromLocation(clObj) / 1000
+                            branch.distanceFromMe = distance
+                            branch.lat = lat
+                            branch.long = long
+                            count++
+                            print(count)
+                            
+                            if (count == self.branchArray.count) {
+                                self.branchArray.sortInPlace({ $0.distanceFromMe < $1.distanceFromMe })
+                                self.printLocations()
+                            }
+                        }
+                    })
                 }
-                if let placemark = placemarks?.first {
-                    let lat = placemark.location!.coordinate.latitude
-                    let long = placemark.location!.coordinate.longitude
-                    
-                    let clObj = CLLocation(latitude: lat, longitude: long)
-                    distance = self.currentLocation.distanceFromLocation(clObj) / 1000
-                    branch.distanceFromMe = distance
-                    branch.lat = lat
-                    branch.long = long
-                    count++
-                    
-                    if (count == self.branchArray.count) {
-                        self.branchArray.sortInPlace({ $0.distanceFromMe < $1.distanceFromMe })
-                        self.printLocations()
-                    }
-                }
-            })
+            }
         }
     }
     
@@ -224,6 +241,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         }
         
         scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(branchArray.count * 110))
+        
+        activityIndicator.stopAnimating()
     }
     
     // MARK:
@@ -270,7 +289,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     
     func openPhoneApp(phoneNumber: String) {
         print(phoneNumber)
-        UIApplication.sharedApplication().openURL(NSURL(string: phoneNumber)!)
+        UIApplication.sharedApplication().openURL(NSURL(string: String(format: "tel://%@", phoneNumber))!)
     }
     
     /*

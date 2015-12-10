@@ -153,7 +153,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         optionThreeLabel.sizeToFit()
         registerView.addSubview(optionThreeLabel)
         
-        let getStartedView = UIView(frame: CGRectMake(65, descLabel.bounds.size.height + 290, (registerView.bounds.size.width / 2) - 130, 40))
+        let getStartedView = UIView(frame: CGRectMake(35, descLabel.bounds.size.height + 290, (registerView.bounds.size.width / 2) - 70, 40))
         let getStartedGradientLayer = CAGradientLayer()
         getStartedGradientLayer.frame = getStartedView.bounds
         getStartedGradientLayer.colors = [darkBlueColor.CGColor, lightBlueColor.CGColor]
@@ -161,7 +161,14 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         getStartedView.layer.addSublayer(getStartedGradientLayer)
         registerView.addSubview(getStartedView)
         
-        let getStartedButton = UIButton (frame: CGRectMake(65, descLabel.bounds.size.height + 290, (registerView.bounds.size.width / 2) - 130, 40))
+        let getStartedArrow = UILabel (frame: CGRectMake(getStartedView.bounds.size.width - 50, 0, 40, 40))
+        getStartedArrow.textAlignment = NSTextAlignment.Right
+        getStartedArrow.font = UIFont(name: "forza-light", size: 40)
+        getStartedArrow.text = ">"
+        getStartedArrow.textColor = UIColor.whiteColor()
+        getStartedView.addSubview(getStartedArrow)
+        
+        let getStartedButton = UIButton (frame: CGRectMake(35, descLabel.bounds.size.height + 290, (registerView.bounds.size.width / 2) - 70, 40))
         getStartedButton.setTitle("GET STARTED", forState: .Normal)
         getStartedButton.addTarget(self, action: "showCreateAccount:", forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)

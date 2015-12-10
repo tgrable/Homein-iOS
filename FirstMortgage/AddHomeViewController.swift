@@ -104,8 +104,13 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         whiteBar.backgroundColor = UIColor.whiteColor()
         addHomeView.addSubview(whiteBar)
 
+        let backIcn = UIImage(named: "backbutton_icon") as UIImage?
+        let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+        backIcon.image = backIcn
+        whiteBar.addSubview(backIcon)
+        
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(0, 0, 75, 45))
+        let homeButton = UIButton (frame: CGRectMake(50, 0, 75, 45))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
         homeButton.setTitle("HOME", forState: .Normal)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)

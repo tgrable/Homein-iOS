@@ -9,6 +9,10 @@
 import UIKit
 
 class Model: NSObject {
+    
+    // MARK:
+    // MARK: Properties
+  
     // Custom Color
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     
@@ -23,4 +27,51 @@ class Model: NSObject {
     
     let lightRedColor = UIColor(red: 204.0/255.0, green: 69.0/255.0, blue: 67.0/255.0, alpha: 1)
     let darkRedColor = UIColor(red: 174.0/255.0, green: 58.0/255.0, blue: 55.0/255.0, alpha: 1)
+    
+    // MARK:
+    // MARK: Calculations
+    func calculateMortgagePayment(loanAmount: Double, interest: Double, mortgage: Double, taxes: Double) -> Double {
+        var estimatedPaymentDefault = 0.0
+        
+        let txs = taxes
+        let intRate = interest
+        let term  = mortgage
+        
+        let r = Double(intRate) / 1200
+        let n = Double(term) * 12
+        let rPower = pow(1 + r, n)
+        
+        let monthlyPayment = loanAmount * r * rPower / (rPower - 1)
+        estimatedPaymentDefault = monthlyPayment + (((txs / 100) * loanAmount) / 12)
+        
+        return estimatedPaymentDefault
+    }
+ 
+    func calculateRefinance(newLoan: Double, newInt: Double, newMort: Double) -> Double {
+        let newloanamount = newLoan
+        let newInterest = newInt
+        let newMortgage = newMort
+        
+        return calculateMortgagePayment(newloanamount, interest: newInterest, mortgage: newMortgage, taxes: 0.0)
+    }
+    
+    func calculateBalancePaid(loanAmount: Double, intRate: Double, mortgage: Double, year: Double) -> Double {
+        
+        let currentMonthlyPayment = calculateMortgagePayment(loanAmount, interest: intRate, mortgage: mortgage, taxes: 0.0)
+        let r = Double(intRate) / 100
+        let monthsPaid = (getCurrentYear() - year) * 12
+        let rPower = pow(1 + r / 12.0, monthsPaid)
+        let balPaid = ((12 * currentMonthlyPayment / r - loanAmount) * (rPower - 1))
+        
+        return balPaid
+    }
+    
+    func getCurrentYear() -> Double {
+        let date = NSDate()
+        let formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy"
+        let defaultTimeZoneStr = formatter.stringFromDate(date);
+        
+        return Double(defaultTimeZoneStr)!
+    }
 }

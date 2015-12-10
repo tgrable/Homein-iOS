@@ -17,17 +17,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // [Optional] Power your app with Local Datastore. For more info, go to
-        // https://parse.com/docs/ios_guide#localdatastore/iOS
-        Parse.enableLocalDatastore()
-        
-        // Initialize Parse.
-        Parse.setApplicationId("oc8vD41spZ2C9BZdxTP9uVmngI88bTnIJVA99xMZ",
-            clientKey: "yUeoRTYblcdr8UJe6tJFg2u1kcA9KOuRsCwBccfd")
-        
-        // [Optional] Track statistics around application opens.
-        PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
-        
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+            // [Optional] Power your app with Local Datastore. For more info, go to
+            // https://parse.com/docs/ios_guide#localdatastore/iOS
+            Parse.enableLocalDatastore()
+            
+            // Initialize Parse.
+            Parse.setApplicationId("oc8vD41spZ2C9BZdxTP9uVmngI88bTnIJVA99xMZ",
+                clientKey: "yUeoRTYblcdr8UJe6tJFg2u1kcA9KOuRsCwBccfd")
+            
+            // [Optional] Track statistics around application opens.
+            PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+        }
         return true
     }
 

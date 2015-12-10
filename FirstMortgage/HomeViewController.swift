@@ -130,12 +130,12 @@ class HomeViewController: UIViewController {
         scrollView.addSubview(addHomesView)
  
         let addIcn = UIImage(named: "add_icon") as UIImage?
-        let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 35, 26, 26))
+        let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 25, 26, 26))
         addHomeIcon.image = addIcn
         addHomesView.addSubview(addHomeIcon)
         
         // UILabel
-        let addHomesLabel = UILabel(frame: CGRectMake(0, 75, myHomesView.bounds.size.width, 48))
+        let addHomesLabel = UILabel(frame: CGRectMake(0, 65, myHomesView.bounds.size.width, 48))
         addHomesLabel.text = "ADD A\nHOME"
         addHomesLabel.font = UIFont(name: "forza-light", size: 18)
         addHomesLabel.textAlignment = NSTextAlignment.Center
@@ -232,7 +232,7 @@ class HomeViewController: UIViewController {
         findBranchView.layer.addSublayer(findBranchGradientLayer)
         scrollView.addSubview(findBranchView)
         
-        let brnchIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let brnchIcn = UIImage(named: "branch_icon") as UIImage?
         let branchIcon = UIImageView(frame: CGRectMake((findBranchView.bounds.size.width / 2) - 18, 25, 36, 36))
         branchIcon.image = brnchIcn
         findBranchView.addSubview(branchIcon)
@@ -290,13 +290,18 @@ class HomeViewController: UIViewController {
         
         scrollView.contentSize = CGSize(width: self.view.bounds.size.width, height: ((self.view.bounds.size.width / 2) * 2) + (135 + 15))
         
-        userButton.frame = (frame: CGRectMake(10, 0, self.view.bounds.size.width - 20, 50))
+        userButton.frame = (frame: CGRectMake(5, 0, whiteBar.bounds.size.width - 35, 50))
         userButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         userButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         userButton.backgroundColor = UIColor.clearColor()
         userButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         userButton.contentHorizontalAlignment = .Right
         whiteBar.addSubview(userButton)
+        
+        let fwdIcn = UIImage(named: "forwardbutton_icon") as UIImage?
+        let fwdIcon = UIImageView(frame: CGRectMake(whiteBar.bounds.size.width - 20, 10, 12.5, 25))
+        fwdIcon.image = fwdIcn
+        whiteBar.addSubview(fwdIcon)
         
         checkIfLoggedIn()
     }
@@ -387,6 +392,7 @@ class HomeViewController: UIViewController {
         case 3:
             isMortgageCalc = false
             performSegueWithIdentifier("calculatorsViewController", sender: nil)
+            print("press")
         case 4:
             let cvc = self.storyboard!.instantiateViewControllerWithIdentifier("findBranchViewController") as! FindBranchViewController
             self.navigationController!.pushViewController(cvc, animated: true)
