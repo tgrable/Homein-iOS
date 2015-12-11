@@ -8,8 +8,9 @@
 
 import UIKit
 import Parse
+import ParseUI
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
     
     // MARK:
     // MARK: Properties
@@ -307,6 +308,13 @@ class HomeViewController: UIViewController {
     }
     
     func buildLoginView() {
+        let logInController = MyCustonViewController()
+        logInController.delegate = self
+        logInController.fields = [.UsernameAndPassword, .LogInButton, .PasswordForgotten, .DismissButton]
+        self.presentViewController(logInController, animated:true, completion: nil)
+        
+        
+        /*
         //1. Create the alert controller.
         let alert = UIAlertController(title: "First Mortgage", message: "Login", preferredStyle: .Alert)
         
@@ -348,6 +356,13 @@ class HomeViewController: UIViewController {
         
         // 4. Present the alert.
         self.presentViewController(alert, animated: true, completion: nil)
+
+        */
+    }
+    
+    func logInViewController(controller: PFLogInViewController, didLogInUser user: PFUser) -> Void {
+        self.dismissViewControllerAnimated(true, completion: nil)
+        self.checkIfLoggedIn()
     }
     
     func checkIfLoggedIn() {

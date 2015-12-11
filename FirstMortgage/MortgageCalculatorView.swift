@@ -34,7 +34,7 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
     
     func buildMortgageCalcView(view: UIView) {
         
-        calcView.frame = (frame: CGRectMake(10, 0, view.bounds.size.width - 20, 300))
+        calcView.frame = (frame: CGRectMake(0, 0, view.bounds.size.width, 300))
         calcView.backgroundColor = UIColor.whiteColor()
         calcView.hidden = false
         view.addSubview(calcView)
@@ -185,6 +185,8 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
     // MARK: UITapGesture
     func tapGesture() {
         loanAmountTxtField.resignFirstResponder()
+        mortgageTxtField.resignFirstResponder()
+        interestTxtField.resignFirstResponder()
         downPaymentTxtField.resignFirstResponder()
         taxesTxtField.resignFirstResponder()
     }    

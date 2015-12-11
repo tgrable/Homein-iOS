@@ -8,8 +8,9 @@
 
 import UIKit
 import Parse
+import ParseUI
 
-class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate {
+class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, PFSignUpViewControllerDelegate {
 
     // MARK:
     // MARK: Properties
@@ -39,9 +40,6 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     var optionOne = Bool()
     var optionTwo = Bool()
     var optionThree = Bool()
-    
-    // ShadowEffet
-    var shadow = ShadowEffect()
     
     var imageView = UIImageView() as UIImageView
     
@@ -183,9 +181,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         registerView.addSubview(continueWithoutButton)
     }
     
-    func buildRegisterView() {
-        print("Create Account")
-        
+    func buildRegisterView() {       
         let bannerView = UIView(frame: CGRectMake((registerView.bounds.size.width / 2), 0, registerView.bounds.size.width / 2, 50))
         let bannerGradientLayer = CAGradientLayer()
         bannerGradientLayer.frame = bannerView.bounds

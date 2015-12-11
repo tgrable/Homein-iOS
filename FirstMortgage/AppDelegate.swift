@@ -15,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             // [Optional] Power your app with Local Datastore. For more info, go to
@@ -28,6 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             // [Optional] Track statistics around application opens.
             PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
+            
+            PFACL.setDefaultACL(PFACL(), withAccessForCurrentUser: true)
         }
         return true
     }

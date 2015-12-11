@@ -11,7 +11,7 @@ import CoreLocation
 import AddressBook
 import MapKit
 
-class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
+class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
     // MARK:
     // MARK: Properties
@@ -20,6 +20,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     
     let addHomeView = UIView() as UIView
+    let pickerView = UIView()
     
     var imageView = UIImageView() as UIImageView
     
@@ -31,18 +32,34 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     var dictionary = Dictionary<String, String>()
     
     var branchArray = [Branch]()
+    var filteredArray = [Branch]()
+    var stateArray = [String]()
+    var stateDictionary = Dictionary<String, String>()
     
     var activityIndicator = UIActivityIndicatorView()
     
+    var isPickerTrayOpen = Bool() as Bool
+    var stateToCheck = String() as String
+    
+    // UIPickerView
+    let statesPicker = UIPickerView() as UIPickerView
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        buildView()
+        
+        statesPicker.delegate = self
+        statesPicker.dataSource = self
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 10;
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+        
+        createStateDictionary()
+        
+        buildView()
+        buildPickerViewTray()
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -87,8 +104,58 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         activityIndicator.center = view.center
         activityIndicator.startAnimating()
-        view.addSubview(activityIndicator)
         addHomeView.addSubview(activityIndicator)
+    }
+    
+    func buildPickerViewTray() {
+        pickerView.frame = (frame: CGRectMake(0, addHomeView.bounds.size.height, addHomeView.bounds.size.width, 450))
+        pickerView.backgroundColor = UIColor.clearColor()
+        addHomeView.addSubview(pickerView)
+        
+        // UILabel
+        let messageLabel = UILabel(frame: CGRectMake(25, 25, addHomeView.bounds.size.width - 50, 0))
+        messageLabel.text = "We were not able to find any branches in your current state. Please select a state from the list below to find a branch near you."
+        messageLabel.font = UIFont(name: "forza-light", size: 25)
+        messageLabel.textAlignment = NSTextAlignment.Left
+        messageLabel.numberOfLines = 0
+        messageLabel.sizeToFit()
+        pickerView.addSubview(messageLabel)
+        
+        // UIButton
+        let selectButton = UIButton (frame: CGRectMake(addHomeView.bounds.size.width - 125, 250, 100, 50))
+        selectButton.addTarget(self, action: "searchNewState:", forControlEvents: .TouchUpInside)
+        selectButton.setTitle("SELECT", forState: .Normal)
+        selectButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        selectButton.backgroundColor = UIColor.clearColor()
+        selectButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        selectButton.contentHorizontalAlignment = .Right
+        selectButton.tag = 0
+        pickerView.addSubview(selectButton)
+        
+        // UIPickerView
+        statesPicker.frame = (frame: CGRectMake(0, 300, pickerView.bounds.size.width, 150))
+        statesPicker.backgroundColor = UIColor.whiteColor()
+        statesPicker.tag = 0
+        pickerView.addSubview(statesPicker)
+    }
+    
+    func showHideSortTray() {
+        if (!isPickerTrayOpen) {
+            UIView.animateWithDuration(0.4, animations: {
+                self.pickerView.frame = (frame: CGRectMake(0, self.addHomeView.bounds.size.height - 450, self.addHomeView.bounds.size.width, 450))
+                }, completion: {
+                    (value: Bool) in
+                    self.isPickerTrayOpen = true
+            })
+        }
+        else {
+            UIView.animateWithDuration(0.4, animations: {
+                self.pickerView.frame = (frame: CGRectMake(0, self.addHomeView.bounds.size.height, self.addHomeView.bounds.size.width, 450))
+                }, completion: {
+                    (value: Bool) in
+                    self.isPickerTrayOpen = false
+            })
+        }
     }
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -102,9 +169,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Error while updating location " + error.localizedDescription)
     }
+
     
     func getBranchJson() {
-        
+        var states = [String]()
         let endpoint = NSURL(string: "http://www.trekkdev1.com/branch-json")
         let data = NSData(contentsOfURL: endpoint!)
         do {
@@ -126,29 +194,68 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
                             branch.phone = cleanPhoneNumnerString(phone)
                         }
                         branchArray.append(branch)
+                        states.append(branch.state)
                     }
                 }
             }
-            calcDistance()
+            stateArray = removeDuplicates(states)
+            statesPicker.reloadAllComponents()
+            
+            getUsersAdministrativeArea()
         }
         catch {
             print("error serializing JSON: \(error)")
         }
     }
     
-    func calcDistance() {
-        var count = 0;
-        branchArray.removeAtIndex(0)
-        branchArray.removeAtIndex(1)
+    func removeDuplicates(array: [String]) -> [String] {
+        var encountered = Set<String>()
+        var result: [String] = []
+        for value in array {
+            if encountered.contains(value) {
+                // Do not add a duplicate element.
+            }
+            else {
+                // Add value to the set.
+                encountered.insert(value)
+                // ... Append the value.
+                result.append(value)
+            }
+        }
+        return result
+    }
 
-        for branch in branchArray {
+    
+    func getUsersAdministrativeArea() {
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(currentLocation, completionHandler: { (placemarks, e) -> Void in
+            let placemark = placemarks!.last! as CLPlacemark
+            let state = placemark.administrativeArea
+            self.findBranchesInMyState(state!)
+        })
+    }
+    
+    func findBranchesInMyState(state: String) {
+        filteredArray = branchArray.filter({ $0.state == state })
+        if (filteredArray.count > 0) {
+            calcDistance(filteredArray)
+        }
+        else {
+            activityIndicator.stopAnimating()
+            showHideSortTray()
+        }
+    }
+    
+    func calcDistance(var filteredBranchArray: Array<Branch>) {
+        var count = 0;
+
+        for branch in filteredBranchArray {
             if (count < 25) {
                 let geocoder = CLGeocoder()
                 let branchLocation = String(format: "%@, %@, USA", branch.address, branch.state)
                 var distance = 0.0
                 dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
                     geocoder.geocodeAddressString(branchLocation, completionHandler: {(placemarks, error) -> Void in
-                        print(branchLocation)
                         if((error) != nil){
                             print("Geocoder Error", error)
                             count++
@@ -157,18 +264,17 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
                         if let placemark = placemarks?.first {
                             let lat = placemark.location!.coordinate.latitude
                             let long = placemark.location!.coordinate.longitude
-                            
+
                             let clObj = CLLocation(latitude: lat, longitude: long)
-                            distance = self.currentLocation.distanceFromLocation(clObj) / 1000
+                            distance = self.currentLocation.distanceFromLocation(clObj) * 0.000621371;
                             branch.distanceFromMe = distance
                             branch.lat = lat
                             branch.long = long
                             count++
-                            print(count)
                             
-                            if (count == self.branchArray.count) {
-                                self.branchArray.sortInPlace({ $0.distanceFromMe < $1.distanceFromMe })
-                                self.printLocations()
+                            if (count == filteredBranchArray.count) {
+                                filteredBranchArray.sortInPlace({ $0.distanceFromMe < $1.distanceFromMe })
+                                self.printLocations(filteredBranchArray)
                             }
                         }
                     })
@@ -177,14 +283,14 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         }
     }
     
-    func printLocations() {
+    func printLocations(filteredBranchArray: Array<Branch>) {
         var yOffset = 15
         var count = 0
         
         let scrollView = UIScrollView(frame: CGRectMake(0, 135.0, addHomeView.bounds.size.width, addHomeView.bounds.size.height - 135.0))
         addHomeView.addSubview(scrollView)
         
-        for branch in branchArray {
+        for branch in filteredBranchArray {
             
             let branchView = UIView(frame: CGRectMake(15, CGFloat(yOffset), self.view.bounds.size.width - 30, 100))
             branchView.backgroundColor = UIColor.whiteColor()
@@ -207,7 +313,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
             
             let milesLabel = UILabel (frame: CGRectMake(15, 55, branchView.bounds.size.width - 30, 24))
             milesLabel.textAlignment = NSTextAlignment.Left
-            milesLabel.text = String(format: "%.2f Miles", branch.distanceFromMe)
+            milesLabel.text = String(format: "%.01f Miles", branch.distanceFromMe)
             milesLabel.numberOfLines = 1
             milesLabel.font = cityStateLabel.font.fontWithSize(18.0)
             milesLabel.sizeToFit()
@@ -239,10 +345,67 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
             yOffset += 110
             count++
         }
-        
-        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(branchArray.count * 110))
+
+        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(filteredArray.count * 115))
         
         activityIndicator.stopAnimating()
+    }
+    
+    // MARK:
+    // MARK: - Action Methods
+    func searchNewState(sender: UIButton) {
+        findBranchesInMyState(stateToCheck)
+        activityIndicator.startAnimating()
+        showHideSortTray()
+    }
+    
+    // MARK:
+    // MARK: - Navigation
+    func navigateBackHome(sender: UIButton) {
+        navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func mapButtonPressed(sender: UIButton) {
+        let branch = filteredArray[sender.tag]
+        openMapForPlace(branch)
+    }
+    
+    func phoneButtonPressed(sender: UIButton) {
+        let branch = filteredArray[sender.tag]
+        openPhoneApp(branch.phone)
+    }
+    
+    func openMapForPlace(branch: Branch) {
+        let coords = CLLocationCoordinate2DMake(branch.lat, branch.long)
+        
+        let address : [String : AnyObject] = [kABPersonAddressStreetKey as String: branch.address, kABPersonAddressCityKey as String: branch.city, kABPersonAddressStateKey as String: branch.state, kABPersonAddressCountryCodeKey as String: "US"]
+        
+        let place = MKPlacemark(coordinate: coords, addressDictionary: address)
+        let mapItem = MKMapItem(placemark: place)
+        mapItem.openInMapsWithLaunchOptions(nil)
+    }
+    
+    func openPhoneApp(phoneNumber: String) {
+        UIApplication.sharedApplication().openURL(NSURL(string: String(format: "tel://%", phoneNumber))!)
+    }
+    
+    // MARK:
+    // MARK: UIPickerView Delegate and Data Source
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+       return stateArray.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        let stateFullName = stateDictionary[stateArray[row]]
+        return stateFullName
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        stateToCheck = stateArray[row]
     }
     
     // MARK:
@@ -261,36 +424,63 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate {
         return String(format: "(%@) %@-%@", areaCode, prefix, number)
     }
     
-    // MARK:
-    // MARK: - Navigation
-    func navigateBackHome(sender: UIButton) {
-        navigationController?.popViewControllerAnimated(true)
+    func createStateDictionary() {
+        stateDictionary = [
+            "AL":"Alabama",
+            "AK":"Alaska",
+            "AZ":"Arizona",
+            "AR":"Arkansas",
+            "CA":"California",
+            "CO":"Colorado",
+            "CT":"Connecticut",
+            "DE":"Delaware",
+            "DC":"District of Columbia",
+            "FL":"Florida",
+            "GA":"Georgia",
+            "HI":"Hawaii",
+            "ID":"Idaho",
+            "IL":"Illinois",
+            "IN":"Indiana",
+            "IA":"Iowa",
+            "KS":"Kansas",
+            "KY":"Kentucky",
+            "LA":"Louisiana",
+            "ME":"Maine",
+            "MD":"Maryland",
+            "MA":"Massachusetts",
+            "MI":"Michigan",
+            "MN":"Minnesota",
+            "MS":"Mississippi",
+            "MO":"Missouri",
+            "MT":"Montana",
+            "NE":"Nebraska",
+            "NV":"Nevada",
+            "NH":"New Hampshire",
+            "NJ":"New Jersey",
+            "NM":"New Mexico",
+            "NY":"New York",
+            "NC":"North Carolina",
+            "ND":"Dorth Dakota",
+            "OH":"Ohio",
+            "OK":"Oklahoma",
+            "OR":"Oregon",
+            "PA":"Pennsylvania",
+            "RI":"Rhode Island",
+            "SC":"South Carolina",
+            "SD":"South Dakota",
+            "TN":"Tennessee",
+            "TX":"Texas",
+            "UT":"Utah",
+            "VT":"Vermont",
+            "VA":"Virginia",
+            "WA":"Washington",
+            "WV":"West Virginia",
+            "WI":"Wisconsin",
+            "WY":"Wyoming",
+        ]
+        stateToCheck = "AZ"
     }
-    
-    func mapButtonPressed(sender: UIButton) {
-        let branch = branchArray[sender.tag]
-        openMapForPlace(branch)
-    }
-    
-    func phoneButtonPressed(sender: UIButton) {
-        let branch = branchArray[sender.tag]
-        openPhoneApp(branch.phone)
-    }
-    
-    func openMapForPlace(branch: Branch) {
-        let coords = CLLocationCoordinate2DMake(branch.lat, branch.long)
-        
-        let address : [String : AnyObject] = [kABPersonAddressStreetKey as String: branch.address, kABPersonAddressCityKey as String: branch.city, kABPersonAddressStateKey as String: branch.state, kABPersonAddressCountryCodeKey as String: "US"]
-        
-        let place = MKPlacemark(coordinate: coords, addressDictionary: address)
-        let mapItem = MKMapItem(placemark: place)
-        mapItem.openInMapsWithLaunchOptions(nil)
-    }
-    
-    func openPhoneApp(phoneNumber: String) {
-        print(phoneNumber)
-        UIApplication.sharedApplication().openURL(NSURL(string: String(format: "tel://%@", phoneNumber))!)
-    }
+
     
     /*
     // In a storyboard-based application, you will often want to do a little preparation before navigation

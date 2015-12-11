@@ -32,29 +32,17 @@ class Model: NSObject {
     // MARK: Calculations
     func calculateMortgagePayment(loanAmount: Double, interest: Double, mortgage: Double, taxes: Double) -> Double {
         var estimatedPaymentDefault = 0.0
-        
-        let txs = taxes
-        let intRate = interest
-        let term  = mortgage
-        
-        let r = Double(intRate) / 1200
-        let n = Double(term) * 12
+
+        let r = Double(interest) / 1200
+        let n = Double(mortgage) * 12
         let rPower = pow(1 + r, n)
         
         let monthlyPayment = loanAmount * r * rPower / (rPower - 1)
-        estimatedPaymentDefault = monthlyPayment + (((txs / 100) * loanAmount) / 12)
+        estimatedPaymentDefault = monthlyPayment + (((taxes / 100) * loanAmount) / 12)
         
         return estimatedPaymentDefault
     }
- 
-    func calculateRefinance(newLoan: Double, newInt: Double, newMort: Double) -> Double {
-        let newloanamount = newLoan
-        let newInterest = newInt
-        let newMortgage = newMort
-        
-        return calculateMortgagePayment(newloanamount, interest: newInterest, mortgage: newMortgage, taxes: 0.0)
-    }
-    
+  
     func calculateBalancePaid(loanAmount: Double, intRate: Double, mortgage: Double, year: Double) -> Double {
         
         let currentMonthlyPayment = calculateMortgagePayment(loanAmount, interest: intRate, mortgage: mortgage, taxes: 0.0)
@@ -62,6 +50,8 @@ class Model: NSObject {
         let monthsPaid = (getCurrentYear() - year) * 12
         let rPower = pow(1 + r / 12.0, monthsPaid)
         let balPaid = ((12 * currentMonthlyPayment / r - loanAmount) * (rPower - 1))
+        
+        print(balPaid)
         
         return balPaid
     }

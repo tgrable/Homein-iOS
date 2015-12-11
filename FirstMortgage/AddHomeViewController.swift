@@ -198,7 +198,7 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
         scrollView.addSubview(homePriceTxtField)
         
-        let starImage = UIImage(named: "Star_empty-01") as UIImage?
+        let starImage = UIImage(named: "star_off_icon") as UIImage?
         var xOffset = 0
         for i in 1...4 {
             // UIButton
@@ -458,7 +458,7 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             home["address"] = self.homeAddressTxtField.text
             home["beds"] = self.bedRoomDefault
             home["baths"] = self.bathRoomDefault
-            home["footage"] = self.sqFeetTxtField
+            home["footage"] = 1234 //self.sqFeetTxtField
             home["rating"] = self.ratingDefault
             home["desc"] = self.descTxtView.text
             
