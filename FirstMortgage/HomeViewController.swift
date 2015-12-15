@@ -418,7 +418,8 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
             print("Login Pressed")
             buildLoginView()
         case 7:
-            print("View Profile")
+            let pvc = self.storyboard!.instantiateViewControllerWithIdentifier("profileViewController") as! ProfileViewController
+            self.navigationController!.pushViewController(pvc, animated: true)
         default:
             print("Default")
         }
