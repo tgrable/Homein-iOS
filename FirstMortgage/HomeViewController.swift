@@ -14,21 +14,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
     
     // MARK:
     // MARK: Properties
-    
-    // Custom Color
-    let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
-    
-    let lightBlueColor = UIColor(red: 83/255, green: 135/255, blue: 186/255, alpha: 1)
-    let darkBlueColor = UIColor(red: 53/255, green: 103/255, blue: 160/255, alpha: 1)
-    
-    let lightOrangeColor = UIColor(red: 238/255, green: 155/255, blue: 78/255, alpha: 1)
-    let darkOrangeColor = UIColor(red: 222/255, green: 123/255, blue: 37/255, alpha: 1)
-    
-    let lightGreenColor = UIColor(red: 184.0/255.0, green: 189.0/255.0, blue: 70.0/255.0, alpha: 1)
-    let darkGreenColor = UIColor(red: 154.0/255.0, green: 166.0/255.0, blue: 65.0/255.0, alpha: 1)
-    
-    let lightRedColor = UIColor(red: 204.0/255.0, green: 69.0/255.0, blue: 67.0/255.0, alpha: 1)
-    let darkRedColor = UIColor(red: 174.0/255.0, green: 58.0/255.0, blue: 55.0/255.0, alpha: 1)
+    var model = Model()
     
     let homeView = UIView()
     
@@ -59,7 +45,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
     
     func buildHomeView() {
         homeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        homeView.backgroundColor = lightGrayColor
+        homeView.backgroundColor = model.lightGrayColor
         homeView.hidden = false
         self.view.addSubview(homeView)
         
@@ -91,7 +77,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         let myHomesView = UIView(frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
         let myHomesGradientLayer = CAGradientLayer()
         myHomesGradientLayer.frame = myHomesView.bounds
-        myHomesGradientLayer.colors = [lightBlueColor.CGColor, darkBlueColor.CGColor]
+        myHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         myHomesView.layer.insertSublayer(myHomesGradientLayer, atIndex: 0)
         myHomesView.layer.addSublayer(myHomesGradientLayer)
         scrollView.addSubview(myHomesView)
@@ -125,7 +111,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         let addHomesView = UIView(frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
         let addHomesGradientLayer = CAGradientLayer()
         addHomesGradientLayer.frame = addHomesView.bounds
-        addHomesGradientLayer.colors = [lightBlueColor.CGColor, darkBlueColor.CGColor]
+        addHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         addHomesView.layer.insertSublayer(addHomesGradientLayer, atIndex: 0)
         addHomesView.layer.addSublayer(addHomesGradientLayer)
         scrollView.addSubview(addHomesView)
@@ -160,7 +146,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         let mortgageCalculatorView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
         let mortgageCalculatorGradientLayer = CAGradientLayer()
         mortgageCalculatorGradientLayer.frame = mortgageCalculatorView.bounds
-        mortgageCalculatorGradientLayer.colors = [lightGreenColor.CGColor, darkGreenColor.CGColor]
+        mortgageCalculatorGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
         mortgageCalculatorView.layer.insertSublayer(mortgageCalculatorGradientLayer, atIndex: 0)
         mortgageCalculatorView.layer.addSublayer(mortgageCalculatorGradientLayer)
         scrollView.addSubview(mortgageCalculatorView)
@@ -194,7 +180,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         let refiCalculatorView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
         let refiCalculatorGradientLayer = CAGradientLayer()
         refiCalculatorGradientLayer.frame = refiCalculatorView.bounds
-        refiCalculatorGradientLayer.colors = [lightOrangeColor.CGColor, darkOrangeColor.CGColor]
+        refiCalculatorGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
         refiCalculatorView.layer.insertSublayer(refiCalculatorGradientLayer, atIndex: 0)
         refiCalculatorView.layer.addSublayer(refiCalculatorGradientLayer)
         scrollView.addSubview(refiCalculatorView)
@@ -228,7 +214,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         let findBranchView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
         let findBranchGradientLayer = CAGradientLayer()
         findBranchGradientLayer.frame = findBranchView.bounds
-        findBranchGradientLayer.colors = [lightRedColor.CGColor, darkRedColor.CGColor]
+        findBranchGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
         findBranchView.layer.insertSublayer(findBranchGradientLayer, atIndex: 0)
         findBranchView.layer.addSublayer(findBranchGradientLayer)
         scrollView.addSubview(findBranchView)
@@ -261,7 +247,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         let preQualifiedView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
         let preQualifiedGradientLayer = CAGradientLayer()
         preQualifiedGradientLayer.frame = preQualifiedView.bounds
-        preQualifiedGradientLayer.colors = [lightBlueColor.CGColor, darkBlueColor.CGColor]
+        preQualifiedGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         preQualifiedView.layer.insertSublayer(preQualifiedGradientLayer, atIndex: 0)
         preQualifiedView.layer.addSublayer(preQualifiedGradientLayer)
         scrollView.addSubview(preQualifiedView)
@@ -291,18 +277,13 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         
         scrollView.contentSize = CGSize(width: self.view.bounds.size.width, height: ((self.view.bounds.size.width / 2) * 2) + (135 + 15))
         
-        userButton.frame = (frame: CGRectMake(5, 0, whiteBar.bounds.size.width - 35, 50))
+        userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
         userButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         userButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         userButton.backgroundColor = UIColor.clearColor()
         userButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         userButton.contentHorizontalAlignment = .Right
         whiteBar.addSubview(userButton)
-        
-        let fwdIcn = UIImage(named: "forwardbutton_icon") as UIImage?
-        let fwdIcon = UIImageView(frame: CGRectMake(whiteBar.bounds.size.width - 20, 10, 12.5, 25))
-        fwdIcon.image = fwdIcn
-        whiteBar.addSubview(fwdIcon)
         
         checkIfLoggedIn()
     }
@@ -367,8 +348,9 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
     
     func checkIfLoggedIn() {
         if ((PFUser.currentUser()) == nil) {
-            userButton.setTitle("Login", forState: .Normal)
-            
+            userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 100, 0, 90, 50))
+            userButton.setTitle("LOGIN", forState: .Normal)
+
             userButton.tag = 6
             
             myHomesButton.enabled = false
@@ -376,13 +358,9 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
             preQualifiedButton.enabled = false
         }
         else {
-            let user = PFUser.currentUser()
-            if let firstName = user!["name"] {
-                userButton.setTitle(String(format: "%@'S PROFILE", firstName.uppercaseString), forState: .Normal)
-            }
-            else {
-                userButton.setTitle("PROFILE", forState: .Normal)
-            }
+            userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
+            userButton.setTitle("", forState: .Normal)
+            userButton.setBackgroundImage(UIImage(named: "account_icon"), forState: .Normal)
             
             userButton.tag = 7
             myHomesButton.enabled = true
@@ -412,8 +390,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
             let cvc = self.storyboard!.instantiateViewControllerWithIdentifier("findBranchViewController") as! FindBranchViewController
             self.navigationController!.pushViewController(cvc, animated: true)
         case 5:
-            let cvc = self.storyboard!.instantiateViewControllerWithIdentifier("webViewController") as! WebViewController
-            self.navigationController!.pushViewController(cvc, animated: true)
+            performSegueWithIdentifier("webViewController", sender: nil)
         case 6:
             print("Login Pressed")
             buildLoginView()
@@ -433,7 +410,19 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        let destViewController: CalculatorsViewController = segue.destinationViewController as! CalculatorsViewController
-        destViewController.isMortgageCalc = isMortgageCalc
+        if segue.identifier == "calculatorsViewController" {
+            let destViewController: CalculatorsViewController = segue.destinationViewController as! CalculatorsViewController
+            destViewController.isMortgageCalc = isMortgageCalc
+        }
+        
+        if segue.identifier == "webViewController" {
+            let webViewDestController: WebViewController = segue.destinationViewController as! WebViewController
+            if let user = PFUser.currentUser() {
+                if let url = user["officerURL"] {
+                    print(url)
+                    webViewDestController.urlPath = url as! String
+                }
+            }
+        }
     }
 }

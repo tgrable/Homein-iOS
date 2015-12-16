@@ -25,6 +25,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var imageView = UIImageView()
     
+    var sortLabel = UILabel() as UILabel
+    
     var isSmallerScreen = Bool()
     var isSortTrayOpen = Bool()
     
@@ -38,7 +40,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         homeTableView.delegate = self
         homeTableView.dataSource = self
         
-        getAllHomesForUser("createdAt")
+        getAllHomesForUser("name")
         buildView()
         
         showSortTray()
@@ -72,23 +74,32 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
         
+        
+        sortLabel.frame = (frame: CGRectMake(35, 0, whiteBar.bounds.size.width - 85, 50))
+        sortLabel.text = "SORTED BY NAME"
+        sortLabel.textAlignment = NSTextAlignment.Center
+        sortLabel.textColor = UIColor.darkTextColor()
+        sortLabel.font = UIFont(name: "forza-light", size: 24)
+        whiteBar.addSubview(sortLabel)
+
+        
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(50, 0, 75, 45))
+        let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("HOME", forState: .Normal)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
-        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         
+        let addIcn = UIImage(named: "add_icon_grey") as UIImage?
+        let addIcon = UIImageView(frame: CGRectMake(whiteBar.bounds.size.width - 50, 12.5, 25, 25))
+        addIcon.image = addIcn
+        whiteBar.addSubview(addIcon)
+        
         // UIButton
-        let addButton = UIButton (frame: CGRectMake(whiteBar.bounds.size.width - 75, 0, 75, 45))
+        let addButton = UIButton (frame: CGRectMake(whiteBar.bounds.size.width - 50, 0, 50, 50))
         addButton.addTarget(self, action: "addNewHome:", forControlEvents: .TouchUpInside)
-        addButton.setTitle("Add", forState: .Normal)
-        addButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         addButton.backgroundColor = UIColor.clearColor()
-        addButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         addButton.tag = 0
         whiteBar.addSubview(addButton)
         
@@ -232,6 +243,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func setSortOrder(sender: UIButton) {
         let sortorder = sender.titleLabel?.text
+        sortLabel.text = String(format: "SORTED BY %@", (sortorder?.uppercaseString)!)
         getAllHomesForUser(sortorder!.lowercaseString)
     }
     
@@ -240,7 +252,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func getAllHomesForUser(sortOrder: String) {
         let query = PFQuery(className:"Home")
         query.whereKey("user", equalTo:PFUser.currentUser()!)
-        query.orderByDescending(sortOrder)
+        query.orderByAscending(sortOrder)
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             
@@ -396,6 +408,10 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK: Navigation
     func navigateBackHome(sender: UIButton) {
         navigationController?.popViewControllerAnimated(true)
+    }
+    func addNewHome(sender: UIButton) {
+        let ahvc = self.storyboard!.instantiateViewControllerWithIdentifier("addHomeViewController") as! AddHomeViewController
+        self.navigationController!.pushViewController(ahvc, animated: true)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?){

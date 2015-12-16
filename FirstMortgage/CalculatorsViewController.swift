@@ -94,12 +94,10 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         whiteBar.addSubview(backIcon)
         
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(50, 0, 75, 45))
+        let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("HOME", forState: .Normal)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
-        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         

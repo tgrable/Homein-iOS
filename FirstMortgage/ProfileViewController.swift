@@ -86,24 +86,35 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         whiteBar.addSubview(backIcon)
         
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(50, 0, 75, 45))
+        let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("HOME", forState: .Normal)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
-        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         
-        // UIButton
-        let logOutButton = UIButton (frame: CGRectMake(whiteBar.bounds.size.width - 140, 0, 125, 45))
-        logOutButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        logOutButton.setTitle("LOG OUT", forState: .Normal)
-        logOutButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
-        logOutButton.backgroundColor = UIColor.clearColor()
-        logOutButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-        logOutButton.tag = 1
-        whiteBar.addSubview(logOutButton)
+        let addHomeBannerView = UIView(frame: CGRectMake(0, 0, profileView.bounds.size.width, 50))
+        let addHomeBannerGradientLayer = CAGradientLayer()
+        addHomeBannerGradientLayer.frame = addHomeBannerView.bounds
+        addHomeBannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+        addHomeBannerView.layer.insertSublayer(addHomeBannerGradientLayer, atIndex: 0)
+        addHomeBannerView.layer.addSublayer(addHomeBannerGradientLayer)
+        addHomeBannerView.hidden = false
+        profileView.addSubview(addHomeBannerView)
+        
+        //UIImageView
+        let homeIcn = UIImage(named: "account_icon") as UIImage?
+        let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 125), 12.5, 25, 25))
+        homeIcon.image = homeIcn
+        addHomeBannerView.addSubview(homeIcon)
+        
+        // UILabel
+        let bannerLabel = UILabel(frame: CGRectMake(15, 0, addHomeBannerView.bounds.size.width, 50))
+        bannerLabel.text = "USER PROFILE"
+        bannerLabel.textAlignment = NSTextAlignment.Center
+        bannerLabel.textColor = UIColor.whiteColor()
+        bannerLabel.font = UIFont(name: "forza-light", size: 25)
+        addHomeBannerView.addSubview(bannerLabel)
     }
 
     override func didReceiveMemoryWarning() {
@@ -131,29 +142,39 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             NSFontAttributeName : UIFont(name: "forza-light", size: 22)!
         ]
         
+        let userView = UIView(frame: CGRectMake(15, 60, profileView.bounds.size.width - 30, 90))
+        userView.backgroundColor = UIColor.whiteColor()
+        profileView.addSubview(userView)
+        
+        let shadowImgOne = UIImage(named: "long_shadow") as UIImage?
+        // UIImageView
+        let shadowViewOne = UIImageView(frame: CGRectMake(15, 150, userView.bounds.size.width, 15))
+        shadowViewOne.image = shadowImgOne
+        profileView.addSubview(shadowViewOne)
+        
         // UITextField
-        nameTxtField.frame = (frame: CGRectMake(25, 10, profileView.bounds.size.width - 50, 30))
+        nameTxtField.frame = (frame: CGRectMake(15, 10, profileView.bounds.size.width - 30, 30))
         nameTxtField.attributedPlaceholder = NSAttributedString(string: user!["name"] as! String, attributes:attributes)
         nameTxtField.backgroundColor = UIColor.clearColor()
         nameTxtField.delegate = self
         nameTxtField.returnKeyType = .Done
         nameTxtField.keyboardType = UIKeyboardType.Default
-        profileView.addSubview(nameTxtField)
+        userView.addSubview(nameTxtField)
         
         // UITextField
-        emailTxtField.frame = (frame: CGRectMake(25, 50, profileView.bounds.size.width - 50, 30))
+        emailTxtField.frame = (frame: CGRectMake(15, 50, profileView.bounds.size.width - 30, 30))
         emailTxtField.attributedPlaceholder = NSAttributedString(string: user!["email"] as! String, attributes:attributes)
         emailTxtField.backgroundColor = UIColor.clearColor()
         emailTxtField.delegate = self
         emailTxtField.returnKeyType = .Done
         emailTxtField.keyboardType = UIKeyboardType.Default
-        profileView.addSubview(emailTxtField)
+        userView.addSubview(emailTxtField)
         
         let defaults = NSUserDefaults.standardUserDefaults()
         if let name = defaults.dictionaryForKey("loanOfficerDict")
         {
             // UIView
-            let loView = UIView(frame: CGRectMake(15, 90, profileView.bounds.size.width - 30, 120))
+            let loView = UIView(frame: CGRectMake(15, 160, profileView.bounds.size.width - 30, 120))
             loView.backgroundColor = UIColor.whiteColor()
             profileView.addSubview(loView)
             
@@ -161,38 +182,45 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             nameLabel.textAlignment = NSTextAlignment.Left
             nameLabel.text = name["name"] as? String
             nameLabel.numberOfLines = 1
-            nameLabel.font = UIFont.boldSystemFontOfSize(22.0)
+            nameLabel.font = UIFont(name: "forza-light", size: 24)
             loView.addSubview(nameLabel)
             
             let emailLabel = UILabel (frame: CGRectMake(15, 35, loView.bounds.size.width - 30, 24))
             emailLabel.textAlignment = NSTextAlignment.Left
             emailLabel.text = name["email"] as? String
             emailLabel.numberOfLines = 1
-            emailLabel.font = UIFont.boldSystemFontOfSize(18.0)
+            emailLabel.font = UIFont(name: "forza-light", size: 18.0)
             loView.addSubview(emailLabel)
             
             let officeLabel = UILabel (frame: CGRectMake(15, 60, loView.bounds.size.width - 30, 24))
             officeLabel.textAlignment = NSTextAlignment.Left
             officeLabel.text = name["office"] as? String
             officeLabel.numberOfLines = 1
-            officeLabel.font = UIFont.boldSystemFontOfSize(18.0)
+            officeLabel.font = UIFont(name: "forza-light", size: 18.0)
             loView.addSubview(officeLabel)
             
             let mobileLabel = UILabel (frame: CGRectMake(15, 85, loView.bounds.size.width - 30, 24))
             mobileLabel.textAlignment = NSTextAlignment.Left
             mobileLabel.text = name["mobile"] as? String
             mobileLabel.numberOfLines = 1
-            mobileLabel.font = UIFont.boldSystemFontOfSize(18.0)
+            mobileLabel.font = UIFont(name: "forza-light", size: 18.0)
             loView.addSubview(mobileLabel)
+            
+            let shadowImg = UIImage(named: "long_shadow") as UIImage?
+            // UIImageView
+            let shadowView = UIImageView(frame: CGRectMake(15, 280, loView.bounds.size.width, 15))
+            shadowView.image = shadowImg
+            profileView.addSubview(shadowView)
+
             
             print(name)
         }
         
         // UIView
-        let calculateView = UIView(frame: CGRectMake(15, 220, profileView.bounds.size.width - 30, 50))
+        let calculateView = UIView(frame: CGRectMake(15, 300, profileView.bounds.size.width - 30, 50))
         let calcGradientLayer = CAGradientLayer()
         calcGradientLayer.frame = calculateView.bounds
-        calcGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+        calcGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
         calculateView.layer.insertSublayer(calcGradientLayer, atIndex: 0)
         calculateView.layer.addSublayer(calcGradientLayer)
         profileView.addSubview(calculateView)
@@ -214,6 +242,33 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         updateUserButton.contentHorizontalAlignment = .Left
         updateUserButton.tag = 0
         calculateView.addSubview(updateUserButton)
+        
+        // UIView
+        let logOutView = UIView(frame: CGRectMake(15, 360, profileView.bounds.size.width - 30, 50))
+        let logOutGradientLayer = CAGradientLayer()
+        logOutGradientLayer.frame = calculateView.bounds
+        logOutGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
+        logOutView.layer.insertSublayer(logOutGradientLayer, atIndex: 0)
+        logOutView.layer.addSublayer(logOutGradientLayer)
+        profileView.addSubview(logOutView)
+        
+        let logOutArrow = UILabel (frame: CGRectMake(calculateView.bounds.size.width - 50, 0, 40, 50))
+        logOutArrow.textAlignment = NSTextAlignment.Right
+        logOutArrow.font = UIFont(name: "forza-light", size: 40)
+        logOutArrow.text = ">"
+        logOutArrow.textColor = UIColor.whiteColor()
+        logOutView.addSubview(logOutArrow)
+        
+        // UIButton
+        let logOutButton = UIButton (frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
+        logOutButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        logOutButton.setTitle("LOG OUT", forState: .Normal)
+        logOutButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        logOutButton.backgroundColor = UIColor.clearColor()
+        logOutButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        logOutButton.contentHorizontalAlignment = .Left
+        updateUserButton.tag = 1
+        logOutView.addSubview(logOutButton)
     }
     
     func buildSeachOverlay(loArray: Array<Dictionary<String, String>>) {
@@ -262,28 +317,28 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         nameLabel.textAlignment = NSTextAlignment.Left
         nameLabel.text = nodeDict["name"]
         nameLabel.numberOfLines = 1
-        nameLabel.font = UIFont.boldSystemFontOfSize(22.0)
+        nameLabel.font = UIFont(name: "forza-light", size: 24)
         loView.addSubview(nameLabel)
         
         let emailLabel = UILabel (frame: CGRectMake(15, 35, loView.bounds.size.width - 30, 24))
         emailLabel.textAlignment = NSTextAlignment.Left
         emailLabel.text = nodeDict["email"]
         emailLabel.numberOfLines = 1
-        emailLabel.font = UIFont.boldSystemFontOfSize(18.0)
+        emailLabel.font = UIFont(name: "forza-light", size: 18)
         loView.addSubview(emailLabel)
         
         let officeLabel = UILabel (frame: CGRectMake(15, 60, loView.bounds.size.width - 30, 24))
         officeLabel.textAlignment = NSTextAlignment.Left
         officeLabel.text = nodeDict["office"]
         officeLabel.numberOfLines = 1
-        officeLabel.font = UIFont.boldSystemFontOfSize(18.0)
+        officeLabel.font = UIFont(name: "forza-light", size: 18)
         loView.addSubview(officeLabel)
         
         let mobileLabel = UILabel (frame: CGRectMake(15, 85, loView.bounds.size.width - 30, 24))
         mobileLabel.textAlignment = NSTextAlignment.Left
         mobileLabel.text = nodeDict["mobile"]
         mobileLabel.numberOfLines = 1
-        mobileLabel.font = UIFont.boldSystemFontOfSize(18.0)
+        mobileLabel.font = UIFont(name: "forza-light", size: 18)
         loView.addSubview(mobileLabel)
         
         // UIButton

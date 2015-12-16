@@ -17,7 +17,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK: Properties
     
     // Custom Color
-    let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
+    let model = Model()
     
     let addHomeView = UIView() as UIView
     let pickerView = UIView()
@@ -72,7 +72,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     func buildView() {
         addHomeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        addHomeView.backgroundColor = lightGrayColor
+        addHomeView.backgroundColor = model.lightGrayColor
         addHomeView.hidden = false
         self.view.addSubview(addHomeView)
         
@@ -92,14 +92,35 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         whiteBar.addSubview(backIcon)
         
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(50, 0, 75, 45))
+        let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
-        homeButton.setTitle("HOME", forState: .Normal)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
-        homeButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
+
+        let addHomeBannerView = UIView(frame: CGRectMake(0, 135, addHomeView.bounds.size.width, 50))
+        let addHomeBannerGradientLayer = CAGradientLayer()
+        addHomeBannerGradientLayer.frame = addHomeBannerView.bounds
+        addHomeBannerGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
+        addHomeBannerView.layer.insertSublayer(addHomeBannerGradientLayer, atIndex: 0)
+        addHomeBannerView.layer.addSublayer(addHomeBannerGradientLayer)
+        addHomeBannerView.hidden = false
+        addHomeView.addSubview(addHomeBannerView)
+        
+        //UIImageView
+        let homeIcn = UIImage(named: "branch_icon") as UIImage?
+        let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 125), 12.5, 25, 25))
+        homeIcon.image = homeIcn
+        addHomeBannerView.addSubview(homeIcon)
+        
+        // UILabel
+        let bannerLabel = UILabel(frame: CGRectMake(15, 0, addHomeBannerView.bounds.size.width, 50))
+        bannerLabel.text = "FIND A BRANCH"
+        bannerLabel.textAlignment = NSTextAlignment.Center
+        bannerLabel.textColor = UIColor.whiteColor()
+        bannerLabel.font = UIFont(name: "forza-light", size: 25)
+        addHomeBannerView.addSubview(bannerLabel)
         
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         activityIndicator.center = view.center
@@ -113,7 +134,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         addHomeView.addSubview(pickerView)
         
         // UILabel
-        let messageLabel = UILabel(frame: CGRectMake(25, 25, addHomeView.bounds.size.width - 50, 0))
+        let messageLabel = UILabel(frame: CGRectMake(25, 75, addHomeView.bounds.size.width - 50, 0))
         messageLabel.text = "We were not able to find any branches in your current state. Please select a state from the list below to find a branch near you."
         messageLabel.font = UIFont(name: "forza-light", size: 25)
         messageLabel.textAlignment = NSTextAlignment.Left
@@ -284,65 +305,79 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     func printLocations(filteredBranchArray: Array<Branch>) {
-        var yOffset = 15
+        var yOffset = 15.0 as CGFloat
         var count = 0
         
-        let scrollView = UIScrollView(frame: CGRectMake(0, 135.0, addHomeView.bounds.size.width, addHomeView.bounds.size.height - 135.0))
+        let scrollView = UIScrollView(frame: CGRectMake(0, 185.0, addHomeView.bounds.size.width, addHomeView.bounds.size.height - 185.0))
         addHomeView.addSubview(scrollView)
         
         for branch in filteredBranchArray {
+            var offset = 0.0 as CGFloat
             
-            let branchView = UIView(frame: CGRectMake(15, CGFloat(yOffset), self.view.bounds.size.width - 30, 100))
+            let branchView = UIView(frame: CGRectMake(15, yOffset, self.view.bounds.size.width - 30, 0))
             branchView.backgroundColor = UIColor.whiteColor()
             scrollView.addSubview(branchView)
             
-            let addressLabel = UILabel (frame: CGRectMake(15, 10, branchView.bounds.size.width - 30, 24))
+            let addressLabel = UILabel (frame: CGRectMake(15, 10, branchView.bounds.size.width - 30, 0))
+            addressLabel.font = UIFont(name: "forza-light", size: 24)
             addressLabel.textAlignment = NSTextAlignment.Left
             addressLabel.text = String(format: "%@", branch.address)
-            addressLabel.numberOfLines = 1
-            addressLabel.font = UIFont.boldSystemFontOfSize(22.0)
+            addressLabel.numberOfLines = 0
+            addressLabel.sizeToFit()
             branchView.addSubview(addressLabel)
+            offset = addressLabel.bounds.size.height
             
-            let cityStateLabel = UILabel (frame: CGRectMake(15, 35, branchView.bounds.size.width - 30, 24))
+            let cityStateLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
+            cityStateLabel.font = UIFont(name: "forza-light", size: 18)
             cityStateLabel.textAlignment = NSTextAlignment.Left
             cityStateLabel.text = String(format: "%@, %@", branch.city, branch.state)
-            cityStateLabel.numberOfLines = 1
-            cityStateLabel.font = cityStateLabel.font.fontWithSize(18.0)
+            cityStateLabel.numberOfLines = 0
             cityStateLabel.sizeToFit()
             branchView.addSubview(cityStateLabel)
+            offset += cityStateLabel.bounds.size.height
             
-            let milesLabel = UILabel (frame: CGRectMake(15, 55, branchView.bounds.size.width - 30, 24))
+            let milesLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
+            milesLabel.font = UIFont(name: "forza-light", size: 18)
             milesLabel.textAlignment = NSTextAlignment.Left
             milesLabel.text = String(format: "%.01f Miles", branch.distanceFromMe)
-            milesLabel.numberOfLines = 1
-            milesLabel.font = cityStateLabel.font.fontWithSize(18.0)
+            milesLabel.numberOfLines = 0
             milesLabel.sizeToFit()
             branchView.addSubview(milesLabel)
+            offset += milesLabel.bounds.size.height
             
             let pl = (branch.phone.characters.count > 0) ? formatPhoneString(branch.phone) : ""
-            let phoneLabel = UILabel (frame: CGRectMake(15, 75, branchView.bounds.size.width - 30, 24))
+            let phoneLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
+            phoneLabel.font = UIFont(name: "forza-light", size: 18)
             phoneLabel.textAlignment = NSTextAlignment.Left
             phoneLabel.text = String(format: "%@", pl)
-            phoneLabel.numberOfLines = 1
-            phoneLabel.font = cityStateLabel.font.fontWithSize(18.0)
+            phoneLabel.numberOfLines = 0
             phoneLabel.sizeToFit()
             branchView.addSubview(phoneLabel)
+            offset += phoneLabel.bounds.size.height
             
-            let locationButton = UIButton(frame: CGRectMake(0, 0, branchView.bounds.size.width, 75))
+            branchView.frame = CGRectMake(15, yOffset, self.view.bounds.size.width - 30, offset + 20)
+            
+            let shadowImg = UIImage(named: "long_shadow") as UIImage?
+            // UIImageView
+            let shadowView = UIImageView(frame: CGRectMake(15, yOffset + offset + 20, branchView.bounds.size.width, 15))
+            shadowView.image = shadowImg
+            scrollView.addSubview(shadowView)
+            
+            let locationButton = UIButton(frame: CGRectMake(0, 0, branchView.bounds.size.width, offset))
             locationButton.addTarget(self, action: "mapButtonPressed:", forControlEvents: .TouchUpInside)
             locationButton.backgroundColor = UIColor.clearColor()
             locationButton.tag = count
             branchView.addSubview(locationButton)
             
             let btnEnabled = (branch.phone.characters.count > 0) ? true : false
-            let phoneButton = UIButton(frame: CGRectMake(0, 75, branchView.bounds.size.width, 25))
+            let phoneButton = UIButton(frame: CGRectMake(0, offset, branchView.bounds.size.width, 20))
             phoneButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
             phoneButton.backgroundColor = UIColor.clearColor()
             phoneButton.tag = count
             phoneButton.enabled = btnEnabled
             branchView.addSubview(phoneButton)
             
-            yOffset += 110
+            yOffset += offset + 30
             count++
         }
 
