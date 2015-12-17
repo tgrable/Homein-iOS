@@ -181,171 +181,18 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     }
     
     func buildRegisterView() {
-        
         let signUpController = CustomSignUpViewController()
         signUpController.delegate = self
-        signUpController.fields = [.SignUpButton, .DismissButton]
+        signUpController.fields = [.UsernameAndPassword, .Email, .Additional, .SignUpButton, .DismissButton]
         self.presentViewController(signUpController, animated:true, completion: nil)
-        
-    
-        /*let bannerView = UIView(frame: CGRectMake(registerView.bounds.size.width, 0, registerView.bounds.size.width / 2, 50))
-        let bannerGradientLayer = CAGradientLayer()
-        bannerGradientLayer.frame = bannerView.bounds
-        bannerGradientLayer.colors = [lightOrangeColor.CGColor, darkOrangeColor.CGColor]
-        bannerView.layer.insertSublayer(bannerGradientLayer, atIndex: 0)
-        bannerView.layer.addSublayer(bannerGradientLayer)
-        bannerView.hidden = false
-        registerView.addSubview(bannerView)
-        
-        let createAccountLabel = UILabel (frame: CGRectMake(0, 0, bannerView.bounds.size.width, 50))
-        createAccountLabel.textAlignment = NSTextAlignment.Center
-        createAccountLabel.font = UIFont(name: "forza-light", size: 25)
-        createAccountLabel.text = "CREATE AN ACCOUNT"
-        createAccountLabel.textColor = UIColor.whiteColor()
-        createAccountLabel.numberOfLines = 1
-        bannerView.addSubview(createAccountLabel)
-        
-        let registerScrollView = UIScrollView(frame: CGRectMake(self.view.bounds.size.width + 15, 65, self.view.bounds.size.width - 30, registerView.bounds.size.height - 150))
-        registerScrollView.backgroundColor = UIColor.whiteColor()
-        registerView.addSubview(registerScrollView)
-        
-        let attributes = [
-            NSForegroundColorAttributeName: UIColor.darkTextColor(),
-            NSFontAttributeName : UIFont(name: "forza-light", size: 25)! // Note the !
-        ]
-        
-        let userNamePaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        userNameRegister.frame = (frame: CGRectMake(15, 15, registerScrollView.bounds.size.width - 30, 40))
-        userNameRegister.attributedPlaceholder = NSAttributedString(string: "PROFILE NAME", attributes:attributes)
-        userNameRegister.leftView = userNamePaddingView
-        userNameRegister.leftViewMode = UITextFieldViewMode.Always
-        userNameRegister.backgroundColor = lightGrayColor
-        userNameRegister.tag = 1
-        userNameRegister.autocapitalizationType = UITextAutocapitalizationType.None
-        userNameRegister.autocorrectionType = UITextAutocorrectionType.No;
-        userNameRegister.spellCheckingType = UITextSpellCheckingType.No;
-        userNameRegister.keyboardType = UIKeyboardType.Default;
-        userNameRegister.delegate = self
-        userNameRegister.returnKeyType = .Done
-        registerScrollView.addSubview(userNameRegister)
-        
-        let firstlastPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        firstlastNameRegister.frame = (frame: CGRectMake(15, 65, registerScrollView.bounds.size.width - 30, 40))
-        firstlastNameRegister.attributedPlaceholder = NSAttributedString(string: "YOUR NAME", attributes:attributes)
-        firstlastNameRegister.leftView = firstlastPaddingView
-        firstlastNameRegister.leftViewMode = UITextFieldViewMode.Always
-        firstlastNameRegister.backgroundColor = lightGrayColor
-        firstlastNameRegister.tag = 1
-        firstlastNameRegister.autocapitalizationType = UITextAutocapitalizationType.Words
-        firstlastNameRegister.autocorrectionType = UITextAutocorrectionType.No;
-        firstlastNameRegister.spellCheckingType = UITextSpellCheckingType.No;
-        firstlastNameRegister.keyboardType = UIKeyboardType.Default;
-        firstlastNameRegister.delegate = self
-        firstlastNameRegister.returnKeyType = .Done
-        registerScrollView.addSubview(firstlastNameRegister)
-        
-        let emailPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        emailRegister.frame = (frame: CGRectMake(15, 115, registerScrollView.bounds.size.width - 30, 40))
-        emailRegister.attributedPlaceholder = NSAttributedString(string: "EMAIL ADDRESS", attributes:attributes)
-        emailRegister.leftView = emailPaddingView
-        emailRegister.leftViewMode = UITextFieldViewMode.Always
-        emailRegister.backgroundColor = lightGrayColor
-        emailRegister.tag = 1
-        emailRegister.autocapitalizationType = UITextAutocapitalizationType.None
-        emailRegister.autocorrectionType = UITextAutocorrectionType.No;
-        emailRegister.spellCheckingType = UITextSpellCheckingType.No;
-        emailRegister.keyboardType = UIKeyboardType.EmailAddress;
-        emailRegister.delegate = self
-        emailRegister.returnKeyType = .Done
-        registerScrollView.addSubview(emailRegister)
-        
-        addressRegister.frame = (frame : CGRectMake(15, 165, registerScrollView.bounds.size.width - 30, 140))
-        addressRegister.backgroundColor = lightGrayColor
-        addressRegister.autocorrectionType = .Yes
-        registerScrollView.addSubview(addressRegister)
-        
-        let passwordPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        passwordRegister.frame = (frame: CGRectMake(15, 315, registerScrollView.bounds.size.width - 30, 40))
-        passwordRegister.attributedPlaceholder = NSAttributedString(string: "ACCOUNT PASSWORD", attributes:attributes)
-        passwordRegister.leftView = passwordPaddingView
-        passwordRegister.leftViewMode = UITextFieldViewMode.Always
-        passwordRegister.backgroundColor = lightGrayColor
-        passwordRegister.tag = 1
-        passwordRegister.autocapitalizationType = UITextAutocapitalizationType.None
-        passwordRegister.autocorrectionType = UITextAutocorrectionType.No;
-        passwordRegister.spellCheckingType = UITextSpellCheckingType.No;
-        passwordRegister.keyboardType = UIKeyboardType.EmailAddress;
-        passwordRegister.returnKeyType = .Done
-        passwordRegister.delegate = self
-        passwordRegister.secureTextEntry = true
-        registerScrollView.addSubview(passwordRegister)
-        
-        let loanOfficerLabel = UILabel (frame: CGRectMake(15, 365, registerScrollView.bounds.size.width - 30, 40))
-        loanOfficerLabel.textAlignment = NSTextAlignment.Left
-        loanOfficerLabel.text = "ARE YOU CURRENTLY WORKING WITH A LOAN OFFICER?"
-        loanOfficerLabel.numberOfLines = 0
-        loanOfficerLabel.sizeToFit()
-        registerScrollView.addSubview(loanOfficerLabel)
-        
-        let loYesButton = UIButton (frame: CGRectMake(15, 415, registerScrollView.bounds.size.width - 30, 30))
-        loYesButton.setTitle("YES", forState: .Normal)
-        loYesButton.addTarget(self, action: "loYesNo", forControlEvents: .TouchUpInside)
-        loYesButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        loYesButton.layer.borderWidth = 1
-        loYesButton.layer.borderColor = lightGrayColor.CGColor
-        loYesButton.tag = 0
-        registerScrollView.addSubview(loYesButton)
-        
-        let loNoButton = UIButton (frame: CGRectMake(15, 445, registerScrollView.bounds.size.width - 30, 30))
-        loNoButton.setTitle("NO", forState: .Normal)
-        loNoButton.addTarget(self, action: "loYesNo", forControlEvents: .TouchUpInside)
-        loNoButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        loNoButton.layer.borderWidth = 1
-        loNoButton.layer.borderColor = lightGrayColor.CGColor
-        loNoButton.tag = 1
-        registerScrollView.addSubview(loNoButton)
-        
-        registerScrollView.contentSize = CGSize(width: self.view.bounds.size.width - 30, height: 775)
-
-        let saveView = UIView(frame: CGRectMake(registerView.bounds.size.width + 75, (registerView.bounds.size.height - 150) + 75, registerView.bounds.size.width - 150, 40))
-        let saveGradientLayer = CAGradientLayer()
-        saveGradientLayer.frame = saveView.bounds
-        saveGradientLayer.colors = [lightBlueColor.CGColor, darkBlueColor.CGColor]
-        bannerView.layer.insertSublayer(saveGradientLayer, atIndex: 0)
-        saveView.layer.addSublayer(saveGradientLayer)
-        saveView.hidden = false
-        registerView.addSubview(saveView)
-        
-        let submitButton = UIButton (frame: CGRectMake(registerView.bounds.size.width + 75, (registerView.bounds.size.height - 150) + 75, registerView.bounds.size.width - 150, 40))
-        submitButton.setTitle("SAVE", forState: .Normal)
-        submitButton.addTarget(self, action: "registerUser:", forControlEvents: .TouchUpInside)
-        submitButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        submitButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-        registerView.addSubview(submitButton)*/
     }
 
-    func showCreateAccount(sender: UIButton) {
-        
-        buildRegisterView()
-        
-        /*switch sender.tag {
-            case 0:
-                UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseOut, animations: {
-                    self.registerView.frame = ( frame: CGRectMake(self.view.bounds.size.width * -1, 85, self.view.bounds.size.width * 2, self.view.bounds.size.height - 75) )
-                    }, completion: { finished in
-                })
-            case 1:
-                UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseOut, animations: {
-                    self.registerView.frame = ( frame: CGRectMake(0, 85, self.view.bounds.size.width * 2, self.view.bounds.size.height - 75) )
-                    }, completion: { finished in
-                })
-            default:
-                UIView.animateWithDuration(0.7, delay: 0, options: .CurveEaseOut, animations: {
-                    self.registerView.frame = ( frame: CGRectMake(0, 85, self.view.bounds.size.width * 2, self.view.bounds.size.height - 75) )
-                    }, completion: { finished in
-                })
-            
-        }*/
+    func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) -> Void {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) -> Void {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func registerUser(sender: UIButton) {

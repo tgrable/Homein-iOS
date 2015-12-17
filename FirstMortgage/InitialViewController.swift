@@ -15,6 +15,7 @@ class InitialViewController: UIViewController {
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,16 +23,27 @@ class InitialViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func viewWillAppear(animated: Bool) {
+        if (PFUser.currentUser() != nil) {
+            let user = PFUser.currentUser()! as PFUser
+            if let _ = user["officerNid"] {
+                performSegueWithIdentifier("homeViewController", sender: self)
+            }
+            else {
+                performSegueWithIdentifier("profileViewController", sender: self)
+            }
+            
+        }
+        else {
+            performSegueWithIdentifier("createAccountViewController", sender: self)
+        }
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
 
         //PFUser.logOut()
         
-        if (PFUser.currentUser() != nil) {
-            performSegueWithIdentifier("homeViewController", sender: self)
-        }
-        else {
-            performSegueWithIdentifier("createAccountViewController", sender: self)
-        }
+        
     }
 }

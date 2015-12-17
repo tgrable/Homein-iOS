@@ -46,29 +46,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         profileView.hidden = false
         self.view.addSubview(profileView)
         
-        overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        overlayView.backgroundColor = UIColor.blackColor()
-        overlayView.alpha = 0.60
-        overlayView.hidden = true
-        self.view.addSubview(overlayView)
-        
         let attributes = [
             NSForegroundColorAttributeName: UIColor.darkTextColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 22)!
         ]
-        
-        searchTxtField.frame = (frame: CGRectMake(15, 125, profileView.bounds.size.width - 30, 50))
-        searchTxtField.attributedPlaceholder = NSAttributedString(string: "SEARCH LOAN OFFICER", attributes:attributes)
-        searchTxtField.backgroundColor = UIColor.whiteColor()
-        searchTxtField.delegate = self
-        searchTxtField.returnKeyType = .Done
-        searchTxtField.keyboardType = UIKeyboardType.Default
-        searchTxtField.tag = 999
-        overlayView.addSubview(searchTxtField)
-        
-        scrollView.frame = (frame: CGRectMake(0, 185, profileView.bounds.size.width, profileView.bounds.size.height - 185))
-        scrollView.backgroundColor = UIColor.clearColor()
-        overlayView.addSubview(scrollView)
         
         let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
@@ -115,6 +96,40 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         bannerLabel.textColor = UIColor.whiteColor()
         bannerLabel.font = UIFont(name: "forza-light", size: 25)
         addHomeBannerView.addSubview(bannerLabel)
+        
+        overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
+        overlayView.backgroundColor = UIColor.blackColor()
+        overlayView.alpha = 0.85
+        overlayView.hidden = true
+        self.view.addSubview(overlayView)
+        
+        // UILabel
+        let overLayTextLabel = UILabel(frame: CGRectMake(15, 25, overlayView.bounds.size.width - 30, 0))
+        overLayTextLabel.text = "You currently not assigned to a loan officer. Please select one from the list below."
+        overLayTextLabel.textAlignment = NSTextAlignment.Left
+        overLayTextLabel.textColor = UIColor.whiteColor()
+        overLayTextLabel.font = UIFont(name: "forza-light", size: 16)
+        overLayTextLabel.numberOfLines = 0
+        overLayTextLabel.sizeToFit()
+        overlayView.addSubview(overLayTextLabel)
+        
+        let searchTxtPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        searchTxtField.frame = (frame: CGRectMake(15, 85, profileView.bounds.size.width - 30, 50))
+        searchTxtField.attributedPlaceholder = NSAttributedString(string: "SEARCH LOAN OFFICER", attributes:attributes)
+        searchTxtField.backgroundColor = UIColor.whiteColor()
+        searchTxtField.delegate = self
+        searchTxtField.leftView = searchTxtPaddingView
+        searchTxtField.leftViewMode = UITextFieldViewMode.Always
+        searchTxtField.returnKeyType = .Done
+        searchTxtField.keyboardType = UIKeyboardType.Default
+        searchTxtField.tag = 999
+        searchTxtField.font = UIFont(name: "forza-light", size: 22)
+        overlayView.addSubview(searchTxtField)
+        
+        scrollView.frame = (frame: CGRectMake(0, 135, overlayView.bounds.size.width, overlayView.bounds.size.height - 135))
+        scrollView.backgroundColor = UIColor.clearColor()
+        overlayView.addSubview(scrollView)
+
     }
 
     override func didReceiveMemoryWarning() {
@@ -139,7 +154,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     func buildProfileView() {
         let attributes = [
             NSForegroundColorAttributeName: UIColor.darkTextColor(),
-            NSFontAttributeName : UIFont(name: "forza-light", size: 22)!
+            NSFontAttributeName : UIFont(name: "forza-light", size: 20)!
         ]
         
         let userView = UIView(frame: CGRectMake(15, 60, profileView.bounds.size.width - 30, 90))
@@ -159,6 +174,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         nameTxtField.delegate = self
         nameTxtField.returnKeyType = .Done
         nameTxtField.keyboardType = UIKeyboardType.Default
+        nameTxtField.font = UIFont(name: "forza-light", size: 22)
         userView.addSubview(nameTxtField)
         
         // UITextField
@@ -168,6 +184,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         emailTxtField.delegate = self
         emailTxtField.returnKeyType = .Done
         emailTxtField.keyboardType = UIKeyboardType.Default
+        emailTxtField.font = UIFont(name: "forza-light", size: 22)
         userView.addSubview(emailTxtField)
         
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -234,7 +251,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         // UIButton
         let updateUserButton = UIButton (frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
-        updateUserButton.addTarget(self, action: "calculateMortgagePaymentButtonPress:", forControlEvents: .TouchUpInside)
+        updateUserButton.addTarget(self, action: "updateUser:", forControlEvents: .TouchUpInside)
         updateUserButton.setTitle("UPDATE USER", forState: .Normal)
         updateUserButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         updateUserButton.backgroundColor = UIColor.clearColor()
@@ -267,7 +284,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         logOutButton.backgroundColor = UIColor.clearColor()
         logOutButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         logOutButton.contentHorizontalAlignment = .Left
-        updateUserButton.tag = 1
+        logOutButton.tag = 1
         logOutView.addSubview(logOutButton)
     }
     
@@ -374,6 +391,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         case 0:
             navigationController?.popViewControllerAnimated(true)
         case 1:
+            print("logout")
             PFUser.logOut()
             self.navigationController!.popToRootViewControllerAnimated(true)
         default:
@@ -398,6 +416,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: 
+    // MARK: Parse
     func saveLoanOfficerToParse(nid: String, name: String, url: String) {
         
         user!["officerNid"] = Int(nid)
@@ -412,6 +431,20 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             }
             else {
                 print("error")
+            }
+        }
+    }
+    
+    func updateUser(sender: UIButton) {
+        user!["name"] = (nameTxtField.text != "") ? nameTxtField.text : user!["name"]
+        user!["email"] = (emailTxtField.text != "") ? emailTxtField.text : user!["email"]
+        
+        user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                print("success")
+            }
+            else {
+                print("failed")
             }
         }
     }

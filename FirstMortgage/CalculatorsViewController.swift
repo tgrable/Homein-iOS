@@ -52,7 +52,8 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
         
         buildView()
         
@@ -135,7 +136,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         bannerLabel.textColor = UIColor.whiteColor()
         calcBannerView.addSubview(bannerLabel)
         
-        scrollView.frame = (frame: CGRectMake(0, 185, calcView.bounds.size.width, calcView.bounds.size.height - 135))
+        scrollView.frame = (frame: CGRectMake(0, 185, calcView.bounds.size.width, calcView.bounds.size.height - 185))
         scrollView.backgroundColor = UIColor.clearColor()
         calcView.addSubview(scrollView)
         
@@ -214,7 +215,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         paymentView.addSubview(paymentLabel)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
-        mortView.addGestureRecognizer(tapGesture)
+        scrollView.addGestureRecognizer(tapGesture)
         
         scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 575)
     }
@@ -546,7 +547,10 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         refiPaymentView.addSubview(refiPaymentLabel)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
-        refiCalcView.addGestureRecognizer(tapGesture)
+        scrollView.addGestureRecognizer(tapGesture)
+        
+        let refiTapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        refiCalcView.addGestureRecognizer(refiTapGesture)
         
         scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 775)
     }
@@ -561,11 +565,10 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidEndEditing(textField: UITextField) {
         
     }
-
-    // MARK:
-    // MARK: UITapGesture
     
     func tapGesture() {
+        mortgageView.tapGesture()
+        
         loanAmountTxtField.resignFirstResponder()
         mortgageTextField.resignFirstResponder()
         interestTextField.resignFirstResponder()
@@ -578,6 +581,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     // MARK:
     // MARK: Action Methods
     func calculateMortgagePaymentButtonPress(sender: UIButton) {
+        mortgageView.tapGesture()
         
         var saleAmount = 250000.0
         if mortgageView.loanAmountTxtField.text?.isEmpty != true {
@@ -610,6 +614,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func calculateRefinanceButtonPress(sender: UIButton) {
+        tapGesture()
         
         var loan = 250000.0
         if loanAmountTxtField.text?.isEmpty != true {
@@ -652,7 +657,27 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         }
 
         refiPaymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(newloanamount, interest: newInterest, mortgage: newMortgage, taxes: taxes))
-    }    
+    }
+    
+    func keyboardWillAppear(notification: NSNotification){
+        if isMortgageCalc {
+            scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 775)
+        }
+        else {
+            scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 900)
+        }
+        
+    }
+    
+    func keyboardWillDisappear(notification: NSNotification){
+        if isMortgageCalc {
+            scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 575)
+        }
+        else {
+            scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 775)
+        }
+        
+    }
     
     // MARK:
     // MARK: Navigation

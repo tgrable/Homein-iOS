@@ -45,12 +45,17 @@ class CustomSignUpViewController: PFSignUpViewController, PFSignUpViewController
             NSForegroundColorAttributeName: UIColor.darkTextColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
         ]
-        
-        //userNameRegister.frame = (frame: CGRectMake(15, 15, registerScrollView.bounds.size.width - 30, 40))
-        
-        self.signUpView!.usernameField!.frame = (frame: CGRectMake(0, 15, (self.signUpView?.bounds.size.width)!, 40))
         self.signUpView!.usernameField!.attributedPlaceholder = NSAttributedString(string: "USER NAME", attributes:attributes)
+        self.signUpView!.usernameField?.font = UIFont(name: "forza-light", size: 18)
         
+        self.signUpView!.passwordField?.attributedPlaceholder = NSAttributedString(string: "PASSWORD", attributes: attributes)
+        self.signUpView!.passwordField?.font = UIFont(name: "forza-light", size: 18)
+        
+        self.signUpView!.emailField!.attributedPlaceholder = NSAttributedString(string: "EMAIL", attributes:attributes)
+        self.signUpView!.emailField?.font = UIFont(name: "forza-light", size: 18)
+        
+        self.signUpView!.additionalField?.attributedPlaceholder = NSAttributedString(string: "NAME", attributes: attributes)
+        self.signUpView!.additionalField?.font = UIFont(name: "forza-light", size: 18)
     }
 
     override func didReceiveMemoryWarning() {

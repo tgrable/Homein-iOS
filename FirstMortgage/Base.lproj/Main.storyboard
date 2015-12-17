@@ -30,6 +30,7 @@
                     <connections>
                         <segue destination="eej-C9-Buj" kind="show" identifier="createAccountViewController" id="Guf-5a-mUz"/>
                         <segue destination="9p0-aR-IBO" kind="show" identifier="homeViewController" id="co5-Ef-rdh"/>
+                        <segue destination="zhq-D3-wKW" kind="show" identifier="profileViewController" id="Tfd-xo-B4O"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -56,7 +57,7 @@
                         <segue destination="WC7-sR-FnP" kind="show" identifier="calculatorsViewController" id="3i0-TD-4wl"/>
                         <segue destination="WjO-Qv-XXm" kind="show" identifier="findBranchViewController" id="wdS-jz-ihI"/>
                         <segue destination="FIe-Pm-iPn" kind="show" identifier="webViewController" id="g4H-Vx-XtG"/>
-                        <segue destination="zhq-D3-wKW" kind="show" id="Q2H-dU-Qsa"/>
+                        <segue destination="zhq-D3-wKW" kind="show" identifier="profileViewController" id="Q2H-dU-Qsa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oh5-aP-mbl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -426,7 +427,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="Xrc-RK-Ivf"/>
         <segue reference="NgR-rr-hyG"/>
+        <segue reference="Tfd-xo-B4O"/>
+        <segue reference="Kze-Tm-IIt"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
 
     // MARK:
     // MARK: Properties
@@ -29,21 +29,14 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     let homeNameTxtField = UITextField()
     let homePriceTxtField = UITextField()
     let homeAddressTxtField = UITextField()
+    let bedsTxtField = UITextField()
+    let bathsTxtField = UITextField()
     let sqFeetTxtField = UITextField()
+    var userRating = Int()
     
     // UITextField
     let descTxtView = UITextView()
     
-    // UIPickerView
-    let bedRoomPicker = UIPickerView() as UIPickerView
-    let bedRoomPickerData = ["1","2","3","4","5","6","7","8","9"]
-    var bedRoomDefault = 4.0
-    
-    let bathRoomPicker = UIPickerView() as UIPickerView
-    let bathRoomPickerData = [
-        ["1","2","3","4","5","6","7","8","9"],
-        ["0.0","0.5"]
-    ]
     var intComponent = 2.0
     var decComponent = 0.0
     var bathRoomDefault = 0.0
@@ -60,16 +53,13 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
     
     var isSmallerScreen = Bool()
     
+    var ratingButtonArray: [UIButton] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        bedRoomPicker.delegate = self
-        bedRoomPicker.dataSource = self
-        bedRoomPicker.selectRow(3, inComponent: 0, animated: true)
-        
-        bathRoomPicker.delegate = self
-        bathRoomPicker.dataSource = self
-        bathRoomPicker.selectRow(1, inComponent: 0, animated: true)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
         
         picker.delegate = self
         
@@ -179,7 +169,7 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         ]
         
         // UITextField
-        homeNameTxtField.frame = (frame: CGRectMake(10, 200, addHomeView.bounds.size.width - 20, 30))
+        homeNameTxtField.frame = (frame: CGRectMake(10, 210, addHomeView.bounds.size.width - 20, 40))
         homeNameTxtField.attributedPlaceholder = NSAttributedString(string: "NAME YOUR HOME", attributes:attributes)
         homeNameTxtField.backgroundColor = UIColor.clearColor()
         homeNameTxtField.delegate = self
@@ -188,7 +178,7 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         scrollView.addSubview(homeNameTxtField)
         
         // UITextField
-        homePriceTxtField.frame = (frame: CGRectMake(10, 230, addHomeView.bounds.size.width - 20, 30))
+        homePriceTxtField.frame = (frame: CGRectMake(10, 250, addHomeView.bounds.size.width - 20, 40))
         homePriceTxtField.attributedPlaceholder = NSAttributedString(string: "$Price", attributes:attributes)
         homePriceTxtField.backgroundColor = UIColor.clearColor()
         homePriceTxtField.delegate = self
@@ -198,73 +188,111 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         
         let starImage = UIImage(named: "star_off_icon") as UIImage?
         var xOffset = 0
-        for i in 1...4 {
+        for i in 1...5 {
             // UIButton
-            let ratingButtonPhotoButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), 263, 30, 30))
-            ratingButtonPhotoButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
-            ratingButtonPhotoButton.backgroundColor = model.darkBlueColor
-            ratingButtonPhotoButton.setImage(starImage, forState: .Normal)
-            ratingButtonPhotoButton.tag = i
-            scrollView.addSubview(ratingButtonPhotoButton)
+            let ratingButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), 290, 35, 35))
+            ratingButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
+            ratingButton.backgroundColor = model.darkBlueColor
+            ratingButton.setImage(starImage, forState: .Normal)
+            ratingButton.tag = i
+            scrollView.addSubview(ratingButton)
             
-            xOffset += 35
+            ratingButtonArray.append(ratingButton)
+            
+            xOffset += 40
         }
         
-        // UIPickerView
-        bedRoomPicker.frame = (frame: CGRectMake(addHomeView.bounds.size.width / 2, 255, 30, 40))
-        bedRoomPicker.backgroundColor = UIColor.clearColor()
-        bedRoomPicker.layer.borderColor = lightGrayColor.CGColor
-        bedRoomPicker.tag = 0
-        scrollView.addSubview(bedRoomPicker)
-        
-        // UILabel
-        let bedLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2), 290, 40, 10))
-        bedLabel.text = "Beds"
-        bedLabel.font = UIFont(name: "Arial", size: 8)
-        bedLabel.textAlignment = NSTextAlignment.Left
-        bedLabel.textColor = UIColor.darkTextColor()
-        scrollView.addSubview(bedLabel)
-        
-        // UIPickerView
-        bathRoomPicker.frame = (frame: CGRectMake((addHomeView.bounds.size.width / 2) + 30, 255, 55, 40))
-        bathRoomPicker.backgroundColor = UIColor.clearColor()
-        bathRoomPicker.layer.borderColor = lightGrayColor.CGColor
-        bathRoomPicker.tag = 1
-        scrollView.addSubview(bathRoomPicker)
-        
-        // UILabel
-        let bathLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2) + 60, 290, 100, 10))
-        bathLabel.text = "Baths"
-        bathLabel.font = UIFont(name: "Arial", size: 8)
-        bathLabel.textAlignment = NSTextAlignment.Left
-        bathLabel.numberOfLines = 0
-        bathLabel.textColor = UIColor.darkTextColor()
-        scrollView.addSubview(bathLabel)
-        
-        // UITextField
-        sqFeetTxtField.frame = (frame: CGRectMake((addHomeView.bounds.size.width / 2) + 100, 255, 100, 40))
-        sqFeetTxtField.placeholder = "2,400"
-        sqFeetTxtField.backgroundColor = UIColor.clearColor()
-        sqFeetTxtField.delegate = self
-        sqFeetTxtField.returnKeyType = .Done
-        sqFeetTxtField.keyboardType = UIKeyboardType.Default
-        scrollView.addSubview(sqFeetTxtField)
-        
-        // UILabel
-        let sqFeetLabel = UILabel(frame: CGRectMake((addHomeView.bounds.size.width / 2) + 100, 290, 100, 10))
-        sqFeetLabel.text = "Sq. Ft."
-        sqFeetLabel.font = UIFont(name: "Arial", size: 8)
-        sqFeetLabel.textAlignment = NSTextAlignment.Left
-        sqFeetLabel.textColor = UIColor.darkTextColor()
-        scrollView.addSubview(sqFeetLabel)
-        
-        let dividerView = UIView(frame: CGRectMake(10, 305, addHomeView.bounds.size.width - 20, 1))
+        let dividerView = UIView(frame: CGRectMake(10, 335, addHomeView.bounds.size.width - 20, 1))
         dividerView.backgroundColor = UIColor.darkGrayColor()
         dividerView.hidden = false
         scrollView.addSubview(dividerView)
         
+        let bed = "4"
+        let attributedHomeBed = NSMutableAttributedString(
+            string: bed,
+            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
+                name: "Arial",
+                size: 14.0)!])
+        
+        // UITextField
+        bedsTxtField.frame = (frame: CGRectMake(15, 345, (scrollView.bounds.size.width / 3) - 10, 30))
+        bedsTxtField.attributedPlaceholder = attributedHomeBed
+        bedsTxtField.backgroundColor = UIColor.clearColor()
+        bedsTxtField.delegate = self
+        bedsTxtField.returnKeyType = .Done
+        bedsTxtField.keyboardType = UIKeyboardType.NumberPad
+        scrollView.addSubview(bedsTxtField)
+        
+        let bedsLabel = UILabel(frame: CGRectMake(15, 370, (scrollView.bounds.size.width / 3) - 10, 30))
+        bedsLabel.text = "Beds"
+        bedsLabel.textAlignment = NSTextAlignment.Left
+        bedsLabel.numberOfLines = 1
+        bedsLabel.font = UIFont(name: "Arial", size: 14)
+        bedsLabel.textColor = UIColor.darkTextColor()
+        scrollView.addSubview(bedsLabel)
+        
+        let vertDividerTwoView = UIView(frame: CGRectMake(scrollView.bounds.size.width / 3, 345, 1, 50))
+        vertDividerTwoView.backgroundColor = UIColor.darkGrayColor()
+        vertDividerTwoView.hidden = false
+        scrollView.addSubview(vertDividerTwoView)
+        
+        let bath = "2.5"
+        let attributedHomeBath = NSMutableAttributedString(
+            string: bath,
+            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
+                name: "Arial",
+                size: 14.0)!])
+        
+        // UITextField
+        bathsTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 345, (scrollView.bounds.size.width / 3) - 10, 30))
+        bathsTxtField.attributedPlaceholder = attributedHomeBath
+        bathsTxtField.backgroundColor = UIColor.clearColor()
+        bathsTxtField.delegate = self
+        bathsTxtField.returnKeyType = .Done
+        bathsTxtField.keyboardType = UIKeyboardType.DecimalPad
+        scrollView.addSubview(bathsTxtField)
+        
+        let bathsLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 370, (scrollView.bounds.size.width / 3) - 10, 30))
+        bathsLabel.text = "Baths"
+        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        bathsLabel.textAlignment = NSTextAlignment.Left
+        bathsLabel.numberOfLines = 1
+        bathsLabel.font = UIFont(name: "Arial", size: 14)
+        bathsLabel.textColor = UIColor.darkTextColor()
+        scrollView.addSubview(bathsLabel)
+        
+        let vertDividerThreeView = UIView(frame: CGRectMake(scrollView.bounds.size.width * 0.66, 345, 1, 50))
+        vertDividerThreeView.backgroundColor = UIColor.darkGrayColor()
+        vertDividerThreeView.hidden = false
+        scrollView.addSubview(vertDividerThreeView)
+        
+        let sqft = "2400"
+        let attributedHomeSqft = NSMutableAttributedString(
+            string: sqft,
+            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
+                name: "Arial",
+                size: 14.0)!])
+        
+        // UITextField
+        sqFeetTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 345, (scrollView.bounds.size.width / 3) - 10, 30))
+        sqFeetTxtField.attributedPlaceholder = attributedHomeSqft
+        sqFeetTxtField.backgroundColor = UIColor.clearColor()
+        sqFeetTxtField.delegate = self
+        sqFeetTxtField.returnKeyType = .Done
+        sqFeetTxtField.keyboardType = UIKeyboardType.NumberPad
+        scrollView.addSubview(sqFeetTxtField)
+        
+        let sqFeetLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 370, (scrollView.bounds.size.width / 3) - 10, 30))
+        sqFeetLabel.text = "Sq. Ft."
+        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
+        sqFeetLabel.textAlignment = NSTextAlignment.Left
+        sqFeetLabel.numberOfLines = 1
+        sqFeetLabel.font = UIFont(name: "Arial", size: 14)
+        sqFeetLabel.textColor = UIColor.darkTextColor()
+        scrollView.addSubview(sqFeetLabel)
+
         //UITextField
-        homeAddressTxtField.frame = (frame: CGRectMake(10, 305, addHomeView.bounds.size.width - 20, 40))
+        homeAddressTxtField.frame = (frame: CGRectMake(10, 410, addHomeView.bounds.size.width - 20, 40))
         homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: "ADDRESS", attributes:attributes)
         homeAddressTxtField.backgroundColor = UIColor.clearColor()
         homeAddressTxtField.delegate = self
@@ -273,12 +301,47 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         scrollView.addSubview(homeAddressTxtField)
         
         //Create textview
-        descTxtView.frame = (frame : CGRectMake(10, 350, addHomeView.bounds.size.width - 20, 250))
+        descTxtView.frame = (frame : CGRectMake(10, 450, addHomeView.bounds.size.width - 20, 220))
         descTxtView.backgroundColor = UIColor.whiteColor()
         descTxtView.autocorrectionType = .Yes
+        descTxtView.returnKeyType = .Done
+        descTxtView.delegate = self
         scrollView.addSubview(descTxtView)
         
-        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: 650)
+        // UIView
+        let saveView = UIView(frame: CGRectMake(15, 695, scrollView.bounds.size.width - 30, 50))
+        let saveGradientLayer = CAGradientLayer()
+        saveGradientLayer.frame = saveView.bounds
+        saveGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
+        saveView.layer.insertSublayer(saveGradientLayer, atIndex: 0)
+        saveView.layer.addSublayer(saveGradientLayer)
+        scrollView.addSubview(saveView)
+        
+        // UIButton
+        let saveButton = UIButton (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
+        saveButton.addTarget(self, action: "addNewHome:", forControlEvents: .TouchUpInside)
+        saveButton.setTitle("SAVE HOME", forState: .Normal)
+        saveButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        saveButton.backgroundColor = UIColor.clearColor()
+        saveButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        saveButton.contentHorizontalAlignment = .Center
+        saveButton.tag = 0
+        saveView.addSubview(saveButton)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        scrollView.addGestureRecognizer(tapGesture)
+        
+        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: 815)
+    }
+    
+    func tapGesture() {
+        homeNameTxtField.resignFirstResponder()
+        homePriceTxtField.resignFirstResponder()
+        homeAddressTxtField.resignFirstResponder()
+        bedsTxtField.resignFirstResponder()
+        bathsTxtField.resignFirstResponder()
+        sqFeetTxtField.resignFirstResponder()
+        descTxtView.resignFirstResponder()
     }
     
     func navigateBackHome(sender: UIButton) {
@@ -296,84 +359,11 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
         
     }
     
-    // MARK:
-    // MARK: UIPickerView Delegate and Data Source
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        if (pickerView.tag == 0) {
-            return 1
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if (text == "\n") {
+            textView.resignFirstResponder()
         }
-        else if (pickerView.tag == 1) {
-            return bathRoomPickerData.count
-        }
-        else {
-            return 0
-        }
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        if (pickerView.tag == 0) {
-            return bedRoomPickerData.count
-        }
-        else if (pickerView.tag == 1) {
-            return bathRoomPickerData[component].count
-        }
-        else {
-            return 0
-        }
-        
-    }
-    
-    /*func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        if (pickerView.tag == 0) {
-            return bedRoomPickerData[row]
-        }
-        else if (pickerView.tag == 1) {
-            return bathRoomPickerData[component][row]
-        }
-        else {
-            return nil
-        }
-    }*/
-    
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-        let pickerLabel = UILabel()
-        pickerLabel.textColor = UIColor.lightGrayColor()
-        pickerLabel.font = UIFont(name: "Arial-BoldMT", size: 12.0) // In this use your custom font
-        pickerLabel.textAlignment = NSTextAlignment.Center
-        
-        if (pickerView.tag == 0) {
-            pickerLabel.text = bedRoomPickerData[row]
-        }
-        else if (pickerView.tag == 1) {
-            pickerLabel.text = bathRoomPickerData[component][row]
-        }
-        else {
-            
-        }
-        return pickerLabel
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        if (pickerView.tag == 0) {
-            bedRoomDefault = Double(bedRoomPickerData[row])!
-        }
-        else if (pickerView.tag == 1) {
-            //bathRoomDefault = Double(bathRoomPickerData[component][row])!
-            if component == 0{
-                intComponent = Double(bathRoomPickerData[component][row])!
-            }
-            else if (component == 1) {
-                decComponent = Double(bathRoomPickerData[component][row])!
-            }
-            else {
-                print("Empty")
-            }
-            
-            bathRoomDefault = intComponent + decComponent
-        }
-        else {
-            print("Empty")
-        }
+        return true
     }
     
     //MARK:
@@ -451,14 +441,14 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
             let home = PFObject(className: "Home")
             
             home["user"] = PFUser.currentUser()
-            home["name"] = self.homeNameTxtField.text
-            home["price"] = Double(self.homePriceTxtField.text!)
-            home["address"] = self.homeAddressTxtField.text
-            home["beds"] = self.bedRoomDefault
-            home["baths"] = self.bathRoomDefault
-            home["footage"] = 1234 //self.sqFeetTxtField
+            home["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : "Home"
+            home["price"] = (self.homePriceTxtField.text != "") ? Double(self.homePriceTxtField.text!) : 250000
+            home["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : "Address"
+            home["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : 4
+            home["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : 2.5
+            home["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : 2400
             home["rating"] = self.ratingDefault
-            home["desc"] = self.descTxtView.text
+            home["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : "Default home description"
             
             let imageData = UIImagePNGRepresentation(self.img)
             if (imageData != nil) {
@@ -479,6 +469,11 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
                     self.descTxtView.text = ""
                     self.imageView.image = nil
                     
+                    for i in 0...4 {
+                        let button = self.ratingButtonArray[i] as UIButton
+                        button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
+                    }
+                    
                     self.addNewImage(home)
                 }
                 else {
@@ -490,6 +485,23 @@ class AddHomeViewController: UIViewController, UIPickerViewDataSource, UIPickerV
 
     func setRating(sender: UIButton) {
         ratingDefault = sender.tag
+        for i in 0...4 {
+            let button = ratingButtonArray[i] as UIButton
+            if i < sender.tag {
+                button.setImage(UIImage(named: "star_on_icon"), forState: .Normal)
+            }
+            else {
+                button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
+            }
+        }
+    }
+    
+    func keyboardWillAppear(notification: NSNotification){
+        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1050)
+    }
+    
+    func keyboardWillDisappear(notification: NSNotification){
+        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 815)
     }
     
     /*
