@@ -20,6 +20,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     let myHomesView = UIView()
     let overlayView = UIView()
     let calcTray = UIView()
+    let saveDeleteTray = UIView()
     
     // UIScrollView
     let scrollView = UIScrollView()
@@ -146,6 +147,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         buildCalcTray()
         
         buildHomeTray()
+        buildSaveDeleteTray()
         
         let calcBannerView = UIView(frame: CGRectMake(0, 670, scrollView.bounds.size.width, 50))
         let calcBannerGradientLayer = CAGradientLayer()
@@ -174,7 +176,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calcBannerButton.backgroundColor = UIColor.clearColor()
         calcBannerView.addSubview(calcBannerButton)
         
-        scrollView.contentSize = CGSize(width: myHomesView.bounds.size.width, height: 750)
+        scrollView.contentSize = CGSize(width: myHomesView.bounds.size.width, height: 900)
     }
 
     func buildHomeTray() {
@@ -382,7 +384,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeTray.addSubview(homeAddressTxtField)
         
         //Create textview
-        descTxtView.frame = (frame : CGRectMake(10, CGFloat(420 + homeNameTxtField.frame.height + 10), homeTray.bounds.size.width - 20, 250))
+        descTxtView.frame = (frame : CGRectMake(10, CGFloat(420 + homeNameTxtField.frame.height + 10), homeTray.bounds.size.width - 20, 195))
         descTxtView.backgroundColor = UIColor.whiteColor()
         descTxtView.text = homeObject["desc"] as? String
         descTxtView.autocorrectionType = .Yes
@@ -393,7 +395,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     }
     
     func buildCalcTray() {
-        calcTray.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, 650))
+        calcTray.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, 450))
         calcTray.backgroundColor = UIColor.clearColor()
         scrollView.addSubview(calcTray)
         
@@ -447,14 +449,22 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         paymentLabel.textAlignment = NSTextAlignment.Center
         paymentView.addSubview(paymentLabel)
         
+    }
+    
+    func buildSaveDeleteTray() {
+        
+        saveDeleteTray.frame = (frame: CGRectMake(0, 730, scrollView.bounds.size.width, 450))
+        saveDeleteTray.backgroundColor = UIColor.clearColor()
+        scrollView.addSubview(saveDeleteTray)
+        
         // UIView
-        let saveView = UIView(frame: CGRectMake(25, 450, calcTray.bounds.size.width - 50, 50))
+        let saveView = UIView(frame: CGRectMake(25, 5, calcTray.bounds.size.width - 50, 50))
         let saveGradientLayer = CAGradientLayer()
         saveGradientLayer.frame = saveView.bounds
         saveGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
         saveView.layer.insertSublayer(saveGradientLayer, atIndex: 0)
         saveView.layer.addSublayer(saveGradientLayer)
-        calcTray.addSubview(saveView)
+        saveDeleteTray.addSubview(saveView)
         
         // UIButton
         let saveButton = UIButton (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
@@ -468,13 +478,13 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         saveView.addSubview(saveButton)
         
         // UIView
-        let deleteView = UIView(frame: CGRectMake(25, 510, calcTray.bounds.size.width - 50, 50))
+        let deleteView = UIView(frame: CGRectMake(25, 65, calcTray.bounds.size.width - 50, 50))
         let deleteGradientLayer = CAGradientLayer()
         deleteGradientLayer.frame = saveView.bounds
         deleteGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
         deleteView.layer.insertSublayer(deleteGradientLayer, atIndex: 0)
         deleteView.layer.addSublayer(deleteGradientLayer)
-        calcTray.addSubview(deleteView)
+        saveDeleteTray.addSubview(deleteView)
         
         // UIButton
         let deleteButton = UIButton (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
@@ -486,24 +496,27 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         deleteButton.contentHorizontalAlignment = .Center
         deleteButton.tag = 0
         deleteView.addSubview(deleteButton)
+
     }
 
     func showHideCalcTray(sender: UIButton) {
         if (!isCalcTrayOpen) {
             UIView.animateWithDuration(0.8, animations: {
-                self.calcTray.frame = (frame: CGRectMake(0, 730, self.scrollView.bounds.size.width, 650))
+                self.calcTray.frame = (frame: CGRectMake(0, 730, self.scrollView.bounds.size.width, 450))
+                self.saveDeleteTray.frame = (frame: CGRectMake(0, 1180, self.scrollView.bounds.size.width, 450))
                 }, completion: {
                     (value: Bool) in
-                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1300)
+                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1350)
                     self.isCalcTrayOpen = true
             })
         }
         else {
             UIView.animateWithDuration(0.8, animations: {
-                self.calcTray.frame = (frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 650))
+                self.calcTray.frame = (frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 450))
+                self.saveDeleteTray.frame = (frame: CGRectMake(0, 720, self.scrollView.bounds.size.width, 450))
                 }, completion: {
                     (value: Bool) in
-                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 750)
+                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 900)
                     self.isCalcTrayOpen = false
             })
         }

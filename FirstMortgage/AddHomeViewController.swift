@@ -15,12 +15,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     // MARK: Properties
     
     let model = Model()
-    
-    // Custom Color
-    let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
-    let greenColor = UIColor(red: 185/255, green: 190/255, blue: 71/255, alpha: 1)
-    
     let addHomeView = UIView()
+    let overlayView = UIView()
     
     // UIScrollView
     let scrollView = UIScrollView()
@@ -43,6 +39,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     // UIImagePickerController
     let picker = UIImagePickerController()
+    
+    var activityIndicator = UIActivityIndicatorView()
     
     var imageView = UIImageView()
     var img = UIImage()
@@ -80,7 +78,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func buildView() {
         addHomeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        addHomeView.backgroundColor = lightGrayColor
+        addHomeView.backgroundColor = model.lightGrayColor
         addHomeView.hidden = false
         self.view.addSubview(addHomeView)
         
@@ -164,7 +162,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.addSubview(addHomePhotoButton)
         
         let attributes = [
-            NSForegroundColorAttributeName: UIColor.darkTextColor(),
+            NSForegroundColorAttributeName: UIColor.lightGrayColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
         ]
         
@@ -210,7 +208,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         let bed = "4"
         let attributedHomeBed = NSMutableAttributedString(
             string: bed,
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
+            attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor(),NSFontAttributeName:UIFont(
                 name: "Arial",
                 size: 14.0)!])
         
@@ -239,7 +237,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         let bath = "2.5"
         let attributedHomeBath = NSMutableAttributedString(
             string: bath,
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
+            attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor(),NSFontAttributeName:UIFont(
                 name: "Arial",
                 size: 14.0)!])
         
@@ -269,7 +267,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         let sqft = "2400"
         let attributedHomeSqft = NSMutableAttributedString(
             string: sqft,
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
+            attributes: [NSForegroundColorAttributeName: UIColor.lightGrayColor(),NSFontAttributeName:UIFont(
                 name: "Arial",
                 size: 14.0)!])
         
@@ -305,6 +303,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         descTxtView.backgroundColor = UIColor.whiteColor()
         descTxtView.autocorrectionType = .Yes
         descTxtView.returnKeyType = .Done
+        descTxtView.textColor = UIColor.lightGrayColor()
+        descTxtView.text = "Add notes about this house."
         descTxtView.delegate = self
         scrollView.addSubview(descTxtView)
         
@@ -330,6 +330,16 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         scrollView.addGestureRecognizer(tapGesture)
+        
+        overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
+        overlayView.backgroundColor = UIColor.blackColor()
+        overlayView.alpha = 0.75
+        overlayView.hidden = true
+        self.view.addSubview(overlayView)
+        
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+        activityIndicator.center = view.center
+        overlayView.addSubview(activityIndicator)
         
         scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: 815)
     }
@@ -357,6 +367,21 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func textFieldDidEndEditing(textField: UITextField) {
         
+    }
+    
+    // MARK:
+    // MARK: UITextViewDelegate
+    func textViewDidBeginEditing(textView: UITextView) {
+        if textView.textColor == UIColor.lightGrayColor() {
+            textView.text = nil
+            textView.textColor = UIColor.blackColor()
+        }
+    }
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Add notes about this house."
+            textView.textColor = UIColor.lightGrayColor()
+        }
     }
     
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
@@ -414,27 +439,9 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         presentViewController(imageAlertController, animated: true, completion: nil)
     }
     
-    func addNewImage(homeObject: PFObject) {
-        let homeImage = PFObject(className: "Images")
-        let imageData = UIImagePNGRepresentation(self.img)
-        if (imageData != nil) {
-            let imageFile = PFFile(name:"image.png", data:imageData!)
-            homeImage["image"] = imageFile
-        }
-        homeImage["home"] = homeObject
-        homeImage["default"] = true
-        
-        homeImage.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-            if (success) {
-                print("success")
-            }
-            else {
-                print("error")
-            }
-        }
-    }
-    
     func addNewHome(sender: UIButton) {
+        overlayView.hidden = false
+        activityIndicator.startAnimating()
         
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             var imageArray: [PFFile] = []
@@ -455,7 +462,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 let imageFile = PFFile(name:"image.png", data:imageData!)
                 home["image"] = imageFile
                 imageArray.append(imageFile!)
-                imageArray.append(imageFile!)
                 home["imageArray"] = imageArray
             }
             
@@ -474,7 +480,20 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                         button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
                     }
                     
-                    self.addNewImage(home)
+                    self.activityIndicator.stopAnimating()
+                    
+                    let alertController = UIAlertController(title: "HomeIn", message: "This house have been added.", preferredStyle: .Alert)
+                    
+                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                        self.overlayView.hidden = true
+                        self.navigationController?.popViewControllerAnimated(true)
+                    }
+                    alertController.addAction(OKAction)
+                    
+                    self.presentViewController(alertController, animated: true) {
+                        // ...
+                    }
+
                 }
                 else {
                     print("The object was not saved")

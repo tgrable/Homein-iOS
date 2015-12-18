@@ -15,8 +15,12 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
     // MARK:
     // MARK: Properties
     var model = Model()
+    let modelName = UIDevice.currentDevice().modelName
     
     let homeView = UIView()
+    let myHomesView = UIView()
+    let addHomesView = UIView()
+    let preQualifiedView = UIView()
     
     var imageView = UIImageView()
 
@@ -32,18 +36,40 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
     let preQualifiedButton = UIButton()
     let userButton = UIButton()
     
+    var locationServicesIsAllowed = Bool()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        buildHomeView()
+        print("viewDidLoad")
+        if CLLocationManager.locationServicesEnabled() {
+            switch(CLLocationManager.authorizationStatus()) {
+            case .NotDetermined, .Restricted, .Denied:
+                locationServicesIsAllowed = false
+            case .AuthorizedAlways, .AuthorizedWhenInUse:
+                locationServicesIsAllowed = true
+            default:
+                locationServicesIsAllowed = false
+            }
+        }
     }
 
+    override func viewWillAppear(animated: Bool) {
+        print("viewWillAppear")
+        buildHomeView()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
     func buildHomeView() {
+        
+        var labelDist = 65.0 as CGFloat
+        if (modelName.rangeOfString("6") != nil) {
+            labelDist = 75.0
+        }
+        
         homeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         homeView.backgroundColor = model.lightGrayColor
         homeView.hidden = false
@@ -74,12 +100,18 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         
         /********************************************************* My Homes Button ********************************************************************/
         // UIView
-        let myHomesView = UIView(frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
-        let myHomesGradientLayer = CAGradientLayer()
-        myHomesGradientLayer.frame = myHomesView.bounds
-        myHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
-        myHomesView.layer.insertSublayer(myHomesGradientLayer, atIndex: 0)
-        myHomesView.layer.addSublayer(myHomesGradientLayer)
+        myHomesView.frame = (frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
+        if (PFUser.currentUser() != nil) {
+            let myHomesGradientLayer = CAGradientLayer()
+            myHomesGradientLayer.frame = myHomesView.bounds
+            myHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+            myHomesView.layer.insertSublayer(myHomesGradientLayer, atIndex: 0)
+            myHomesView.layer.addSublayer(myHomesGradientLayer)
+        }
+        else {
+            myHomesView.backgroundColor = UIColor.grayColor()
+            myHomesButton.enabled = false
+        }
         scrollView.addSubview(myHomesView)
         
         let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
@@ -88,7 +120,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         myHomesView.addSubview(homeIcon)
         
         // UILabel
-        let myHomesLabel = UILabel(frame: CGRectMake(0, 75, myHomesView.bounds.size.width, 24))
+        let myHomesLabel = UILabel(frame: CGRectMake(0, labelDist, myHomesView.bounds.size.width, 24))
         myHomesLabel.text = "MY HOMES"
         myHomesLabel.font = UIFont(name: "forza-light", size: 18)
         myHomesLabel.textAlignment = NSTextAlignment.Center
@@ -108,12 +140,18 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         
         /********************************************************* Add Homes Button ********************************************************************/
         // UIView
-        let addHomesView = UIView(frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
-        let addHomesGradientLayer = CAGradientLayer()
-        addHomesGradientLayer.frame = addHomesView.bounds
-        addHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
-        addHomesView.layer.insertSublayer(addHomesGradientLayer, atIndex: 0)
-        addHomesView.layer.addSublayer(addHomesGradientLayer)
+        addHomesView.frame = (frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
+        if (PFUser.currentUser() != nil) {
+            let addHomesGradientLayer = CAGradientLayer()
+            addHomesGradientLayer.frame = addHomesView.bounds
+            addHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+            addHomesView.layer.insertSublayer(addHomesGradientLayer, atIndex: 0)
+            addHomesView.layer.addSublayer(addHomesGradientLayer)
+        }
+        else {
+            addHomesView.backgroundColor = UIColor.grayColor()
+            addAHomeButton.enabled = false
+        }
         scrollView.addSubview(addHomesView)
  
         let addIcn = UIImage(named: "add_icon") as UIImage?
@@ -122,7 +160,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         addHomesView.addSubview(addHomeIcon)
         
         // UILabel
-        let addHomesLabel = UILabel(frame: CGRectMake(0, 65, myHomesView.bounds.size.width, 48))
+        let addHomesLabel = UILabel(frame: CGRectMake(0, labelDist, myHomesView.bounds.size.width, 48))
         addHomesLabel.text = "ADD A\nHOME"
         addHomesLabel.font = UIFont(name: "forza-light", size: 18)
         addHomesLabel.textAlignment = NSTextAlignment.Center
@@ -157,7 +195,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         mortgageCalculatorView.addSubview(calcIcon)
         
         // UILabel
-        let mortgageCalculatorLabel = UILabel(frame: CGRectMake(0, 75, mortgageCalculatorView.bounds.size.width, 48))
+        let mortgageCalculatorLabel = UILabel(frame: CGRectMake(0, labelDist, mortgageCalculatorView.bounds.size.width, 48))
         mortgageCalculatorLabel.text = "MORTGAGE\nCALCULATOR"
         mortgageCalculatorLabel.font = UIFont(name: "forza-light", size: 18)
         mortgageCalculatorLabel.textAlignment = NSTextAlignment.Center
@@ -190,7 +228,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         refiCalculatorView.addSubview(calcIconTwo)
         
         // UILabel
-        let refiCalculatorLabel = UILabel(frame: CGRectMake(0, 75, refiCalculatorView.bounds.size.width, 48))
+        let refiCalculatorLabel = UILabel(frame: CGRectMake(0, labelDist, refiCalculatorView.bounds.size.width, 48))
         refiCalculatorLabel.text = "REFINANCING\nCALCULATOR"
         refiCalculatorLabel.font = UIFont(name: "forza-light", size: 18)
         refiCalculatorLabel.textAlignment = NSTextAlignment.Center
@@ -212,11 +250,17 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         /********************************************************* Find Branch Button ********************************************************************/
         // UIView
         let findBranchView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        let findBranchGradientLayer = CAGradientLayer()
-        findBranchGradientLayer.frame = findBranchView.bounds
-        findBranchGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
-        findBranchView.layer.insertSublayer(findBranchGradientLayer, atIndex: 0)
-        findBranchView.layer.addSublayer(findBranchGradientLayer)
+        if (locationServicesIsAllowed) {
+            let findBranchGradientLayer = CAGradientLayer()
+            findBranchGradientLayer.frame = findBranchView.bounds
+            findBranchGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
+            findBranchView.layer.insertSublayer(findBranchGradientLayer, atIndex: 0)
+            findBranchView.layer.addSublayer(findBranchGradientLayer)
+        }
+        else {
+            findBranchView.backgroundColor = UIColor.grayColor()
+            findBranchButton.enabled = false
+        }
         scrollView.addSubview(findBranchView)
         
         let brnchIcn = UIImage(named: "branch_icon") as UIImage?
@@ -225,7 +269,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         findBranchView.addSubview(branchIcon)
         
         // UILabel
-        let findBranchLabel = UILabel(frame: CGRectMake(0, 75, findBranchView.bounds.size.width, 72))
+        let findBranchLabel = UILabel(frame: CGRectMake(0, labelDist, findBranchView.bounds.size.width, 72))
         findBranchLabel.text = "FIND THE\nCLOSEST\nBRANCH"
         findBranchLabel.font = UIFont(name: "forza-light", size: 18)
         findBranchLabel.textAlignment = NSTextAlignment.Center
@@ -244,12 +288,18 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         
         /********************************************************* Get Prequalified Button ********************************************************************/
          // UIView
-        let preQualifiedView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        let preQualifiedGradientLayer = CAGradientLayer()
-        preQualifiedGradientLayer.frame = preQualifiedView.bounds
-        preQualifiedGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
-        preQualifiedView.layer.insertSublayer(preQualifiedGradientLayer, atIndex: 0)
-        preQualifiedView.layer.addSublayer(preQualifiedGradientLayer)
+        preQualifiedView.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
+        if (PFUser.currentUser() != nil) {
+            let preQualifiedGradientLayer = CAGradientLayer()
+            preQualifiedGradientLayer.frame = preQualifiedView.bounds
+            preQualifiedGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+            preQualifiedView.layer.insertSublayer(preQualifiedGradientLayer, atIndex: 0)
+            preQualifiedView.layer.addSublayer(preQualifiedGradientLayer)
+        }
+        else {
+            preQualifiedView.backgroundColor = UIColor.grayColor()
+            preQualifiedButton.enabled = false
+        }
         scrollView.addSubview(preQualifiedView)
         
         let checkIcn = UIImage(named: "icn-applyOnline") as UIImage?
@@ -258,7 +308,7 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         preQualifiedView.addSubview(checkIcon)
         
         // UILabel
-        let preQualifiedLabel = UILabel(frame: CGRectMake(0, 75, preQualifiedView.bounds.size.width, 48))
+        let preQualifiedLabel = UILabel(frame: CGRectMake(0, labelDist, preQualifiedView.bounds.size.width, 48))
         preQualifiedLabel.text = "GET\nPREQUALIFIED"
         preQualifiedLabel.font = UIFont(name: "forza-light", size: 18)
         preQualifiedLabel.textAlignment = NSTextAlignment.Center
@@ -293,52 +343,6 @@ class HomeViewController: UIViewController, PFLogInViewControllerDelegate {
         logInController.delegate = self
         logInController.fields = [.UsernameAndPassword, .LogInButton, .PasswordForgotten, .DismissButton]
         self.presentViewController(logInController, animated:true, completion: nil)
-        
-        
-        /*
-        //1. Create the alert controller.
-        let alert = UIAlertController(title: "First Mortgage", message: "Login", preferredStyle: .Alert)
-        
-        //2. Add the text field. You can configure it however you need.
-        alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
-            textField.placeholder = "User Name"
-        })
-        
-        //2. Add the text field. You can configure it however you need.
-        alert.addTextFieldWithConfigurationHandler({ (textField) -> Void in
-            textField.placeholder = "Password"
-            textField.secureTextEntry = true
-        })
-        
-        //3. Grab the value from the text field, and print it when the user clicks OK.
-        alert.addAction(UIAlertAction(title: "Login", style: .Default, handler: { (action) -> Void in
-            let unTextField = alert.textFields![0] as UITextField
-            print("User Name Text field: \(unTextField.text)")
-            
-            let pwTextField = alert.textFields![1] as UITextField
-            print("Password Text field: \(pwTextField.text)")
-            
-            PFUser.logInWithUsernameInBackground(unTextField.text!, password:pwTextField.text!) {
-                (user: PFUser?, error: NSError?) -> Void in
-                if user != nil {
-                    // Do stuff after successful login.
-                    self.checkIfLoggedIn()
-                } else {
-                    // The login failed. Check error to see why.
-                    print(error)
-                }
-            }
-        }))
-        
-        //3. Grab the value from the text field, and print it when the user clicks OK.
-        alert.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) -> Void in
-            
-        }))
-        
-        // 4. Present the alert.
-        self.presentViewController(alert, animated: true, completion: nil)
-
-        */
     }
     
     func logInViewController(controller: PFLogInViewController, didLogInUser user: PFUser) -> Void {

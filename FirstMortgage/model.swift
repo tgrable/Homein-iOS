@@ -12,7 +12,8 @@ class Model: NSObject {
     
     // MARK:
     // MARK: Properties
-  
+    let modelName = UIDevice.currentDevice().modelName
+    
     // Custom Color
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
     
@@ -63,5 +64,48 @@ class Model: NSObject {
         let defaultTimeZoneStr = formatter.stringFromDate(date);
         
         return Double(defaultTimeZoneStr)!
+    }
+    
+    func getBranchLoanOfficers() -> NSArray {
+        let endpoint = NSURL(string: "http://www.trekkdev1.com/loan-officers-json")
+        let data = NSData(contentsOfURL: endpoint!)
+        do {
+            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
+            if let nodes = json as? NSArray {
+                print(nodes.count)
+                return nodes
+            }
+        }
+        catch {
+            print("error serializing JSON: \(error)")
+        }
+        return []
+    }
+
+    
+    func deviceWidth() -> CGFloat {
+        //modelName.rangeOfString("5")
+        switch modelName {
+        case "iPhone 4":
+            return 320.0
+        case "iPhone 4s":
+            return 320.0
+        case "iPhone 5":
+            return 320.0
+        case "iPhone 5c":
+            return 320.0
+        case "iPhone 5s":
+            return 320.0
+        case "iPhone 6":
+            return 375.0
+        case "iPhone 6 Plus":
+            return 414
+        case "iPhone 6s":
+            return 375.0
+        case "iPhone 6s Plus":
+            return 414
+        default:
+            return 375.0
+        }
     }
 }

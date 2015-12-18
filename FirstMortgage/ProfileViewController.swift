@@ -169,7 +169,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         // UITextField
         nameTxtField.frame = (frame: CGRectMake(15, 10, profileView.bounds.size.width - 30, 30))
-        nameTxtField.attributedPlaceholder = NSAttributedString(string: user!["name"] as! String, attributes:attributes)
+        nameTxtField.attributedPlaceholder = NSAttributedString(string: user!["additional"] as! String, attributes:attributes)
         nameTxtField.backgroundColor = UIColor.clearColor()
         nameTxtField.delegate = self
         nameTxtField.returnKeyType = .Done

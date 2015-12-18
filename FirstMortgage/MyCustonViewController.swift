@@ -25,7 +25,7 @@ class MyCustonViewController: PFLogInViewController {
         
         self.logInView!.logo = nil;
         
-        let bannerView = UIView(frame: CGRectMake(0, 85, 320, 50))
+        let bannerView = UIView(frame: CGRectMake(0, 85, model.deviceWidth(), 50))
         let bannerGradientLayer = CAGradientLayer()
         bannerGradientLayer.frame = bannerView.bounds
         bannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
@@ -43,7 +43,7 @@ class MyCustonViewController: PFLogInViewController {
         bannerView.addSubview(createAccountLabel)
         
         let attributes = [
-            NSForegroundColorAttributeName: UIColor.darkTextColor(),
+            NSForegroundColorAttributeName: UIColor.lightGrayColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
         ]
         

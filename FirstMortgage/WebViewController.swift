@@ -26,7 +26,7 @@ class WebViewController: UIViewController, UIWebViewDelegate {
         imageView.image = fmcLogo
         self.view.addSubview(imageView)
         
-        let whiteBar = UIView(frame: CGRectMake(0, 85, self.view.bounds.size.width, 50))
+        let whiteBar = UIView(frame: CGRectMake(0, 85, self.view.bounds.size.width, 105))
         whiteBar.backgroundColor = UIColor.whiteColor()
         self.view.addSubview(whiteBar)
         

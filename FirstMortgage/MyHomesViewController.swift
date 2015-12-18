@@ -30,6 +30,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     var isSmallerScreen = Bool()
     var isSortTrayOpen = Bool()
     
+    let swipeRec = UISwipeGestureRecognizer()
+    
     // Parse
     var userHomes = [PFObject]()
     var home: PFObject!
@@ -121,7 +123,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         
         // UIButton
         let sortButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
-        sortButton.addTarget(self, action: "showHideSortTray:", forControlEvents: .TouchUpInside)
+        sortButton.addTarget(self, action: "showHideSortTray", forControlEvents: .TouchUpInside)
         sortButton.backgroundColor = UIColor.clearColor()
         sortButton.tag = 0
         addHomeBannerView.addSubview(sortButton)
@@ -167,7 +169,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         dividerView.hidden = false
         sortTrayView.addSubview(dividerView)
         
-        let nameImage = UIImage(named: "Star_empty-01") as UIImage?
+        let nameImage = UIImage(named: "icn-firstTime") as UIImage?
         // UIImageView
         let nameImageView = UIImageView(frame: CGRectMake(15, 45, 30, 30))
         nameImageView.image = nameImage
@@ -202,7 +204,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortTrayView.addSubview(sortRatingButton)
         
         
-        let priceImage = UIImage(named: "Star_empty-01") as UIImage?
+        let priceImage = UIImage(named: "Money_icon-04") as UIImage?
         // UIImageView
         let priceImageView = UIImageView(frame: CGRectMake(15, 135, 30, 30))
         priceImageView.image = priceImage
@@ -218,9 +220,14 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortPriceButton.tag = 0
         sortPriceButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortPriceButton)
+        
+        swipeRec.direction = UISwipeGestureRecognizerDirection.Down
+        swipeRec.addTarget(self, action: "showHideSortTray")
+        sortTrayView.addGestureRecognizer(swipeRec)
+        sortTrayView.userInteractionEnabled = true
     }
 
-    func showHideSortTray(sender: UIButton) {
+    func showHideSortTray() {
         if (!isSortTrayOpen) {
             UIView.animateWithDuration(0.4, animations: {
                 self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height - 175, self.view.bounds.size.width, 175))

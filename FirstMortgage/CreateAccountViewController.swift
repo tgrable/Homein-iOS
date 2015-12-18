@@ -10,19 +10,22 @@ import UIKit
 import Parse
 import ParseUI
 
-class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, PFSignUpViewControllerDelegate {
+class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, PFSignUpViewControllerDelegate, CLLocationManagerDelegate {
 
     // MARK:
     // MARK: Properties
+    let model = Model()
+    var parseUser = PFUser()
     
-    // Custom Color
-    let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
+    //UIView
+    let overlayView = UIView() as UIView
     
-    let lightBlueColor = UIColor(red: 83/255, green: 135/255, blue: 186/255, alpha: 1)
-    let darkBlueColor = UIColor(red: 53/255, green: 103/255, blue: 160/255, alpha: 1)
+    //UIScrollView
+    let scrollView = UIScrollView() as UIScrollView
     
-    let lightOrangeColor = UIColor(red: 238/255, green: 155/255, blue: 78/255, alpha: 1)
-    let darkOrangeColor = UIColor(red: 222/255, green: 123/255, blue: 37/255, alpha: 1)
+    //Array
+    var loanOfficerArray = Array<Dictionary<String, String>>()
+    var tempArray = Array<Dictionary<String, String>>()
     
     // Login View
     let registerView = UIView()
@@ -32,6 +35,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     let firstlastNameRegister = UITextField()
     let passwordRegister = UITextField()
     let emailRegister = UITextField()
+    let searchTxtField = UITextField() as UITextField
     
     // UITextView
     let addressRegister = UITextView()
@@ -42,6 +46,8 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     var optionThree = Bool()
     
     var imageView = UIImageView() as UIImageView
+    
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,15 +63,34 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         imageView.image = fmcLogo
         self.view.addSubview(imageView)
         
-        self.view.backgroundColor = lightGrayColor
+        self.view.backgroundColor = model.lightGrayColor
         
         optionOne = true
         optionTwo = true
         optionThree = true
         
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 10;
+        locationManager.requestWhenInUseAuthorization()
+        
         buildCreateAccountView()
     }
 
+    override func viewDidAppear(animated: Bool) {
+        let nodes = model.getBranchLoanOfficers()
+        
+        loanOfficerArray.removeAll()
+        tempArray.removeAll()
+        
+        for node in nodes {
+            if let nodeDict = node as? NSDictionary {
+                loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
+                tempArray.append(nodeDict as! Dictionary<String, String>)
+            }
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -82,7 +107,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         let createAccountView = UIView(frame: CGRectMake(15, 50, registerView.bounds.size.width - 30, 40))
         let createAccountGradientLayer = CAGradientLayer()
         createAccountGradientLayer.frame = createAccountView.bounds
-        createAccountGradientLayer.colors = [darkOrangeColor.CGColor, lightOrangeColor.CGColor]
+        createAccountGradientLayer.colors = [model.darkOrangeColor.CGColor, model.lightOrangeColor.CGColor]
         createAccountView.layer.insertSublayer(createAccountGradientLayer, atIndex: 0)
         createAccountView.layer.addSublayer(createAccountGradientLayer)
         registerView.addSubview(createAccountView)
@@ -153,7 +178,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         let getStartedView = UIView(frame: CGRectMake(35, descLabel.bounds.size.height + 290, registerView.bounds.size.width - 70, 40))
         let getStartedGradientLayer = CAGradientLayer()
         getStartedGradientLayer.frame = getStartedView.bounds
-        getStartedGradientLayer.colors = [darkBlueColor.CGColor, lightBlueColor.CGColor]
+        getStartedGradientLayer.colors = [model.darkBlueColor.CGColor, model.lightBlueColor.CGColor]
         getStartedView.layer.insertSublayer(getStartedGradientLayer, atIndex: 0)
         getStartedView.layer.addSublayer(getStartedGradientLayer)
         registerView.addSubview(getStartedView)
@@ -175,12 +200,12 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         let continueWithoutButton = UIButton (frame: CGRectMake(15, descLabel.bounds.size.height + 340, registerView.bounds.size.width - 30, 40))
         continueWithoutButton.setTitle("CONTINUE WITHOUT", forState: .Normal)
         continueWithoutButton.addTarget(self, action: "continueWithoutLogin:", forControlEvents: .TouchUpInside)
-        continueWithoutButton.setTitleColor(darkBlueColor, forState: .Normal)
+        continueWithoutButton.setTitleColor(model.darkBlueColor, forState: .Normal)
         continueWithoutButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
         registerView.addSubview(continueWithoutButton)
     }
     
-    func buildRegisterView() {
+    func showCreateAccount(sender: UIButton) {
         let signUpController = CustomSignUpViewController()
         signUpController.delegate = self
         signUpController.fields = [.UsernameAndPassword, .Email, .Additional, .SignUpButton, .DismissButton]
@@ -188,35 +213,13 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     }
 
     func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) -> Void {
+        parseUser = user
+        buildOverlay()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) -> Void {
         self.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func registerUser(sender: UIButton) {
-        let user = PFUser()
-        user.username = userNameRegister.text
-        user["searchableUserName"] = userNameRegister.text!.lowercaseString
-        user["name"] = firstlastNameRegister.text
-        user.email = emailRegister.text
-        user["address"] = addressRegister.text
-        user.password = passwordRegister.text
-        user["optionOne"] = optionOne
-        user["optionTwo"] = optionTwo
-        user["optionThree"] = optionThree
-        
-        user.signUpInBackgroundWithBlock {
-            (succeeded: Bool, error: NSError?) -> Void in
-            if succeeded {
-                // Do stuff after successful login.
-                self.performSegueWithIdentifier("userLoggedIn", sender: self)
-            } else {
-                // The login failed. Check error to see why.
-                print(error!.userInfo["error"])
-            }
-        }
     }
     
     func optionChecked(sender: UIButton) {
@@ -270,9 +273,26 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         performSegueWithIdentifier("userLoggedIn", sender: self)
     }
     
+    func searchLoanOfficerArray(searchText: String) {
+        removeViews(scrollView)
+        tempArray.removeAll()
+        for loanOfficer in loanOfficerArray {
+            if let lo = loanOfficer["name"] {
+                if lo.containsString(searchText) {
+                    tempArray.append(loanOfficer)
+                }
+            }
+        }
+        buildLoanOfficerSeachOverLay(tempArray)
+    }
+    
     // MARK:
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if textField.tag == 999 {
+            searchLoanOfficerArray(searchTxtField.text!)
+        }
+        
         textField.resignFirstResponder()
         return true
     }
@@ -281,6 +301,232 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
     }
     
+    func removeViews(views: UIView) {
+        for view in views.subviews {
+            view.removeFromSuperview()
+        }
+    }
+
+    func buildOverlay() {
+
+        overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
+        overlayView.backgroundColor = UIColor.blackColor()
+        overlayView.alpha = 0.90
+        self.view.addSubview(overlayView)
+        
+        let overLayTextLabel = UILabel(frame: CGRectMake(15, 75, overlayView.bounds.size.width - 30, 0))
+        overLayTextLabel.text = "Are you currently working with a loan officer?"
+        overLayTextLabel.textAlignment = NSTextAlignment.Left
+        overLayTextLabel.textColor = UIColor.whiteColor()
+        overLayTextLabel.font = UIFont(name: "forza-light", size: 32)
+        overLayTextLabel.numberOfLines = 0
+        overLayTextLabel.sizeToFit()
+        overlayView.addSubview(overLayTextLabel)
+        
+        
+        // UIView
+        let noView = UIView(frame: CGRectMake(15, 200, overlayView.bounds.size.width - 30, 50))
+        let noGradientLayer = CAGradientLayer()
+        noGradientLayer.frame = noView.bounds
+        noGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
+        noView.alpha = 1.0
+        noView.layer.insertSublayer(noGradientLayer, atIndex: 0)
+        noView.layer.addSublayer(noGradientLayer)
+        overlayView.addSubview(noView)
+        
+        // UIButton
+        let noButton = UIButton (frame: CGRectMake(0, 0, noView.bounds.size.width, 50))
+        noButton.addTarget(self, action: "workingWithALoanOfficer:", forControlEvents: .TouchUpInside)
+        noButton.setTitle("NO", forState: .Normal)
+        noButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        noButton.backgroundColor = UIColor.clearColor()
+        noButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        noButton.contentHorizontalAlignment = .Center
+        noButton.tag = 0
+        noView.addSubview(noButton)
+        
+        // UIView
+        let yesView = UIView(frame: CGRectMake(15, 300, overlayView.bounds.size.width - 30, 50))
+        let yesGradientLayer = CAGradientLayer()
+        yesGradientLayer.frame = yesView.bounds
+        yesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+        yesView.alpha = 1.0
+        yesView.layer.insertSublayer(yesGradientLayer, atIndex: 0)
+        yesView.layer.addSublayer(yesGradientLayer)
+        overlayView.addSubview(yesView)
+        
+        // UIButton
+        let yesButton = UIButton (frame: CGRectMake(0, 0, yesView.bounds.size.width, 50))
+        yesButton.addTarget(self, action: "workingWithALoanOfficer:", forControlEvents: .TouchUpInside)
+        yesButton.setTitle("YES", forState: .Normal)
+        yesButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        yesButton.backgroundColor = UIColor.clearColor()
+        yesButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        yesButton.contentHorizontalAlignment = .Center
+        yesButton.tag = 1
+        yesView.addSubview(yesButton)
+        
+    }
+    
+    func buildLoanOfficerSeachOverLay(loArray: Array<Dictionary<String, String>>) {
+        
+        removeViews(overlayView)
+        
+        var yVal = 15.0
+        var count = 0
+        
+        // UILabel
+        let overLayTextLabel = UILabel(frame: CGRectMake(15, 25, overlayView.bounds.size.width - 30, 0))
+        overLayTextLabel.text = "You currently not assigned to a loan officer. Please select one from the list below."
+        overLayTextLabel.textAlignment = NSTextAlignment.Left
+        overLayTextLabel.textColor = UIColor.whiteColor()
+        overLayTextLabel.font = UIFont(name: "forza-light", size: 18)
+        overLayTextLabel.numberOfLines = 0
+        overLayTextLabel.sizeToFit()
+        overlayView.addSubview(overLayTextLabel)
+        
+        let attributes = [
+            NSForegroundColorAttributeName: UIColor.darkTextColor(),
+            NSFontAttributeName : UIFont(name: "forza-light", size: 22)!
+        ]
+        
+        let searchTxtPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        searchTxtField.frame = (frame: CGRectMake(15, 85, overlayView.bounds.size.width - 30, 50))
+        searchTxtField.attributedPlaceholder = NSAttributedString(string: "SEARCH LOAN OFFICER", attributes:attributes)
+        searchTxtField.backgroundColor = UIColor.whiteColor()
+        searchTxtField.delegate = self
+        searchTxtField.leftView = searchTxtPaddingView
+        searchTxtField.leftViewMode = UITextFieldViewMode.Always
+        searchTxtField.returnKeyType = .Done
+        searchTxtField.keyboardType = UIKeyboardType.Default
+        searchTxtField.tag = 999
+        searchTxtField.font = UIFont(name: "forza-light", size: 22)
+        overlayView.addSubview(searchTxtField)
+        
+        scrollView.frame = (frame: CGRectMake(0, 135, overlayView.bounds.size.width, overlayView.bounds.size.height - 135))
+        scrollView.backgroundColor = UIColor.clearColor()
+        overlayView.addSubview(scrollView)
+        
+        for loanOfficer in loArray {
+            let nodeDict = loanOfficer as NSDictionary
+            buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count)
+            
+            scrollView.contentSize = CGSize(width: overlayView.bounds.size.width, height: CGFloat(loArray.count * 135))
+            yVal += 130
+            count++
+        }
+    }
+    
+    func buildLoanOfficerCard(nodeDict: Dictionary<String, String>, yVal: CGFloat, count: Int) -> UIView {
+        // UIView
+        let loView = UIView(frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 120))
+        loView.backgroundColor = UIColor.whiteColor()
+        scrollView.addSubview(loView)
+        
+        let nameLabel = UILabel (frame: CGRectMake(15, 10, loView.bounds.size.width - 30, 24))
+        nameLabel.textAlignment = NSTextAlignment.Left
+        nameLabel.text = nodeDict["name"]
+        nameLabel.numberOfLines = 1
+        nameLabel.font = UIFont(name: "forza-light", size: 24)
+        loView.addSubview(nameLabel)
+        
+        let emailLabel = UILabel (frame: CGRectMake(15, 35, loView.bounds.size.width - 30, 24))
+        emailLabel.textAlignment = NSTextAlignment.Left
+        emailLabel.text = nodeDict["email"]
+        emailLabel.numberOfLines = 1
+        emailLabel.font = UIFont(name: "forza-light", size: 18)
+        loView.addSubview(emailLabel)
+        
+        let officeLabel = UILabel (frame: CGRectMake(15, 60, loView.bounds.size.width - 30, 24))
+        officeLabel.textAlignment = NSTextAlignment.Left
+        officeLabel.text = nodeDict["office"]
+        officeLabel.numberOfLines = 1
+        officeLabel.font = UIFont(name: "forza-light", size: 18)
+        loView.addSubview(officeLabel)
+        
+        let mobileLabel = UILabel (frame: CGRectMake(15, 85, loView.bounds.size.width - 30, 24))
+        mobileLabel.textAlignment = NSTextAlignment.Left
+        mobileLabel.text = nodeDict["mobile"]
+        mobileLabel.numberOfLines = 1
+        mobileLabel.font = UIFont(name: "forza-light", size: 18)
+        loView.addSubview(mobileLabel)
+        
+        // UIButton
+        let selectButton = UIButton (frame: CGRectMake(0, 0, loView.bounds.size.width, loView.bounds.size.height))
+        selectButton.addTarget(self, action: "setLoanOfficer:", forControlEvents: .TouchUpInside)
+        selectButton.backgroundColor = UIColor.clearColor()
+        selectButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        selectButton.contentHorizontalAlignment = .Right
+        selectButton.tag = count
+        loView.addSubview(selectButton)
+        
+        return loView
+    }
+    
+    func setLoanOfficer(sender: UIButton) {
+        let dict = tempArray[sender.tag]
+        
+        let nid = dict["nid"]! as String
+        let name = dict["name"]! as String
+        let officerURL = dict["url"]! as String
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.removeObjectForKey("loanOfficerDict")
+        defaults.setObject(dict, forKey: "loanOfficerDict")
+        
+        print(dict)
+        
+        saveLoanOfficerToParse(nid, name: name, url: officerURL)
+    }
+    
+    // MARK:
+    // MARK: Parse
+    func saveLoanOfficerToParse(nid: String, name: String, url: String) {
+        
+        parseUser["officerNid"] = Int(nid)
+        parseUser["officerName"] = name
+        parseUser["officerURL"] = url
+        parseUser["optionOne"] = optionOne
+        parseUser["optionTwo"] = optionTwo
+        parseUser["optionThree"] = optionThree
+        
+        parseUser.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                print("succcess")
+                self.performSegueWithIdentifier("userLoggedIn", sender: self)
+            }
+            else {
+                print("error")
+            }
+        }
+    }
+    
+    func saveUserOptionToParse() {
+        parseUser["optionOne"] = optionOne
+        parseUser["optionTwo"] = optionTwo
+        parseUser["optionThree"] = optionThree
+        
+        parseUser.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                print("succcess")
+                self.performSegueWithIdentifier("userLoggedIn", sender: self)
+            }
+            else {
+                print("error")
+            }
+        }
+    }
+    
+    func workingWithALoanOfficer(sender: UIButton) {
+        switch sender.tag {
+        case 0:
+            saveUserOptionToParse()
+        case 1:
+            buildLoanOfficerSeachOverLay(loanOfficerArray)
+        default:
+            print("Default")
+        }
+    }
     /*
     // MARK: - Navigation
 

@@ -22,7 +22,7 @@ class CustomSignUpViewController: PFSignUpViewController, PFSignUpViewController
         logoView.frame = (frame: CGRectMake(100, 25, 159, 47.5))
         self.signUpView?.addSubview(logoView)
         
-        let bannerView = UIView(frame: CGRectMake(0, 75, 320, 50))
+        let bannerView = UIView(frame: CGRectMake(0, 75, model.deviceWidth(), 50))
         let bannerGradientLayer = CAGradientLayer()
         bannerGradientLayer.frame = bannerView.bounds
         bannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
@@ -42,7 +42,7 @@ class CustomSignUpViewController: PFSignUpViewController, PFSignUpViewController
         self.signUpView!.logo = nil;
         
         let attributes = [
-            NSForegroundColorAttributeName: UIColor.darkTextColor(),
+            NSForegroundColorAttributeName: UIColor.lightGrayColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
         ]
         self.signUpView!.usernameField!.attributedPlaceholder = NSAttributedString(string: "USER NAME", attributes:attributes)
@@ -56,22 +56,14 @@ class CustomSignUpViewController: PFSignUpViewController, PFSignUpViewController
         
         self.signUpView!.additionalField?.attributedPlaceholder = NSAttributedString(string: "NAME", attributes: attributes)
         self.signUpView!.additionalField?.font = UIFont(name: "forza-light", size: 18)
+        
+        self.signUpView!.signUpButton?.setTitle("SIGN UP", forState: .Normal)
+        self.signUpView!.signUpButton?.titleLabel?.font = UIFont(name: "forza-light", size: 22)
+        self.signUpView!.signUpButton?.backgroundColor = model.darkBlueColor
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
