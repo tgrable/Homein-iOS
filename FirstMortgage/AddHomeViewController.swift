@@ -173,6 +173,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homeNameTxtField.delegate = self
         homeNameTxtField.returnKeyType = .Done
         homeNameTxtField.keyboardType = UIKeyboardType.Default
+        homeNameTxtField.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(homeNameTxtField)
         
         // UITextField
@@ -182,6 +183,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homePriceTxtField.delegate = self
         homePriceTxtField.returnKeyType = .Done
         homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
+        homePriceTxtField.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(homePriceTxtField)
         
         let starImage = UIImage(named: "star_off_icon") as UIImage?
@@ -219,6 +221,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bedsTxtField.delegate = self
         bedsTxtField.returnKeyType = .Done
         bedsTxtField.keyboardType = UIKeyboardType.NumberPad
+        bedsTxtField.font = UIFont(name: "Arial", size: 12)
         scrollView.addSubview(bedsTxtField)
         
         let bedsLabel = UILabel(frame: CGRectMake(15, 370, (scrollView.bounds.size.width / 3) - 10, 30))
@@ -248,6 +251,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bathsTxtField.delegate = self
         bathsTxtField.returnKeyType = .Done
         bathsTxtField.keyboardType = UIKeyboardType.DecimalPad
+        bathsTxtField.font = UIFont(name: "Arial", size: 12)
         scrollView.addSubview(bathsTxtField)
         
         let bathsLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 370, (scrollView.bounds.size.width / 3) - 10, 30))
@@ -278,6 +282,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         sqFeetTxtField.delegate = self
         sqFeetTxtField.returnKeyType = .Done
         sqFeetTxtField.keyboardType = UIKeyboardType.NumberPad
+        sqFeetTxtField.font = UIFont(name: "Arial", size: 12)
         scrollView.addSubview(sqFeetTxtField)
         
         let sqFeetLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 370, (scrollView.bounds.size.width / 3) - 10, 30))
@@ -296,6 +301,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homeAddressTxtField.delegate = self
         homeAddressTxtField.returnKeyType = .Done
         homeAddressTxtField.keyboardType = UIKeyboardType.Default
+        homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(homeAddressTxtField)
         
         //Create textview
@@ -306,6 +312,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         descTxtView.textColor = UIColor.lightGrayColor()
         descTxtView.text = "Add notes about this house."
         descTxtView.delegate = self
+        descTxtView.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(descTxtView)
         
         // UIView

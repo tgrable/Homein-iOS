@@ -15,6 +15,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     // MARK: Properties
     let model = Model()
     let mortgageView = MortgageCalculatorView()
+    let modelName = UIDevice.currentDevice().modelName
     
     // UIView
     let myHomesView = UIView()
@@ -149,6 +150,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         buildHomeTray()
         buildSaveDeleteTray()
         
+        var fontSize = 25 as CGFloat
+        if modelName.rangeOfString("5") != nil{
+            fontSize = 18
+        }
+        
         let calcBannerView = UIView(frame: CGRectMake(0, 670, scrollView.bounds.size.width, 50))
         let calcBannerGradientLayer = CAGradientLayer()
         calcBannerGradientLayer.frame = calcBannerView.bounds
@@ -166,7 +172,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         // UILabel
         let calcBannerLabel = UILabel(frame: CGRectMake(50, 0, calcBannerView.bounds.size.width - 50, 50))
         calcBannerLabel.text = "MORTGAGE CALCULATOR"
-        calcBannerLabel.font = UIFont(name: "forza-light", size: 25)
+        calcBannerLabel.font = UIFont(name: "forza-light", size: fontSize)
         calcBannerLabel.textAlignment = NSTextAlignment.Left
         calcBannerLabel.textColor = UIColor.whiteColor()
         calcBannerView.addSubview(calcBannerLabel)
@@ -201,6 +207,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeNameTxtField.delegate = self
         homeNameTxtField.returnKeyType = .Done
         homeNameTxtField.keyboardType = UIKeyboardType.Default
+        homeNameTxtField.font = UIFont(name: "forza-light", size: 22)
         homeNameTxtField.enabled = false
         homeTray.addSubview(homeNameTxtField)
         
@@ -217,6 +224,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homePriceTxtField.delegate = self
         homePriceTxtField.returnKeyType = .Done
         homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
+        homePriceTxtField.font = UIFont(name: "forza-light", size: 22)
         homePriceTxtField.enabled = false
         homeTray.addSubview(homePriceTxtField)
         
@@ -290,6 +298,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bedsTxtField.delegate = self
         bedsTxtField.returnKeyType = .Done
         bedsTxtField.keyboardType = UIKeyboardType.NumberPad
+        bedsTxtField.font = UIFont(name: "Arial", size: 12)
         bedsTxtField.enabled = false
         homeTray.addSubview(bedsTxtField)
         
@@ -321,6 +330,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bathsTxtField.delegate = self
         bathsTxtField.returnKeyType = .Done
         bathsTxtField.keyboardType = UIKeyboardType.DecimalPad
+        bathsTxtField.font = UIFont(name: "Arial", size: 12)
         bathsTxtField.enabled = false
         homeTray.addSubview(bathsTxtField)
         
@@ -355,6 +365,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         sqFeetTxtField.delegate = self
         sqFeetTxtField.returnKeyType = .Done
         sqFeetTxtField.keyboardType = UIKeyboardType.NumberPad
+        sqFeetTxtField.font = UIFont(name: "Arial", size: 12)
         sqFeetTxtField.enabled = false
         homeTray.addSubview(sqFeetTxtField)
         
@@ -380,6 +391,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeAddressTxtField.delegate = self
         homeAddressTxtField.returnKeyType = .Done
         homeAddressTxtField.keyboardType = UIKeyboardType.Default
+        homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
         homeAddressTxtField.enabled = false
         homeTray.addSubview(homeAddressTxtField)
         
@@ -389,6 +401,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         descTxtView.text = homeObject["desc"] as? String
         descTxtView.autocorrectionType = .Yes
         descTxtView.editable = false
+        descTxtView.font = UIFont(name: "forza-light", size: 22)
         homeTray.addSubview(descTxtView)
         
         setDefaultImage()
@@ -601,6 +614,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.text = ""
     }
     
     func textFieldDidEndEditing(textField: UITextField) {

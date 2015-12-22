@@ -167,9 +167,19 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         shadowViewOne.image = shadowImgOne
         profileView.addSubview(shadowViewOne)
         
+        var name = "Enter Your Name"
+        if let un = user!["name"] {
+            name = un as! String
+        }
+        else {
+            if let ua = user!["additional"] {
+                name = ua as! String
+            }
+        }
+        
         // UITextField
         nameTxtField.frame = (frame: CGRectMake(15, 10, profileView.bounds.size.width - 30, 30))
-        nameTxtField.attributedPlaceholder = NSAttributedString(string: user!["additional"] as! String, attributes:attributes)
+        nameTxtField.attributedPlaceholder = NSAttributedString(string: name, attributes:attributes)
         nameTxtField.backgroundColor = UIColor.clearColor()
         nameTxtField.delegate = self
         nameTxtField.returnKeyType = .Done
@@ -437,14 +447,27 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     func updateUser(sender: UIButton) {
         user!["name"] = (nameTxtField.text != "") ? nameTxtField.text : user!["name"]
+        user!["additional"] = (nameTxtField.text != "") ? nameTxtField.text : user!["additional"]
         user!["email"] = (emailTxtField.text != "") ? emailTxtField.text : user!["email"]
         
         user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            var message = ""
             if (success) {
-                print("success")
+                message = "Your profile information was updated."
             }
             else {
-                print("failed")
+                message = String(format: "There was an error updating your profile information. %@", error!)
+            }
+            
+            let alertController = UIAlertController(title: "HomeIn", message: message, preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                // ...
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
             }
         }
     }
@@ -458,6 +481,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.text = ""
     }
     
     func textFieldDidEndEditing(textField: UITextField) {

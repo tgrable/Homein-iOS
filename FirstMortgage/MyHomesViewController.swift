@@ -13,8 +13,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
 
     // MARK:
     // MARK: Properties
-    
     let model = Model()
+    let modelName = UIDevice.currentDevice().modelName
 
     @IBOutlet weak var homeTableView: UITableView!
     let basicCellIdentifier = "BasicCell"
@@ -25,10 +25,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var imageView = UIImageView()
     
-    var sortLabel = UILabel() as UILabel
-    
     var isSmallerScreen = Bool()
     var isSortTrayOpen = Bool()
+    
+    let sortNameButton = UIButton ()
+    let sortPriceButton = UIButton ()
+    let sortRatingButton = UIButton ()
     
     let swipeRec = UISwipeGestureRecognizer()
     
@@ -75,16 +77,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
-        
-        
-        sortLabel.frame = (frame: CGRectMake(35, 0, whiteBar.bounds.size.width - 85, 50))
-        sortLabel.text = "SORTED BY NAME"
-        sortLabel.textAlignment = NSTextAlignment.Center
-        sortLabel.textColor = UIColor.darkTextColor()
-        sortLabel.font = UIFont(name: "forza-light", size: 24)
-        whiteBar.addSubview(sortLabel)
 
-        
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
@@ -176,7 +169,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortTrayView.addSubview(nameImageView)
         
         // UIButton
-        let sortNameButton = UIButton (frame: CGRectMake(50, 40, sortTrayView.bounds.size.width - 50, 40))
+        sortNameButton.frame = (frame: CGRectMake(50, 40, sortTrayView.bounds.size.width - 50, 40))
         sortNameButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortNameButton.setTitle("NAME", forState: .Normal)
         sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -193,7 +186,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortTrayView.addSubview(ratingImageView)
         
         // UIButton
-        let sortRatingButton = UIButton (frame: CGRectMake(50, 85, sortTrayView.bounds.size.width - 50, 40))
+        sortRatingButton.frame = (frame: CGRectMake(50, 85, sortTrayView.bounds.size.width - 50, 40))
         sortRatingButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortRatingButton.setTitle("RATING", forState: .Normal)
         sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -203,7 +196,6 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortRatingButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortRatingButton)
         
-        
         let priceImage = UIImage(named: "Money_icon-04") as UIImage?
         // UIImageView
         let priceImageView = UIImageView(frame: CGRectMake(15, 135, 30, 30))
@@ -211,7 +203,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortTrayView.addSubview(priceImageView)
         
         // UIButton
-        let sortPriceButton = UIButton (frame: CGRectMake(50, 130, sortTrayView.bounds.size.width, 40))
+        sortPriceButton.frame = (frame: CGRectMake(50, 130, sortTrayView.bounds.size.width, 40))
         sortPriceButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortPriceButton.setTitle("PRICE", forState: .Normal)
         sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -249,9 +241,29 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func setSortOrder(sender: UIButton) {
-        let sortorder = sender.titleLabel?.text
-        sortLabel.text = String(format: "SORTED BY %@", (sortorder?.uppercaseString)!)
-        getAllHomesForUser(sortorder!.lowercaseString)
+        let sortorder = (sender.titleLabel?.text)! as String
+        
+        switch sortorder {
+        case "NAME":
+            sortNameButton.setTitleColor(model.darkRedColor, forState: .Normal)
+            sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        case "PRICE":
+            sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            sortPriceButton.setTitleColor(model.darkRedColor, forState: .Normal)
+            sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        case "RATING":
+            sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            sortRatingButton.setTitleColor(model.darkRedColor, forState: .Normal)
+        default:
+            sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            
+        }
+        
+        getAllHomesForUser(sortorder.lowercaseString)
     }
     
     // MARK:
@@ -295,13 +307,19 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func basicCellAtIndexPath(indexPath:NSIndexPath) -> BasicCell {
         let cell = homeTableView.dequeueReusableCellWithIdentifier(basicCellIdentifier) as! BasicCell
         setBackgroungImageForCell(cell, indexPath: indexPath)
+        
         setTitleForCell(cell, indexPath: indexPath)
         setPriceForCell(cell, indexPath: indexPath)
         setAddressForCell(cell, indexPath: indexPath)
+        
         setBedsForCell(cell, indexPath: indexPath)
         setBathsForCell(cell, indexPath: indexPath)
+        
         return cell
     }
+    
+    
+    
     func setBackgroungImageForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
@@ -327,6 +345,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             cell.backgroundImage?.image = fillerImage
         }
     }
+    
     func setTitleForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
@@ -364,6 +383,29 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
         cell.addressLabel?.text = item["sqfeet"] as? String
+    }
+    
+    func setRatingImage(cell:BasicCell, indexPath:NSIndexPath) {
+        let row = indexPath.row
+        let item = self.userHomes[row] as PFObject
+        let rating = item["baths"] as! Int
+        switch rating {
+        case 0:
+            cell.ratingView.image = UIImage(named: "")
+        case 1:
+            cell.ratingView.image = UIImage(named: "")
+        case 2:
+            cell.ratingView.image = UIImage(named: "")
+        case 3:
+            cell.ratingView.image = UIImage(named: "")
+        case 4:
+            cell.ratingView.image = UIImage(named: "")
+        case 5:
+            cell.ratingView.image = UIImage(named: "")
+        default:
+            cell.ratingView.image = UIImage(named: "")
+            
+        }
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

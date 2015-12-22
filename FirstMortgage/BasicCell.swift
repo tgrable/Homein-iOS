@@ -16,6 +16,8 @@ class BasicCell: UITableViewCell {
     @IBOutlet weak var priceLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     
+    @IBOutlet weak var ratingView: UIImageView!
+    
     @IBOutlet weak var bedsLabel: UILabel!
     @IBOutlet weak var bathsLabel: UILabel!
     @IBOutlet weak var sqfeetLabel: UILabel!

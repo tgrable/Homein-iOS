@@ -16,6 +16,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     // MARK: Properties
     let model = Model()
     var parseUser = PFUser()
+    let modelName = UIDevice.currentDevice().modelName
     
     //UIView
     let overlayView = UIView() as UIView
@@ -97,7 +98,10 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     }
     
     func buildCreateAccountView() {
-        print("Create Account")
+        var fontSize = 18 as CGFloat
+        if modelName.rangeOfString("5") != nil{
+            fontSize = 12
+        }
         
         registerView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
         registerView.backgroundColor = UIColor.whiteColor()
@@ -123,56 +127,54 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
         let descLabel = UILabel (frame: CGRectMake(35, 115, registerView.bounds.size.width - 70, 40))
         descLabel.textAlignment = NSTextAlignment.Left
-        descLabel.font = UIFont(name: "Arial", size: 12)
+        descLabel.font = UIFont(name: "Arial", size: fontSize)
         descLabel.text = "Bacon ipsum dolor amet ribeye ball tip andouille, tail chuck t-bone turducken. Hamburger capicola prosciutto tenderloin."
         descLabel.numberOfLines = 0
         descLabel.sizeToFit()
         registerView.addSubview(descLabel)
         
         let checkMarkImage = UIImage(named: "blue_check") as UIImage?
-        let optionOneButton = UIButton (frame: CGRectMake(70, descLabel.bounds.size.height + 150, 25, 25))
+        
+        let optionOneButton = UIButton (frame: CGRectMake(35, descLabel.bounds.size.height + 150, 25, 25))
         optionOneButton.setBackgroundImage(checkMarkImage, forState: .Normal)
         optionOneButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
         optionOneButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         optionOneButton.tag = 1
         registerView.addSubview(optionOneButton)
         
-        let optionOneLabel = UILabel (frame: CGRectMake(105, descLabel.bounds.size.height + 155, registerView.bounds.size.width - 210, 40))
+        let optionOneLabel = UILabel (frame: CGRectMake(70, descLabel.bounds.size.height + 150, registerView.bounds.size.width - 125, 25))
         optionOneLabel.textAlignment = NSTextAlignment.Left
-        optionOneLabel.font = UIFont(name: "Arial", size: 12)
+        optionOneLabel.font = UIFont(name: "Arial", size: fontSize)
         optionOneLabel.text = "Sausage drumstick salami"
-        optionOneLabel.numberOfLines = 0
-        optionOneLabel.sizeToFit()
+        optionOneLabel.numberOfLines = 1
         registerView.addSubview(optionOneLabel)
 
-        let optionTwoButton = UIButton (frame: CGRectMake(70, descLabel.bounds.size.height + 190, 25, 25))
+        let optionTwoButton = UIButton (frame: CGRectMake(35, descLabel.bounds.size.height + 190, 25, 25))
         optionTwoButton.setBackgroundImage(checkMarkImage, forState: .Normal)
         optionTwoButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
         optionTwoButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         optionTwoButton.tag = 2
         registerView.addSubview(optionTwoButton)
         
-        let optionTwoLabel = UILabel (frame: CGRectMake(105, descLabel.bounds.size.height + 195, registerView.bounds.size.width - 210, 40))
+        let optionTwoLabel = UILabel (frame: CGRectMake(70, descLabel.bounds.size.height + 195, registerView.bounds.size.width - 125, 25))
         optionTwoLabel.textAlignment = NSTextAlignment.Left
-        optionTwoLabel.font = UIFont(name: "Arial", size: 12)
+        optionTwoLabel.font = UIFont(name: "Arial", size: fontSize)
         optionTwoLabel.text = "t-bone porchetta fatback jowl"
-        optionTwoLabel.numberOfLines = 0
-        optionTwoLabel.sizeToFit()
+        optionTwoLabel.numberOfLines = 1
         registerView.addSubview(optionTwoLabel)
         
-        let optionThreeButton = UIButton (frame: CGRectMake(70, descLabel.bounds.size.height + 230, 25, 25))
+        let optionThreeButton = UIButton (frame: CGRectMake(35, descLabel.bounds.size.height + 230, 25, 25))
         optionThreeButton.setBackgroundImage(checkMarkImage, forState: .Normal)
         optionThreeButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
         optionThreeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         optionThreeButton.tag = 3
         registerView.addSubview(optionThreeButton)
         
-        let optionThreeLabel = UILabel (frame: CGRectMake(105, descLabel.bounds.size.height + 235, registerView.bounds.size.width - 210, 40))
+        let optionThreeLabel = UILabel (frame: CGRectMake(70, descLabel.bounds.size.height + 235, registerView.bounds.size.width - 125, 25))
         optionThreeLabel.textAlignment = NSTextAlignment.Left
-        optionThreeLabel.font = UIFont(name: "Arial", size: 12)
+        optionThreeLabel.font = UIFont(name: "Arial", size: fontSize)
         optionThreeLabel.text = "Prosciutto andouille biltong"
-        optionThreeLabel.numberOfLines = 0
-        optionThreeLabel.sizeToFit()
+        optionThreeLabel.numberOfLines = 1
         registerView.addSubview(optionThreeLabel)
         
         let getStartedView = UIView(frame: CGRectMake(35, descLabel.bounds.size.height + 290, registerView.bounds.size.width - 70, 40))
@@ -259,6 +261,8 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
             
         }
         
+        //print(sender.tag)
+        /*
         if (sender.tag == 0) {
             sender.tag = 1
             sender.setBackgroundImage(checkMarkUncheckedImage, forState: .Normal)
@@ -266,7 +270,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         else {
             sender.tag = 0
             sender.setBackgroundImage(checkMarkCheckedImage, forState: .Normal)
-        }
+        }*/
     }
 
     func continueWithoutLogin(sender: UIButton) {
@@ -527,6 +531,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
             print("Default")
         }
     }
+    
     /*
     // MARK: - Navigation
 

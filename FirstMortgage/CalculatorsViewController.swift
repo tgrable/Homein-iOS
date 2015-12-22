@@ -267,6 +267,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         loanAmountTxtField.delegate = self
         loanAmountTxtField.returnKeyType = .Done
         loanAmountTxtField.keyboardType = UIKeyboardType.NumberPad
+        loanAmountTxtField.font = UIFont(name: "forza-light", size: 22)
         refiCalcView.addSubview(loanAmountTxtField)
         
         /********************************************************* Current Mortgage Term ********************************************************************/
@@ -300,6 +301,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         mortgageTextField.delegate = self
         mortgageTextField.returnKeyType = .Done
         mortgageTextField.keyboardType = UIKeyboardType.NumberPad
+        mortgageTextField.font = UIFont(name: "forza-light", size: 22)
         refiCalcView.addSubview(mortgageTextField)
         
         /********************************************************* Current Interest Rate ********************************************************************/
@@ -333,6 +335,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         interestTextField.delegate = self
         interestTextField.returnKeyType = .Done
         interestTextField.keyboardType = UIKeyboardType.DecimalPad
+        interestTextField.font = UIFont(name: "forza-light", size: 22)
         refiCalcView.addSubview(interestTextField)
 
         
@@ -367,6 +370,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         currentYearTxtField.delegate = self
         currentYearTxtField.returnKeyType = .Done
         currentYearTxtField.keyboardType = UIKeyboardType.NumberPad
+        currentYearTxtField.font = UIFont(name: "forza-light", size: 22)
         refiCalcView.addSubview(currentYearTxtField)
 
         /********************************************************* Refinance Fees ********************************************************************/
@@ -400,6 +404,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         taxesTxtField.delegate = self
         taxesTxtField.returnKeyType = .Done
         taxesTxtField.keyboardType = UIKeyboardType.DecimalPad
+        taxesTxtField.font = UIFont(name: "forza-light", size: 22)
         refiCalcView.addSubview(taxesTxtField)
 
         let refiDividerView = UIView(frame: CGRectMake(10, 275, calcWindowView.bounds.size.width - 20, 2))
@@ -438,6 +443,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         newMortgageTextField.delegate = self
         newMortgageTextField.returnKeyType = .Done
         newMortgageTextField.keyboardType = UIKeyboardType.NumberPad
+        newMortgageTextField.font = UIFont(name: "forza-light", size: 22)
         refiCalcView.addSubview(newMortgageTextField)
         
         /********************************************************* Current Interest Rate ********************************************************************/
@@ -471,6 +477,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         newInterestTextField.delegate = self
         newInterestTextField.returnKeyType = .Done
         newInterestTextField.keyboardType = UIKeyboardType.DecimalPad
+        newInterestTextField.font = UIFont(name: "forza-light", size: 22)
         refiCalcView.addSubview(newInterestTextField)
         
         // UIView
@@ -562,6 +569,10 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.text = ""
+    }
+    
     func textFieldDidEndEditing(textField: UITextField) {
         
     }
@@ -634,7 +645,15 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         var year = 2010.0
         if currentYearTxtField.text?.isEmpty != true {
             year = Double(currentYearTxtField.text!)!
+            if year > 00 && year < 50 {
+                year = year + 2000
+            }
+            else {
+                year = year + 1900
+            }
         }
+        
+        print(year)
         
         var taxes = 3.75
         if taxesTxtField.text?.isEmpty != true {

@@ -68,6 +68,7 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         loanAmountTxtField.delegate = self
         loanAmountTxtField.returnKeyType = .Done
         loanAmountTxtField.keyboardType = UIKeyboardType.NumberPad
+        loanAmountTxtField.font = UIFont(name: "forza-light", size: 22)
         mortgageCalcView.addSubview(loanAmountTxtField)
         
         /********************************************************* Mortgage Term ********************************************************************/
@@ -92,6 +93,7 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         mortgageTxtField.delegate = self
         mortgageTxtField.returnKeyType = .Done
         mortgageTxtField.keyboardType = UIKeyboardType.NumberPad
+        mortgageTxtField.font = UIFont(name: "forza-light", size: 22)
         mortgageCalcView.addSubview(mortgageTxtField)
         
         /********************************************************* Interest Rate ********************************************************************/
@@ -116,6 +118,7 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         interestTxtField.delegate = self
         interestTxtField.returnKeyType = .Done
         interestTxtField.keyboardType = UIKeyboardType.DecimalPad
+        interestTxtField.font = UIFont(name: "forza-light", size: 22)
         mortgageCalcView.addSubview(interestTxtField)
         
         /********************************************************* Down Payment ********************************************************************/
@@ -140,6 +143,7 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         downPaymentTxtField.delegate = self
         downPaymentTxtField.returnKeyType = .Done
         downPaymentTxtField.keyboardType = UIKeyboardType.NumberPad
+        downPaymentTxtField.font = UIFont(name: "forza-light", size: 22)
         mortgageCalcView.addSubview(downPaymentTxtField)
         
         /********************************************************* Property Taxes ********************************************************************/
@@ -164,6 +168,7 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         taxesTxtField.delegate = self
         taxesTxtField.returnKeyType = .Done
         taxesTxtField.keyboardType = UIKeyboardType.DecimalPad
+        taxesTxtField.font = UIFont(name: "forza-light", size: 22)
         mortgageCalcView.addSubview(taxesTxtField)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
@@ -175,6 +180,10 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+    
+    func textFieldDidBeginEditing(textField: UITextField) {
+        textField.text = ""
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
