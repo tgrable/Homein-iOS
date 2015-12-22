@@ -52,6 +52,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     var imageView = UIImageView()
     let defaultImageView = UIImageView()
+    let expandIcon = UIImageView()
     
     var isSmallerScreen = Bool()
     var isTextFieldEnabled = Bool()
@@ -62,6 +63,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     let estPaymentLabel = UILabel()
     
+    let saveView = UIView()
+    let saveButton = UIButton ()
     let editButton = UIButton ()
     let editIcon = UIImageView()
     
@@ -176,6 +179,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calcBannerLabel.textAlignment = NSTextAlignment.Left
         calcBannerLabel.textColor = UIColor.whiteColor()
         calcBannerView.addSubview(calcBannerLabel)
+        
+        let expandIcn = UIImage(named: "expand_white") as UIImage?
+        expandIcon.frame = (frame: CGRectMake(calcBannerView.bounds.size.width - 50, 0, 50, 50))
+        expandIcon.image = expandIcn
+        calcBannerView.addSubview(expandIcon)
         
         let calcBannerButton = UIButton(frame: CGRectMake(0, 0, calcBannerView.bounds.size.width, calcBannerView.bounds.size.height))
         calcBannerButton.addTarget(self, action: "showHideCalcTray:", forControlEvents: .TouchUpInside)
@@ -471,36 +479,16 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         scrollView.addSubview(saveDeleteTray)
         
         // UIView
-        let saveView = UIView(frame: CGRectMake(25, 5, calcTray.bounds.size.width - 50, 50))
-        let saveGradientLayer = CAGradientLayer()
-        saveGradientLayer.frame = saveView.bounds
-        saveGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
-        saveView.layer.insertSublayer(saveGradientLayer, atIndex: 0)
-        saveView.layer.addSublayer(saveGradientLayer)
-        saveDeleteTray.addSubview(saveView)
-        
-        // UIButton
-        let saveButton = UIButton (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
-        saveButton.addTarget(self, action: "updateHomeObject:", forControlEvents: .TouchUpInside)
-        saveButton.setTitle("SAVE HOME", forState: .Normal)
-        saveButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        saveButton.backgroundColor = UIColor.clearColor()
-        saveButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-        saveButton.contentHorizontalAlignment = .Center
-        saveButton.tag = 0
-        saveView.addSubview(saveButton)
-        
-        // UIView
-        let deleteView = UIView(frame: CGRectMake(25, 65, calcTray.bounds.size.width - 50, 50))
+        let deleteView = UIView(frame: CGRectMake(25, 5, calcTray.bounds.size.width - 50, 50))
         let deleteGradientLayer = CAGradientLayer()
-        deleteGradientLayer.frame = saveView.bounds
+        deleteGradientLayer.frame = deleteView.bounds
         deleteGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
         deleteView.layer.insertSublayer(deleteGradientLayer, atIndex: 0)
         deleteView.layer.addSublayer(deleteGradientLayer)
         saveDeleteTray.addSubview(deleteView)
         
         // UIButton
-        let deleteButton = UIButton (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
+        let deleteButton = UIButton (frame: CGRectMake(0, 0, deleteView.bounds.size.width, deleteView.bounds.size.height))
         deleteButton.addTarget(self, action: "deleteHome:", forControlEvents: .TouchUpInside)
         deleteButton.setTitle("DELETE HOME", forState: .Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -509,12 +497,35 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         deleteButton.contentHorizontalAlignment = .Center
         deleteButton.tag = 0
         deleteView.addSubview(deleteButton)
-
+        
+        // UIView
+        saveView.frame = (frame: CGRectMake(25, 65, calcTray.bounds.size.width - 50, 50))
+        let saveGradientLayer = CAGradientLayer()
+        saveGradientLayer.frame = saveView.bounds
+        saveGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
+        saveView.layer.insertSublayer(saveGradientLayer, atIndex: 0)
+        saveView.layer.addSublayer(saveGradientLayer)
+        saveView.hidden = true
+        saveDeleteTray.addSubview(saveView)
+        
+        // UIButton
+        saveButton.frame = (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
+        saveButton.addTarget(self, action: "updateHomeObject:", forControlEvents: .TouchUpInside)
+        saveButton.setTitle("SAVE HOME", forState: .Normal)
+        saveButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        saveButton.backgroundColor = UIColor.clearColor()
+        saveButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        saveButton.contentHorizontalAlignment = .Center
+        saveButton.tag = 0
+        saveButton.hidden = true
+        saveButton.enabled = false
+        saveView.addSubview(saveButton)
     }
 
     func showHideCalcTray(sender: UIButton) {
         if (!isCalcTrayOpen) {
             UIView.animateWithDuration(0.8, animations: {
+                self.expandIcon.image = UIImage(named: "expand_white_up")
                 self.calcTray.frame = (frame: CGRectMake(0, 730, self.scrollView.bounds.size.width, 450))
                 self.saveDeleteTray.frame = (frame: CGRectMake(0, 1180, self.scrollView.bounds.size.width, 450))
                 }, completion: {
@@ -525,6 +536,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
         else {
             UIView.animateWithDuration(0.8, animations: {
+                self.expandIcon.image = UIImage(named: "expand_white")
                 self.calcTray.frame = (frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 450))
                 self.saveDeleteTray.frame = (frame: CGRectMake(0, 720, self.scrollView.bounds.size.width, 450))
                 }, completion: {
@@ -656,6 +668,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     }
     
     func allowEdit(sender: UIButton) {
+        saveView.hidden = false
+        saveButton.hidden = false
+        saveButton.enabled = true
+        
         if (!isTextFieldEnabled) {
             homeNameTxtField.enabled = true
             homePriceTxtField.enabled = true

@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import Parse
 import ParseUI
 
-class MyCustonViewController: PFLogInViewController {
+class MyCustonViewController: PFLogInViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate {
 
     let model = Model()
     
@@ -42,6 +43,14 @@ class MyCustonViewController: PFLogInViewController {
         createAccountLabel.numberOfLines = 1
         bannerView.addSubview(createAccountLabel)
         
+        let getStartedButton = UIButton (frame: CGRectMake(0, 425, 320, 50))
+        getStartedButton.setTitle("CREATE AN ACCOUNT", forState: .Normal)
+        getStartedButton.addTarget(self, action: "showCreateAccount:", forControlEvents: .TouchUpInside)
+        getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        getStartedButton.backgroundColor = model.darkBlueColor
+        getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        self.logInView?.addSubview(getStartedButton)
+        
         let attributes = [
             NSForegroundColorAttributeName: UIColor.lightGrayColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
@@ -59,6 +68,27 @@ class MyCustonViewController: PFLogInViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func showCreateAccount(sender: UIButton) {
+        
+        let signUpController = CustomSignUpViewController()
+        signUpController.delegate = self
+        signUpController.fields = [.UsernameAndPassword, .Email, .Additional, .SignUpButton, .DismissButton]
+        self.presentViewController(signUpController, animated:true, completion: nil)
+    }
+    
+    func signUpViewController(signUpController: PFSignUpViewController, shouldBeginSignUp info: [NSObject : AnyObject]) -> Bool {
+        return true
+    }
+    
+    func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) -> Void {
+        //parseUser = user
+        //buildOverlay()
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) -> Void {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation

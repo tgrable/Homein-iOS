@@ -84,7 +84,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         profileView.addSubview(addHomeBannerView)
         
         //UIImageView
-        let homeIcn = UIImage(named: "account_icon") as UIImage?
+        let homeIcn = UIImage(named: "profile_white") as UIImage?
         let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 125), 12.5, 25, 25))
         homeIcon.image = homeIcn
         addHomeBannerView.addSubview(homeIcon)

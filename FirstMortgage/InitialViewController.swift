@@ -26,14 +26,7 @@ class InitialViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         //PFUser.logOut()
         if (PFUser.currentUser() != nil) {
-            let user = PFUser.currentUser()! as PFUser
-            if let _ = user["officerNid"] {
-                performSegueWithIdentifier("homeViewController", sender: self)
-            }
-            else {
-                performSegueWithIdentifier("profileViewController", sender: self)
-            }
-            
+            performSegueWithIdentifier("homeViewController", sender: self)
         }
         else {
             performSegueWithIdentifier("createAccountViewController", sender: self)
@@ -41,10 +34,6 @@ class InitialViewController: UIViewController {
     }
     
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(true)
-
-        
-        
-        
+        super.viewDidAppear(true) 
     }
 }

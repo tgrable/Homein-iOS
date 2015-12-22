@@ -315,6 +315,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         setBedsForCell(cell, indexPath: indexPath)
         setBathsForCell(cell, indexPath: indexPath)
         
+        setRatingImage(cell, indexPath: indexPath)
+        
         return cell
     }
     
@@ -341,7 +343,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             }
         }
         else {
-            let fillerImage = UIImage(named: "homebackground") as UIImage?
+            let fillerImage = UIImage(named: "default_home") as UIImage?
             cell.backgroundImage?.image = fillerImage
         }
     }
@@ -388,23 +390,30 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func setRatingImage(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
-        let rating = item["baths"] as! Int
+        let rating = item["rating"] as! Int
+        
         switch rating {
         case 0:
-            cell.ratingView.image = UIImage(named: "")
+            print("case 0:")
+            cell.ratingView?.image = UIImage(named: "star-0")
         case 1:
-            cell.ratingView.image = UIImage(named: "")
+            print("case 1:")
+            cell.ratingView?.image = UIImage(named: "star-1")
         case 2:
-            cell.ratingView.image = UIImage(named: "")
+            print("case 2:")
+            cell.ratingView?.image = UIImage(named: "star-2")
         case 3:
-            cell.ratingView.image = UIImage(named: "")
+            print("case 3:")
+            cell.ratingView?.image = UIImage(named: "star-3")
         case 4:
-            cell.ratingView.image = UIImage(named: "")
+            print("case 4:")
+            cell.ratingView?.image = UIImage(named: "star-4")
         case 5:
-            cell.ratingView.image = UIImage(named: "")
+            print("case 5:")
+            cell.ratingView?.image = UIImage(named: "star-5")
         default:
-            cell.ratingView.image = UIImage(named: "")
-            
+            print("default:")
+            cell.ratingView?.image = UIImage(named: "star-0")
         }
     }
     
