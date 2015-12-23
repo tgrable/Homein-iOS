@@ -183,7 +183,7 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
-        textField.text = ""
+        textField.text = ""        
     }
     
     func textFieldDidEndEditing(textField: UITextField) {

@@ -35,6 +35,7 @@
 		4F8F93031C061E0B00639F55 /* icn-firstTime@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F93011C061E0B00639F55 /* icn-firstTime@2x.png */; };
 		4F8F93061C06238E00639F55 /* icn-applyOnline.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F93041C06238E00639F55 /* icn-applyOnline.png */; };
 		4F8F93071C06238E00639F55 /* icn-applyOnline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F93051C06238E00639F55 /* icn-applyOnline@2x.png */; };
+		4F9970FB1C2B0E22005173B8 /* hide_keyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F9970FA1C2B0E22005173B8 /* hide_keyboard.png */; };
 		4FADCA631C0E2798000186A8 /* edit_icon_onstate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA611C0E2798000186A8 /* edit_icon_onstate.png */; };
 		4FADCA641C0E2798000186A8 /* edit_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA621C0E2798000186A8 /* edit_icon.png */; };
 		4FADCA661C0E27A0000186A8 /* edit-128_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA651C0E27A0000186A8 /* edit-128_blue.png */; };
@@ -151,6 +152,7 @@
 		4F8F93011C061E0B00639F55 /* icn-firstTime@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-firstTime@2x.png"; path = "images/icn-firstTime@2x.png"; sourceTree = "<group>"; };
 		4F8F93041C06238E00639F55 /* icn-applyOnline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-applyOnline.png"; path = "images/icn-applyOnline.png"; sourceTree = "<group>"; };
 		4F8F93051C06238E00639F55 /* icn-applyOnline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-applyOnline@2x.png"; path = "images/icn-applyOnline@2x.png"; sourceTree = "<group>"; };
+		4F9970FA1C2B0E22005173B8 /* hide_keyboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = hide_keyboard.png; path = images/hide_keyboard.png; sourceTree = "<group>"; };
 		4FADCA551C0DEC26000186A8 /* FORZA-BLACK.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BLACK.OTF"; path = "fonts/FORZA-BLACK.OTF"; sourceTree = "<group>"; };
 		4FADCA561C0DEC26000186A8 /* FORZA-BLACKITALIC.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BLACKITALIC.OTF"; path = "fonts/FORZA-BLACKITALIC.OTF"; sourceTree = "<group>"; };
 		4FADCA571C0DEC26000186A8 /* FORZA-BOLD.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BOLD.OTF"; path = "fonts/FORZA-BOLD.OTF"; sourceTree = "<group>"; };
@@ -386,6 +388,7 @@
 		4FAF3D2C1BE119E200A89A9A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4F9970FA1C2B0E22005173B8 /* hide_keyboard.png */,
 				4FD37AB51C29A49C008A1F3C /* expand_white_up@3x.png */,
 				4FD37AB61C29A49C008A1F3C /* expand_white_up@2x.png */,
 				4FD37AB71C29A49C008A1F3C /* expand_white_up.png */,
@@ -593,6 +596,7 @@
 				4F7A4CC01C19ED93009F3684 /* long_shadow.png in Resources */,
 				4FD37AB01C299C50008A1F3C /* star-3.png in Resources */,
 				4FD37AB41C299C50008A1F3C /* star-4.png in Resources */,
+				4F9970FB1C2B0E22005173B8 /* hide_keyboard.png in Resources */,
 				4FD37AA31C299778008A1F3C /* profile_white.png in Resources */,
 				4F7A4CC11C19ED93009F3684 /* backbutton_icon.png in Resources */,
 				4FAF3D301BE11BEC00A89A9A /* white_check.png in Resources */,

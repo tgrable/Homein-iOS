@@ -21,6 +21,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     let myHomesView = UIView()
     let sortTrayView = UIView()
+    let dismissView = UIView()
     let sortTrayGradientLayer = CAGradientLayer()
     
     var imageView = UIImageView()
@@ -138,6 +139,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func showSortTray() {
+        dismissView.frame = (frame: CGRectMake(0, 185, self.view.bounds.size.width, self.view.bounds.height))
+        dismissView.backgroundColor = model.lightGrayColor
+        dismissView.alpha = 0.0
+        dismissView.hidden = true
+        self.view.addSubview(dismissView)
+        
         sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 175))
         sortTrayGradientLayer.frame = sortTrayView.bounds
         sortTrayGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
@@ -217,13 +224,18 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         swipeRec.addTarget(self, action: "showHideSortTray")
         sortTrayView.addGestureRecognizer(swipeRec)
         sortTrayView.userInteractionEnabled = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: "showHideSortTray")
+        dismissView.addGestureRecognizer(tapGesture)
     }
 
     func showHideSortTray() {
         if (!isSortTrayOpen) {
             UIView.animateWithDuration(0.4, animations: {
+                self.dismissView.hidden = false
                 self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height - 175, self.view.bounds.size.width, 175))
                 self.sortTrayGradientLayer.frame = self.sortTrayGradientLayer.bounds
+                self.dismissView.alpha = 0.25
                 }, completion: {
                     (value: Bool) in
                     self.isSortTrayOpen = true
@@ -233,9 +245,11 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             UIView.animateWithDuration(0.4, animations: {
                 self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 175))
                 self.sortTrayGradientLayer.frame = self.sortTrayGradientLayer.bounds
+                self.dismissView.alpha = 0.0
                 }, completion: {
                     (value: Bool) in
                     self.isSortTrayOpen = false
+                    self.dismissView.hidden = true
             })
         }
     }

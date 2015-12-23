@@ -27,6 +27,13 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     var imageView = UIImageView() as UIImageView
     
     // UITextField
+    let mortLoanAmountTxtField = UITextField() as UITextField
+    let mortMortgageTxtField = UITextField() as UITextField
+    let mortInterestTxtField = UITextField() as UITextField
+    let mortDownPaymentTxtField = UITextField() as UITextField
+    let mortTaxesTxtField = UITextField() as UITextField
+    
+    // UITextField
     let loanAmountTxtField = UITextField() as UITextField
     let mortgageTextField = UITextField() as UITextField
     let interestTextField = UITextField() as UITextField
@@ -45,6 +52,8 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     var estimatedPaymentDefault = 1865.78
     var estimatedOriginalPaymentDefault = 2047.96
     var refiPaymentDefault = 1735.52
+    
+    let hideKeyboardButton = UIButton()
     
     // MARK:
     // MARK: View Life Cycle
@@ -93,6 +102,16 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
+        
+        // UIButton
+        hideKeyboardButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 40, 40))
+        hideKeyboardButton.addTarget(self, action: "tapGesture", forControlEvents: .TouchUpInside)
+        hideKeyboardButton.setImage(UIImage(named: "hide_keyboard"), forState: .Normal)
+        hideKeyboardButton.backgroundColor = UIColor.clearColor()
+        hideKeyboardButton.tag = 0
+        hideKeyboardButton.enabled = false
+        hideKeyboardButton.alpha = 0
+        whiteBar.addSubview(hideKeyboardButton)
         
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
@@ -150,7 +169,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         calcWindowView.frame = (frame: CGRectMake(10, 0, calcView.bounds.size.width - 20, 300))
 
         let mortView = UIView(frame: CGRectMake(0, 0, calcWindowView.bounds.size.width, 300))
-        mortView.backgroundColor = model.lightGrayColor
+        mortView.backgroundColor = UIColor.whiteColor()
         calcWindowView.addSubview(mortView)
         
         let shadowImg = UIImage(named: "long_shadow") as UIImage?
@@ -158,8 +177,132 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         let shadowView = UIImageView(frame: CGRectMake(0, 300, mortView.bounds.size.width, 15))
         shadowView.image = shadowImg
         mortView.addSubview(shadowView)
+
+        /********************************************************* Loan Amount ********************************************************************/
+        // UILabel
+        let loanAmountLabel = UILabel(frame: CGRectMake(10, 25, (mortView.bounds.size.width / 2) - 20, 40))
+        loanAmountLabel.text = "SALE PRICE = "
+        loanAmountLabel.font = UIFont(name: "forza-light", size: 14)
+        loanAmountLabel.textAlignment = NSTextAlignment.Right
+        loanAmountLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(loanAmountLabel)
         
-        mortgageView.buildMortgageCalcView(mortView)
+        // UITextField
+        let loanAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        mortLoanAmountTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 25,(mortView.bounds.size.width / 2) - 20, 40));
+        mortLoanAmountTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        mortLoanAmountTxtField.layer.borderWidth = 1.0
+        mortLoanAmountTxtField.layer.cornerRadius = 2.0
+        mortLoanAmountTxtField.leftView = loanAmountPaddingView
+        mortLoanAmountTxtField.leftViewMode = UITextFieldViewMode.Always
+        mortLoanAmountTxtField.placeholder = "$250,000"
+        mortLoanAmountTxtField.backgroundColor = UIColor.clearColor()
+        mortLoanAmountTxtField.delegate = self
+        mortLoanAmountTxtField.returnKeyType = .Done
+        mortLoanAmountTxtField.keyboardType = UIKeyboardType.NumberPad
+        mortLoanAmountTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(mortLoanAmountTxtField)
+        
+        /********************************************************* Mortgage Term ********************************************************************/
+         // UILabel
+        let mTermLabel = UILabel(frame: CGRectMake(10, 75, (mortView.bounds.size.width / 2) - 20, 40))
+        mTermLabel.text = "MORTGAGE TERM = "
+        mTermLabel.font = UIFont(name: "forza-light", size: 14)
+        mTermLabel.textAlignment = NSTextAlignment.Right
+        mTermLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(mTermLabel)
+        
+        // UITextField
+        let mTermAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        mortMortgageTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 75,(mortView.bounds.size.width / 2) - 20, 40));
+        mortMortgageTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        mortMortgageTxtField.layer.borderWidth = 1.0
+        mortMortgageTxtField.layer.cornerRadius = 2.0
+        mortMortgageTxtField.leftView = mTermAmountPaddingView
+        mortMortgageTxtField.leftViewMode = UITextFieldViewMode.Always
+        mortMortgageTxtField.placeholder = "30 YEARS"
+        mortMortgageTxtField.backgroundColor = UIColor.clearColor()
+        mortMortgageTxtField.delegate = self
+        mortMortgageTxtField.returnKeyType = .Done
+        mortMortgageTxtField.keyboardType = UIKeyboardType.NumberPad
+        mortMortgageTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(mortMortgageTxtField)
+        
+        /********************************************************* Interest Rate ********************************************************************/
+         // UILabel
+        let interestRateLabel = UILabel(frame: CGRectMake(10, 125, (mortView.bounds.size.width / 2) - 20, 40))
+        interestRateLabel.text = "INTEREST RATE = "
+        interestRateLabel.font = UIFont(name: "forza-light", size: 14)
+        interestRateLabel.textAlignment = NSTextAlignment.Right
+        interestRateLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(interestRateLabel)
+        
+        // UITextField
+        let interestAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        mortInterestTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 125,(mortView.bounds.size.width / 2) - 20, 40));
+        mortInterestTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        mortInterestTxtField.layer.borderWidth = 1.0
+        mortInterestTxtField.layer.cornerRadius = 2.0
+        mortInterestTxtField.leftView = interestAmountPaddingView
+        mortInterestTxtField.leftViewMode = UITextFieldViewMode.Always
+        mortInterestTxtField.placeholder = "3.5%"
+        mortInterestTxtField.backgroundColor = UIColor.clearColor()
+        mortInterestTxtField.delegate = self
+        mortInterestTxtField.returnKeyType = .Done
+        mortInterestTxtField.keyboardType = UIKeyboardType.DecimalPad
+        mortInterestTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(mortInterestTxtField)
+        
+        /********************************************************* Down Payment ********************************************************************/
+         // UILabel
+        let downPaymentLabel = UILabel(frame: CGRectMake(10, 175, (mortView.bounds.size.width / 2) - 20, 40))
+        downPaymentLabel.text = "DOWNPAYMENT = "
+        downPaymentLabel.font = UIFont(name: "forza-light", size: 14)
+        downPaymentLabel.textAlignment = NSTextAlignment.Right
+        downPaymentLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(downPaymentLabel)
+        
+        // UITextField
+        let downPaymentPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        mortDownPaymentTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 175,(mortView.bounds.size.width / 2) - 20, 40));
+        mortDownPaymentTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        mortDownPaymentTxtField.layer.borderWidth = 1.0
+        mortDownPaymentTxtField.layer.cornerRadius = 2.0
+        mortDownPaymentTxtField.leftView = downPaymentPaddingView
+        mortDownPaymentTxtField.leftViewMode = UITextFieldViewMode.Always
+        mortDownPaymentTxtField.placeholder = "$5,000"
+        mortDownPaymentTxtField.backgroundColor = UIColor.clearColor()
+        mortDownPaymentTxtField.delegate = self
+        mortDownPaymentTxtField.returnKeyType = .Done
+        mortDownPaymentTxtField.keyboardType = UIKeyboardType.NumberPad
+        mortDownPaymentTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(mortDownPaymentTxtField)
+        
+        /********************************************************* Property Taxes ********************************************************************/
+         // UILabel
+        let taxesLabel = UILabel(frame: CGRectMake(10, 225, (mortView.bounds.size.width / 2) - 20, 40))
+        taxesLabel.text = "PROPERTY TAXES = "
+        taxesLabel.font = UIFont(name: "forza-light", size: 14)
+        taxesLabel.textAlignment = NSTextAlignment.Right
+        taxesLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(taxesLabel)
+        
+        // UITextField
+        let taxesPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        mortTaxesTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 225,(mortView.bounds.size.width / 2) - 20, 40));
+        mortTaxesTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        mortTaxesTxtField.layer.borderWidth = 1.0
+        mortTaxesTxtField.layer.cornerRadius = 2.0
+        mortTaxesTxtField.placeholder = "3.750%"
+        mortTaxesTxtField.leftView = taxesPaddingView
+        mortTaxesTxtField.leftViewMode = UITextFieldViewMode.Always
+        mortTaxesTxtField.backgroundColor = UIColor.clearColor()
+        mortTaxesTxtField.delegate = self
+        mortTaxesTxtField.returnKeyType = .Done
+        mortTaxesTxtField.keyboardType = UIKeyboardType.DecimalPad
+        mortTaxesTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(mortTaxesTxtField)
+        
         
         // UIView
         let calculateView = UIView(frame: CGRectMake(25, 325, scrollView.bounds.size.width - 50, 50))
@@ -213,6 +356,9 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         paymentLabel.textColor = UIColor.whiteColor()
         paymentLabel.textAlignment = NSTextAlignment.Center
         paymentView.addSubview(paymentLabel)
+        
+        let mortTapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        mortView.addGestureRecognizer(mortTapGesture)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         scrollView.addGestureRecognizer(tapGesture)
@@ -571,6 +717,37 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     
     func textFieldDidBeginEditing(textField: UITextField) {
         textField.text = ""
+        
+        if textField == mortgageTextField || textField == mortMortgageTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 175
+                }, completion: nil)
+        }
+        else if textField == interestTextField || textField == mortInterestTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 225
+                }, completion: nil)
+        }
+        else if textField == currentYearTxtField || textField == mortDownPaymentTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 275
+                }, completion: nil)
+        }
+        else if textField == taxesTxtField || textField == mortTaxesTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 325
+                }, completion: nil)
+        }
+        else if textField == newMortgageTextField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 375
+                }, completion: nil)
+        }
+        else if textField == newInterestTextField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 425
+                }, completion: nil)
+        }
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
@@ -578,7 +755,12 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func tapGesture() {
-        mortgageView.tapGesture()
+        // UITextField
+        mortLoanAmountTxtField.resignFirstResponder()
+        mortMortgageTxtField.resignFirstResponder()
+        mortInterestTxtField.resignFirstResponder()
+        mortDownPaymentTxtField.resignFirstResponder()
+        mortTaxesTxtField.resignFirstResponder()
         
         loanAmountTxtField.resignFirstResponder()
         mortgageTextField.resignFirstResponder()
@@ -592,33 +774,37 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     // MARK:
     // MARK: Action Methods
     func calculateMortgagePaymentButtonPress(sender: UIButton) {
-        mortgageView.tapGesture()
+        UIView.animateWithDuration(0.4, animations: {
+            self.scrollView.contentOffset.y = 225
+            }, completion: nil)
+        
+        tapGesture()
         
         var saleAmount = 250000.0
-        if mortgageView.loanAmountTxtField.text?.isEmpty != true {
-            saleAmount = Double(mortgageView.loanAmountTxtField.text!)!
+        if mortLoanAmountTxtField.text?.isEmpty != true {
+            saleAmount = Double(mortLoanAmountTxtField.text!)!
         }
         
         var downPayment = 5000.0
-        if mortgageView.downPaymentTxtField.text?.isEmpty != true {
-            downPayment = Double(mortgageView.downPaymentTxtField.text!)!
+        if mortDownPaymentTxtField.text?.isEmpty != true {
+            downPayment = Double(mortDownPaymentTxtField.text!)!
         }
         
         let loan = saleAmount - downPayment
         
         var mortgage = 30.0
-        if mortgageView.mortgageTxtField.text?.isEmpty != true {
-            mortgage = Double(mortgageView.mortgageTxtField.text!)!
+        if mortMortgageTxtField.text?.isEmpty != true {
+            mortgage = Double(mortMortgageTxtField.text!)!
         }
         
         var interest = 3.5
-        if mortgageView.interestTxtField.text?.isEmpty != true {
-            interest = Double(mortgageView.interestTxtField.text!)!
+        if mortInterestTxtField.text?.isEmpty != true {
+            interest = Double(mortInterestTxtField.text!)!
         }
         
         var taxes = 3.75
-        if mortgageView.taxesTxtField.text?.isEmpty != true {
-            taxes = Double(mortgageView.taxesTxtField.text!)!
+        if mortTaxesTxtField.text?.isEmpty != true {
+            taxes = Double(mortTaxesTxtField.text!)!
         }
         
         paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: taxes))
@@ -679,6 +865,9 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func keyboardWillAppear(notification: NSNotification){
+        hideKeyboardButton.enabled = true
+        hideKeyboardButton.alpha = 1.0
+        
         if isMortgageCalc {
             scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 775)
         }
@@ -689,13 +878,15 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func keyboardWillDisappear(notification: NSNotification){
+        hideKeyboardButton.enabled = false
+        hideKeyboardButton.alpha = 0.0
+        
         if isMortgageCalc {
             scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 575)
         }
         else {
             scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 775)
         }
-        
     }
     
     // MARK:

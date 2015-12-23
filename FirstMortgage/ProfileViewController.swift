@@ -33,6 +33,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let nameTxtField = UITextField() as UITextField
     let emailTxtField = UITextField() as UITextField
     let searchTxtField = UITextField() as UITextField
+    
+    let editButton = UIButton ()
+    let editIcon = UIImageView()
 
     let user = PFUser.currentUser()
     
@@ -65,6 +68,19 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
+        
+        // UIButton
+        let editIcn = UIImage(named: "edit_icon") as UIImage?
+        editIcon.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 55, 255, 41.25, 35))
+        editIcon.image = editIcn
+        whiteBar.addSubview(editIcon)
+        
+        editButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 60, 250, 60, 50))
+        editButton.addTarget(self, action: "allowEdit:", forControlEvents: .TouchUpInside)
+        editButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        editButton.backgroundColor = UIColor.clearColor()
+        editButton.tag = 0
+        whiteBar.addSubview(editButton)
         
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))

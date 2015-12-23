@@ -70,6 +70,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     var officerName = String()
     var officerURL = String()
     
+    let loadingOverlay = UIView()
+    let loadingLabel = UILabel()
+    
+    var activityIndicator = UIActivityIndicatorView()
+    
     // MARK:
     // MARK: View Life Cycle
     override func viewDidLoad() {
@@ -88,13 +93,32 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                     self.locationServicesIsAllowed = false
                 }
             }
-        }
+        }  
     }
 
     override func viewWillAppear(animated: Bool) {
         buildHomeView()
         buildLoginView()
         buildSignUpView()
+        
+        loadingOverlay.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.size.height))
+        loadingOverlay.backgroundColor = UIColor.darkGrayColor()
+        loadingOverlay.alpha = 0.85
+        loadingOverlay.hidden = true
+        self.view.addSubview(loadingOverlay)
+        
+        loadingLabel.frame = (frame: CGRectMake(0, 75, loadingOverlay.bounds.size.width, 0))
+        loadingLabel.textAlignment = NSTextAlignment.Center
+        loadingLabel.font = UIFont(name: "Arial", size: 25)
+        loadingLabel.textColor = UIColor.whiteColor()
+        loadingLabel.text = "Creating Your Account"
+        loadingLabel.numberOfLines = 1
+        loadingOverlay.addSubview(loadingLabel)
+        
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        activityIndicator.center = view.center
+        loadingOverlay.addSubview(activityIndicator)
     }
     
     override func didReceiveMemoryWarning() {
@@ -617,19 +641,17 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     func buildOverlay() {
         
         overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        overlayView.backgroundColor = UIColor.blackColor()
-        overlayView.alpha = 0.85
+        overlayView.backgroundColor = model.lightGrayColor
         self.view.addSubview(overlayView)
         
         let overLayTextLabel = UILabel(frame: CGRectMake(15, 75, overlayView.bounds.size.width - 30, 0))
         overLayTextLabel.text = "Are you currently working with a loan officer?"
-        overLayTextLabel.textAlignment = NSTextAlignment.Left
-        overLayTextLabel.textColor = UIColor.whiteColor()
+        overLayTextLabel.textAlignment = NSTextAlignment.Center
+        overLayTextLabel.textColor = UIColor.darkTextColor()
         overLayTextLabel.font = UIFont(name: "forza-light", size: 32)
         overLayTextLabel.numberOfLines = 0
         overLayTextLabel.sizeToFit()
         overlayView.addSubview(overLayTextLabel)
-        
         
         // UIView
         let noView = UIView(frame: CGRectMake(15, 200, overlayView.bounds.size.width - 30, 50))
@@ -684,9 +706,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         // UILabel
         let overLayTextLabel = UILabel(frame: CGRectMake(15, 25, overlayView.bounds.size.width - 30, 0))
-        overLayTextLabel.text = "You currently not assigned to a loan officer. Please select one from the list below."
-        overLayTextLabel.textAlignment = NSTextAlignment.Left
-        overLayTextLabel.textColor = UIColor.whiteColor()
+        overLayTextLabel.text = "Please select a loan officer from the list below or use the search box to find your loan officer."
+        overLayTextLabel.textAlignment = NSTextAlignment.Center
+        overLayTextLabel.textColor = UIColor.darkTextColor()
         overLayTextLabel.font = UIFont(name: "forza-light", size: 18)
         overLayTextLabel.numberOfLines = 0
         overLayTextLabel.sizeToFit()
@@ -870,15 +892,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             }
         }
         else if sender == 1 {
+            
+            activityIndicator.startAnimating()
+            self.loadingOverlay.hidden = false
+            overlayView.removeFromSuperview()
+            
             let user = PFUser()
             
             user["name"] = namereg.text
             user.username = usernamereg.text
             user.password = passwordreg.text
             user.email = emailreg.text
-            
-            
-            
+
             if hasLoanOfficer {
                 user["officerNid"] = Int(officerNid)
                 user["officerName"] = officerName
@@ -888,9 +913,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             user.signUpInBackgroundWithBlock {
                 (succeeded: Bool, error: NSError?) -> Void in
                 if let error = error {
-                    let errorString = error.userInfo["error"] as? NSString
-                    // Show the errorString somewhere and let the user try again.
-                    print(errorString)
+
+                    self.removeViews(self.overlayView)
+                    self.activityIndicator.startAnimating()
+                    self.loadingOverlay.hidden = true
+                    
+                    let errorString = error.userInfo["error"] as? String
+                    
+                    let alertController = UIAlertController(title: "HomeIn", message: errorString, preferredStyle: .Alert)
+                    
+                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                        // ...
+                    }
+                    alertController.addAction(OKAction)
+                    
+                    self.presentViewController(alertController, animated: true) {
+                        // ...
+                    }
                 } else {
                     // Hooray! Let them use the app now.
                     self.namereg.resignFirstResponder()
@@ -903,6 +942,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                     self.removeViews(self.homeView)
                     self.buildHomeView()
                     self.showHideSignUpView()
+                    
+                    self.activityIndicator.stopAnimating()
+                    self.loadingOverlay.hidden = true
                 }
             }
         }
@@ -965,9 +1007,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         defaults.setObject(dict, forKey: "loanOfficerDict")
     
         loginSignupUser(1)
-        
-        print(dict)
-        //saveUserToParse(true, nid: nid, name: name, url: officerURL)
     }
     
     func workingWithALoanOfficer(sender: UIButton) {
@@ -1269,12 +1308,40 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             self.passwordreg.resignFirstResponder()
             self.confirmpasswordreg.resignFirstResponder()
             
-            if (passwordreg.text == confirmpasswordreg.text) {
-                if (namereg.text!.isEmpty != true && emailreg.text!.isEmpty != true && usernamereg.text!.isEmpty != true && passwordreg.text!.isEmpty != true && confirmpasswordreg.text!.isEmpty != true) {
-                    buildOverlay()
+            if (namereg.text!.isEmpty != true && emailreg.text!.isEmpty != true && usernamereg.text!.isEmpty != true && passwordreg.text!.isEmpty != true && confirmpasswordreg.text!.isEmpty != true) {
+                if (passwordreg.text == confirmpasswordreg.text) {
+                    if (passwordreg.text?.characters.count > 5) {
+                        if (model.isValidEmail(emailreg.text!)) {
+                            buildOverlay()
+                        }
+                        else {
+                            let alertController = UIAlertController(title: "HomeIn", message: "Please Enter a valid email.", preferredStyle: .Alert)
+                            
+                            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                                // ...
+                            }
+                            alertController.addAction(OKAction)
+                            
+                            self.presentViewController(alertController, animated: true) {
+                                // ...
+                            }
+                        }
+                    }
+                    else {
+                        let alertController = UIAlertController(title: "HomeIn", message: "Your password needs to be at least 6 characters long.", preferredStyle: .Alert)
+                        
+                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                            // ...
+                        }
+                        alertController.addAction(OKAction)
+                        
+                        self.presentViewController(alertController, animated: true) {
+                            // ...
+                        }
+                    }
                 }
                 else {
-                    let alertController = UIAlertController(title: "HomeIn", message: "Plaese make sure you have filled out all the required fields.", preferredStyle: .Alert)
+                    let alertController = UIAlertController(title: "HomeIn", message: "Your passwords do not match.", preferredStyle: .Alert)
                     
                     let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                         // ...
@@ -1287,7 +1354,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                 }
             }
             else {
-                let alertController = UIAlertController(title: "HomeIn", message: "Your passwords do not match.", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: "HomeIn", message: "Plaese make sure you have filled out all the required fields.", preferredStyle: .Alert)
                 
                 let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                     // ...

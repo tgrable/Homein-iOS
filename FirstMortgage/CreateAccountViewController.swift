@@ -25,7 +25,8 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     let signUpView = UIView()
     
     //UIScrollView
-    let scrollView = UIScrollView() as UIScrollView
+    let scrollView = UIScrollView()
+    let contentScrollView = UIScrollView()
     
     //Array
     var loanOfficerArray = Array<Dictionary<String, String>>()
@@ -46,9 +47,6 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     let addressRegister = UITextView()
     
     // Bool
-    var optionOne = Bool()
-    var optionTwo = Bool()
-    var optionThree = Bool()
     var isRegisterViewOpen = Bool()
     
     var imageView = UIImageView() as UIImageView
@@ -56,6 +54,8 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     let locationManager = CLLocationManager()
     
     var activityIndicator = UIActivityIndicatorView()
+    
+    let loadingLabel = UILabel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,10 +72,6 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
         self.view.backgroundColor = model.lightGrayColor
         
-        optionOne = true
-        optionTwo = true
-        optionThree = true
-        
         buildCreateAccountView()
         buildSignUpView()
         
@@ -84,19 +80,20 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         loadingOverlay.alpha = 0.85
         self.view.addSubview(loadingOverlay)
         
-        let loadingLabel = UILabel (frame: CGRectMake(10, 75, loadingOverlay.bounds.size.width - 20, 0))
+        loadingLabel.frame = (frame: CGRectMake(10, 75, loadingOverlay.bounds.size.width - 20, 0))
         loadingLabel.textAlignment = NSTextAlignment.Center
         loadingLabel.font = UIFont(name: "Arial", size: 25)
         loadingLabel.textColor = UIColor.whiteColor()
-        loadingLabel.text = "Welcome to the HomeIn\n\nPlease hold tight while we gather up a bit of information."
+        loadingLabel.text = "Welcome to HomeIn\n\nPlease hold tight while we gather up the latest information from HomeIn."
         loadingLabel.numberOfLines = 0
         loadingLabel.sizeToFit()
         loadingOverlay.addSubview(loadingLabel)
         
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
         activityIndicator.center = view.center
-        activityIndicator.startAnimating()
         loadingOverlay.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
     }
 
     override func viewDidAppear(animated: Bool) {
@@ -127,9 +124,9 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     }
     
     func buildCreateAccountView() {
-        var fontSize = 18 as CGFloat
+        var fontSize = 16 as CGFloat
         if modelName.rangeOfString("5") != nil{
-            fontSize = 12
+            fontSize = 14
         }
         
         registerView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
@@ -137,7 +134,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         registerView.hidden = false
         self.view.addSubview(registerView)
         
-        let createAccountView = UIView(frame: CGRectMake(15, 50, registerView.bounds.size.width - 30, 40))
+        let createAccountView = UIView(frame: CGRectMake(0, 0, registerView.bounds.size.width, 40))
         let createAccountGradientLayer = CAGradientLayer()
         createAccountGradientLayer.frame = createAccountView.bounds
         createAccountGradientLayer.colors = [model.darkOrangeColor.CGColor, model.lightOrangeColor.CGColor]
@@ -145,74 +142,93 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         createAccountView.layer.addSublayer(createAccountGradientLayer)
         registerView.addSubview(createAccountView)
         
-        let createAccountButton = UIButton (frame: CGRectMake(15, 50, registerView.bounds.size.width - 30, 40))
-        createAccountButton.setTitle("CREATE AN ACCOUNT", forState: .Normal)
-        createAccountButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
-        createAccountButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        createAccountButton.backgroundColor = UIColor.clearColor()
-        createAccountButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-        createAccountButton.tag = 0
-        registerView.addSubview(createAccountButton)
+        let createAccountLabel = UILabel (frame: CGRectMake(0, 0, createAccountView.bounds.size.width, 40))
+        createAccountLabel.textAlignment = NSTextAlignment.Center
+        createAccountLabel.font = UIFont(name: "forza-light", size: 25)
+        createAccountLabel.text = "CREATE AN ACCOUNT"
+        createAccountLabel.numberOfLines = 1
+        createAccountLabel.textColor = UIColor.whiteColor()
+        createAccountView.addSubview(createAccountLabel)
         
-        let descLabel = UILabel (frame: CGRectMake(35, 115, registerView.bounds.size.width - 70, 40))
+        contentScrollView.frame = (frame: CGRectMake(0, 40, registerView.bounds.size.width, registerView.bounds.size.height - 50))
+        contentScrollView.backgroundColor = UIColor.clearColor()
+        registerView.addSubview(contentScrollView)
+        
+        let descLabel = UILabel (frame: CGRectMake(15, 10, contentScrollView.bounds.size.width - 30, 0))
         descLabel.textAlignment = NSTextAlignment.Left
         descLabel.font = UIFont(name: "Arial", size: fontSize)
-        descLabel.text = "Bacon ipsum dolor amet ribeye ball tip andouille, tail chuck t-bone turducken. Hamburger capicola prosciutto tenderloin."
+        descLabel.text = "When you create a HomeIn account, you’re building a personal portfolio of all of the homes you visit. And you’ll be able to HomeIn on all of the features you loved (or didn’t love) about each property on your home buying  journey.\n\nHere’s what you can do with a HomeIn account:"
         descLabel.numberOfLines = 0
         descLabel.sizeToFit()
-        registerView.addSubview(descLabel)
+        contentScrollView.addSubview(descLabel)
         
         let checkMarkImage = UIImage(named: "blue_check") as UIImage?
         
-        let optionOneButton = UIButton (frame: CGRectMake(35, descLabel.bounds.size.height + 150, 25, 25))
-        optionOneButton.setBackgroundImage(checkMarkImage, forState: .Normal)
-        optionOneButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
-        optionOneButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        optionOneButton.tag = 1
-        registerView.addSubview(optionOneButton)
+        var offset = descLabel.bounds.size.height + 25.0 as CGFloat
         
-        let optionOneLabel = UILabel (frame: CGRectMake(70, descLabel.bounds.size.height + 150, registerView.bounds.size.width - 125, 25))
+        let checkImageOne = UIImageView(frame: CGRectMake(20, offset, 25, 25))
+        checkImageOne.image = checkMarkImage
+        contentScrollView.addSubview(checkImageOne)
+        
+        let optionOneLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
         optionOneLabel.textAlignment = NSTextAlignment.Left
         optionOneLabel.font = UIFont(name: "Arial", size: fontSize)
-        optionOneLabel.text = "Sausage drumstick salami"
-        optionOneLabel.numberOfLines = 1
-        registerView.addSubview(optionOneLabel)
-
-        let optionTwoButton = UIButton (frame: CGRectMake(35, descLabel.bounds.size.height + 190, 25, 25))
-        optionTwoButton.setBackgroundImage(checkMarkImage, forState: .Normal)
-        optionTwoButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
-        optionTwoButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        optionTwoButton.tag = 2
-        registerView.addSubview(optionTwoButton)
+        optionOneLabel.text = "Take unlimited photos of the homes you visit and store them in your personal library"
+        optionOneLabel.numberOfLines = 0
+        optionOneLabel.sizeToFit()
+        contentScrollView.addSubview(optionOneLabel)
         
-        let optionTwoLabel = UILabel (frame: CGRectMake(70, descLabel.bounds.size.height + 195, registerView.bounds.size.width - 125, 25))
+        offset += optionOneLabel.bounds.size.height + 10.0
+
+        let checkImageTwo = UIImageView(frame: CGRectMake(20, offset, 25, 25))
+        checkImageTwo.image = checkMarkImage
+        contentScrollView.addSubview(checkImageTwo)
+        
+        let optionTwoLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
         optionTwoLabel.textAlignment = NSTextAlignment.Left
         optionTwoLabel.font = UIFont(name: "Arial", size: fontSize)
-        optionTwoLabel.text = "t-bone porchetta fatback jowl"
-        optionTwoLabel.numberOfLines = 1
-        registerView.addSubview(optionTwoLabel)
+        optionTwoLabel.text = "Make notes about your saved homes and every room and feature"
+        optionTwoLabel.numberOfLines = 0
+        optionTwoLabel.sizeToFit()
+        contentScrollView.addSubview(optionTwoLabel)
         
-        let optionThreeButton = UIButton (frame: CGRectMake(35, descLabel.bounds.size.height + 230, 25, 25))
-        optionThreeButton.setBackgroundImage(checkMarkImage, forState: .Normal)
-        optionThreeButton.addTarget(self, action: "optionChecked:", forControlEvents: .TouchUpInside)
-        optionThreeButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
-        optionThreeButton.tag = 3
-        registerView.addSubview(optionThreeButton)
+        offset += optionTwoLabel.bounds.size.height + 10.0
         
-        let optionThreeLabel = UILabel (frame: CGRectMake(70, descLabel.bounds.size.height + 235, registerView.bounds.size.width - 125, 25))
+        let checkImageThree = UIImageView(frame: CGRectMake(20, offset, 25, 25))
+        checkImageThree.image = checkMarkImage
+        contentScrollView.addSubview(checkImageThree)
+        
+        let optionThreeLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
         optionThreeLabel.textAlignment = NSTextAlignment.Left
         optionThreeLabel.font = UIFont(name: "Arial", size: fontSize)
-        optionThreeLabel.text = "Prosciutto andouille biltong"
-        optionThreeLabel.numberOfLines = 1
-        registerView.addSubview(optionThreeLabel)
+        optionThreeLabel.text = "Connect with an expert First Mortgage Company  or Cunningham & Company Loan Officer to get pre-qualified for a home loan."
+        optionThreeLabel.numberOfLines = 0
+        optionThreeLabel.sizeToFit()
+        contentScrollView.addSubview(optionThreeLabel)
         
-        let getStartedView = UIView(frame: CGRectMake(35, descLabel.bounds.size.height + 290, registerView.bounds.size.width - 70, 40))
+        offset += optionThreeLabel.bounds.size.height + 10.0
+        
+        let checkImageFour = UIImageView(frame: CGRectMake(20, offset, 25, 25))
+        checkImageFour.image = checkMarkImage
+        contentScrollView.addSubview(checkImageFour)
+        
+        let optionFourLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
+        optionFourLabel.textAlignment = NSTextAlignment.Left
+        optionFourLabel.font = UIFont(name: "Arial", size: fontSize)
+        optionFourLabel.text = "Access valuable tools, such as a Mortgage Calculator and a Refinancing Calculator."
+        optionFourLabel.numberOfLines = 0
+        optionFourLabel.sizeToFit()
+        contentScrollView.addSubview(optionFourLabel)
+        
+        offset += optionFourLabel.bounds.size.height + 10.0
+        
+        let getStartedView = UIView(frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
         let getStartedGradientLayer = CAGradientLayer()
         getStartedGradientLayer.frame = getStartedView.bounds
         getStartedGradientLayer.colors = [model.darkBlueColor.CGColor, model.lightBlueColor.CGColor]
         getStartedView.layer.insertSublayer(getStartedGradientLayer, atIndex: 0)
         getStartedView.layer.addSublayer(getStartedGradientLayer)
-        registerView.addSubview(getStartedView)
+        contentScrollView.addSubview(getStartedView)
         
         let getStartedArrow = UILabel (frame: CGRectMake(getStartedView.bounds.size.width - 50, 0, 40, 40))
         getStartedArrow.textAlignment = NSTextAlignment.Right
@@ -221,19 +237,23 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         getStartedArrow.textColor = UIColor.whiteColor()
         getStartedView.addSubview(getStartedArrow)
         
-        let getStartedButton = UIButton (frame: CGRectMake(35, descLabel.bounds.size.height + 290, registerView.bounds.size.width - 70, 40))
+        let getStartedButton = UIButton (frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
         getStartedButton.setTitle("GET STARTED", forState: .Normal)
         getStartedButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-        registerView.addSubview(getStartedButton)
+        contentScrollView.addSubview(getStartedButton)
         
-        let continueWithoutButton = UIButton (frame: CGRectMake(15, descLabel.bounds.size.height + 340, registerView.bounds.size.width - 30, 40))
+        offset += getStartedView.bounds.size.height + 10.0
+        
+        let continueWithoutButton = UIButton (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
         continueWithoutButton.setTitle("CONTINUE WITHOUT", forState: .Normal)
         continueWithoutButton.addTarget(self, action: "continueWithoutLogin:", forControlEvents: .TouchUpInside)
         continueWithoutButton.setTitleColor(model.darkBlueColor, forState: .Normal)
         continueWithoutButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
-        registerView.addSubview(continueWithoutButton)
+        contentScrollView.addSubview(continueWithoutButton)
+        
+        contentScrollView.contentSize = CGSize(width: registerView.bounds.size.width, height: 525)
     }
     
     func buildSignUpView() {
@@ -397,12 +417,40 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
             self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
             }, completion: nil)
         
-        if (passwordreg.text == confirmpasswordreg.text) {
-            if (namereg.text!.isEmpty != true && emailreg.text!.isEmpty != true && usernamereg.text!.isEmpty != true && passwordreg.text!.isEmpty != true && confirmpasswordreg.text!.isEmpty != true) {
-                buildOverlay()
+        if (namereg.text!.isEmpty != true && emailreg.text!.isEmpty != true && usernamereg.text!.isEmpty != true && passwordreg.text!.isEmpty != true && confirmpasswordreg.text!.isEmpty != true) {
+            if (passwordreg.text == confirmpasswordreg.text) {
+                if (passwordreg.text?.characters.count > 5) {
+                    if (model.isValidEmail(emailreg.text!)) {
+                        buildOverlay()
+                    }
+                    else {
+                        let alertController = UIAlertController(title: "HomeIn", message: "Please Enter a valid email.", preferredStyle: .Alert)
+                        
+                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                            // ...
+                        }
+                        alertController.addAction(OKAction)
+                        
+                        self.presentViewController(alertController, animated: true) {
+                            // ...
+                        }
+                    }
+                }
+                else {
+                    let alertController = UIAlertController(title: "HomeIn", message: "Please Enter a valid password.", preferredStyle: .Alert)
+                    
+                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                        // ...
+                    }
+                    alertController.addAction(OKAction)
+                    
+                    self.presentViewController(alertController, animated: true) {
+                        // ...
+                    }
+                }
             }
             else {
-                let alertController = UIAlertController(title: "HomeIn", message: "Plaese make sure you have filled out all the required fields.", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: "HomeIn", message: "Your passwords do not match.", preferredStyle: .Alert)
                 
                 let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                     // ...
@@ -415,7 +463,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
             }
         }
         else {
-            let alertController = UIAlertController(title: "HomeIn", message: "Your passwords do not match.", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "HomeIn", message: "Plaese make sure you have filled out all the required fields.", preferredStyle: .Alert)
             
             let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                 // ...
@@ -426,44 +474,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
                 // ...
             }
         }
-    }
-
-    func optionChecked(sender: UIButton) {
-        let checkMarkCheckedImage = UIImage(named: "blue_check") as UIImage?
-        let checkMarkUncheckedImage = UIImage(named: "white_check") as UIImage?
         
-        switch sender.tag {
-        case 1:
-            if optionOne {
-                sender.setBackgroundImage(checkMarkUncheckedImage, forState: .Normal)
-                optionOne = false
-            }
-            else {
-                sender.setBackgroundImage(checkMarkCheckedImage, forState: .Normal)
-                optionOne = true
-            }
-        case 2:
-            if optionTwo {
-                sender.setBackgroundImage(checkMarkUncheckedImage, forState: .Normal)
-                optionTwo = false
-            }
-            else {
-                sender.setBackgroundImage(checkMarkCheckedImage, forState: .Normal)
-                optionTwo = true
-            }
-        case 3:
-            if optionThree {
-                sender.setBackgroundImage(checkMarkUncheckedImage, forState: .Normal)
-                optionThree = false
-            }
-            else {
-                sender.setBackgroundImage(checkMarkCheckedImage, forState: .Normal)
-                optionThree = true
-            }
-        default:
-            print("")
-            
-        }
     }
 
     func continueWithoutLogin(sender: UIButton) {
@@ -572,19 +583,19 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     func buildOverlay() {
 
         overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        overlayView.backgroundColor = UIColor.blackColor()
-        overlayView.alpha = 0.85
+        overlayView.backgroundColor = model.lightGrayColor
         self.view.addSubview(overlayView)
+        
+        showHideSignUpView()
         
         let overLayTextLabel = UILabel(frame: CGRectMake(15, 75, overlayView.bounds.size.width - 30, 0))
         overLayTextLabel.text = "Are you currently working with a loan officer?"
         overLayTextLabel.textAlignment = NSTextAlignment.Left
-        overLayTextLabel.textColor = UIColor.whiteColor()
+        overLayTextLabel.textColor = UIColor.darkTextColor()
         overLayTextLabel.font = UIFont(name: "forza-light", size: 32)
         overLayTextLabel.numberOfLines = 0
         overLayTextLabel.sizeToFit()
         overlayView.addSubview(overLayTextLabel)
-        
         
         // UIView
         let noView = UIView(frame: CGRectMake(15, 200, overlayView.bounds.size.width - 30, 50))
@@ -608,7 +619,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         noView.addSubview(noButton)
         
         // UIView
-        let yesView = UIView(frame: CGRectMake(15, 300, overlayView.bounds.size.width - 30, 50))
+        let yesView = UIView(frame: CGRectMake(15, 275, overlayView.bounds.size.width - 30, 50))
         let yesGradientLayer = CAGradientLayer()
         yesGradientLayer.frame = yesView.bounds
         yesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
@@ -639,9 +650,9 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
         // UILabel
         let overLayTextLabel = UILabel(frame: CGRectMake(15, 25, overlayView.bounds.size.width - 30, 0))
-        overLayTextLabel.text = "You currently not assigned to a loan officer. Please select one from the list below."
-        overLayTextLabel.textAlignment = NSTextAlignment.Left
-        overLayTextLabel.textColor = UIColor.whiteColor()
+        overLayTextLabel.text = "Please select a loan officer from the list below or use the search box to find your loan officer."
+        overLayTextLabel.textAlignment = NSTextAlignment.Center
+        overLayTextLabel.textColor = UIColor.darkTextColor()
         overLayTextLabel.font = UIFont(name: "forza-light", size: 18)
         overLayTextLabel.numberOfLines = 0
         overLayTextLabel.sizeToFit()
@@ -726,6 +737,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     }
     
     func setLoanOfficer(sender: UIButton) {
+        
         let dict = tempArray[sender.tag]
         
         let nid = dict["nid"]! as String
@@ -736,21 +748,21 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         defaults.removeObjectForKey("loanOfficerDict")
         defaults.setObject(dict, forKey: "loanOfficerDict")
         
-        print(dict)
-        
         saveUserToParse(true, nid: nid, name: name, url: officerURL)
     }
     
     // MARK:
     // MARK: Parse
     func saveUserToParse(isWorkingWithAdvisor: Bool, nid: String, name: String, url: String) {
-        print("saveUserOptionToParse")
+        
+        activityIndicator.startAnimating()
+        self.loadingOverlay.hidden = false
+        loadingLabel.text = "Creating Your Account"
+        overlayView.removeFromSuperview()
+        
         let user = PFUser()
         
         user["name"] = namereg.text
-        user["optionOne"] = optionOne
-        user["optionTwo"] = optionTwo
-        user["optionThree"] = optionThree
         user.username = usernamereg.text
         user.password = passwordreg.text
         user.email = emailreg.text
@@ -764,9 +776,23 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         user.signUpInBackgroundWithBlock {
             (succeeded: Bool, error: NSError?) -> Void in
             if let error = error {
-                let errorString = error.userInfo["error"] as? NSString
-                // Show the errorString somewhere and let the user try again.
-                print(errorString)
+                
+                self.removeViews(self.overlayView)
+                self.activityIndicator.startAnimating()
+                self.loadingOverlay.hidden = true
+                
+                let errorString = error.userInfo["error"] as? String
+
+                let alertController = UIAlertController(title: "HomeIn", message: errorString, preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    // ...
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
             } else {
                 // Hooray! Let them use the app now.
                 self.namereg.resignFirstResponder()
@@ -775,6 +801,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
                 self.passwordreg.resignFirstResponder()
                 self.confirmpasswordreg.resignFirstResponder()
                 
+                self.activityIndicator.stopAnimating()
                 self.performSegueWithIdentifier("userLoggedIn", sender: self)
             }
         }
@@ -799,7 +826,6 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
             print("Default")
         }
     }
-    
     
     // MARK:
     // MARK: - Navigation

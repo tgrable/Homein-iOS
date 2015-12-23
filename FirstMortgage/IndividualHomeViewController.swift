@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class IndividualHomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class IndividualHomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
     
     // MARK:
     // MARK: Properties
@@ -68,10 +68,15 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     let editButton = UIButton ()
     let editIcon = UIImageView()
     
+    let hideKeyboardButton = UIButton()
+    
     // MARK:
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
         
         picker.delegate = self
         
@@ -110,6 +115,16 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
+        
+        // UIButton
+        hideKeyboardButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 40, 40))
+        hideKeyboardButton.addTarget(self, action: "tapGesture", forControlEvents: .TouchUpInside)
+        hideKeyboardButton.setImage(UIImage(named: "hide_keyboard"), forState: .Normal)
+        hideKeyboardButton.backgroundColor = UIColor.clearColor()
+        hideKeyboardButton.tag = 0
+        hideKeyboardButton.enabled = false
+        hideKeyboardButton.alpha = 0
+        whiteBar.addSubview(hideKeyboardButton)
         
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
@@ -209,11 +224,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         let homeName = homeObject["name"] as! NSString
         // UITextField
-        homeNameTxtField.frame = (frame: CGRectMake(10, 250, homeTray.bounds.size.width - 20, 30))
+        homeNameTxtField.frame = (frame: CGRectMake(10, 250, homeTray.bounds.size.width - 20, 40))
         homeNameTxtField.attributedPlaceholder = NSAttributedString(string: homeName as String, attributes:attributes)
         homeNameTxtField.backgroundColor = UIColor.clearColor()
         homeNameTxtField.delegate = self
-        homeNameTxtField.returnKeyType = .Done
+        homeNameTxtField.returnKeyType = .Next
         homeNameTxtField.keyboardType = UIKeyboardType.Default
         homeNameTxtField.font = UIFont(name: "forza-light", size: 22)
         homeNameTxtField.enabled = false
@@ -226,11 +241,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let homePrice = formatter.stringFromNumber(price)! as String
         
         // UITextField
-        homePriceTxtField.frame = (frame: CGRectMake(10, 275, homeTray.bounds.size.width - 90, 30))
+        homePriceTxtField.frame = (frame: CGRectMake(10, 290, homeTray.bounds.size.width - 90, 40))
         homePriceTxtField.attributedPlaceholder = NSAttributedString(string: homePrice as String, attributes:attributes)
         homePriceTxtField.backgroundColor = UIColor.clearColor()
         homePriceTxtField.delegate = self
-        homePriceTxtField.returnKeyType = .Done
+        homePriceTxtField.returnKeyType = .Next
         homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
         homePriceTxtField.font = UIFont(name: "forza-light", size: 22)
         homePriceTxtField.enabled = false
@@ -269,7 +284,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         for i in 1...5 {
             // UIButton
-            let ratingButton = UIButton(frame: CGRectMake(CGFloat(10 + xOffset), 315, 35, 35))
+            let ratingButton = UIButton(frame: CGRectMake(CGFloat(10 + xOffset), 330, 35, 35))
             ratingButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
             ratingButton.backgroundColor = model.darkBlueColor
             if i <= userRating {
@@ -286,7 +301,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             xOffset += 40
         }
         
-        let dividerView = UIView(frame: CGRectMake(10, 359, homeTray.bounds.size.width - 20, 1))
+        let dividerView = UIView(frame: CGRectMake(10, 375, homeTray.bounds.size.width - 20, 1))
         dividerView.backgroundColor = UIColor.darkGrayColor()
         dividerView.hidden = false
         homeTray.addSubview(dividerView)
@@ -300,17 +315,17 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
 
         
         // UITextField
-        bedsTxtField.frame = (frame: CGRectMake(15, 370, (homeTray.bounds.size.width / 3) - 10, 30))
+        bedsTxtField.frame = (frame: CGRectMake(15, 385, (homeTray.bounds.size.width / 3) - 10, 30))
         bedsTxtField.attributedPlaceholder = attributedHomeBed
         bedsTxtField.backgroundColor = UIColor.clearColor()
         bedsTxtField.delegate = self
-        bedsTxtField.returnKeyType = .Done
+        bedsTxtField.returnKeyType = .Next
         bedsTxtField.keyboardType = UIKeyboardType.NumberPad
         bedsTxtField.font = UIFont(name: "Arial", size: 12)
         bedsTxtField.enabled = false
         homeTray.addSubview(bedsTxtField)
         
-        let bedsLabel = UILabel(frame: CGRectMake(15, 390, (homeTray.bounds.size.width / 3) - 10, 30))
+        let bedsLabel = UILabel(frame: CGRectMake(15, 410, (homeTray.bounds.size.width / 3) - 10, 30))
         bedsLabel.text = "Beds"
         //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
         bedsLabel.textAlignment = NSTextAlignment.Left
@@ -319,7 +334,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bedsLabel.textColor = UIColor.darkTextColor()
         homeTray.addSubview(bedsLabel)
         
-        let vertDividerTwoView = UIView(frame: CGRectMake(homeTray.bounds.size.width / 3, 370, 1, 50))
+        let vertDividerTwoView = UIView(frame: CGRectMake(homeTray.bounds.size.width / 3, 385, 1, 50))
         vertDividerTwoView.backgroundColor = UIColor.darkGrayColor()
         vertDividerTwoView.hidden = false
         homeTray.addSubview(vertDividerTwoView)
@@ -332,17 +347,17 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 size: 12.0)!])
         
         // UITextField
-        bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 370, (homeTray.bounds.size.width / 3) - 10, 30))
+        bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 385, (homeTray.bounds.size.width / 3) - 10, 30))
         bathsTxtField.attributedPlaceholder = attributedHomeBath
         bathsTxtField.backgroundColor = UIColor.clearColor()
         bathsTxtField.delegate = self
-        bathsTxtField.returnKeyType = .Done
+        bathsTxtField.returnKeyType = .Next
         bathsTxtField.keyboardType = UIKeyboardType.DecimalPad
         bathsTxtField.font = UIFont(name: "Arial", size: 12)
         bathsTxtField.enabled = false
         homeTray.addSubview(bathsTxtField)
         
-        let bathsLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 390, (homeTray.bounds.size.width / 3) - 10, 30))
+        let bathsLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 410, (homeTray.bounds.size.width / 3) - 10, 30))
         bathsLabel.text = "Baths"
         //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
         bathsLabel.textAlignment = NSTextAlignment.Left
@@ -351,7 +366,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bathsLabel.textColor = UIColor.darkTextColor()
         homeTray.addSubview(bathsLabel)
         
-        let vertDividerThreeView = UIView(frame: CGRectMake(homeTray.bounds.size.width * 0.66, 370, 1, 50))
+        let vertDividerThreeView = UIView(frame: CGRectMake(homeTray.bounds.size.width * 0.66, 385, 1, 50))
         vertDividerThreeView.backgroundColor = UIColor.darkGrayColor()
         vertDividerThreeView.hidden = false
         homeTray.addSubview(vertDividerThreeView)
@@ -367,17 +382,17 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         
         // UITextField
-        sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 370, (homeTray.bounds.size.width / 3) - 10, 30))
+        sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 385, (homeTray.bounds.size.width / 3) - 10, 30))
         sqFeetTxtField.attributedPlaceholder = attributedHomeSqft
         sqFeetTxtField.backgroundColor = UIColor.clearColor()
         sqFeetTxtField.delegate = self
-        sqFeetTxtField.returnKeyType = .Done
+        sqFeetTxtField.returnKeyType = .Next
         sqFeetTxtField.keyboardType = UIKeyboardType.NumberPad
         sqFeetTxtField.font = UIFont(name: "Arial", size: 12)
         sqFeetTxtField.enabled = false
         homeTray.addSubview(sqFeetTxtField)
         
-        let sqFeetLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 390, (homeTray.bounds.size.width / 3) - 10, 30))
+        let sqFeetLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 410, (homeTray.bounds.size.width / 3) - 10, 30))
         sqFeetLabel.text = "Sq. Ft."
         //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
         sqFeetLabel.textAlignment = NSTextAlignment.Left
@@ -393,18 +408,18 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         let homeAddress = homeObject["address"] as! NSString
         //UITextField
-        homeAddressTxtField.frame = (frame: CGRectMake(10, 420, homeTray.bounds.size.width - 20, 30))
+        homeAddressTxtField.frame = (frame: CGRectMake(10, 450, homeTray.bounds.size.width - 20, 40))
         homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: homeAddress as String, attributes:arialAttributes)
         homeAddressTxtField.backgroundColor = UIColor.clearColor()
         homeAddressTxtField.delegate = self
-        homeAddressTxtField.returnKeyType = .Done
+        homeAddressTxtField.returnKeyType = .Next
         homeAddressTxtField.keyboardType = UIKeyboardType.Default
         homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
         homeAddressTxtField.enabled = false
         homeTray.addSubview(homeAddressTxtField)
         
         //Create textview
-        descTxtView.frame = (frame : CGRectMake(10, CGFloat(420 + homeNameTxtField.frame.height + 10), homeTray.bounds.size.width - 20, 195))
+        descTxtView.frame = (frame : CGRectMake(10, 500, homeTray.bounds.size.width - 20, 150))
         descTxtView.backgroundColor = UIColor.whiteColor()
         descTxtView.text = homeObject["desc"] as? String
         descTxtView.autocorrectionType = .Yes
@@ -624,16 +639,72 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     // MARK:
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        if textField == self.homeNameTxtField {
+            self.homePriceTxtField.becomeFirstResponder()
+        }
+        else if textField == self.homeAddressTxtField {
+            self.descTxtView.becomeFirstResponder()
+        }
+        else {
+            textField.resignFirstResponder()
+        }
         return true
-    }
-    
-    func textFieldDidBeginEditing(textField: UITextField) {
-        textField.text = ""
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
         
+    }
+    
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        if textField == homeNameTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 200
+                }, completion: nil)
+        }
+        else if textField == homePriceTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 250
+                }, completion: nil)
+        }
+        else if textField == bedsTxtField || textField == bathsTxtField || textField == sqFeetTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 350
+                }, completion: nil)
+        }
+        else if textField == homeAddressTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 425
+                }, completion: nil)
+        }
+        
+        return true
+    }
+    
+    // MARK:
+    // MARK: UITextViewDelegate
+    func textViewDidBeginEditing(textView: UITextView) {
+        UIView.animateWithDuration(0.4, animations: {
+            self.scrollView.contentOffset.y = 500
+            }, completion: nil)
+        
+        if textView.textColor == UIColor.lightGrayColor() {
+            textView.text = nil
+            textView.textColor = UIColor.blackColor()
+        }
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if textView.text.isEmpty {
+            textView.text = "Add notes about this house."
+            textView.textColor = UIColor.lightGrayColor()
+        }
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        if (text == "\n") {
+            textView.resignFirstResponder()
+        }
+        return true
     }
     
     // MARK:
@@ -653,6 +724,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     }
     
     func setRating(sender: UIButton) {
+        tapGesture()
+        
+        UIView.animateWithDuration(0.4, animations: {
+            self.scrollView.contentOffset.y = 300
+            }, completion: nil)
+        
         if (isTextFieldEnabled) {
             userRating = sender.tag
             for i in 0...4 {
@@ -679,6 +756,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             bedsTxtField.enabled = true
             bathsTxtField.enabled = true
             sqFeetTxtField.enabled = true
+            descTxtView.editable = true
             
             isTextFieldEnabled = true
             editIcon.image = UIImage(named: "edit_icon_onstate")
@@ -690,6 +768,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             bedsTxtField.enabled = false
             bathsTxtField.enabled = false
             sqFeetTxtField.enabled = false
+            descTxtView.editable = false
             
             isTextFieldEnabled = false
             editIcon.image = UIImage(named: "edit_icon")
@@ -850,10 +929,26 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             
             self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
                 if (success) {
-                    print("The object was saved")
+                    let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
+                    
+                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                        // ...
+                    }
+                    alertController.addAction(OKAction)
+                    
+                    self.presentViewController(alertController, animated: true) {
+                        // ...
+                    }
                 }
                 else {
-                    print("The object was not saved")
+                    let errorString = error!.userInfo["error"] as? String
+                    
+                    let alertController = UIAlertController(title: "HomeIn", message: errorString, preferredStyle: .Alert)
+                    
+                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                        // ...
+                    }
+                    alertController.addAction(OKAction)
                 }
             }
         }
@@ -894,6 +989,29 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         self.presentViewController(alertController, animated: true) {
             // ...
         }
+    }
+    
+    
+    func tapGesture() {
+        homeNameTxtField.resignFirstResponder()
+        homePriceTxtField.resignFirstResponder()
+        homeAddressTxtField.resignFirstResponder()
+        bedsTxtField.resignFirstResponder()
+        bathsTxtField.resignFirstResponder()
+        sqFeetTxtField.resignFirstResponder()
+        descTxtView.resignFirstResponder()
+    }
+    
+    func keyboardWillAppear(notification: NSNotification){
+        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1050)
+        hideKeyboardButton.enabled = true
+        hideKeyboardButton.alpha = 1.0
+    }
+    
+    func keyboardWillDisappear(notification: NSNotification){
+        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 815)
+        hideKeyboardButton.enabled = false
+        hideKeyboardButton.alpha = 0.0
     }
     
     /*
