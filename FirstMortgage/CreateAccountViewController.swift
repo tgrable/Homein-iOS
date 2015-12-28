@@ -8,7 +8,6 @@
 
 import UIKit
 import Parse
-import ParseUI
 
 class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITextFieldDelegate, CLLocationManagerDelegate {
 
@@ -49,7 +48,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     // Bool
     var isRegisterViewOpen = Bool()
     
-    var imageView = UIImageView() as UIImageView
+    var imageView = UIImageView()
     
     let locationManager = CLLocationManager()
     
@@ -244,6 +243,12 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         contentScrollView.addSubview(getStartedButton)
         
+        let btnImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let btnView = UIImageView(frame: CGRectMake(0, getStartedView.bounds.size.height, getStartedView.bounds.size.width, 15))
+        btnView.image = btnImg
+        getStartedView.addSubview(btnView)
+        
         offset += getStartedView.bounds.size.height + 10.0
         
         let continueWithoutButton = UIButton (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
@@ -387,7 +392,6 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     }
     
     func showHideSignUpView() {
-       
         if (!isRegisterViewOpen) {
             UIView.animateWithDuration(0.4, animations: {
                 self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
@@ -803,6 +807,12 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
                 
                 self.activityIndicator.stopAnimating()
                 self.performSegueWithIdentifier("userLoggedIn", sender: self)
+                
+                PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
+                    
+                    print("----- Email LO -----")
+                    // TODO: [Error]: success/error was not called (Code: 141, Version: 1.10.0)
+                }
             }
         }
     }

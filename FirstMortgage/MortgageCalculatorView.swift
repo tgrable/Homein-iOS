@@ -35,29 +35,24 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
     func buildMortgageCalcView(view: UIView) {
         
         calcView.frame = (frame: CGRectMake(0, 0, view.bounds.size.width, 300))
-        calcView.backgroundColor = UIColor.whiteColor()
+        calcView.backgroundColor = UIColor.clearColor()
         calcView.hidden = false
         view.addSubview(calcView)
 
         let fontSize = 14
         
-        let mortgageCalcView = UIView(frame: CGRectMake(0, 0, calcView.bounds.size.width, calcView.bounds.size.height))
-        mortgageCalcView.backgroundColor = UIColor.clearColor()
-        mortgageCalcView.hidden = false
-        calcView.addSubview(mortgageCalcView)
-        
         /********************************************************* Loan Amount ********************************************************************/
          // UILabel
-        let loanAmountLabel = UILabel(frame: CGRectMake(10, 25, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        let loanAmountLabel = UILabel(frame: CGRectMake(10, 25, (calcView.bounds.size.width / 2) - 20, 40))
         loanAmountLabel.text = "SALE PRICE = "
         loanAmountLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         loanAmountLabel.textAlignment = NSTextAlignment.Right
         loanAmountLabel.textColor = UIColor.darkTextColor()
-        mortgageCalcView.addSubview(loanAmountLabel)
+        calcView.addSubview(loanAmountLabel)
         
         // UITextField
         let loanAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        loanAmountTxtField.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 25,(mortgageCalcView.bounds.size.width / 2) - 20, 40));
+        loanAmountTxtField.frame = (frame: CGRectMake((calcView.bounds.size.width / 2) + 10, 25,(calcView.bounds.size.width / 2) - 20, 40));
         loanAmountTxtField.layer.borderColor = model.lightGrayColor.CGColor
         loanAmountTxtField.layer.borderWidth = 1.0
         loanAmountTxtField.layer.cornerRadius = 2.0
@@ -69,20 +64,20 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         loanAmountTxtField.returnKeyType = .Done
         loanAmountTxtField.keyboardType = UIKeyboardType.NumberPad
         loanAmountTxtField.font = UIFont(name: "forza-light", size: 22)
-        mortgageCalcView.addSubview(loanAmountTxtField)
+        calcView.addSubview(loanAmountTxtField)
         
         /********************************************************* Mortgage Term ********************************************************************/
          // UILabel
-        let mTermLabel = UILabel(frame: CGRectMake(10, 75, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        let mTermLabel = UILabel(frame: CGRectMake(10, 75, (calcView.bounds.size.width / 2) - 20, 40))
         mTermLabel.text = "MORTGAGE TERM = "
         mTermLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         mTermLabel.textAlignment = NSTextAlignment.Right
         mTermLabel.textColor = UIColor.darkTextColor()
-        mortgageCalcView.addSubview(mTermLabel)
+        calcView.addSubview(mTermLabel)
         
         // UITextField
         let mTermAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        mortgageTxtField.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 75,(mortgageCalcView.bounds.size.width / 2) - 20, 40));
+        mortgageTxtField.frame = (frame: CGRectMake((calcView.bounds.size.width / 2) + 10, 75,(calcView.bounds.size.width / 2) - 20, 40));
         mortgageTxtField.layer.borderColor = model.lightGrayColor.CGColor
         mortgageTxtField.layer.borderWidth = 1.0
         mortgageTxtField.layer.cornerRadius = 2.0
@@ -94,20 +89,20 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         mortgageTxtField.returnKeyType = .Done
         mortgageTxtField.keyboardType = UIKeyboardType.NumberPad
         mortgageTxtField.font = UIFont(name: "forza-light", size: 22)
-        mortgageCalcView.addSubview(mortgageTxtField)
+        calcView.addSubview(mortgageTxtField)
         
         /********************************************************* Interest Rate ********************************************************************/
          // UILabel
-        let interestRateLabel = UILabel(frame: CGRectMake(10, 125, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        let interestRateLabel = UILabel(frame: CGRectMake(10, 125, (calcView.bounds.size.width / 2) - 20, 40))
         interestRateLabel.text = "INTEREST RATE = "
         interestRateLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         interestRateLabel.textAlignment = NSTextAlignment.Right
         interestRateLabel.textColor = UIColor.darkTextColor()
-        mortgageCalcView.addSubview(interestRateLabel)
+        calcView.addSubview(interestRateLabel)
         
         // UITextField
         let interestAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        interestTxtField.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 125,(mortgageCalcView.bounds.size.width / 2) - 20, 40));
+        interestTxtField.frame = (frame: CGRectMake((calcView.bounds.size.width / 2) + 10, 125,(calcView.bounds.size.width / 2) - 20, 40));
         interestTxtField.layer.borderColor = model.lightGrayColor.CGColor
         interestTxtField.layer.borderWidth = 1.0
         interestTxtField.layer.cornerRadius = 2.0
@@ -119,20 +114,20 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         interestTxtField.returnKeyType = .Done
         interestTxtField.keyboardType = UIKeyboardType.DecimalPad
         interestTxtField.font = UIFont(name: "forza-light", size: 22)
-        mortgageCalcView.addSubview(interestTxtField)
+        calcView.addSubview(interestTxtField)
         
         /********************************************************* Down Payment ********************************************************************/
          // UILabel
-        let downPaymentLabel = UILabel(frame: CGRectMake(10, 175, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        let downPaymentLabel = UILabel(frame: CGRectMake(10, 175, (calcView.bounds.size.width / 2) - 20, 40))
         downPaymentLabel.text = "DOWNPAYMENT = "
         downPaymentLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         downPaymentLabel.textAlignment = NSTextAlignment.Right
         downPaymentLabel.textColor = UIColor.darkTextColor()
-        mortgageCalcView.addSubview(downPaymentLabel)
+        calcView.addSubview(downPaymentLabel)
         
         // UITextField
         let downPaymentPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        downPaymentTxtField.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 175,(mortgageCalcView.bounds.size.width / 2) - 20, 40));
+        downPaymentTxtField.frame = (frame: CGRectMake((calcView.bounds.size.width / 2) + 10, 175,(calcView.bounds.size.width / 2) - 20, 40));
         downPaymentTxtField.layer.borderColor = model.lightGrayColor.CGColor
         downPaymentTxtField.layer.borderWidth = 1.0
         downPaymentTxtField.layer.cornerRadius = 2.0
@@ -144,20 +139,20 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         downPaymentTxtField.returnKeyType = .Done
         downPaymentTxtField.keyboardType = UIKeyboardType.NumberPad
         downPaymentTxtField.font = UIFont(name: "forza-light", size: 22)
-        mortgageCalcView.addSubview(downPaymentTxtField)
+        calcView.addSubview(downPaymentTxtField)
         
         /********************************************************* Property Taxes ********************************************************************/
          // UILabel
-        let taxesLabel = UILabel(frame: CGRectMake(10, 225, (mortgageCalcView.bounds.size.width / 2) - 20, 40))
+        let taxesLabel = UILabel(frame: CGRectMake(10, 225, (calcView.bounds.size.width / 2) - 20, 40))
         taxesLabel.text = "PROPERTY TAXES = "
         taxesLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         taxesLabel.textAlignment = NSTextAlignment.Right
         taxesLabel.textColor = UIColor.darkTextColor()
-        mortgageCalcView.addSubview(taxesLabel)
+        calcView.addSubview(taxesLabel)
         
         // UITextField
         let taxesPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        taxesTxtField.frame = (frame: CGRectMake((mortgageCalcView.bounds.size.width / 2) + 10, 225,(mortgageCalcView.bounds.size.width / 2) - 20, 40));
+        taxesTxtField.frame = (frame: CGRectMake((calcView.bounds.size.width / 2) + 10, 225,(calcView.bounds.size.width / 2) - 20, 40));
         taxesTxtField.layer.borderColor = model.lightGrayColor.CGColor
         taxesTxtField.layer.borderWidth = 1.0
         taxesTxtField.layer.cornerRadius = 2.0
@@ -169,10 +164,10 @@ class MortgageCalculatorView: UIView, UITextFieldDelegate {
         taxesTxtField.returnKeyType = .Done
         taxesTxtField.keyboardType = UIKeyboardType.DecimalPad
         taxesTxtField.font = UIFont(name: "forza-light", size: 22)
-        mortgageCalcView.addSubview(taxesTxtField)
+        calcView.addSubview(taxesTxtField)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
-        mortgageCalcView.addGestureRecognizer(tapGesture)
+        calcView.addGestureRecognizer(tapGesture)
     }
     
     // MARK:

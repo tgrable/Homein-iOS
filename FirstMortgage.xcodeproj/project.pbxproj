@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C54BCC71C2F1F02001EC096 /* save_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C54BCC61C2F1F02001EC096 /* save_icon.png */; };
 		4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */; };
 		4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */; };
 		4F1ED5141C1B790900E40F4B /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1ED5131C1B790900E40F4B /* ParseUI.framework */; };
@@ -124,6 +125,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2C54BCC61C2F1F02001EC096 /* save_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = save_icon.png; path = images/save_icon.png; sourceTree = "<group>"; };
 		4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = FirstMortgage/DeviceExtension.swift; sourceTree = "<group>"; };
 		4F1ED5131C1B790900E40F4B /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = frameworks/ParseUI.framework; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 		4FAF3D2C1BE119E200A89A9A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2C54BCC61C2F1F02001EC096 /* save_icon.png */,
 				4F9970FA1C2B0E22005173B8 /* hide_keyboard.png */,
 				4FD37AB51C29A49C008A1F3C /* expand_white_up@3x.png */,
 				4FD37AB61C29A49C008A1F3C /* expand_white_up@2x.png */,
@@ -583,6 +586,7 @@
 				4FD37AB81C29A49C008A1F3C /* expand_white_up@3x.png in Resources */,
 				4F6B03201C2498190055521B /* loadscreen.png in Resources */,
 				4FADCA641C0E2798000186A8 /* edit_icon.png in Resources */,
+				2C54BCC71C2F1F02001EC096 /* save_icon.png in Resources */,
 				4FF179251C2200A300A00CE0 /* add_icon_grey.png in Resources */,
 				4FD37AA41C299778008A1F3C /* profile_white@2x.png in Resources */,
 				4F6B03221C2498190055521B /* loadscreen@3x.png in Resources */,

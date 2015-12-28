@@ -830,14 +830,20 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         var year = 2010.0
         if currentYearTxtField.text?.isEmpty != true {
-            year = Double(currentYearTxtField.text!)!
-            if year > 00 && year < 50 {
-                year = year + 2000
+            if currentYearTxtField.text?.characters.count == 2 {
+                year = Double(currentYearTxtField.text!)!
+                if year > 00 && year < 50 {
+                    year = year + 2000
+                }
+                else {
+                    year = year + 1900
+                }
             }
             else {
-                year = year + 1900
+                year = Double(currentYearTxtField.text!)!
             }
         }
+            
         
         print(year)
         

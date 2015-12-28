@@ -337,16 +337,23 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         saveButton.tag = 0
         saveView.addSubview(saveButton)
         
+        let btnImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let btnView = UIImageView(frame: CGRectMake(0, saveView.bounds.size.height, saveView.bounds.size.width, 15))
+        btnView.image = btnImg
+        saveView.addSubview(btnView)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         scrollView.addGestureRecognizer(tapGesture)
         
         overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         overlayView.backgroundColor = UIColor.blackColor()
-        overlayView.alpha = 0.75
+        overlayView.alpha = 0.85
         overlayView.hidden = true
         self.view.addSubview(overlayView)
         
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.White)
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
         activityIndicator.center = view.center
         overlayView.addSubview(activityIndicator)
         
@@ -423,6 +430,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
             textView.textColor = UIColor.blackColor()
         }
     }
+    
     func textViewDidEndEditing(textView: UITextView) {
         if textView.text.isEmpty {
             textView.text = "Add notes about this house."
@@ -440,10 +448,15 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     //MARK:
     //MARK: UIImagePickerController Delegates
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        if let pickedImage = info[UIImagePickerControllerEditedImage] as? UIImage {
+        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
             imageView.contentMode = .ScaleAspectFit
             imageView.image = pickedImage
+            imageView.frame = (frame: CGRectMake((scrollView.bounds.size.width / 2) - 125, 25, 250, 175))
             img = pickedImage
+            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                self.img = self.scaleImagesForParse(self.img)
+            }
+
             if (picker.sourceType.rawValue == 1) {
                 UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
             }
@@ -459,17 +472,30 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func scaleImagesForParse(img: UIImage) -> UIImage {
+        let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(0.33, 0.33))
+        let hasAlpha = false
+        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+        
+        UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
+        img.drawInRect(CGRect(origin: CGPointZero, size: size))
+        
+        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return scaledImage
+    }
+
     func selectWhereToGetImage(sender: UIButton) {
         tapGesture()
         
         let photoLibActionHandler = { (action:UIAlertAction!) -> Void in
-            self.picker.allowsEditing = true
+            self.picker.allowsEditing = false
             self.picker.sourceType = .PhotoLibrary
             self.presentViewController(self.picker, animated: true, completion: nil)
         }
         
         let cameraActionHandler = { (action:UIAlertAction!) -> Void in
-            self.picker.allowsEditing = true
+            self.picker.allowsEditing = false
             self.picker.sourceType = UIImagePickerControllerSourceType.Camera
             self.picker.cameraCaptureMode = .Photo
             self.picker.modalPresentationStyle = .FullScreen

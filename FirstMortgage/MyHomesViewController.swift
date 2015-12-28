@@ -45,12 +45,18 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         homeTableView.delegate = self
         homeTableView.dataSource = self
         
+        // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(animated: Bool) {
         getAllHomesForUser("name")
         buildView()
         
         showSortTray()
-        
-        // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        homeTableView.reloadData()
     }
     
     override func didReceiveMemoryWarning() {
@@ -408,25 +414,18 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         
         switch rating {
         case 0:
-            print("case 0:")
             cell.ratingView?.image = UIImage(named: "star-0")
         case 1:
-            print("case 1:")
             cell.ratingView?.image = UIImage(named: "star-1")
         case 2:
-            print("case 2:")
             cell.ratingView?.image = UIImage(named: "star-2")
         case 3:
-            print("case 3:")
             cell.ratingView?.image = UIImage(named: "star-3")
         case 4:
-            print("case 4:")
             cell.ratingView?.image = UIImage(named: "star-4")
         case 5:
-            print("case 5:")
             cell.ratingView?.image = UIImage(named: "star-5")
         default:
-            print("default:")
             cell.ratingView?.image = UIImage(named: "star-0")
         }
     }

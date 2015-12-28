@@ -8,7 +8,6 @@
 
 import UIKit
 import Parse
-import ParseUI
 
 class HomeViewController: UIViewController, UITextFieldDelegate {
     
@@ -79,13 +78,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print(loanOfficerArray.count)
-        
+
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             if CLLocationManager.locationServicesEnabled() {
                 switch(CLLocationManager.authorizationStatus()) {
-                case .NotDetermined, .Restricted, .Denied:
+                case .NotDetermined, .Restricted: //, .Denied:
                     self.locationServicesIsAllowed = false
                 case .AuthorizedAlways, .AuthorizedWhenInUse:
                     self.locationServicesIsAllowed = true
@@ -93,7 +90,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                     self.locationServicesIsAllowed = false
                 }
             }
-        }  
+        }
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -212,10 +209,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             addHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
             addHomesView.layer.insertSublayer(addHomesGradientLayer, atIndex: 0)
             addHomesView.layer.addSublayer(addHomesGradientLayer)
+            print("Should be blue")
         }
         else {
             addHomesView.backgroundColor = UIColor.grayColor()
             addAHomeButton.enabled = false
+            print("Should be gray")
         }
         scrollView.addSubview(addHomesView)
  
@@ -360,7 +359,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             if var _ = user!["officerURL"] {
                 url = user!["officerURL"] as! String
             }
-
         }
 
         if (user != nil && url.characters.count > 0) {
@@ -404,7 +402,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
         userButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         userButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
-        userButton.backgroundColor = UIColor.clearColor()
         userButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         userButton.contentHorizontalAlignment = .Right
         whiteBar.addSubview(userButton)
@@ -855,10 +852,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                 self.isRegisterView = false
         })
     }
-    
-    
-    
-    
+
     // MARK:
     // MARK: Parse Login/Sign up
     func loginSignupUser(sender: Int) {
@@ -979,6 +973,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         default:
             print("Default")
         }
+        
+        removeViews(homeView)
     }
     
     func loginSignupUserButtonPress(sender: UIButton) {
@@ -1066,6 +1062,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        if segue.identifier == "profileViewController" {
+            let destViewController: ProfileViewController = segue.destinationViewController as! ProfileViewController
+            print(loanOfficerArray.count)
+            destViewController.loanOfficerArray = loanOfficerArray
+            destViewController.tempArray = loanOfficerArray
+        }
         
         if segue.identifier == "calculatorsViewController" {
             let destViewController: CalculatorsViewController = segue.destinationViewController as! CalculatorsViewController

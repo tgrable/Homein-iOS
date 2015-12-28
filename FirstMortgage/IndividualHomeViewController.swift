@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class IndividualHomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+class IndividualHomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIScrollViewDelegate {
     
     // MARK:
     // MARK: Properties
@@ -22,6 +22,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     let overlayView = UIView()
     let calcTray = UIView()
     let saveDeleteTray = UIView()
+    let loadingOverlay = UIView()
     
     // UIScrollView
     let scrollView = UIScrollView()
@@ -37,9 +38,17 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     let descTxtView = UITextView()
     var userRating = Int()
     
+    // UITextField
+    let loanAmountTxtField = UITextField() as UITextField
+    let mortgageTxtField = UITextField() as UITextField
+    let interestTxtField = UITextField() as UITextField
+    let downPaymentTxtField = UITextField() as UITextField
+    let taxesTxtField = UITextField() as UITextField
+    
     // UIImagePickerController
     let picker = UIImagePickerController()
     var img = UIImage()
+    var newImg = UIImage()
     
     // UILabel
     var paymentLabel = UILabel() as UILabel
@@ -62,13 +71,19 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     var isCalcTrayOpen = Bool()
     
     let estPaymentLabel = UILabel()
+    let imageIndexLabel = UILabel()
     
     let saveView = UIView()
     let saveButton = UIButton ()
     let editButton = UIButton ()
     let editIcon = UIImageView()
+    let saveImageDefaultButton = UIButton()
     
     let hideKeyboardButton = UIButton()
+    
+    var contentOffSet = 0.0 as CGFloat
+    var imageIndex = 0
+    var scrollLocation = 0.0 as CGFloat
     
     // MARK:
     // MARK: View Life Cycle
@@ -79,13 +94,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
         
         picker.delegate = self
-        
         buildView()
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(animated: Bool) {
-        
+
     }
     
     override func didReceiveMemoryWarning() {
@@ -164,7 +177,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         myHomesView.addSubview(scrollView)
         
         buildCalcTray()
-        
         buildHomeTray()
         buildSaveDeleteTray()
         
@@ -204,6 +216,17 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calcBannerButton.addTarget(self, action: "showHideCalcTray:", forControlEvents: .TouchUpInside)
         calcBannerButton.backgroundColor = UIColor.clearColor()
         calcBannerView.addSubview(calcBannerButton)
+        
+        loadingOverlay.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.size.height))
+        loadingOverlay.backgroundColor = UIColor.darkGrayColor()
+        loadingOverlay.hidden = true
+        loadingOverlay.alpha = 0.85
+        self.view.addSubview(loadingOverlay)
+        
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        activityIndicator.center = view.center
+        loadingOverlay.addSubview(activityIndicator)
         
         scrollView.contentSize = CGSize(width: myHomesView.bounds.size.width, height: 900)
     }
@@ -280,7 +303,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         var xOffset = 0
         userRating = homeObject["rating"] as! Int
-        print(userRating)
         
         for i in 1...5 {
             // UIButton
@@ -380,7 +402,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                     size: 12.0)!])
         }
         
-        
         // UITextField
         sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 385, (homeTray.bounds.size.width / 3) - 10, 30))
         sqFeetTxtField.attributedPlaceholder = attributedHomeSqft
@@ -435,11 +456,136 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calcTray.backgroundColor = UIColor.clearColor()
         scrollView.addSubview(calcTray)
         
-        let mortView = UIView(frame: CGRectMake(0, 0, scrollView.bounds.size.width, 300))
-        mortView.backgroundColor = model.lightGrayColor
+        let mortView = UIView(frame: CGRectMake(0, 0, calcTray.bounds.size.width, 300))
+        mortView.backgroundColor = UIColor.whiteColor()
         calcTray.addSubview(mortView)
         
-        mortgageView.buildMortgageCalcView(mortView)
+        //mortgageView.buildMortgageCalcView(mortView)
+        /********************************************************* Loan Amount ********************************************************************/
+        // UILabel
+        let loanAmountLabel = UILabel(frame: CGRectMake(10, 25, (mortView.bounds.size.width / 2) - 20, 40))
+        loanAmountLabel.text = "SALE PRICE = "
+        loanAmountLabel.font = UIFont(name: "forza-light", size: 14)
+        loanAmountLabel.textAlignment = NSTextAlignment.Right
+        loanAmountLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(loanAmountLabel)
+        
+        // UITextField
+        let loanAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        loanAmountTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 25,(mortView.bounds.size.width / 2) - 20, 40));
+        loanAmountTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        loanAmountTxtField.layer.borderWidth = 1.0
+        loanAmountTxtField.layer.cornerRadius = 2.0
+        loanAmountTxtField.leftView = loanAmountPaddingView
+        loanAmountTxtField.leftViewMode = UITextFieldViewMode.Always
+        loanAmountTxtField.placeholder = "$250,000"
+        loanAmountTxtField.backgroundColor = UIColor.clearColor()
+        loanAmountTxtField.delegate = self
+        loanAmountTxtField.returnKeyType = .Done
+        loanAmountTxtField.keyboardType = UIKeyboardType.NumberPad
+        loanAmountTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(loanAmountTxtField)
+        
+        /********************************************************* Mortgage Term ********************************************************************/
+         // UILabel
+        let mTermLabel = UILabel(frame: CGRectMake(10, 75, (mortView.bounds.size.width / 2) - 20, 40))
+        mTermLabel.text = "MORTGAGE TERM = "
+        mTermLabel.font = UIFont(name: "forza-light", size: 14)
+        mTermLabel.textAlignment = NSTextAlignment.Right
+        mTermLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(mTermLabel)
+
+        
+        // UITextField
+        let mTermAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        mortgageTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 75,(mortView.bounds.size.width / 2) - 20, 40));
+        mortgageTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        mortgageTxtField.layer.borderWidth = 1.0
+        mortgageTxtField.layer.cornerRadius = 2.0
+        mortgageTxtField.leftView = mTermAmountPaddingView
+        mortgageTxtField.leftViewMode = UITextFieldViewMode.Always
+        mortgageTxtField.placeholder = "30 YEARS"
+        mortgageTxtField.backgroundColor = UIColor.clearColor()
+        mortgageTxtField.delegate = self
+        mortgageTxtField.returnKeyType = .Done
+        mortgageTxtField.keyboardType = UIKeyboardType.NumberPad
+        mortgageTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(mortgageTxtField)
+        
+        /********************************************************* Interest Rate ********************************************************************/
+         // UILabel
+        let interestRateLabel = UILabel(frame: CGRectMake(10, 125, (mortView.bounds.size.width / 2) - 20, 40))
+        interestRateLabel.text = "INTEREST RATE = "
+        interestRateLabel.font = UIFont(name: "forza-light", size: 14)
+        interestRateLabel.textAlignment = NSTextAlignment.Right
+        interestRateLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(interestRateLabel)
+        
+        // UITextField
+        let interestAmountPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        interestTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 125,(mortView.bounds.size.width / 2) - 20, 40));
+        interestTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        interestTxtField.layer.borderWidth = 1.0
+        interestTxtField.layer.cornerRadius = 2.0
+        interestTxtField.leftView = interestAmountPaddingView
+        interestTxtField.leftViewMode = UITextFieldViewMode.Always
+        interestTxtField.placeholder = "3.5%"
+        interestTxtField.backgroundColor = UIColor.clearColor()
+        interestTxtField.delegate = self
+        interestTxtField.returnKeyType = .Done
+        interestTxtField.keyboardType = UIKeyboardType.DecimalPad
+        interestTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(interestTxtField)
+        
+        /********************************************************* Down Payment ********************************************************************/
+         // UILabel
+        let downPaymentLabel = UILabel(frame: CGRectMake(10, 175, (mortView.bounds.size.width / 2) - 20, 40))
+        downPaymentLabel.text = "DOWNPAYMENT = "
+        downPaymentLabel.font = UIFont(name: "forza-light", size: 14)
+        downPaymentLabel.textAlignment = NSTextAlignment.Right
+        downPaymentLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(downPaymentLabel)
+        
+        // UITextField
+        let downPaymentPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        downPaymentTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 175,(mortView.bounds.size.width / 2) - 20, 40));
+        downPaymentTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        downPaymentTxtField.layer.borderWidth = 1.0
+        downPaymentTxtField.layer.cornerRadius = 2.0
+        downPaymentTxtField.leftView = downPaymentPaddingView
+        downPaymentTxtField.leftViewMode = UITextFieldViewMode.Always
+        downPaymentTxtField.placeholder = "$5,000"
+        downPaymentTxtField.backgroundColor = UIColor.clearColor()
+        downPaymentTxtField.delegate = self
+        downPaymentTxtField.returnKeyType = .Done
+        downPaymentTxtField.keyboardType = UIKeyboardType.NumberPad
+        downPaymentTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(downPaymentTxtField)
+        
+        /********************************************************* Property Taxes ********************************************************************/
+        // UILabel
+        let taxesLabel = UILabel(frame: CGRectMake(10, 225, (mortView.bounds.size.width / 2) - 20, 40))
+        taxesLabel.text = "PROPERTY TAXES = "
+        taxesLabel.font = UIFont(name: "forza-light", size: 14)
+        taxesLabel.textAlignment = NSTextAlignment.Right
+        taxesLabel.textColor = UIColor.darkTextColor()
+        mortView.addSubview(taxesLabel)
+        
+        // UITextField
+        let taxesPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
+        taxesTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 225,(mortView.bounds.size.width / 2) - 20, 40));
+        taxesTxtField.layer.borderColor = model.lightGrayColor.CGColor
+        taxesTxtField.layer.borderWidth = 1.0
+        taxesTxtField.layer.cornerRadius = 2.0
+        taxesTxtField.placeholder = "3.750%"
+        taxesTxtField.leftView = taxesPaddingView
+        taxesTxtField.leftViewMode = UITextFieldViewMode.Always
+        taxesTxtField.backgroundColor = UIColor.clearColor()
+        taxesTxtField.delegate = self
+        taxesTxtField.returnKeyType = .Done
+        taxesTxtField.keyboardType = UIKeyboardType.DecimalPad
+        taxesTxtField.font = UIFont(name: "forza-light", size: 22)
+        mortView.addSubview(taxesTxtField)
         
         // UIView
         let calculateView = UIView(frame: CGRectMake(25, 310, calcTray.bounds.size.width - 50, 50))
@@ -545,7 +691,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 self.saveDeleteTray.frame = (frame: CGRectMake(0, 1180, self.scrollView.bounds.size.width, 450))
                 }, completion: {
                     (value: Bool) in
-                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1350)
+                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1500)
                     self.isCalcTrayOpen = true
             })
         }
@@ -593,6 +739,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     func imageOverlay(imageArray: Array<PFFile>) {
         
+        imageScollView.contentOffset.x = 0
         let overlayColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.6)
         
         overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
@@ -602,27 +749,35 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         imageScollView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         imageScollView.backgroundColor = UIColor.clearColor()
+        imageScollView.delegate = self
         overlayView.addSubview(imageScollView)
-        var xLocation = 0.0
         
+        var xLocation = 0.0 as CGFloat
         for img: PFFile in imageArray {
-            img.getDataInBackgroundWithBlock {
-                (imageData: NSData?, error: NSError?) -> Void in
-                if error == nil {
-                    if let imageData = imageData {
-                        let image = UIImage(data:imageData)
-                        print(image)
-                        let homeImageView = UIImageView(frame: CGRectMake(CGFloat(xLocation), 0, self.view.bounds.size.width, self.view.bounds.size.height))
-                        homeImageView.contentMode = .ScaleAspectFit
-                        homeImageView.backgroundColor = UIColor.clearColor()
-                        self.imageScollView.addSubview(homeImageView)
-                        homeImageView.image = image
-                    }
-                    
-                    xLocation += Double(self.scrollView.bounds.size.width)
-                }
-            }
+            addImageToOverlayAtLocation(img, xLocation: xLocation)
+            xLocation += self.scrollView.bounds.size.width
         }
+        
+        var labelWidth = 100.0 as CGFloat
+        if imageArray.count > 9 {
+            labelWidth = 125.0
+        }
+        
+        saveImageDefaultButton.frame = (frame: CGRectMake(10, 25, 40, 40))
+        saveImageDefaultButton.addTarget(self, action: "setImageAsDefault:", forControlEvents: .TouchUpInside)
+        saveImageDefaultButton.setBackgroundImage(UIImage(named: "save_icon"), forState: .Normal)
+        saveImageDefaultButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        saveImageDefaultButton.backgroundColor = UIColor.clearColor()
+        saveImageDefaultButton.titleLabel!.font = UIFont(name: "forza-light", size: 45)
+        saveImageDefaultButton.tag = 0
+        overlayView.addSubview(saveImageDefaultButton)
+        
+        imageIndexLabel.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) - (labelWidth / 2), 25, labelWidth, 50))
+        imageIndexLabel.text = String(format: "%d of %d", 1, imageArray.count)
+        imageIndexLabel.font = UIFont(name: "forza-light", size: 35)
+        imageIndexLabel.textAlignment = NSTextAlignment.Right
+        imageIndexLabel.textColor = UIColor.whiteColor()
+        overlayView.addSubview(imageIndexLabel)
         
         let closeButton = UIButton(frame: CGRectMake(self.view.bounds.size.width - 50, 25, 50, 50))
         closeButton.addTarget(self, action: "hideImageOverlay:", forControlEvents: .TouchUpInside)
@@ -633,7 +788,85 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         closeButton.tag = 0
         overlayView.addSubview(closeButton)
         
+        let setDefaultLabel = UILabel(frame: CGRectMake(0, self.view.bounds.size.height - 65, self.view.bounds.size.width, 65))
+        setDefaultLabel.text = "Use the save button to set an image as the new default image for this home."
+        setDefaultLabel.font = UIFont(name: "forza-light", size: 18)
+        setDefaultLabel.textAlignment = NSTextAlignment.Center
+        setDefaultLabel.textColor = UIColor.whiteColor()
+        setDefaultLabel.numberOfLines = 3
+        setDefaultLabel.backgroundColor = UIColor(red:0.0/255.0, green:0.0/255.0, blue:0.0/255.0, alpha:90.0)
+        overlayView.addSubview(setDefaultLabel)
+        
         imageScollView.contentSize = CGSize(width: CGFloat(Int(scrollView.bounds.size.width) * imageArray.count), height: 250)
+    }
+    
+    func addImageToOverlayAtLocation(img: PFFile, xLocation: CGFloat) {
+        img.getDataInBackgroundWithBlock {
+            (imageData: NSData?, error: NSError?) -> Void in
+            if error == nil {
+                if let imageData = imageData {
+                    let image = UIImage(data:imageData)
+                    let homeImageView = UIImageView(frame: CGRectMake(CGFloat(xLocation), 0, self.view.bounds.size.width, self.view.bounds.size.height))
+                    homeImageView.contentMode = .ScaleAspectFit
+                    homeImageView.backgroundColor = UIColor.clearColor()
+                    self.imageScollView.addSubview(homeImageView)
+                    homeImageView.image = image
+                }
+            }
+        }
+    }
+    
+    // MARK:
+    // MARK: UIScrollViewDelegate
+    func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        
+        /**
+        * Here we target a specific cell index to move towards
+        */
+        let imageWidth = self.view.bounds.size.width as CGFloat
+        if (velocity.x == 0.0)
+        {
+            // A 0 velocity means the user dragged and stopped (no flick)
+            // In this case, tell the scroll view to animate to the closest index
+            if (targetContentOffset.memory.x > scrollLocation) {
+                print("Should increase")
+                imageIndex++
+                scrollLocation = imageWidth * CGFloat(imageIndex)
+            }
+            else {
+                print("Should decrease")
+                imageIndex--
+                scrollLocation = imageWidth * CGFloat(imageIndex)
+            }
+        }
+        else if (velocity.x > 0.0)
+        {
+            // User scrolled right
+            // Evaluate to the nearest index
+            // Err towards closer a index by forcing a slightly closer target offset
+            imageIndex++
+            scrollLocation = imageWidth * CGFloat(imageIndex)
+        }
+        else
+        {
+            // User scrolled left
+            // Evaluate to the nearest index
+            // Err towards closer a index by forcing a slightly closer target offset
+            imageIndex--
+            scrollLocation = imageWidth * CGFloat(imageIndex)
+        }
+        
+        // Return our adjusted target point
+        // Adjust stopping point to exact beginning of cell.
+        targetContentOffset.memory.x = scrollLocation
+        imageIndexLabel.text = String(format: "%d of %d", Int(imageIndex) + 1, imageArray.count)
+        saveImageDefaultButton.tag = Int(imageIndex)
+    }
+    
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView){
+    }
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
     }
     
     // MARK:
@@ -676,6 +909,32 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 self.scrollView.contentOffset.y = 425
                 }, completion: nil)
         }
+        else if textField == loanAmountTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 800
+                }, completion: nil)
+        }
+        else if textField == mortgageTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 850
+                }, completion: nil)
+        }
+        else if textField == interestTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 900
+                }, completion: nil)
+        }
+        else if textField == downPaymentTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 950
+                }, completion: nil)
+        }
+        else if textField == taxesTxtField {
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 1000
+                }, completion: nil)
+        }
+        
         
         return true
     }
@@ -801,35 +1060,46 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         presentViewController(imageAlertController, animated: true, completion: nil)
     }
     
-    func calculateMortgagePaymentButtonPress(sender: UIButton) {        
+    func calculateMortgagePaymentButtonPress(sender: UIButton) {
+        tapGesture()
+        
         var saleAmount = 250000.0
-        if mortgageView.loanAmountTxtField.text?.isEmpty != true {
-            saleAmount = Double(mortgageView.loanAmountTxtField.text!)!
+        if loanAmountTxtField.text?.isEmpty != true {
+            saleAmount = Double(loanAmountTxtField.text!)!
         }
-        
-        var downPayment = 5000.0
-        if mortgageView.downPaymentTxtField.text?.isEmpty != true {
-            downPayment = Double(mortgageView.downPaymentTxtField.text!)!
-        }
-        
-        let loan = saleAmount - downPayment
         
         var mortgage = 30.0
-        if mortgageView.mortgageTxtField.text?.isEmpty != true {
-            mortgage = Double(mortgageView.mortgageTxtField.text!)!
+        if mortgageTxtField.text?.isEmpty != true {
+            mortgage = Double(mortgageTxtField.text!)!
         }
         
         var interest = 3.5
-        if mortgageView.interestTxtField.text?.isEmpty != true {
-            interest = Double(mortgageView.interestTxtField.text!)!
+        if interestTxtField.text?.isEmpty != true {
+            interest = Double(interestTxtField.text!)!
         }
         
+        var downPayment = 5000.0
+        if downPaymentTxtField.text?.isEmpty != true {
+            downPayment = Double(downPaymentTxtField.text!)!
+        }
+        
+        let loan = saleAmount - downPayment
+
         var taxes = 3.75
-        if mortgageView.taxesTxtField.text?.isEmpty != true {
-            taxes = Double(mortgageView.taxesTxtField.text!)!
+        if taxesTxtField.text?.isEmpty != true {
+            taxes = Double(taxesTxtField.text!)!
         }
         
-        paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: taxes))
+        estimatedPaymentDefault = model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: taxes)
+        paymentLabel.text = String(format:"$%.2f / MONTH", estimatedPaymentDefault)
+    }
+    
+    func setImageAsDefault(sender: UIButton) {
+        let img = imageArray[sender.tag]
+        imageArray.removeAtIndex(sender.tag)
+        imageArray.insert(img, atIndex: 0)
+        
+        reorderHomeObjectImageArray()
     }
     
     func deleteHome(sender: UIButton) {
@@ -840,24 +1110,28 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     //MARK: UIImagePickerController Delegates
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            defaultImageView.contentMode = .ScaleAspectFit
-            defaultImageView.image = pickedImage
-            img = pickedImage
+            //defaultImageView.contentMode = .ScaleAspectFit
+            //defaultImageView.image = pickedImage
+
             if (picker.sourceType.rawValue == 1) {
                 UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
             }
             
-            activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
-            activityIndicator.center = view.center
-            activityIndicator.startAnimating()
-            view.addSubview(activityIndicator)
-            scrollView.addSubview(activityIndicator)
+            let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
+            let nsUserDomainMask    = NSSearchPathDomainMask.UserDomainMask
+            let paths            = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
             
-            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                
-                self.img = self.scaleImagesForParse(self.img)
-                self.updateHomeObjectImageArray()
+            
+            if paths.count > 0
+            {
+                print(paths[0])
             }
+            
+            loadingOverlay.hidden = false
+            activityIndicator.startAnimating()
+
+            self.newImg = self.scaleImagesForParse(pickedImage)
+            self.updateHomeObjectImageArray()
 
         }
         else {
@@ -886,43 +1160,70 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         return scaledImage
     }
     
+    func removeViews(views: UIView) {
+        for view in views.subviews {
+            view.removeFromSuperview()
+        }
+    }
+    
     //MARK:
     //MARK: Parse Update Object
     func updateHomeObjectImageArray() {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             var imgArray = self.homeObject["imageArray"] as! Array<PFFile>
-            let imageData = UIImagePNGRepresentation(self.img)
+            let imageData = UIImagePNGRepresentation(self.newImg)
             
             if (imageData != nil) {
                 let imageFile = PFFile(name:"image.png", data:imageData!)
                 imgArray.append(imageFile!)
+                self.imageArray.append(imageFile!)
                 self.homeObject["imageArray"] = imgArray
             }
+            
             self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
                 if (success) {
                     self.imageScollView.removeFromSuperview()
                     self.imageOverlay(imgArray)
                     
+                    print(self.imageArray)
                     // TODO: This update method is really slow
                     print("The object was saved")
                 }
                 else {
                     print("The object was not saved")
                 }
-                
+
                 self.activityIndicator.stopAnimating()
+                self.loadingOverlay.hidden = true
             }
+        }
+    }
+    
+    func reorderHomeObjectImageArray() {
+        self.homeObject["imageArray"] = self.imageArray
+        
+        self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                self.removeViews(self.imageScollView)
+                self.setDefaultImage()
+                print("The object was saved")
+            }
+            else {
+                print("The object was not saved")
+            }
+            
+            self.activityIndicator.stopAnimating()
         }
     }
     
     func updateHomeObject(sender: UIButton) {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
-            self.homeObject["price"] = (self.homePriceTxtField.text != "") ? self.homePriceTxtField.text : self.homeObject["price"]
+            self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(self.homePriceTxtField.text!) : self.homeObject["price"]
             self.homeObject["rating"] = self.userRating
-            self.homeObject["beds"] = (self.bedsTxtField.text != "") ? self.bedsTxtField.text : self.homeObject["beds"]
-            self.homeObject["baths"] = (self.bathsTxtField.text != "") ? self.bathsTxtField.text : self.homeObject["baths"]
-            self.homeObject["footage"] = (self.sqFeetTxtField.text != "") ? self.sqFeetTxtField.text : self.homeObject["footage"]
+            self.homeObject["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : self.homeObject["beds"]
+            self.homeObject["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : self.homeObject["baths"]
+            self.homeObject["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : self.homeObject["footage"]
             self.homeObject["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : self.homeObject["address"]
             self.homeObject["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : self.homeObject["desc"]
             self.homeObject["monthlyPayment"] = self.estimatedPaymentDefault
@@ -962,7 +1263,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
         alertController.addAction(cancelAction)
         
-        let destroyAction = UIAlertAction(title: "Destroy", style: .Destructive) { (action) in
+        let destroyAction = UIAlertAction(title: "Delete", style: .Destructive) { (action) in
             self.homeObject.deleteInBackgroundWithBlock {
                 (success: Bool, error: NSError?) -> Void in
                 if (success) {
@@ -991,7 +1292,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
     }
     
-    
     func tapGesture() {
         homeNameTxtField.resignFirstResponder()
         homePriceTxtField.resignFirstResponder()
@@ -1000,16 +1300,28 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bathsTxtField.resignFirstResponder()
         sqFeetTxtField.resignFirstResponder()
         descTxtView.resignFirstResponder()
+        
+        loanAmountTxtField.resignFirstResponder()
+        mortgageTxtField.resignFirstResponder()
+        interestTxtField.resignFirstResponder()
+        downPaymentTxtField.resignFirstResponder()
+        taxesTxtField.resignFirstResponder()
     }
     
     func keyboardWillAppear(notification: NSNotification){
-        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1050)
+        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1500)
         hideKeyboardButton.enabled = true
         hideKeyboardButton.alpha = 1.0
     }
     
     func keyboardWillDisappear(notification: NSNotification){
-        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 815)
+        if isCalcTrayOpen {
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1500)
+        }
+        else {
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 900)
+        }
+        
         hideKeyboardButton.enabled = false
         hideKeyboardButton.alpha = 0.0
     }
