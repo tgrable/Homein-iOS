@@ -799,7 +799,12 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         var interest = 3.5
         if mortInterestTxtField.text?.isEmpty != true {
-            interest = Double(mortInterestTxtField.text!)!
+            if (Double(mortInterestTxtField.text!) == 0.0) {
+                interest = 0.01
+            }
+            else {
+                interest = Double(mortInterestTxtField.text!)!
+            }
         }
         
         var taxes = 3.75
@@ -825,7 +830,12 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
 
         var interest = 4.5
         if interestTextField.text?.isEmpty != true {
-            interest = Double(interestTextField.text!)!
+            if (Double(interestTextField.text!) == 0.0) {
+                interest = 0.01
+            }
+            else {
+                interest = Double(interestTextField.text!)!
+            }
         }
         
         var year = 2010.0
@@ -843,10 +853,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
                 year = Double(currentYearTxtField.text!)!
             }
         }
-            
-        
-        print(year)
-        
+
         var taxes = 3.75
         if taxesTxtField.text?.isEmpty != true {
             taxes = Double(taxesTxtField.text!)!

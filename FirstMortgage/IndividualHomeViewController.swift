@@ -180,7 +180,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         buildHomeTray()
         buildSaveDeleteTray()
         
-        var fontSize = 25 as CGFloat
+        var fontSize = 24 as CGFloat
         if modelName.rangeOfString("5") != nil{
             fontSize = 18
         }
@@ -1075,7 +1075,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         var interest = 3.5
         if interestTxtField.text?.isEmpty != true {
-            interest = Double(interestTxtField.text!)!
+            if (Double(interestTxtField.text!) == 0.0) {
+                interest = 0.01
+            }
+            else {
+                interest = Double(interestTxtField.text!)!
+            }
         }
         
         var downPayment = 5000.0

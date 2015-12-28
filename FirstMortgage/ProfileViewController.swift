@@ -237,7 +237,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         emailTxtField.backgroundColor = UIColor.clearColor()
         emailTxtField.delegate = self
         emailTxtField.returnKeyType = .Done
-        emailTxtField.keyboardType = UIKeyboardType.Default
+        emailTxtField.keyboardType = UIKeyboardType.EmailAddress
         emailTxtField.font = UIFont(name: "forza-light", size: 22)
         emailTxtField.enabled = false
         userView.addSubview(emailTxtField)
