@@ -596,9 +596,16 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calculateView.layer.addSublayer(calcGradientLayer)
         calcTray.addSubview(calculateView)
         
+        let calculateArrow = UILabel (frame: CGRectMake(calculateView.bounds.size.width - 50, 0, 40, 50))
+        calculateArrow.textAlignment = NSTextAlignment.Right
+        calculateArrow.font = UIFont(name: "forza-light", size: 40)
+        calculateArrow.text = ">"
+        calculateArrow.textColor = UIColor.whiteColor()
+        calculateView.addSubview(calculateArrow)
+        
         // UIButton
-        let calculateButton = UIButton (frame: CGRectMake(25, 0, calculateView.bounds.size.width - 25, calculateView.bounds.size.height))
-        calculateButton.addTarget(self, action: "calculateMortgagePaymentButtonPress:", forControlEvents: .TouchUpInside)
+        let calculateButton = UIButton (frame: CGRectMake(25, 0, calculateView.bounds.size.width - 25, 50))
+        calculateButton.addTarget(self, action: "calculateRefinanceButtonPress:", forControlEvents: .TouchUpInside)
         calculateButton.setTitle("CALCULATE", forState: .Normal)
         calculateButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         calculateButton.backgroundColor = UIColor.clearColor()
@@ -606,6 +613,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calculateButton.contentHorizontalAlignment = .Left
         calculateButton.tag = 0
         calculateView.addSubview(calculateButton)
+        
+        let btnImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let btnView = UIImageView(frame: CGRectMake(0, calculateView.bounds.size.height, calculateView.bounds.size.width, 15))
+        btnView.image = btnImg
+        calculateView.addSubview(btnView)
         
         // UILabel
         estPaymentLabel.frame = (frame: CGRectMake(25, 360, calcTray.bounds.size.width - 50, 25))
@@ -659,6 +672,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         deleteButton.tag = 0
         deleteView.addSubview(deleteButton)
         
+        let deleteButtonShadowImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let deleteButtonShadowView = UIImageView(frame: CGRectMake(0, deleteView.bounds.size.height, deleteView.bounds.size.width, 15))
+        deleteButtonShadowView.image = deleteButtonShadowImg
+        deleteView.addSubview(deleteButtonShadowView)
+        
         // UIView
         saveView.frame = (frame: CGRectMake(25, 65, calcTray.bounds.size.width - 50, 50))
         let saveGradientLayer = CAGradientLayer()
@@ -681,6 +700,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         saveButton.hidden = true
         saveButton.enabled = false
         saveView.addSubview(saveButton)
+        
+        let saveButtonShadowImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let saveButtonShadowView = UIImageView(frame: CGRectMake(0, saveView.bounds.size.height, saveView.bounds.size.width, 15))
+        saveButtonShadowView.image = saveButtonShadowImg
+        saveView.addSubview(saveButtonShadowView)
     }
 
     func showHideCalcTray(sender: UIButton) {
@@ -732,7 +757,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             }
         }
         else {
-            let fillerImage = UIImage(named: "homebackground") as UIImage?
+            let fillerImage = UIImage(named: "default_home") as UIImage?
             defaultImageView.image = fillerImage
         }
     }
@@ -751,6 +776,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         imageScollView.backgroundColor = UIColor.clearColor()
         imageScollView.delegate = self
         overlayView.addSubview(imageScollView)
+        
+        print(imageArray.count)
         
         var xLocation = 0.0 as CGFloat
         for img: PFFile in imageArray {
@@ -819,7 +846,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     // MARK:
     // MARK: UIScrollViewDelegate
     func scrollViewWillEndDragging(scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
-        
         /**
         * Here we target a specific cell index to move towards
         */
@@ -829,14 +855,16 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             // A 0 velocity means the user dragged and stopped (no flick)
             // In this case, tell the scroll view to animate to the closest index
             if (targetContentOffset.memory.x > scrollLocation) {
-                print("Should increase")
-                imageIndex++
-                scrollLocation = imageWidth * CGFloat(imageIndex)
+                if imageIndex < imageArray.count - 1 {
+                    imageIndex++
+                    scrollLocation = imageWidth * CGFloat(imageIndex)
+                }
             }
             else {
-                print("Should decrease")
-                imageIndex--
-                scrollLocation = imageWidth * CGFloat(imageIndex)
+                if imageIndex > 0 {
+                    imageIndex--
+                    scrollLocation = imageWidth * CGFloat(imageIndex)
+                }
             }
         }
         else if (velocity.x > 0.0)
@@ -844,16 +872,20 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             // User scrolled right
             // Evaluate to the nearest index
             // Err towards closer a index by forcing a slightly closer target offset
-            imageIndex++
-            scrollLocation = imageWidth * CGFloat(imageIndex)
+            if imageIndex < imageArray.count - 1 {
+                imageIndex++
+                scrollLocation = imageWidth * CGFloat(imageIndex)
+            }
         }
         else
         {
             // User scrolled left
             // Evaluate to the nearest index
             // Err towards closer a index by forcing a slightly closer target offset
-            imageIndex--
-            scrollLocation = imageWidth * CGFloat(imageIndex)
+            if imageIndex > 0 {
+                imageIndex--
+                scrollLocation = imageWidth * CGFloat(imageIndex)
+            }
         }
         
         // Return our adjusted target point
@@ -980,16 +1012,20 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     func hideImageOverlay(sender: UIButton) {
         overlayView.hidden = true
+        imageIndex = 0
+        imageScollView.contentOffset.x = 0
+        imageIndexLabel.text = String(format: "%d of %d", Int(imageIndex) + 1, imageArray.count)
     }
     
     func setRating(sender: UIButton) {
         tapGesture()
         
-        UIView.animateWithDuration(0.4, animations: {
-            self.scrollView.contentOffset.y = 300
-            }, completion: nil)
-        
         if (isTextFieldEnabled) {
+            
+            UIView.animateWithDuration(0.4, animations: {
+                self.scrollView.contentOffset.y = 300
+                }, completion: nil)
+            
             userRating = sender.tag
             for i in 0...4 {
                 let button = ratingButtonArray[i] as UIButton
@@ -1104,7 +1140,18 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         imageArray.removeAtIndex(sender.tag)
         imageArray.insert(img, atIndex: 0)
         
-        reorderHomeObjectImageArray()
+        removeViews(imageScollView)
+        self.homeObject["imageArray"] = self.imageArray
+        setDefaultImage()
+        
+        saveView.hidden = false
+        saveButton.hidden = false
+        saveButton.enabled = true
+        
+        overlayView.hidden = true
+        imageIndex = 0
+        imageScollView.contentOffset.x = 0
+        imageIndexLabel.text = String(format: "%d of %d", Int(imageIndex) + 1, imageArray.count)
     }
     
     func deleteHome(sender: UIButton) {
@@ -1122,9 +1169,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
             }
             
-            let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
-            let nsUserDomainMask    = NSSearchPathDomainMask.UserDomainMask
-            let paths            = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
+            /*let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
+            let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
+            let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
             
             
             if paths.count > 0
@@ -1133,7 +1180,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             }
             
             loadingOverlay.hidden = false
-            activityIndicator.startAnimating()
+            activityIndicator.startAnimating()*/
 
             self.newImg = self.scaleImagesForParse(pickedImage)
             self.updateHomeObjectImageArray()
@@ -1165,6 +1212,31 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         return scaledImage
     }
     
+    func updateHomeObjectImageArray() {
+        removeViews(imageScollView)
+        
+        saveView.hidden = false
+        saveButton.hidden = false
+        saveButton.enabled = true
+        
+        let imageData = UIImagePNGRepresentation(self.newImg)
+        if (imageData != nil) {
+            let imageFile = PFFile(name:"image.png", data:imageData!)
+            imageArray.append(imageFile!)
+            
+            imageOverlay(imageArray)
+        }
+        
+        if self.imageArray.count == 1 {
+            defaultImageView.image = newImg
+            
+            let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
+            overlayButton.backgroundColor = UIColor.clearColor()
+            overlayButton.addTarget(self, action: "showImageOverlay:", forControlEvents: .TouchUpInside)
+            self.scrollView.addSubview(overlayButton)
+        }
+    }
+    
     func removeViews(views: UIView) {
         for view in views.subviews {
             view.removeFromSuperview()
@@ -1173,55 +1245,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     //MARK:
     //MARK: Parse Update Object
-    func updateHomeObjectImageArray() {
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-            var imgArray = self.homeObject["imageArray"] as! Array<PFFile>
-            let imageData = UIImagePNGRepresentation(self.newImg)
-            
-            if (imageData != nil) {
-                let imageFile = PFFile(name:"image.png", data:imageData!)
-                imgArray.append(imageFile!)
-                self.imageArray.append(imageFile!)
-                self.homeObject["imageArray"] = imgArray
-            }
-            
-            self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-                if (success) {
-                    self.imageScollView.removeFromSuperview()
-                    self.imageOverlay(imgArray)
-                    
-                    print(self.imageArray)
-                    // TODO: This update method is really slow
-                    print("The object was saved")
-                }
-                else {
-                    print("The object was not saved")
-                }
-
-                self.activityIndicator.stopAnimating()
-                self.loadingOverlay.hidden = true
-            }
-        }
-    }
-    
-    func reorderHomeObjectImageArray() {
-        self.homeObject["imageArray"] = self.imageArray
-        
-        self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-            if (success) {
-                self.removeViews(self.imageScollView)
-                self.setDefaultImage()
-                print("The object was saved")
-            }
-            else {
-                print("The object was not saved")
-            }
-            
-            self.activityIndicator.stopAnimating()
-        }
-    }
-    
     func updateHomeObject(sender: UIButton) {
+        loadingOverlay.hidden = false
+        activityIndicator.startAnimating()
+        
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
             self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(self.homePriceTxtField.text!) : self.homeObject["price"]
@@ -1231,14 +1258,18 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             self.homeObject["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : self.homeObject["footage"]
             self.homeObject["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : self.homeObject["address"]
             self.homeObject["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : self.homeObject["desc"]
+            self.homeObject["imageArray"] = self.imageArray
             self.homeObject["monthlyPayment"] = self.estimatedPaymentDefault
             
             self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                self.activityIndicator.stopAnimating()
+                self.loadingOverlay.hidden = true
+                
                 if (success) {
                     let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
                     
                     let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        // ...
+                        
                     }
                     alertController.addAction(OKAction)
                     

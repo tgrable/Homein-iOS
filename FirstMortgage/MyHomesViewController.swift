@@ -291,7 +291,13 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func getAllHomesForUser(sortOrder: String) {
         let query = PFQuery(className:"Home")
         query.whereKey("user", equalTo:PFUser.currentUser()!)
-        query.orderByAscending(sortOrder)
+        if sortOrder == "name" {
+            query.orderByAscending(sortOrder)
+        }
+        else {
+            query.orderByDescending(sortOrder)
+        }
+        
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             
@@ -334,6 +340,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         
         setBedsForCell(cell, indexPath: indexPath)
         setBathsForCell(cell, indexPath: indexPath)
+        setSqfeetForCell(cell, indexPath: indexPath)
         
         setRatingImage(cell, indexPath: indexPath)
         
@@ -371,46 +378,91 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func setTitleForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
-        cell.titleLabel?.text = item["name"] as? String
+        
+        if let _ = item["name"] {
+            cell.titleLabel?.text = item["name"] as? String
+        }
+        else {
+            cell.titleLabel?.text = ""
+        }
     }
+    
     func setPriceForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
-        let price = item["price"] as! Double
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .CurrencyStyle
-        formatter.locale = NSLocale(localeIdentifier: "en_US")
-        cell.priceLabel?.text = formatter.stringFromNumber(price)
         
-        //cell.priceLabel?.text = String(format:"$%.0f", price) as String
+        if let _ = item["price"] {
+            let price = item["price"] as! Double
+            let formatter = NSNumberFormatter()
+            formatter.numberStyle = .CurrencyStyle
+            formatter.locale = NSLocale(localeIdentifier: "en_US")
+            cell.priceLabel?.text = formatter.stringFromNumber(price)
+        }
+        else {
+            cell.priceLabel?.text = "$0.00"
+        }
     }
+    
     func setAddressForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
-        cell.addressLabel?.text = item["address"] as? String
+        
+        if let _ = item["address"] {
+            cell.addressLabel?.text = item["address"] as? String
+        }
+        else {
+            cell.addressLabel?.text = ""
+        }
     }
+    
     func setBedsForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
-        let beds = item["beds"] as! Int
-        cell.bedsLabel?.text = String(format:"%d", beds) as String
+        
+        if let _ = item["beds"] {
+            let beds = item["beds"] as! Int
+            cell.bedsLabel?.text = String(format:"%d", beds) as String
+        }
+        else {
+            cell.bedsLabel?.text = String(format:"%d", 0) as String
+        }
     }
+    
     func setBathsForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
-        let baths = item["baths"] as! Double
-        cell.bathsLabel?.text = String(format: "%.1f", baths) as String
+        
+        if let _ = item["baths"] {
+            let baths = item["baths"] as! Double
+            cell.bathsLabel?.text = String(format: "%.1f", baths) as String
+        }
+        else {
+            cell.bathsLabel?.text = String(format: "%.1f", 0.0) as String
+        }
+        
     }
+    
     func setSqfeetForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
-        cell.addressLabel?.text = item["sqfeet"] as? String
+        
+        if let _ = item["footage"] {
+            let sqft = item["footage"] as! Int
+            cell.sqfeetLabel?.text = String(format:"%d", sqft) as String
+        }
+        else {
+            cell.sqfeetLabel?.text = String(format:"%d", 0) as String
+        }
     }
     
     func setRatingImage(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
-        let rating = item["rating"] as! Int
+        
+        var rating = 0
+        if let _ = item["rating"] {
+            rating = item["rating"] as! Int
+        }
         
         switch rating {
         case 0:
@@ -466,20 +518,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    /*func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let delete = UITableViewRowAction(style: .Destructive, title: "Delete") { (action, indexPath) in
-            // delete item at indexPath
-        }
-        
-        delete.backgroundColor = model.darkOrangeColor
-        return [delete]
-    }*/
-    
     // MARK:
     // MARK: Navigation
     func navigateBackHome(sender: UIButton) {
         navigationController?.popViewControllerAnimated(true)
     }
+    
     func addNewHome(sender: UIButton) {
         let ahvc = self.storyboard!.instantiateViewControllerWithIdentifier("addHomeViewController") as! AddHomeViewController
         self.navigationController!.pushViewController(ahvc, animated: true)

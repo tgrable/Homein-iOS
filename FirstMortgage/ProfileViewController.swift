@@ -20,6 +20,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let overlayView = UIView()
     let calculateView = UIView()
     let loView = UIView()
+    let loadingOverlay = UIView()
     
     // UIGradientLayer
     let calcGradientLayer = CAGradientLayer()
@@ -52,6 +53,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     var isTextFieldEnabled = Bool()
 
+    var activityIndicator = UIActivityIndicatorView()
+    
     let user = PFUser.currentUser()
     
     override func viewDidLoad() {
@@ -166,6 +169,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         searchTxtField.leftViewMode = UITextFieldViewMode.Always
         searchTxtField.returnKeyType = .Done
         searchTxtField.keyboardType = UIKeyboardType.Default
+        searchTxtField.autocorrectionType = .No
+        searchTxtField.autocapitalizationType = .Words
         searchTxtField.tag = 999
         searchTxtField.font = UIFont(name: "forza-light", size: 22)
         overlayView.addSubview(searchTxtField)
@@ -205,9 +210,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         let shadowImgOne = UIImage(named: "long_shadow") as UIImage?
         // UIImageView
-        let shadowViewOne = UIImageView(frame: CGRectMake(15, 150, userView.bounds.size.width, 15))
+        let shadowViewOne = UIImageView(frame: CGRectMake(0, userView.bounds.size.height, userView.bounds.size.width, 15))
         shadowViewOne.image = shadowImgOne
-        profileView.addSubview(shadowViewOne)
+        userView.addSubview(shadowViewOne)
         
         var name = "Enter Your Name"
         if let un = user!["name"] {
@@ -352,6 +357,17 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         saveBtnView.image = saveBtnImg
         calculateView.addSubview(saveBtnView)
         
+        loadingOverlay.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.size.height))
+        loadingOverlay.backgroundColor = UIColor.darkGrayColor()
+        loadingOverlay.hidden = true
+        loadingOverlay.alpha = 0.85
+        self.view.addSubview(loadingOverlay)
+        
+        activityIndicator = UIActivityIndicatorView()
+        activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
+        activityIndicator.center = view.center
+        loadingOverlay.addSubview(activityIndicator)
+        
         profileView.contentSize = CGSize(width: userView.bounds.size.width, height: 475)
     }
     
@@ -360,7 +376,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         var count = 0
         
         overlayView.hidden = false
-        
         for loanOfficer in loArray {
             let nodeDict = loanOfficer as NSDictionary
             buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count, view: scrollView, isSingleView: false)
@@ -369,7 +384,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             yVal += 160
             count++
         }
-
     }
 
     func getBranchLoanOfficers() {
@@ -464,12 +478,28 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         for loanOfficer in loanOfficerArray {
             if let lo = loanOfficer["name"] {
-                if lo.containsString(searchText) {
+                if lo.lowercaseString.containsString(searchText.lowercaseString) {
                     tempArray.append(loanOfficer)
                 }
             }
         }
-        buildSeachOverlay(tempArray)
+        if tempArray.count > 0 {
+            buildSeachOverlay(tempArray)
+        }
+        else {
+            buildSeachOverlay(loanOfficerArray)
+            
+            let alertController = UIAlertController(title: "HomeIn", message: "We could not find any loan officers with that name.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                // ...
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+        }
     }
     
     // MARK:
@@ -479,6 +509,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         case 0:
             navigationController?.popViewControllerAnimated(true)
         case 1:
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.removeObjectForKey("loanOfficerDict")
             PFUser.logOut()
             // TODO: Pop to home screen on logout
             //navigationController?.popViewControllerAnimated(true)
@@ -520,6 +552,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     // MARK: 
     // MARK: Parse
     func saveLoanOfficerToParse(nid: String, name: String, url: String) {
+        loadingOverlay.hidden = false
+        activityIndicator.startAnimating()
+        
         user!["officerNid"] = Int(nid)
         user!["officerName"] = name
         user!["officerURL"] = url
@@ -530,6 +565,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 self.buildProfileView()
                 self.overlayView.hidden = true
                 //self.buildLoanOfficerCard(loDict as! Dictionary<String, String>, yVal: 160, count: 0, view: self.profileView, isSingleView: true)
+                
+                self.loadingOverlay.hidden = true
+                self.activityIndicator.stopAnimating()
             }
             else {
                 print("error")
@@ -538,6 +576,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     func updateUser(sender: UIButton) {
+        loadingOverlay.hidden = false
+        activityIndicator.startAnimating()
+        
         user!["name"] = (nameTxtField.text != "") ? nameTxtField.text : user!["name"]
         user!["additional"] = (nameTxtField.text != "") ? nameTxtField.text : user!["additional"]
         user!["email"] = (emailTxtField.text != "") ? emailTxtField.text : user!["email"]
@@ -550,6 +591,16 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             else {
                 message = String(format: "There was an error updating your profile information. %@", error!)
             }
+            
+            self.nameTxtField.enabled = false
+            self.emailTxtField.enabled = false
+            self.loButton.enabled = false
+            
+            self.isTextFieldEnabled = false
+            self.editIcon.image = UIImage(named: "edit_icon")
+            
+            self.loadingOverlay.hidden = true
+            self.activityIndicator.stopAnimating()
             
             let alertController = UIAlertController(title: "HomeIn", message: message, preferredStyle: .Alert)
             

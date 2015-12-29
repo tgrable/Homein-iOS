@@ -788,9 +788,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         return loView
     }
-    
-    
-    
+
     // MARK:
     // MARK: Show/Hide Views
     func showHideLoginView() {
@@ -973,8 +971,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         default:
             print("Default")
         }
-        
-        removeViews(homeView)
     }
     
     func loginSignupUserButtonPress(sender: UIButton) {

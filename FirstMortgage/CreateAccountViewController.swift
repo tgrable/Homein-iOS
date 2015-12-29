@@ -35,6 +35,9 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     let registerView = UIView()
     
     //UITextField
+    let username = UITextField()
+    let password = UITextField()
+    
     let namereg = UITextField()
     let emailreg = UITextField()
     let usernamereg = UITextField()
@@ -47,6 +50,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     
     // Bool
     var isRegisterViewOpen = Bool()
+    var isLoginViewOpen = Bool()
     
     var imageView = UIImageView()
     
@@ -72,6 +76,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         self.view.backgroundColor = model.lightGrayColor
         
         buildCreateAccountView()
+        buildLoginView()
         buildSignUpView()
         
         loadingOverlay.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.size.height))
@@ -251,6 +256,36 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
         offset += getStartedView.bounds.size.height + 10.0
         
+        let loginButtonView = UIView(frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
+        let loginButtonGradientLayer = CAGradientLayer()
+        loginButtonGradientLayer.frame = loginButtonView.bounds
+        loginButtonGradientLayer.colors = [model.darkOrangeColor.CGColor, model.lightOrangeColor.CGColor]
+        loginButtonView.layer.insertSublayer(loginButtonGradientLayer, atIndex: 0)
+        loginButtonView.layer.addSublayer(loginButtonGradientLayer)
+        contentScrollView.addSubview(loginButtonView)
+        
+        let loginArrow = UILabel (frame: CGRectMake(getStartedView.bounds.size.width - 50, 0, 40, 40))
+        loginArrow.textAlignment = NSTextAlignment.Right
+        loginArrow.font = UIFont(name: "forza-light", size: 40)
+        loginArrow.text = ">"
+        loginArrow.textColor = UIColor.whiteColor()
+        loginButtonView.addSubview(loginArrow)
+        
+        let loginButton = UIButton (frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
+        loginButton.setTitle("LOGIN", forState: .Normal)
+        loginButton.addTarget(self, action: "showHideLoginView", forControlEvents: .TouchUpInside)
+        loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        loginButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        contentScrollView.addSubview(loginButton)
+        
+        let loginImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let loginShadowView = UIImageView(frame: CGRectMake(0, getStartedView.bounds.size.height, getStartedView.bounds.size.width, 15))
+        loginShadowView.image = loginImg
+        loginButtonView.addSubview(loginShadowView)
+        
+        offset += loginButtonView.bounds.size.height + 10.0
+        
         let continueWithoutButton = UIButton (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
         continueWithoutButton.setTitle("CONTINUE WITHOUT", forState: .Normal)
         continueWithoutButton.addTarget(self, action: "continueWithoutLogin:", forControlEvents: .TouchUpInside)
@@ -261,7 +296,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         contentScrollView.contentSize = CGSize(width: registerView.bounds.size.width, height: 525)
     }
     
-    func buildSignUpView() {
+    func buildLoginView() {
         loginView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width, self.view.bounds.height))
         loginView.backgroundColor = model.lightGrayColor
         self.view.addSubview(loginView)
@@ -272,7 +307,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
         let dismissButton = UIButton (frame: CGRectMake(0, 25, 50, 50))
         dismissButton.setTitle("X", forState: .Normal)
-        dismissButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        dismissButton.addTarget(self, action: "showHideLoginView", forControlEvents: .TouchUpInside)
         dismissButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 42)
         loginView.addSubview(dismissButton)
@@ -285,6 +320,91 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         bannerView.layer.addSublayer(bannerGradientLayer)
         bannerView.hidden = false
         loginView.addSubview(bannerView)
+        
+        let createAccountLabel = UILabel (frame: CGRectMake(0, 0, bannerView.bounds.size.width, 50))
+        createAccountLabel.textAlignment = NSTextAlignment.Center
+        createAccountLabel.font = UIFont(name: "forza-light", size: 25)
+        createAccountLabel.text = "LOG INTO YOUR ACCOUNT"
+        createAccountLabel.textColor = UIColor.whiteColor()
+        createAccountLabel.numberOfLines = 1
+        bannerView.addSubview(createAccountLabel)
+        
+        // UITextField
+        let unPaddingView = UIView(frame: CGRectMake(0, 0, 15, 50))
+        username.frame = (frame: CGRectMake(0, 155, self.view.bounds.size.width, 50));
+        username.layer.borderColor = model.lightGrayColor.CGColor
+        username.layer.borderWidth = 1.0
+        username.leftView = unPaddingView
+        username.leftViewMode = UITextFieldViewMode.Always
+        username.placeholder = "USER NAME"
+        username.backgroundColor = UIColor.whiteColor()
+        username.delegate = self
+        username.returnKeyType = .Next
+        username.keyboardType = UIKeyboardType.Default
+        username.autocapitalizationType = .None
+        username.autocorrectionType = .No
+        username.font = UIFont(name: "forza-username", size: 45)
+        loginView.addSubview(username)
+        
+        // UITextField
+        let pwPaddingView = UIView(frame: CGRectMake(0, 0, 15, 50))
+        password.frame = (frame: CGRectMake(0, 205, self.view.bounds.size.width, 50));
+        password.layer.borderColor = model.lightGrayColor.CGColor
+        password.layer.borderWidth = 1.0
+        password.leftView = pwPaddingView
+        password.leftViewMode = UITextFieldViewMode.Always
+        password.placeholder = "PASSWORD"
+        password.backgroundColor = UIColor.whiteColor()
+        password.delegate = self
+        password.returnKeyType = .Done
+        password.keyboardType = UIKeyboardType.Default
+        password.secureTextEntry = true
+        password.autocapitalizationType = .None
+        password.autocorrectionType = .No
+        password.font = UIFont(name: "forza-username", size: 45)
+        loginView.addSubview(password)
+        
+        let loginButton = UIButton (frame: CGRectMake(0, 275, self.view.bounds.size.width, 50))
+        loginButton.setTitle("LOGIN", forState: .Normal)
+        loginButton.addTarget(self, action: "loginUser", forControlEvents: .TouchUpInside)
+        loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        loginButton.backgroundColor = model.darkBlueColor
+        loginButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        loginButton.tag = 0
+        loginView.addSubview(loginButton)
+        
+        let forGotPasswordFormButton = UIButton (frame: CGRectMake(15, 325, contentScrollView.bounds.size.width - 30, 40))
+        forGotPasswordFormButton.setTitle("FORGOT PASSWORD?", forState: .Normal)
+        forGotPasswordFormButton.addTarget(self, action: "forgotPassord", forControlEvents: .TouchUpInside)
+        forGotPasswordFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
+        forGotPasswordFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
+        loginView.addSubview(forGotPasswordFormButton)
+    }
+    
+    func buildSignUpView() {
+        signUpView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width, self.view.bounds.height))
+        signUpView.backgroundColor = model.lightGrayColor
+        self.view.addSubview(signUpView)
+        
+        let logoView = UIImageView(image: UIImage(named:"home_in"))
+        logoView.frame = (frame: CGRectMake(100, 25, 159, 47.5))
+        signUpView.addSubview(logoView)
+        
+        let dismissButton = UIButton (frame: CGRectMake(0, 25, 50, 50))
+        dismissButton.setTitle("X", forState: .Normal)
+        dismissButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        dismissButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 42)
+        signUpView.addSubview(dismissButton)
+        
+        let bannerView = UIView(frame: CGRectMake(0, 85, model.deviceWidth(), 50))
+        let bannerGradientLayer = CAGradientLayer()
+        bannerGradientLayer.frame = bannerView.bounds
+        bannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
+        bannerView.layer.insertSublayer(bannerGradientLayer, atIndex: 0)
+        bannerView.layer.addSublayer(bannerGradientLayer)
+        bannerView.hidden = false
+        signUpView.addSubview(bannerView)
         
         let createAccountLabel = UILabel (frame: CGRectMake(0, 0, self.view.bounds.size.width, 50))
         createAccountLabel.textAlignment = NSTextAlignment.Center
@@ -309,7 +429,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         namereg.font = UIFont(name: "forza-username", size: 45)
         namereg.autocapitalizationType = .Words
         namereg.autocorrectionType = .No
-        loginView.addSubview(namereg)
+        signUpView.addSubview(namereg)
         
         // UITextField
         let emPaddingView = UIView(frame: CGRectMake(0, 0, 15, 50))
@@ -326,7 +446,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         emailreg.autocapitalizationType = .None
         emailreg.autocorrectionType = .No
         emailreg.font = UIFont(name: "forza-username", size: 45)
-        loginView.addSubview(emailreg)
+        signUpView.addSubview(emailreg)
         
         // UITextField
         let unPaddingView = UIView(frame: CGRectMake(0, 0, 15, 50))
@@ -343,7 +463,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         usernamereg.autocapitalizationType = .None
         usernamereg.autocorrectionType = .No
         usernamereg.font = UIFont(name: "forza-username", size: 45)
-        loginView.addSubview(usernamereg)
+        signUpView.addSubview(usernamereg)
         
         // UITextField
         let pwPaddingView = UIView(frame: CGRectMake(0, 0, 15, 50))
@@ -361,7 +481,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         passwordreg.autocapitalizationType = .None
         passwordreg.autocorrectionType = .No
         passwordreg.font = UIFont(name: "forza-username", size: 45)
-        loginView.addSubview(passwordreg)
+        signUpView.addSubview(passwordreg)
         
         // UITextField
         let cpwPaddingView = UIView(frame: CGRectMake(0, 0, 15, 50))
@@ -379,7 +499,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         confirmpasswordreg.autocapitalizationType = .None
         confirmpasswordreg.autocorrectionType = .No
         confirmpasswordreg.font = UIFont(name: "forza-username", size: 45)
-        loginView.addSubview(confirmpasswordreg)
+        signUpView.addSubview(confirmpasswordreg)
         
         let signUpButton = UIButton (frame: CGRectMake(0, 425, self.view.bounds.size.width, 50))
         signUpButton.setTitle("SIGN UP", forState: .Normal)
@@ -388,13 +508,50 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         signUpButton.backgroundColor = model.darkBlueColor
         signUpButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         signUpButton.tag = 1
-        loginView.addSubview(signUpButton)
+        signUpView.addSubview(signUpButton)
+        
+        let closeSignUpFormButton = UIButton (frame: CGRectMake(15, 475, contentScrollView.bounds.size.width - 30, 40))
+        closeSignUpFormButton.setTitle("CLOSE SIGNUP FORM", forState: .Normal)
+        closeSignUpFormButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        closeSignUpFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
+        closeSignUpFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
+        signUpView.addSubview(closeSignUpFormButton)
+    }
+    
+    // MARK:
+    // MARK: Show/Hide Views
+    func showHideLoginView() {
+        username.resignFirstResponder()
+        password.resignFirstResponder()
+        
+        if (!isLoginViewOpen) {
+            UIView.animateWithDuration(0.4, animations: {
+                self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
+                }, completion: {
+                    (value: Bool) in
+                    self.isLoginViewOpen = true
+            })
+        }
+        else {
+            UIView.animateWithDuration(0.4, animations: {
+                self.loginView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width, self.view.bounds.height))
+                }, completion: {
+                    (value: Bool) in
+                    self.isLoginViewOpen = false
+            })
+        }
     }
     
     func showHideSignUpView() {
+        self.namereg.resignFirstResponder()
+        self.emailreg.resignFirstResponder()
+        self.usernamereg.resignFirstResponder()
+        self.passwordreg.resignFirstResponder()
+        self.confirmpasswordreg.resignFirstResponder()
+        
         if (!isRegisterViewOpen) {
             UIView.animateWithDuration(0.4, animations: {
-                self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
+                self.signUpView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
                 }, completion: {
                     (value: Bool) in
                     self.isRegisterViewOpen = true
@@ -402,7 +559,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         }
         else {
             UIView.animateWithDuration(0.4, animations: {
-                self.loginView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width, self.view.bounds.height))
+                self.signUpView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width, self.view.bounds.height))
                 }, completion: {
                     (value: Bool) in
                     self.isRegisterViewOpen = false
@@ -490,12 +647,29 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         tempArray.removeAll()
         for loanOfficer in loanOfficerArray {
             if let lo = loanOfficer["name"] {
-                if lo.containsString(searchText) {
+                if lo.lowercaseString.containsString(searchText.lowercaseString) {
                     tempArray.append(loanOfficer)
                 }
             }
         }
-        buildLoanOfficerSeachOverLay(tempArray)
+        if tempArray.count > 0 {
+            buildLoanOfficerSeachOverLay(tempArray)
+        }
+        else {
+            buildLoanOfficerSeachOverLay(loanOfficerArray)
+            
+            let alertController = UIAlertController(title: "HomeIn", message: "We could not find any loan officers with that name.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                // ...
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+        }
+        
     }
     
     // MARK:
@@ -529,13 +703,19 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
                     self.loginView.frame = (frame: CGRectMake(0, -200, self.view.bounds.width, self.view.bounds.height))
                     }, completion: nil)
             }
-            else {
+            else if textField == confirmpasswordreg {
                 UIView.animateWithDuration(0.4, animations: {
                     self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.height))
                     }, completion: nil)
                 
                 textField.resignFirstResponder()
                 checkInputFields()
+            }
+            else if textField == username {
+                password.becomeFirstResponder()
+            }
+            else if textField == password {
+                loginUser()
             }
         }
         
@@ -546,27 +726,27 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     func textFieldDidBeginEditing(textField: UITextField) {
         if textField == self.namereg {
             UIView.animateWithDuration(0.4, animations: {
-                self.loginView.frame = (frame: CGRectMake(0, -50, self.view.bounds.width, self.view.bounds.height))
+                self.signUpView.frame = (frame: CGRectMake(0, -50, self.view.bounds.width, self.view.bounds.height))
                 }, completion: nil)
         }
         else if textField == emailreg {
             UIView.animateWithDuration(0.4, animations: {
-                self.loginView.frame = (frame: CGRectMake(0, -100, self.view.bounds.width, self.view.bounds.height))
+                self.signUpView.frame = (frame: CGRectMake(0, -100, self.view.bounds.width, self.view.bounds.height))
                 }, completion: nil)
         }
         else if textField == usernamereg {
             UIView.animateWithDuration(0.4, animations: {
-                self.loginView.frame = (frame: CGRectMake(0, -150, self.view.bounds.width, self.view.bounds.height))
+                self.signUpView.frame = (frame: CGRectMake(0, -150, self.view.bounds.width, self.view.bounds.height))
                 }, completion: nil)
         }
         else if textField == passwordreg {
             UIView.animateWithDuration(0.4, animations: {
-                self.loginView.frame = (frame: CGRectMake(0, -200, self.view.bounds.width, self.view.bounds.height))
+                self.signUpView.frame = (frame: CGRectMake(0, -200, self.view.bounds.width, self.view.bounds.height))
                 }, completion: nil)
         }
         else if textField == confirmpasswordreg {
             UIView.animateWithDuration(0.4, animations: {
-                self.loginView.frame = (frame: CGRectMake(0, -200, self.view.bounds.width, self.view.bounds.height))
+                self.signUpView.frame = (frame: CGRectMake(0, -200, self.view.bounds.width, self.view.bounds.height))
                 }, completion: nil)
         }
         else {
@@ -676,6 +856,8 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         searchTxtField.leftViewMode = UITextFieldViewMode.Always
         searchTxtField.returnKeyType = .Done
         searchTxtField.keyboardType = UIKeyboardType.Default
+        searchTxtField.autocapitalizationType = .Words
+        searchTxtField.autocorrectionType = .No
         searchTxtField.tag = 999
         searchTxtField.font = UIFont(name: "forza-light", size: 22)
         overlayView.addSubview(searchTxtField)
@@ -756,7 +938,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
     }
     
     // MARK:
-    // MARK: Parse
+    // MARK: Parse Login/Sign up
     func saveUserToParse(isWorkingWithAdvisor: Bool, nid: String, name: String, url: String) {
         
         activityIndicator.startAnimating()
@@ -808,12 +990,113 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
                 self.activityIndicator.stopAnimating()
                 self.performSegueWithIdentifier("userLoggedIn", sender: self)
                 
-                PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
+                // TODO: Uncomment this when ready to deploy
+                /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
                     
                     print("----- Email LO -----")
                     // TODO: [Error]: success/error was not called (Code: 141, Version: 1.10.0)
+                }*/
+            }
+        }
+    }
+
+    func loginUser() {
+        if (username.text!.isEmpty != true && password.text!.isEmpty != true) {
+            PFUser.logInWithUsernameInBackground(username.text!, password:password.text!) {
+                (user: PFUser?, error: NSError?) -> Void in
+                if user != nil {
+                    self.username.resignFirstResponder()
+                    self.password.resignFirstResponder()
+                    
+                    self.showHideLoginView()
+                    self.performSegueWithIdentifier("userLoggedIn", sender: self)
+                    
+                } else {
+                    let message = error!.localizedDescription as String
+                    let alertController = UIAlertController(title: "HomeIn", message: message, preferredStyle: .Alert)
+                    
+                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                        // ...
+                    }
+                    alertController.addAction(OKAction)
+                    
+                    self.presentViewController(alertController, animated: true) {
+                        // ...
+                    }
                 }
             }
+        }
+        else {
+            let alertController = UIAlertController(title: "HomeIn", message: "Plaese make sure you have filled out all the required fields.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                // ...
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+        }
+    }
+    
+    func forgotPassord() {
+        let alertController = UIAlertController(title: "HomeIn", message: "Please enter your email address.", preferredStyle: .Alert)
+        
+        let loginAction = UIAlertAction(title: "Submit", style: .Default) { (_) in
+            let emailTextField = alertController.textFields![0] as UITextField
+            
+            if self.model.isValidEmail(emailTextField.text!) {
+
+                do {
+                    try PFUser.requestPasswordResetForEmail(emailTextField.text!)
+                    
+                } catch {
+                    print("Error!")
+                }
+                
+                let alertController = UIAlertController(title: "HomeIn", message: "An email has been sent to the email address provided with instructions to reset your password.", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    // ...
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
+            }
+            else {
+                let alertController = UIAlertController(title: "HomeIn", message: "Please Enter a valid email.", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    // ...
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
+            }
+            
+        }
+        loginAction.enabled = false
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
+        
+        alertController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.placeholder = "Email Address"
+            
+            NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: textField, queue: NSOperationQueue.mainQueue()) { (notification) in
+                loginAction.enabled = textField.text != ""
+            }
+        }
+        
+        alertController.addAction(loginAction)
+        alertController.addAction(cancelAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
     

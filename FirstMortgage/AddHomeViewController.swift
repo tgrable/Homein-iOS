@@ -347,7 +347,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.addGestureRecognizer(tapGesture)
         
         overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        overlayView.backgroundColor = UIColor.blackColor()
+        overlayView.backgroundColor = UIColor.darkGrayColor()
         overlayView.alpha = 0.85
         overlayView.hidden = true
         self.view.addSubview(overlayView)

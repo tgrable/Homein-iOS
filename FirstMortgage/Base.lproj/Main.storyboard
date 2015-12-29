@@ -233,7 +233,7 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ttH-ku-Erx">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ttH-ku-Erx">
                                                     <rect key="frame" x="544" y="116" width="40" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="40" id="FGG-St-pvp"/>
@@ -266,7 +266,7 @@
                                                         </mask>
                                                     </variation>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wwu-nz-38m">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wwu-nz-38m">
                                                     <rect key="frame" x="497" y="115" width="40" height="15"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="40" id="Jhe-Cd-BoO"/>
@@ -390,7 +390,7 @@
                                             <outlet property="bedsLabel" destination="bgM-s4-PVc" id="O7P-JK-C2c"/>
                                             <outlet property="priceLabel" destination="cUd-fb-Jdy" id="Gf8-3D-DsG"/>
                                             <outlet property="ratingView" destination="Gwb-4I-wuA" id="54c-z4-ikz"/>
-                                            <outlet property="sqfeetLabel" destination="ttH-ku-Erx" id="aZ5-U6-u2s"/>
+                                            <outlet property="sqfeetLabel" destination="ttH-ku-Erx" id="Okq-EV-7XB"/>
                                             <outlet property="titleLabel" destination="44Q-wU-L6w" id="Ehc-cq-RuF"/>
                                         </connections>
                                     </tableViewCell>
@@ -475,7 +475,7 @@
     </scenes>
     <resources>
         <image name="divider.png" width="1" height="50"/>
-        <image name="overlay.png" width="640" height="480"/>
+        <image name="overlay.png" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="NgR-rr-hyG"/>
