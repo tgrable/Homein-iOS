@@ -16,6 +16,7 @@ class Model: NSObject {
     
     // Custom Color
     let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
+    let darkGrayColor = UIColor(red: 62/255, green: 65/255, blue: 69/255, alpha: 1)
     
     let lightBlueColor = UIColor(red: 83/255, green: 135/255, blue: 186/255, alpha: 1)
     let darkBlueColor = UIColor(red: 53/255, green: 103/255, blue: 160/255, alpha: 1)

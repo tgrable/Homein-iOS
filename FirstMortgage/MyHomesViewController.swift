@@ -28,6 +28,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var isSmallerScreen = Bool()
     var isSortTrayOpen = Bool()
+    var cameFromHomeScreen = Bool()
     
     let sortNameButton = UIButton ()
     let sortPriceButton = UIButton ()
@@ -45,6 +46,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         homeTableView.delegate = self
         homeTableView.dataSource = self
         
+        print(cameFromHomeScreen)
         // Do any additional setup after loading the view.
     }
     
@@ -297,7 +299,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func getAllHomesForUser(sortOrder: String) {
         let query = PFQuery(className:"Home")
         query.whereKey("user", equalTo:PFUser.currentUser()!)
-        if (sortOrder == "name" || sortOrder == "createdAt") {
+        if (sortOrder == "name") {
             query.orderByAscending(sortOrder)
         }
         else {
@@ -527,7 +529,15 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK:
     // MARK: Navigation
     func navigateBackHome(sender: UIButton) {
-        navigationController?.popViewControllerAnimated(true)
+        if cameFromHomeScreen {
+            print("pop 2")
+            let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
+            self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true);
+        }
+        else {
+            print("pop 1")
+            navigationController?.popViewControllerAnimated(true)
+        }
     }
     
     func addNewHome(sender: UIButton) {

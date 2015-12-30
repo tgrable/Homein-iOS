@@ -418,7 +418,7 @@
         <!--Add Home View Controller-->
         <scene sceneID="fqS-Ov-f7L">
             <objects>
-                <viewController storyboardIdentifier="addHomeViewController" id="MUy-2W-QPS" customClass="AddHomeViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addHomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="MUy-2W-QPS" customClass="AddHomeViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="iLL-tl-UNP"/>
                         <viewControllerLayoutGuide type="bottom" id="lkT-BB-ix4"/>
@@ -428,6 +428,9 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <connections>
+                        <segue destination="Qda-ha-LEX" kind="show" identifier="addHomeToTableView" id="8Yr-cE-60D"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tpd-uK-sV0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -480,6 +483,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="NgR-rr-hyG"/>
         <segue reference="Tfd-xo-B4O"/>
-        <segue reference="Xrc-RK-Ivf"/>
+        <segue reference="Kze-Tm-IIt"/>
+        <segue reference="8Yr-cE-60D"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -22,6 +22,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     let addHomeView = UIView() as UIView
     let pickerView = UIView()
     
+    let homeButton = UIButton ()
+    
     var imageView = UIImageView() as UIImageView
     
     let locationManager = CLLocationManager()
@@ -41,6 +43,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     var isPickerTrayOpen = Bool() as Bool
     var stateToCheck = String() as String
     
+
+    
     // UIPickerView
     let statesPicker = UIPickerView() as UIPickerView
     
@@ -55,7 +59,9 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         locationManager.distanceFilter = 10;
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
         createStateDictionary()
         
         buildView()
@@ -65,6 +71,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     override func viewDidAppear(animated: Bool) {
         getBranchJson()
     }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -92,7 +99,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         whiteBar.addSubview(backIcon)
         
         // UIButton
-        let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
+        homeButton.frame = (frame: CGRectMake(0, 0, 50, 50))
         homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
@@ -193,39 +200,46 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
 
     
     func getBranchJson() {
-        var states = [String]()
-        let endpoint = NSURL(string: "http://www.trekkdev1.com/branch-json")
-        let data = NSData(contentsOfURL: endpoint!)
-        do {
-            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
-            if let nodes = json as? NSArray {
-                for node in nodes {
-                    if let nodeDict = node as? NSDictionary {
-                        let branch = Branch()
-                        if let streetName = nodeDict["street"] as? String {
-                            branch.address = streetName
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+            var states = [String]()
+            let endpoint = NSURL(string: "http://www.trekkdev1.com/branch-json")
+            let data = NSData(contentsOfURL: endpoint!)
+            do {
+                let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
+                if let nodes = json as? NSArray {
+                    for node in nodes {
+                        if let nodeDict = node as? NSDictionary {
+                            let branch = Branch()
+                            if let streetName = nodeDict["street"] as? String {
+                                branch.address = streetName
+                            }
+                            if let city = nodeDict["city"] as? String {
+                                branch.city = city
+                            }
+                            if let state = nodeDict["state"] as? String {
+                                branch.state = state
+                            }
+                            if let phone = nodeDict["phone"] as? String {
+                                branch.phone = self.cleanPhoneNumnerString(phone)
+                            }
+                            self.branchArray.append(branch)
+                            states.append(branch.state)
                         }
-                        if let city = nodeDict["city"] as? String {
-                            branch.city = city
-                        }
-                        if let state = nodeDict["state"] as? String {
-                            branch.state = state
-                        }
-                        if let phone = nodeDict["phone"] as? String {
-                            branch.phone = cleanPhoneNumnerString(phone)
-                        }
-                        branchArray.append(branch)
-                        states.append(branch.state)
                     }
                 }
+                self.stateArray = self.removeDuplicates(states)
+                
+                // TODO: this works for now but need to find a better way
+                let center = NSNotificationCenter.defaultCenter()
+                center.addObserverForName(nil, object: nil, queue: nil) { notification in
+                    print("\(notification.name): \(notification.userInfo ?? [:])")
+                    self.statesPicker.reloadAllComponents()
+                }
+                self.getUsersAdministrativeArea()
             }
-            stateArray = removeDuplicates(states)
-            statesPicker.reloadAllComponents()
-            
-            getUsersAdministrativeArea()
-        }
-        catch {
-            print("error serializing JSON: \(error)")
+            catch {
+                print("error serializing JSON: \(error)")
+            }
         }
     }
     
@@ -397,6 +411,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK:
     // MARK: - Navigation
     func navigateBackHome(sender: UIButton) {
+        print("navigateBackHome")
+        homeButton.enabled = false
         navigationController?.popViewControllerAnimated(true)
     }
     

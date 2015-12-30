@@ -34,6 +34,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     let descTxtView = UITextView()
     
     let hideKeyboardButton = UIButton()
+    let saveButton = UIButton ()
     
     var intComponent = 2.0
     var decComponent = 0.0
@@ -52,6 +53,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     var logoImageView = UIImageView()
     
     var isSmallerScreen = Bool()
+    var cameFromHomeScreen = Bool()
     
     var ratingButtonArray: [UIButton] = []
     
@@ -69,6 +71,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         if (self.view.bounds.size.width == 320) {
             isSmallerScreen = true
         }
+        print(cameFromHomeScreen)
         
         buildView()
     }
@@ -327,7 +330,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.addSubview(saveView)
         
         // UIButton
-        let saveButton = UIButton (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
+        saveButton.frame = (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
         saveButton.addTarget(self, action: "addNewHome:", forControlEvents: .TouchUpInside)
         saveButton.setTitle("SAVE HOME", forState: .Normal)
         saveButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -513,64 +516,87 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     func addNewHome(sender: UIButton) {
-        overlayView.hidden = false
-        activityIndicator.startAnimating()
-        
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-            var imageArray: [PFFile] = []
-            let home = PFObject(className: "Home")
+        if (self.homeNameTxtField.text != "") {
+            saveButton.enabled = false
+            overlayView.hidden = false
+            activityIndicator.startAnimating()
             
-            home["user"] = PFUser.currentUser()
-            home["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : "Home"
-            home["price"] = (self.homePriceTxtField.text != "") ? Double(self.homePriceTxtField.text!) : 250000
-            home["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : "Address"
-            home["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : 4
-            home["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : 2.5
-            home["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : 2400
-            home["rating"] = self.ratingDefault
-            home["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : "Default home description"
-            
-            let imageData = UIImagePNGRepresentation(self.img)
-            if (imageData != nil) {
-                let imageFile = PFFile(name:"image.png", data:imageData!)
-                home["image"] = imageFile
-                imageArray.append(imageFile!)
-                home["imageArray"] = imageArray
+            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                var imageArray: [PFFile] = []
+                let home = PFObject(className: "Home")
+                
+                home["user"] = PFUser.currentUser()
+                home["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : "Home"
+                home["price"] = (self.homePriceTxtField.text != "") ? Double(self.homePriceTxtField.text!) : 0
+                home["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : ""
+                home["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : 0
+                home["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : 0
+                home["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : 0
+                home["rating"] = self.ratingDefault
+                home["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : "Default home description"
+                
+                let imageData = UIImagePNGRepresentation(self.img)
+                if (imageData != nil) {
+                    let imageFile = PFFile(name:"image.png", data:imageData!)
+                    home["image"] = imageFile
+                    imageArray.append(imageFile!)
+                    home["imageArray"] = imageArray
+                }
+                
+                home.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                    if (success) {
+                        print("The object was saved")
+                        self.homeNameTxtField.text = ""
+                        self.homePriceTxtField.text = ""
+                        self.homeAddressTxtField.text = ""
+                        self.sqFeetTxtField.text = ""
+                        self.descTxtView.text = ""
+                        self.imageView.image = nil
+                        
+                        for i in 0...4 {
+                            let button = self.ratingButtonArray[i] as UIButton
+                            button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
+                        }
+                        
+                        self.activityIndicator.stopAnimating()
+                        
+                        let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
+                        
+                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                            self.overlayView.hidden = true
+                            if (self.cameFromHomeScreen) {
+                                print("yeah")
+                                let mhvc = self.storyboard!.instantiateViewControllerWithIdentifier("myHomesViewController") as! MyHomesViewController
+                                self.navigationController!.pushViewController(mhvc, animated: true)
+                            }
+                            else {
+                                print("no")
+                                self.navigationController?.popViewControllerAnimated(true)
+                            }
+                        }
+                        alertController.addAction(OKAction)
+                        
+                        self.presentViewController(alertController, animated: true) {
+                            // ...
+                        }
+                        
+                    }
+                    else {
+                        print("The object was not saved")
+                    }
+                }
             }
+        }
+        else {
+            let alertController = UIAlertController(title: "HomeIn", message: "Please enter a name for this home.", preferredStyle: .Alert)
             
-            home.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-                if (success) {
-                    print("The object was saved")
-                    self.homeNameTxtField.text = ""
-                    self.homePriceTxtField.text = ""
-                    self.homeAddressTxtField.text = ""
-                    self.sqFeetTxtField.text = ""
-                    self.descTxtView.text = ""
-                    self.imageView.image = nil
-                    
-                    for i in 0...4 {
-                        let button = self.ratingButtonArray[i] as UIButton
-                        button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
-                    }
-                    
-                    self.activityIndicator.stopAnimating()
-                    
-                    let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
-                    
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        self.overlayView.hidden = true
-                        self.navigationController?.popViewControllerAnimated(true)
-                    }
-                    alertController.addAction(OKAction)
-                    
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
-                    }
-
-                }
-                else {
-                    print("The object was not saved")
-                }
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
             }
         }
     }
@@ -606,14 +632,16 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         hideKeyboardButton.alpha = 0.0
     }
     
-    /*
+
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "addHomeToTableView" {
+            let destViewController: MyHomesViewController = segue.destinationViewController as! MyHomesViewController
+            destViewController.cameFromHomeScreen = false
+        }
     }
-    */
-
 }

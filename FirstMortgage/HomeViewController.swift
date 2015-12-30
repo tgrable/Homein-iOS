@@ -96,6 +96,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     }
 
     override func viewWillAppear(animated: Bool) {
+        myHomesButton.enabled = true
+        addAHomeButton.enabled = true
+        mortgageCalculatorButton.enabled = true
+        refiCalculatorButton.enabled = true
+        findBranchButton.enabled = true
+        preQualifiedButton.enabled = true
+        
         buildHomeView()
         buildLoginView()
         buildSignUpView()
@@ -211,12 +218,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             addHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
             addHomesView.layer.insertSublayer(addHomesGradientLayer, atIndex: 0)
             addHomesView.layer.addSublayer(addHomesGradientLayer)
-            print("Should be blue")
         }
         else {
             addHomesView.backgroundColor = UIColor.grayColor()
             addAHomeButton.enabled = false
-            print("Should be gray")
         }
         scrollView.addSubview(addHomesView)
  
@@ -417,8 +422,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         loginView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width * 2, self.view.bounds.height))
         loginView.backgroundColor = model.lightGrayColor
         self.view.addSubview(loginView)
-        
-        print(loginView.bounds.size.width)
         
         let logoView = UIImageView(image: UIImage(named:"home_in"))
         logoView.frame = (frame: CGRectMake(100, 25, 159, 47.5))
@@ -949,13 +952,22 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     // MARK:
     // MARK: Actions
     func navigateToOtherViews(sender: UIButton) {
+        myHomesButton.enabled = false
+        addAHomeButton.enabled = false
+        mortgageCalculatorButton.enabled = false
+        refiCalculatorButton.enabled = false
+        findBranchButton.enabled = false
+        preQualifiedButton.enabled = false
+        
         switch sender.tag {
         case 0:
             let mhvc = self.storyboard!.instantiateViewControllerWithIdentifier("myHomesViewController") as! MyHomesViewController
             self.navigationController!.pushViewController(mhvc, animated: true)
         case 1:
-            let ahvc = self.storyboard!.instantiateViewControllerWithIdentifier("addHomeViewController") as! AddHomeViewController
-            self.navigationController!.pushViewController(ahvc, animated: true)
+            //let ahvc = self.storyboard!.instantiateViewControllerWithIdentifier("addHomeViewController") as! AddHomeViewController
+            //self.navigationController!.pushViewController(ahvc, animated: true)
+            
+            performSegueWithIdentifier("addHomeViewController", sender: nil)
         case 2:
             isMortgageCalc = true
             performSegueWithIdentifier("calculatorsViewController", sender: nil)
@@ -1063,9 +1075,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
+        if segue.identifier == "addHomeViewController" {
+            let destViewController: AddHomeViewController = segue.destinationViewController as! AddHomeViewController
+            destViewController.cameFromHomeScreen = true
+        }
+        
         if segue.identifier == "profileViewController" {
             let destViewController: ProfileViewController = segue.destinationViewController as! ProfileViewController
-            print(loanOfficerArray.count)
             destViewController.loanOfficerArray = loanOfficerArray
             destViewController.tempArray = loanOfficerArray
         }
@@ -1079,7 +1095,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             let webViewDestController: WebViewController = segue.destinationViewController as! WebViewController
             if let user = PFUser.currentUser() {
                 if let url = user["officerURL"] {
-                    print(url)
                     webViewDestController.urlPath = url as! String
                 }
             }
