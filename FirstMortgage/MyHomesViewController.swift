@@ -49,7 +49,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     override func viewWillAppear(animated: Bool) {
-        getAllHomesForUser("name")
+        getAllHomesForUser("createdAt")
         buildView()
         
         showSortTray()
@@ -226,10 +226,16 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortPriceButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortPriceButton)
         
+        let dismissSwipe = UISwipeGestureRecognizer()
+        dismissSwipe.direction = UISwipeGestureRecognizerDirection.Down
+        dismissSwipe.addTarget(self, action: "showHideSortTray")
+        dismissView.userInteractionEnabled = true
+        dismissView.addGestureRecognizer(dismissSwipe)
+        
         swipeRec.direction = UISwipeGestureRecognizerDirection.Down
         swipeRec.addTarget(self, action: "showHideSortTray")
-        sortTrayView.addGestureRecognizer(swipeRec)
         sortTrayView.userInteractionEnabled = true
+        sortTrayView.addGestureRecognizer(swipeRec)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "showHideSortTray")
         dismissView.addGestureRecognizer(tapGesture)
@@ -265,17 +271,17 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         
         switch sortorder {
         case "NAME":
-            sortNameButton.setTitleColor(model.darkRedColor, forState: .Normal)
+            sortNameButton.setTitleColor(model.darkGrayColor, forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         case "PRICE":
             sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            sortPriceButton.setTitleColor(model.darkRedColor, forState: .Normal)
+            sortPriceButton.setTitleColor(model.darkGrayColor, forState: .Normal)
             sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         case "RATING":
             sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            sortRatingButton.setTitleColor(model.darkRedColor, forState: .Normal)
+            sortRatingButton.setTitleColor(model.darkGrayColor, forState: .Normal)
         default:
             sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -291,7 +297,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func getAllHomesForUser(sortOrder: String) {
         let query = PFQuery(className:"Home")
         query.whereKey("user", equalTo:PFUser.currentUser()!)
-        if sortOrder == "name" {
+        if (sortOrder == "name" || sortOrder == "createdAt") {
             query.orderByAscending(sortOrder)
         }
         else {

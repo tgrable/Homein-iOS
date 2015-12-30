@@ -15,6 +15,8 @@ class InitialViewController: UIViewController {
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        let reachability = Reachability()
+        print(reachability.isConnectedToNetwork())
         
     }
 

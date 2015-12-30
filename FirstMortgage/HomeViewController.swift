@@ -74,6 +74,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     
     var activityIndicator = UIActivityIndicatorView()
     
+    let reachability = Reachability()
+    
     // MARK:
     // MARK: View Life Cycle
     override func viewDidLoad() {
@@ -314,7 +316,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         /********************************************************* Find Branch Button ********************************************************************/
         // UIView
         let findBranchView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
-        if (locationServicesIsAllowed) {
+        if (locationServicesIsAllowed && reachability.isConnectedToNetwork()) {
             let findBranchGradientLayer = CAGradientLayer()
             findBranchGradientLayer.frame = findBranchView.bounds
             findBranchGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
@@ -326,6 +328,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             findBranchButton.enabled = false
         }
         scrollView.addSubview(findBranchView)
+        
+        
         
         let brnchIcn = UIImage(named: "branch_icon") as UIImage?
         let branchIcon = UIImageView(frame: CGRectMake((findBranchView.bounds.size.width / 2) - 18, 25, 36, 36))
@@ -361,7 +365,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             }
         }
 
-        if (user != nil && url.characters.count > 0) {
+        if (user != nil && url.characters.count > 0 && reachability.isConnectedToNetwork()) {
             let preQualifiedGradientLayer = CAGradientLayer()
             preQualifiedGradientLayer.frame = preQualifiedView.bounds
             preQualifiedGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]

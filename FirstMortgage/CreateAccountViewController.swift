@@ -170,7 +170,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
         var offset = descLabel.bounds.size.height + 25.0 as CGFloat
         
-        let checkImageOne = UIImageView(frame: CGRectMake(20, offset, 25, 25))
+        let checkImageOne = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
         checkImageOne.image = checkMarkImage
         contentScrollView.addSubview(checkImageOne)
         
@@ -184,7 +184,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
         offset += optionOneLabel.bounds.size.height + 10.0
 
-        let checkImageTwo = UIImageView(frame: CGRectMake(20, offset, 25, 25))
+        let checkImageTwo = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
         checkImageTwo.image = checkMarkImage
         contentScrollView.addSubview(checkImageTwo)
         
@@ -198,33 +198,43 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         
         offset += optionTwoLabel.bounds.size.height + 10.0
         
-        let checkImageThree = UIImageView(frame: CGRectMake(20, offset, 25, 25))
+        let checkImageThree = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
         checkImageThree.image = checkMarkImage
         contentScrollView.addSubview(checkImageThree)
         
         let optionThreeLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
         optionThreeLabel.textAlignment = NSTextAlignment.Left
         optionThreeLabel.font = UIFont(name: "Arial", size: fontSize)
-        optionThreeLabel.text = "Connect with an expert First Mortgage Company  or Cunningham & Company Loan Officer to get pre-qualified for a home loan."
+        optionThreeLabel.text = "Connect with an expert First Mortgage Company or Cunningham & Company Loan Officer to get pre-qualified for a home loan."
         optionThreeLabel.numberOfLines = 0
         optionThreeLabel.sizeToFit()
         contentScrollView.addSubview(optionThreeLabel)
         
         offset += optionThreeLabel.bounds.size.height + 10.0
         
-        let checkImageFour = UIImageView(frame: CGRectMake(20, offset, 25, 25))
-        checkImageFour.image = checkMarkImage
-        contentScrollView.addSubview(checkImageFour)
+        let checkImageFive = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
+        checkImageFive.image = checkMarkImage
+        contentScrollView.addSubview(checkImageFive)
         
-        let optionFourLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
-        optionFourLabel.textAlignment = NSTextAlignment.Left
-        optionFourLabel.font = UIFont(name: "Arial", size: fontSize)
-        optionFourLabel.text = "Access valuable tools, such as a Mortgage Calculator and a Refinancing Calculator."
-        optionFourLabel.numberOfLines = 0
-        optionFourLabel.sizeToFit()
-        contentScrollView.addSubview(optionFourLabel)
+        let optionFiveLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
+        optionFiveLabel.textAlignment = NSTextAlignment.Left
+        optionFiveLabel.font = UIFont(name: "Arial", size: fontSize)
+        optionFiveLabel.text = "Share your home search portfolio with your family and friends."
+        optionFiveLabel.numberOfLines = 0
+        optionFiveLabel.sizeToFit()
+        contentScrollView.addSubview(optionFiveLabel)
         
-        offset += optionFourLabel.bounds.size.height + 10.0
+        offset += optionFiveLabel.bounds.size.height + 10.0
+        
+        let setUpLabel = UILabel (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 0))
+        setUpLabel.textAlignment = NSTextAlignment.Left
+        setUpLabel.font = UIFont(name: "Arial", size: fontSize)
+        setUpLabel.text = "Set up your own HomeIn account today!"
+        setUpLabel.numberOfLines = 0
+        setUpLabel.sizeToFit()
+        contentScrollView.addSubview(setUpLabel)
+        
+        offset += setUpLabel.bounds.size.height + 15.0
         
         let getStartedView = UIView(frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
         let getStartedGradientLayer = CAGradientLayer()
@@ -293,7 +303,7 @@ class CreateAccountViewController: UIViewController, UIScrollViewDelegate, UITex
         continueWithoutButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
         contentScrollView.addSubview(continueWithoutButton)
         
-        contentScrollView.contentSize = CGSize(width: registerView.bounds.size.width, height: 525)
+        contentScrollView.contentSize = CGSize(width: registerView.bounds.size.width, height: 575)
     }
     
     func buildLoginView() {

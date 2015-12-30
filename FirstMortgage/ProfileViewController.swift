@@ -247,6 +247,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         emailTxtField.enabled = false
         userView.addSubview(emailTxtField)
         
+        // TODO: This does not working if logging in from two different phones
         let defaults = NSUserDefaults.standardUserDefaults()
         if let loDict = defaults.dictionaryForKey("loanOfficerDict") {
             buildLoanOfficerCard(loDict as! Dictionary<String, String>, yVal: 110, count: 0, view: profileView, isSingleView: true)

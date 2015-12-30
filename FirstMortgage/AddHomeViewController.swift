@@ -555,7 +555,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                     
                     self.activityIndicator.stopAnimating()
                     
-                    let alertController = UIAlertController(title: "HomeIn", message: "This house have been added.", preferredStyle: .Alert)
+                    let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
                     
                     let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                         self.overlayView.hidden = true

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2C54BCC71C2F1F02001EC096 /* save_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C54BCC61C2F1F02001EC096 /* save_icon.png */; };
+		2CD798611C3233710052C18C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD798601C3233710052C18C /* Reachability.swift */; };
 		4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */; };
 		4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */; };
 		4F1ED5141C1B790900E40F4B /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1ED5131C1B790900E40F4B /* ParseUI.framework */; };
@@ -126,6 +127,7 @@
 
 /* Begin PBXFileReference section */
 		2C54BCC61C2F1F02001EC096 /* save_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = save_icon.png; path = images/save_icon.png; sourceTree = "<group>"; };
+		2CD798601C3233710052C18C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = FirstMortgage/Reachability.swift; sourceTree = "<group>"; };
 		4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = FirstMortgage/DeviceExtension.swift; sourceTree = "<group>"; };
 		4F1ED5131C1B790900E40F4B /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = frameworks/ParseUI.framework; sourceTree = "<group>"; };
@@ -463,6 +465,7 @@
 				4F1ED5151C1B85EB00E40F4B /* MyCustonViewController.swift */,
 				4FF179201C21BC6F00A00CE0 /* CustomSignUpViewController.swift */,
 				4FD37ABB1C29B17F008A1F3C /* CustomLoginViewController.swift */,
+				2CD798601C3233710052C18C /* Reachability.swift */,
 			);
 			name = "Supporting Classes";
 			sourceTree = "<group>";
@@ -693,6 +696,7 @@
 				4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */,
 				4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */,
 				4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */,
+				2CD798611C3233710052C18C /* Reachability.swift in Sources */,
 				4FAF3D0E1BE10AAE00A89A9A /* FindBranchViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
