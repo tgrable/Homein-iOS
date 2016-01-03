@@ -14,7 +14,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     // MARK:
     // MARK: Properties
     let model = Model()
-    let mortgageView = MortgageCalculatorView()
     let modelName = UIDevice.currentDevice().modelName
     
     // UIView
@@ -276,7 +275,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         // UIButton
         let addIcn = UIImage(named: "camera_icon") as UIImage?
-        let addIcon = UIImageView(frame: CGRectMake(homeTray.bounds.size.width - 115, 255, 40.5, 35))
+        let addIcon = UIImageView(frame: CGRectMake(homeTray.bounds.size.width - 115, 255, 34.29, 30))
         addIcon.image = addIcn
         homeTray.addSubview(addIcon)
         
@@ -289,7 +288,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         // UIButton
         let editIcn = UIImage(named: "edit_icon") as UIImage?
-        editIcon.frame = (frame: CGRectMake(homeTray.bounds.size.width - 55, 255, 41.25, 35))
+        editIcon.frame = (frame: CGRectMake(homeTray.bounds.size.width - 55, 255, 34.27, 30))
         editIcon.image = editIcn
         homeTray.addSubview(editIcon)
         
@@ -596,7 +595,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calculateView.layer.addSublayer(calcGradientLayer)
         calcTray.addSubview(calculateView)
         
-        let calculateArrow = UILabel (frame: CGRectMake(calculateView.bounds.size.width - 50, 0, 40, 50))
+        let calculateArrow = UILabel (frame: CGRectMake(calculateView.bounds.size.width - 50, 5, 40, 45))
         calculateArrow.textAlignment = NSTextAlignment.Right
         calculateArrow.font = UIFont(name: "forza-light", size: 40)
         calculateArrow.text = ">"
@@ -735,30 +734,31 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     func setDefaultImage() {
         if (homeObject["imageArray"] != nil) {
-            
             imageArray = homeObject["imageArray"] as! [PFFile]
             
-            let img = imageArray[0] as PFFile
-            img.getDataInBackgroundWithBlock {
-                (imageData: NSData?, error: NSError?) -> Void in
-                if error == nil {
-                    if let imageData = imageData {
-                        let image = UIImage(data:imageData)
-                        self.defaultImageView.image = image
-                        
-                        let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
-                        overlayButton.backgroundColor = UIColor.clearColor()
-                        overlayButton.addTarget(self, action: "showImageOverlay:", forControlEvents: .TouchUpInside)
-                        self.scrollView.addSubview(overlayButton)
-                        
-                        self.imageOverlay(self.imageArray)
+            if imageArray.count > 0 {
+                let img = imageArray[0] as PFFile
+                img.getDataInBackgroundWithBlock {
+                    (imageData: NSData?, error: NSError?) -> Void in
+                    if error == nil {
+                        if let imageData = imageData {
+                            let image = UIImage(data:imageData)
+                            self.defaultImageView.image = image
+                            
+                            let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
+                            overlayButton.backgroundColor = UIColor.clearColor()
+                            overlayButton.addTarget(self, action: "showImageOverlay:", forControlEvents: .TouchUpInside)
+                            self.scrollView.addSubview(overlayButton)
+                            
+                            self.imageOverlay(self.imageArray)
+                        }
                     }
                 }
             }
-        }
-        else {
-            let fillerImage = UIImage(named: "default_home") as UIImage?
-            defaultImageView.image = fillerImage
+            else {
+                let fillerImage = UIImage(named: "default_home") as UIImage?
+                defaultImageView.image = fillerImage
+            }
         }
     }
     
@@ -1328,6 +1328,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
     }
     
+    //MARK:
+    //MARK: UIGesture
     func tapGesture() {
         homeNameTxtField.resignFirstResponder()
         homePriceTxtField.resignFirstResponder()
@@ -1344,6 +1346,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         taxesTxtField.resignFirstResponder()
     }
     
+    //MARK:
+    //MARK: NSNotification
     func keyboardWillAppear(notification: NSNotification){
         scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1500)
         hideKeyboardButton.enabled = true

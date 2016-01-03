@@ -16,20 +16,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     var model = Model()
     let modelName = UIDevice.currentDevice().modelName
     
+    //UIView
     let homeView = UIView()
     let myHomesView = UIView()
     let addHomesView = UIView()
     let preQualifiedView = UIView()
+    let caView = UIView()
     let loginView = UIView()
     let signUpView = UIView()
     let overlayView = UIView()
+    let whiteBar = UIView()
+    let loadingOverlay = UIView()
     
     //UIScrollView
     let scrollView = UIScrollView()
+    let contentScrollView = UIScrollView()
     
+    //UITextField
     let username = UITextField()
     let password = UITextField()
-    
     let namereg = UITextField()
     let emailreg = UITextField()
     let usernamereg = UITextField()
@@ -37,11 +42,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     let confirmpasswordreg = UITextField()
     let searchTxtField = UITextField()
     
+    //UIImageView
     var imageView = UIImageView()
 
-    var isMortgageCalc = Bool()
-    let whiteBar = UIView()
-    
+    //UIGestureRecognizer
     let swipeRec = UISwipeGestureRecognizer()
     
     // UIButton
@@ -53,10 +57,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     let preQualifiedButton = UIButton()
     let userButton = UIButton()
     
+    //Bool
     var locationServicesIsAllowed = Bool()
     var isLoginViewOpen = Bool()
     var isRegisterViewOpen = Bool()
-    
+    var isMortgageCalc = Bool()
+    var isUserLoggedIn = Bool()
     var isLoginView = Bool()
     var isRegisterView = Bool()
     var hasLoanOfficer = Bool()
@@ -65,21 +71,31 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     var loanOfficerArray = Array<Dictionary<String, String>>()
     var tempArray = Array<Dictionary<String, String>>()
     
+    //String
     var officerNid = String()
     var officerName = String()
     var officerURL = String()
     
-    let loadingOverlay = UIView()
+    //UILabel
     let loadingLabel = UILabel()
     
+    //UIActivityIndicatorView
     var activityIndicator = UIActivityIndicatorView()
     
+    //Reachability
     let reachability = Reachability()
     
     // MARK:
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if (PFUser.currentUser() != nil) {
+            isUserLoggedIn = true
+        }
+        else {
+            isUserLoggedIn = false
+        }
 
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             if CLLocationManager.locationServicesEnabled() {
@@ -103,10 +119,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         findBranchButton.enabled = true
         preQualifiedButton.enabled = true
         
-        buildHomeView()
-        buildLoginView()
-        buildSignUpView()
+        self.view.backgroundColor = model.lightGrayColor
         
+        // UIImageView
+        let fmcLogo = UIImage(named: "home_in") as UIImage?
+        imageView.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
+        imageView.image = fmcLogo
+        self.view.addSubview(imageView)
+        
+        if (PFUser.currentUser() != nil) {
+            buildHomeView()
+        }
+        else {
+            buildCreateAccountView()
+            buildLoginView()
+            buildSignUpView()
+        }
+
         loadingOverlay.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.size.height))
         loadingOverlay.backgroundColor = UIColor.darkGrayColor()
         loadingOverlay.alpha = 0.85
@@ -127,6 +156,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         loadingOverlay.addSubview(activityIndicator)
     }
     
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -141,28 +174,22 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             labelDist = 75.0
         }
         
-        homeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
+        homeView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
         homeView.backgroundColor = model.lightGrayColor
         homeView.hidden = false
         self.view.addSubview(homeView)
         
-        let fmcLogo = UIImage(named: "home_in") as UIImage?
-        // UIImageView
-        imageView.frame = (frame: CGRectMake((homeView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
-        imageView.image = fmcLogo
-        homeView.addSubview(imageView)
-        
-        whiteBar.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, 50))
+        whiteBar.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, 50))
         whiteBar.backgroundColor = UIColor.whiteColor()
         homeView.addSubview(whiteBar)
         
         let backgroundImage = UIImage(named: "homebackground") as UIImage?
         // UIImageView
-        let backgroundImageView = UIImageView(frame: CGRectMake(0, 135, self.view.bounds.size.width, self.view.bounds.size.height - 135))
+        let backgroundImageView = UIImageView(frame: CGRectMake(0, 50, self.view.bounds.size.width, self.view.bounds.size.height - 135))
         backgroundImageView.image = backgroundImage
         homeView.addSubview(backgroundImageView)
         
-        let scrollView = UIScrollView(frame: CGRectMake(0, 135, self.view.bounds.size.width, self.view.bounds.size.height - 135))
+        let scrollView = UIScrollView(frame: CGRectMake(0, 50, self.view.bounds.size.width, self.view.bounds.size.height - 135))
         scrollView.backgroundColor = UIColor.clearColor()
         homeView.addSubview(scrollView)
         
@@ -334,8 +361,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         }
         scrollView.addSubview(findBranchView)
         
-        
-        
         let brnchIcn = UIImage(named: "branch_icon") as UIImage?
         let branchIcon = UIImageView(frame: CGRectMake((findBranchView.bounds.size.width / 2) - 18, 25, 36, 36))
         branchIcon.image = brnchIcn
@@ -418,6 +443,187 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         checkIfLoggedIn()
     }
     
+    func buildCreateAccountView() {
+        getBranchJSON()
+        
+        var fontSize = 16 as CGFloat
+        if modelName.rangeOfString("5") != nil{
+            fontSize = 14
+        }
+        
+        caView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
+        caView.backgroundColor = UIColor.whiteColor()
+        caView.hidden = false
+        self.view.addSubview(caView)
+        
+        let createAccountView = UIView(frame: CGRectMake(0, 0, caView.bounds.size.width, 40))
+        let createAccountGradientLayer = CAGradientLayer()
+        createAccountGradientLayer.frame = createAccountView.bounds
+        createAccountGradientLayer.colors = [model.darkOrangeColor.CGColor, model.lightOrangeColor.CGColor]
+        createAccountView.layer.insertSublayer(createAccountGradientLayer, atIndex: 0)
+        createAccountView.layer.addSublayer(createAccountGradientLayer)
+        caView.addSubview(createAccountView)
+        
+        let createAccountLabel = UILabel (frame: CGRectMake(0, 0, createAccountView.bounds.size.width, 40))
+        createAccountLabel.textAlignment = NSTextAlignment.Center
+        createAccountLabel.font = UIFont(name: "forza-light", size: 25)
+        createAccountLabel.text = "CREATE AN ACCOUNT"
+        createAccountLabel.numberOfLines = 1
+        createAccountLabel.textColor = UIColor.whiteColor()
+        createAccountView.addSubview(createAccountLabel)
+        
+        contentScrollView.frame = (frame: CGRectMake(0, 40, caView.bounds.size.width, caView.bounds.size.height - 50))
+        contentScrollView.backgroundColor = UIColor.clearColor()
+        caView.addSubview(contentScrollView)
+        
+        let descLabel = UILabel (frame: CGRectMake(15, 10, contentScrollView.bounds.size.width - 30, 0))
+        descLabel.textAlignment = NSTextAlignment.Left
+        descLabel.font = UIFont(name: "Arial", size: fontSize)
+        descLabel.text = "When you create a HomeIn account, you’re building a personal portfolio of all of the homes you visit. And you’ll be able to HomeIn on all of the features you loved (or didn’t love) about each property on your home buying  journey.\n\nHere’s what you can do with a HomeIn account:"
+        descLabel.numberOfLines = 0
+        descLabel.sizeToFit()
+        contentScrollView.addSubview(descLabel)
+        
+        let checkMarkImage = UIImage(named: "blue_check") as UIImage?
+        
+        var offset = descLabel.bounds.size.height + 25.0 as CGFloat
+        
+        let checkImageOne = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
+        checkImageOne.image = checkMarkImage
+        contentScrollView.addSubview(checkImageOne)
+        
+        let optionOneLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
+        optionOneLabel.textAlignment = NSTextAlignment.Left
+        optionOneLabel.font = UIFont(name: "Arial", size: fontSize)
+        optionOneLabel.text = "Take unlimited photos of the homes you visit and store them in your personal library"
+        optionOneLabel.numberOfLines = 0
+        optionOneLabel.sizeToFit()
+        contentScrollView.addSubview(optionOneLabel)
+        
+        offset += optionOneLabel.bounds.size.height + 10.0
+        
+        let checkImageTwo = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
+        checkImageTwo.image = checkMarkImage
+        contentScrollView.addSubview(checkImageTwo)
+        
+        let optionTwoLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
+        optionTwoLabel.textAlignment = NSTextAlignment.Left
+        optionTwoLabel.font = UIFont(name: "Arial", size: fontSize)
+        optionTwoLabel.text = "Make notes about your saved homes and every room and feature"
+        optionTwoLabel.numberOfLines = 0
+        optionTwoLabel.sizeToFit()
+        contentScrollView.addSubview(optionTwoLabel)
+        
+        offset += optionTwoLabel.bounds.size.height + 10.0
+        
+        let checkImageThree = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
+        checkImageThree.image = checkMarkImage
+        contentScrollView.addSubview(checkImageThree)
+        
+        let optionThreeLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
+        optionThreeLabel.textAlignment = NSTextAlignment.Left
+        optionThreeLabel.font = UIFont(name: "Arial", size: fontSize)
+        optionThreeLabel.text = "Connect with an expert First Mortgage Company or Cunningham & Company Loan Officer to get pre-qualified for a home loan."
+        optionThreeLabel.numberOfLines = 0
+        optionThreeLabel.sizeToFit()
+        contentScrollView.addSubview(optionThreeLabel)
+        
+        offset += optionThreeLabel.bounds.size.height + 10.0
+        
+        let checkImageFive = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
+        checkImageFive.image = checkMarkImage
+        contentScrollView.addSubview(checkImageFive)
+        
+        let optionFiveLabel = UILabel (frame: CGRectMake(55, offset, contentScrollView.bounds.size.width - 65, 0))
+        optionFiveLabel.textAlignment = NSTextAlignment.Left
+        optionFiveLabel.font = UIFont(name: "Arial", size: fontSize)
+        optionFiveLabel.text = "Share your home search portfolio with your family and friends."
+        optionFiveLabel.numberOfLines = 0
+        optionFiveLabel.sizeToFit()
+        contentScrollView.addSubview(optionFiveLabel)
+        
+        offset += optionFiveLabel.bounds.size.height + 10.0
+        
+        let setUpLabel = UILabel (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 0))
+        setUpLabel.textAlignment = NSTextAlignment.Left
+        setUpLabel.font = UIFont(name: "Arial", size: fontSize)
+        setUpLabel.text = "Set up your own HomeIn account today!"
+        setUpLabel.numberOfLines = 0
+        setUpLabel.sizeToFit()
+        contentScrollView.addSubview(setUpLabel)
+        
+        offset += setUpLabel.bounds.size.height + 15.0
+        
+        let getStartedView = UIView(frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
+        let getStartedGradientLayer = CAGradientLayer()
+        getStartedGradientLayer.frame = getStartedView.bounds
+        getStartedGradientLayer.colors = [model.darkBlueColor.CGColor, model.lightBlueColor.CGColor]
+        getStartedView.layer.insertSublayer(getStartedGradientLayer, atIndex: 0)
+        getStartedView.layer.addSublayer(getStartedGradientLayer)
+        contentScrollView.addSubview(getStartedView)
+        
+        let getStartedArrow = UILabel (frame: CGRectMake(getStartedView.bounds.size.width - 50, 0, 40, 40))
+        getStartedArrow.textAlignment = NSTextAlignment.Right
+        getStartedArrow.font = UIFont(name: "forza-light", size: 40)
+        getStartedArrow.text = ">"
+        getStartedArrow.textColor = UIColor.whiteColor()
+        getStartedView.addSubview(getStartedArrow)
+        
+        let getStartedButton = UIButton (frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
+        getStartedButton.setTitle("GET STARTED", forState: .Normal)
+        getStartedButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        contentScrollView.addSubview(getStartedButton)
+        
+        let btnImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let btnView = UIImageView(frame: CGRectMake(0, getStartedView.bounds.size.height, getStartedView.bounds.size.width, 15))
+        btnView.image = btnImg
+        getStartedView.addSubview(btnView)
+        
+        offset += getStartedView.bounds.size.height + 10.0
+        
+        let loginButtonView = UIView(frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
+        let loginButtonGradientLayer = CAGradientLayer()
+        loginButtonGradientLayer.frame = loginButtonView.bounds
+        loginButtonGradientLayer.colors = [model.darkOrangeColor.CGColor, model.lightOrangeColor.CGColor]
+        loginButtonView.layer.insertSublayer(loginButtonGradientLayer, atIndex: 0)
+        loginButtonView.layer.addSublayer(loginButtonGradientLayer)
+        contentScrollView.addSubview(loginButtonView)
+        
+        let loginArrow = UILabel (frame: CGRectMake(getStartedView.bounds.size.width - 50, 0, 40, 40))
+        loginArrow.textAlignment = NSTextAlignment.Right
+        loginArrow.font = UIFont(name: "forza-light", size: 40)
+        loginArrow.text = ">"
+        loginArrow.textColor = UIColor.whiteColor()
+        loginButtonView.addSubview(loginArrow)
+        
+        let loginButton = UIButton (frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
+        loginButton.setTitle("LOGIN", forState: .Normal)
+        loginButton.addTarget(self, action: "showHideLoginView", forControlEvents: .TouchUpInside)
+        loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        loginButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        contentScrollView.addSubview(loginButton)
+        
+        let loginImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let loginShadowView = UIImageView(frame: CGRectMake(0, getStartedView.bounds.size.height, getStartedView.bounds.size.width, 15))
+        loginShadowView.image = loginImg
+        loginButtonView.addSubview(loginShadowView)
+        
+        offset += loginButtonView.bounds.size.height + 10.0
+        
+        let continueWithoutButton = UIButton (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
+        continueWithoutButton.setTitle("CONTINUE WITHOUT", forState: .Normal)
+        continueWithoutButton.addTarget(self, action: "continueWithoutLogin:", forControlEvents: .TouchUpInside)
+        continueWithoutButton.setTitleColor(model.darkBlueColor, forState: .Normal)
+        continueWithoutButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
+        contentScrollView.addSubview(continueWithoutButton)
+        
+        contentScrollView.contentSize = CGSize(width: caView.bounds.size.width, height: 575)
+    }
+    
     func buildLoginView() {
         loginView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width * 2, self.view.bounds.height))
         loginView.backgroundColor = model.lightGrayColor
@@ -453,7 +659,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         // UITextField
         let unPaddingView = UIView(frame: CGRectMake(0, 0, 15, 50))
-        username.frame = (frame: CGRectMake(0, 155, self.view.bounds.size.width, 50));
+        username.frame = (frame: CGRectMake(0, 145, self.view.bounds.size.width, 50));
         username.layer.borderColor = model.lightGrayColor.CGColor
         username.layer.borderWidth = 1.0
         username.leftView = unPaddingView
@@ -470,7 +676,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         // UITextField
         let pwPaddingView = UIView(frame: CGRectMake(0, 0, 15, 50))
-        password.frame = (frame: CGRectMake(0, 205, self.view.bounds.size.width, 50));
+        password.frame = (frame: CGRectMake(0, 195, self.view.bounds.size.width, 50));
         password.layer.borderColor = model.lightGrayColor.CGColor
         password.layer.borderWidth = 1.0
         password.leftView = pwPaddingView
@@ -486,7 +692,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         password.font = UIFont(name: "forza-username", size: 45)
         loginView.addSubview(password)
         
-        let loginButton = UIButton (frame: CGRectMake(0, 275, self.view.bounds.size.width, 50))
+        let loginButton = UIButton (frame: CGRectMake(0, 250, self.view.bounds.size.width, 50))
         loginButton.setTitle("LOGIN", forState: .Normal)
         loginButton.addTarget(self, action: "checkInputFieldsButtonPress:", forControlEvents: .TouchUpInside)
         loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -495,17 +701,30 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         loginButton.tag = 0
         loginView.addSubview(loginButton)
         
-        let getStartedButton = UIButton (frame: CGRectMake(0, 350, self.view.bounds.size.width, 50))
+        let getStartedButton = UIButton (frame: CGRectMake(0, 310, self.view.bounds.size.width, 50))
         getStartedButton.setTitle("CREATE AN ACCOUNT", forState: .Normal)
         getStartedButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         getStartedButton.backgroundColor = model.lightRedColor
         getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         loginView.addSubview(getStartedButton)
+        
+        let forGotPasswordFormButton = UIButton (frame: CGRectMake(0, 370, contentScrollView.bounds.size.width / 2, 30))
+        forGotPasswordFormButton.setTitle("FORGOT PASSWORD?", forState: .Normal)
+        forGotPasswordFormButton.addTarget(self, action: "forgotPassord", forControlEvents: .TouchUpInside)
+        forGotPasswordFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
+        forGotPasswordFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 15)
+        loginView.addSubview(forGotPasswordFormButton)
+        
+        let closeSignUpFormButton = UIButton (frame: CGRectMake(contentScrollView.bounds.size.width / 2, 370, contentScrollView.bounds.size.width / 2, 30))
+        closeSignUpFormButton.setTitle("CLOSE LOGIN FORM", forState: .Normal)
+        closeSignUpFormButton.addTarget(self, action: "showHideLoginView", forControlEvents: .TouchUpInside)
+        closeSignUpFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
+        closeSignUpFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 15)
+        loginView.addSubview(closeSignUpFormButton)
     }
     
     func buildSignUpView() {
-        
         let signUpView = UIView(frame: CGRectMake(self.view.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         signUpView.backgroundColor = UIColor.clearColor()
         loginView.addSubview(signUpView)
@@ -633,6 +852,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         signUpButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         signUpButton.tag = 1
         signUpView.addSubview(signUpButton)
+        
+        let closeSignUpFormButton = UIButton (frame: CGRectMake(15, 475, contentScrollView.bounds.size.width - 30, 40))
+        closeSignUpFormButton.setTitle("CLOSE SIGNUP FORM", forState: .Normal)
+        closeSignUpFormButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        closeSignUpFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
+        closeSignUpFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
+        signUpView.addSubview(closeSignUpFormButton)
         
         swipeRec.direction = UISwipeGestureRecognizerDirection.Right
         swipeRec.addTarget(self, action: "swipeBackToLogin")
@@ -795,10 +1021,33 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         return loView
     }
+    
+    func getBranchJSON() {
+        loadingOverlay.hidden = false
+        activityIndicator.startAnimating()
+        
+        let nodes = self.model.getBranchLoanOfficers()
+        
+        self.loanOfficerArray.removeAll()
+        self.tempArray.removeAll()
+        
+        for node in nodes {
+            if let nodeDict = node as? NSDictionary {
+                self.loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
+                self.tempArray.append(nodeDict as! Dictionary<String, String>)
+            }
+        }
+        
+        self.activityIndicator.stopAnimating()
+        self.loadingOverlay.hidden = true
+    }
 
     // MARK:
     // MARK: Show/Hide Views
     func showHideLoginView() {
+        username.resignFirstResponder()
+        password.resignFirstResponder()
+        
         if (!isLoginViewOpen) {
             UIView.animateWithDuration(0.4, animations: {
                 self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width  * 2, self.view.bounds.height))
@@ -820,15 +1069,24 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     }
     
     func showHideSignUpView() {
-        self.isLoginView = false
+        namereg.resignFirstResponder()
+        emailreg.resignFirstResponder()
+        usernamereg.resignFirstResponder()
+        passwordreg.resignFirstResponder()
+        confirmpasswordreg.resignFirstResponder()
         
         if (!isRegisterViewOpen) {
+            if self.isLoginViewOpen == false {
+                self.loginView.frame = (frame: CGRectMake(self.view.bounds.size.width * -1, self.view.bounds.height, self.view.bounds.width  * 2, self.view.bounds.height))
+            }
+            
             UIView.animateWithDuration(0.4, animations: {
                 self.loginView.frame = (frame: CGRectMake(self.view.bounds.size.width * -1, 0, self.view.bounds.width  * 2, self.view.bounds.height))
                 }, completion: {
                     (value: Bool) in
                     self.isRegisterViewOpen = true
                     self.isRegisterView = true
+                    self.isLoginViewOpen = false
             })
         }
         else {
@@ -866,10 +1124,20 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                 PFUser.logInWithUsernameInBackground(username.text!, password:password.text!) {
                     (user: PFUser?, error: NSError?) -> Void in
                     if user != nil {
+                        self.isUserLoggedIn = true
+                        
+                        self.username.text = ""
+                        self.password.text = ""
+                        
                         self.username.resignFirstResponder()
                         self.password.resignFirstResponder()
                         
+                        self.contentScrollView.contentOffset.y = 0
+                        
+                        self.isLoginViewOpen = false
+                        
                         self.checkIfLoggedIn()
+                        self.caView.removeFromSuperview()
                         self.removeViews(self.homeView)
                         self.buildHomeView()
                         self.showHideLoginView()
@@ -931,21 +1199,108 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                     }
                 } else {
                     // Hooray! Let them use the app now.
+                    self.isUserLoggedIn = true
+                    
+                    self.namereg.text = ""
+                    self.usernamereg.text = ""
+                    self.emailreg.text = ""
+                    self.passwordreg.text = ""
+                    self.confirmpasswordreg.text = ""
+                    
                     self.namereg.resignFirstResponder()
                     self.emailreg.resignFirstResponder()
                     self.usernamereg.resignFirstResponder()
                     self.passwordreg.resignFirstResponder()
                     self.confirmpasswordreg.resignFirstResponder()
                     
+                    self.contentScrollView.contentOffset.y = 0
+                    
                     self.checkIfLoggedIn()
+                    self.caView.removeFromSuperview()
                     self.removeViews(self.homeView)
                     self.buildHomeView()
                     self.showHideSignUpView()
                     
                     self.activityIndicator.stopAnimating()
                     self.loadingOverlay.hidden = true
+                    
+                    // TODO: Uncomment this when ready to deploy
+                    /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
+                    
+                    print("----- Email LO -----")
+                    // TODO: [Error]: success/error was not called (Code: 141, Version: 1.10.0)
+                    }*/
                 }
             }
+        }
+    }
+    
+    func forgotPassord() {
+        let alertController = UIAlertController(title: "HomeIn", message: "Please enter your email address.", preferredStyle: .Alert)
+        
+        let loginAction = UIAlertAction(title: "Submit", style: .Default) { (_) in
+            let emailTextField = alertController.textFields![0] as UITextField
+            
+            if self.model.isValidEmail(emailTextField.text!) {
+                
+                do {
+                    try PFUser.requestPasswordResetForEmail(emailTextField.text!)
+                    
+                } catch {
+                    let alertController = UIAlertController(title: "HomeIn", message: "We apologize but an error has occurred", preferredStyle: .Alert)
+                    
+                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                        // ...
+                    }
+                    alertController.addAction(OKAction)
+                    
+                    self.presentViewController(alertController, animated: true) {
+                        // ...
+                    }
+                }
+                
+                let alertController = UIAlertController(title: "HomeIn", message: "An email has been sent to the email address provided with instructions to reset your password.", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    // ...
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
+            }
+            else {
+                let alertController = UIAlertController(title: "HomeIn", message: "Please Enter a valid email.", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    // ...
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
+            }
+            
+        }
+        loginAction.enabled = false
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
+        
+        alertController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.placeholder = "Email Address"
+            
+            NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: textField, queue: NSOperationQueue.mainQueue()) { (notification) in
+                loginAction.enabled = textField.text != ""
+            }
+        }
+        
+        alertController.addAction(loginAction)
+        alertController.addAction(cancelAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
     
@@ -961,12 +1316,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         switch sender.tag {
         case 0:
-            let mhvc = self.storyboard!.instantiateViewControllerWithIdentifier("myHomesViewController") as! MyHomesViewController
-            self.navigationController!.pushViewController(mhvc, animated: true)
+            performSegueWithIdentifier("myHomesViewController", sender: nil)
         case 1:
-            //let ahvc = self.storyboard!.instantiateViewControllerWithIdentifier("addHomeViewController") as! AddHomeViewController
-            //self.navigationController!.pushViewController(ahvc, animated: true)
-            
             performSegueWithIdentifier("addHomeViewController", sender: nil)
         case 2:
             isMortgageCalc = true
@@ -1073,12 +1424,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
-        if segue.identifier == "addHomeViewController" {
-            let destViewController: AddHomeViewController = segue.destinationViewController as! AddHomeViewController
-            destViewController.cameFromHomeScreen = true
-        }
+        // Pass the selected object to the new view controller
         
         if segue.identifier == "profileViewController" {
             let destViewController: ProfileViewController = segue.destinationViewController as! ProfileViewController
@@ -1111,10 +1457,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                 password.becomeFirstResponder()
                 
                 UIView.animateWithDuration(0.4, animations: {
-                    self.loginView.frame = (frame: CGRectMake(0, -65, self.view.bounds.width * 2, self.view.bounds.height))
+                    self.loginView.frame = (frame: CGRectMake(0, -75, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+                        self.isLoginViewOpen = true
                 })
             }
             else {

@@ -55,6 +55,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     var isSmallerScreen = Bool()
     var cameFromHomeScreen = Bool()
     
+    var imageArray: [PFFile] = []
     var ratingButtonArray: [UIButton] = []
     
     override func viewDidLoad() {
@@ -71,7 +72,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         if (self.view.bounds.size.width == 320) {
             isSmallerScreen = true
         }
-        print(cameFromHomeScreen)
+        print("AddHomeViewController cameFromHomeScreen: ", cameFromHomeScreen)
         
         buildView()
     }
@@ -456,9 +457,14 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
             imageView.image = pickedImage
             imageView.frame = (frame: CGRectMake((scrollView.bounds.size.width / 2) - 125, 25, 250, 175))
             img = pickedImage
-            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+            //dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
                 self.img = self.scaleImagesForParse(self.img)
-            }
+                let imageData = UIImagePNGRepresentation(self.img)
+                if (imageData != nil) {
+                    let imageFile = PFFile(name:"image.png", data:imageData!)
+                    self.imageArray.append(imageFile!)
+                }
+            //}
 
             if (picker.sourceType.rawValue == 1) {
                 UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
@@ -469,6 +475,25 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
             print(picker.sourceType.rawValue)
         }
         dismissViewControllerAnimated(true, completion: nil)
+        
+        var msg = String()
+        if (self.imageArray.count > 1) {
+            msg = String(format: "You now have %d images associated with this house.", self.imageArray.count)
+        }
+        else {
+            msg = String(format: "You now have %d image associated with this house.", self.imageArray.count)
+        }
+        
+        let alertController = UIAlertController(title: "HomeIn", message: msg, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
+        }
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -522,7 +547,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
             activityIndicator.startAnimating()
             
             dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                var imageArray: [PFFile] = []
                 let home = PFObject(className: "Home")
                 
                 home["user"] = PFUser.currentUser()
@@ -534,14 +558,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 home["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : 0
                 home["rating"] = self.ratingDefault
                 home["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : "Default home description"
-                
-                let imageData = UIImagePNGRepresentation(self.img)
-                if (imageData != nil) {
-                    let imageFile = PFFile(name:"image.png", data:imageData!)
-                    home["image"] = imageFile
-                    imageArray.append(imageFile!)
-                    home["imageArray"] = imageArray
-                }
+                home["imageArray"] = self.imageArray
                 
                 home.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
                     if (success) {
@@ -565,13 +582,11 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                         let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                             self.overlayView.hidden = true
                             if (self.cameFromHomeScreen) {
-                                print("yeah")
-                                let mhvc = self.storyboard!.instantiateViewControllerWithIdentifier("myHomesViewController") as! MyHomesViewController
-                                self.navigationController!.pushViewController(mhvc, animated: true)
+                                self.navigationController?.popViewControllerAnimated(true)
+                                self.navigationController?.popToRootViewControllerAnimated(true)
                             }
                             else {
-                                print("no")
-                                self.navigationController?.popViewControllerAnimated(true)
+                                self.performSegueWithIdentifier("addHomeToTableView", sender: nil)
                             }
                         }
                         alertController.addAction(OKAction)
@@ -641,7 +656,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         // Pass the selected object to the new view controller.
         if segue.identifier == "addHomeToTableView" {
             let destViewController: MyHomesViewController = segue.destinationViewController as! MyHomesViewController
-            destViewController.cameFromHomeScreen = false
+            destViewController.cameFromHomeScreen = cameFromHomeScreen
         }
     }
 }

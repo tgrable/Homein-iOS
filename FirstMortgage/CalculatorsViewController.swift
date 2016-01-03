@@ -313,7 +313,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         calculateView.layer.addSublayer(calcGradientLayer)
         scrollView.addSubview(calculateView)
         
-        let calculateArrow = UILabel (frame: CGRectMake(calculateView.bounds.size.width - 50, 0, 40, 50))
+        let calculateArrow = UILabel (frame: CGRectMake(calculateView.bounds.size.width - 50, 5, 40, 45))
         calculateArrow.textAlignment = NSTextAlignment.Right
         calculateArrow.font = UIFont(name: "forza-light", size: 40)
         calculateArrow.text = ">"
@@ -635,7 +635,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         calculateView.layer.addSublayer(calcGradientLayer)
         scrollView.addSubview(calculateView)
         
-        let calculateArrow = UILabel (frame: CGRectMake(calculateView.bounds.size.width - 50, 0, 40, 50))
+        let calculateArrow = UILabel (frame: CGRectMake(calculateView.bounds.size.width - 50, 5, 40, 45))
         calculateArrow.textAlignment = NSTextAlignment.Right
         calculateArrow.font = UIFont(name: "forza-light", size: 40)
         calculateArrow.text = ">"

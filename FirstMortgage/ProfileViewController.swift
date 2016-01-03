@@ -173,6 +173,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         searchTxtField.autocapitalizationType = .Words
         searchTxtField.tag = 999
         searchTxtField.font = UIFont(name: "forza-light", size: 22)
+        searchTxtField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         overlayView.addSubview(searchTxtField)
         
         scrollView.frame = (frame: CGRectMake(0, 135, overlayView.bounds.size.width, overlayView.bounds.size.height - 135))
@@ -473,7 +474,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     func searchLoanOfficerArray(searchText: String) {
-        searchTxtField.resignFirstResponder()
+        //searchTxtField.resignFirstResponder()
         removeViews(scrollView)
         tempArray.removeAll()
         
@@ -500,24 +501,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             self.presentViewController(alertController, animated: true) {
                 // ...
             }
-        }
-    }
-    
-    // MARK:
-    // MARK: Navigation
-    func navigateBackHome(sender: UIButton) {
-        switch sender.tag {
-        case 0:
-            navigationController?.popViewControllerAnimated(true)
-        case 1:
-            let defaults = NSUserDefaults.standardUserDefaults()
-            defaults.removeObjectForKey("loanOfficerDict")
-            PFUser.logOut()
-            // TODO: Pop to home screen on logout
-            //navigationController?.popViewControllerAnimated(true)
-            self.navigationController!.popToRootViewControllerAnimated(true)
-        default:
-            break
         }
     }
     
@@ -626,7 +609,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField.tag == 999 {
-            searchLoanOfficerArray(searchTxtField.text!)
+            if (textField.text != "") {
+                searchLoanOfficerArray(searchTxtField.text!)
+            }
+            
+            textField.resignFirstResponder()
         }
         else if textField == nameTxtField {
             emailTxtField.becomeFirstResponder()
@@ -639,11 +626,21 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
-        textField.text = ""
+        //textField.text = ""
+        print("letter 1")
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        
+        print("letter 2")
+    }
+    
+    func textFieldDidChange(textField: UITextField) {
+        //your code
+        print(textField.text!)
+        if textField.text != "" {
+            textField.becomeFirstResponder()
+            searchLoanOfficerArray(textField.text!)
+        }
     }
     
     func removeViews(views: UIView) {
@@ -676,14 +673,29 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    /*
-    // MARK: - Navigation
+    // MARK:
+    // MARK: Navigation
+    func navigateBackHome(sender: UIButton) {
+        switch sender.tag {
+        case 1:
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.removeObjectForKey("loanOfficerDict")
+            
+            PFUser.logOut()
+            
+            let hvc = self.storyboard!.instantiateViewControllerWithIdentifier("homeViewController") as! HomeViewController
+            hvc.homeView.removeFromSuperview()
+            hvc.isUserLoggedIn = false
+        default:
+            break
+        }
+        
+        self.navigationController!.popToRootViewControllerAnimated(true)
+    }
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
     }
-    */
-
 }

@@ -25,16 +25,20 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     let sortTrayGradientLayer = CAGradientLayer()
     
     var imageView = UIImageView()
+    var sortDirIcon = UIImageView()
     
     var isSmallerScreen = Bool()
     var isSortTrayOpen = Bool()
-    var cameFromHomeScreen = Bool()
+    var sortAscending = Bool()
     
+    let sortDirectionButton = UIButton()
     let sortNameButton = UIButton ()
     let sortPriceButton = UIButton ()
     let sortRatingButton = UIButton ()
     
     let swipeRec = UISwipeGestureRecognizer()
+    
+    var sortCriteria = String()
     
     // Parse
     var userHomes = [PFObject]()
@@ -46,18 +50,22 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         homeTableView.delegate = self
         homeTableView.dataSource = self
         
-        print(cameFromHomeScreen)
-        // Do any additional setup after loading the view.
+        sortAscending = false
     }
     
     override func viewWillAppear(animated: Bool) {
-        getAllHomesForUser("createdAt")
+        super.viewWillAppear(true)
+        
+        sortCriteria = "createdAt"
+        getAllHomesForUser(sortCriteria)
         buildView()
         
         showSortTray()
     }
     
     override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        
         homeTableView.reloadData()
     }
     
@@ -172,6 +180,20 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortByLabel.sizeToFit()
         sortTrayView.addSubview(sortByLabel)
         
+        //UIImageView
+        let sortDirIcn = UIImage(named: "DownArrow") as UIImage?
+        sortDirIcon.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 50, 5, 25, 25))
+        sortDirIcon.image = sortDirIcn
+        sortTrayView.addSubview(sortDirIcon)
+        
+        // UIButton
+        sortDirectionButton.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 75, 0, 75, 35))
+        sortDirectionButton.addTarget(self, action: "setSortDirection:", forControlEvents: .TouchUpInside)
+        sortDirectionButton.backgroundColor = UIColor.clearColor()
+        sortDirectionButton.contentHorizontalAlignment = .Left
+        sortDirectionButton.tag = 0
+        sortTrayView.addSubview(sortDirectionButton)
+        
         let dividerView = UIView(frame: CGRectMake(15, 34, self.view.bounds.size.width - 30, 1))
         dividerView.backgroundColor = UIColor.whiteColor()
         dividerView.hidden = false
@@ -268,10 +290,27 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
+    func setSortDirection(sender: UIButton) {
+        if sortAscending {
+            sortAscending = false
+            sortDirIcon.image = UIImage(named: "DownArrow") as UIImage?
+        }
+        else {
+            sortAscending = true
+            sortDirIcon.image = UIImage(named: "UpArrow") as UIImage?
+        }
+        if sortCriteria == "createdAt" {
+            getAllHomesForUser(sortCriteria)
+        }
+        else {
+            getAllHomesForUser(sortCriteria.lowercaseString)
+        }
+    }
+    
     func setSortOrder(sender: UIButton) {
-        let sortorder = (sender.titleLabel?.text)! as String
+        sortCriteria = (sender.titleLabel?.text)! as String
         
-        switch sortorder {
+        switch sortCriteria {
         case "NAME":
             sortNameButton.setTitleColor(model.darkGrayColor, forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -291,7 +330,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             
         }
         
-        getAllHomesForUser(sortorder.lowercaseString)
+        getAllHomesForUser(sortCriteria.lowercaseString)
     }
     
     // MARK:
@@ -299,13 +338,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func getAllHomesForUser(sortOrder: String) {
         let query = PFQuery(className:"Home")
         query.whereKey("user", equalTo:PFUser.currentUser()!)
-        if (sortOrder == "name") {
+        if sortAscending {
             query.orderByAscending(sortOrder)
         }
         else {
             query.orderByDescending(sortOrder)
         }
-        
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             
@@ -319,7 +357,16 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                 self.homeTableView.reloadData()
             } else {
                 // Log details of the failure
-                print("Error: \(error!) \(error!.userInfo)")
+                let alertController = UIAlertController(title: "HomeIn", message: String(format: "%@", error!.userInfo), preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+    
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
             }
         }
     }
@@ -375,6 +422,10 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                         }
                     }
                 }
+            }
+            else {
+                let fillerImage = UIImage(named: "default_home") as UIImage?
+                cell.backgroundImage?.image = fillerImage
             }
         }
         else {
@@ -517,11 +568,28 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         homeObject.deleteInBackgroundWithBlock {
             (success: Bool, error: NSError?) -> Void in
             if (success) {
-                print("The object was deleted")
+                let alertController = UIAlertController(title: "HomeIn", message: "The home was deleted", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
                 
             } else {
-                // There was a problem, check error.description
-                print("error: %@", error)
+                let alertController = UIAlertController(title: "HomeIn", message: String(format: "%@", error!), preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
             }
         }
     }
@@ -529,15 +597,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK:
     // MARK: Navigation
     func navigateBackHome(sender: UIButton) {
-        if cameFromHomeScreen {
-            print("pop 2")
-            let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
-            self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true);
-        }
-        else {
-            print("pop 1")
-            navigationController?.popViewControllerAnimated(true)
-        }
+        self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
     func addNewHome(sender: UIButton) {

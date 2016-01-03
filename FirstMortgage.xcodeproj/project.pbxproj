@@ -8,11 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		2C54BCC71C2F1F02001EC096 /* save_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C54BCC61C2F1F02001EC096 /* save_icon.png */; };
+		2C9CA2401C39A95000F648EA /* DownArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C9CA23A1C39A95000F648EA /* DownArrow.png */; };
+		2C9CA2411C39A95000F648EA /* DownArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C9CA23B1C39A95000F648EA /* DownArrow@2x.png */; };
+		2C9CA2421C39A95000F648EA /* DownArrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C9CA23C1C39A95000F648EA /* DownArrow@3x.png */; };
+		2C9CA2431C39A95000F648EA /* UpArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C9CA23D1C39A95000F648EA /* UpArrow.png */; };
+		2C9CA2441C39A95000F648EA /* UpArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C9CA23E1C39A95000F648EA /* UpArrow@2x.png */; };
+		2C9CA2451C39A95000F648EA /* UpArrow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C9CA23F1C39A95000F648EA /* UpArrow@3x.png */; };
 		2CD798611C3233710052C18C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD798601C3233710052C18C /* Reachability.swift */; };
 		4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */; };
 		4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */; };
 		4F1ED5141C1B790900E40F4B /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1ED5131C1B790900E40F4B /* ParseUI.framework */; };
-		4F1ED5161C1B85EB00E40F4B /* MyCustonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5151C1B85EB00E40F4B /* MyCustonViewController.swift */; };
 		4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */; };
 		4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */; };
 		4F5AD5F21BFA3547000AF1A2 /* btn-calculate.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F5AD5F11BFA3547000AF1A2 /* btn-calculate.png */; };
@@ -29,7 +34,6 @@
 		4F7A4CC01C19ED93009F3684 /* long_shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A4CB91C19ED93009F3684 /* long_shadow.png */; };
 		4F7A4CC11C19ED93009F3684 /* backbutton_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A4CBA1C19ED93009F3684 /* backbutton_icon.png */; };
 		4F7A4CC31C19F4A4009F3684 /* forwardbutton_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F7A4CC21C19F4A4009F3684 /* forwardbutton_icon.png */; };
-		4F7BE9A81C189A4A00ECF12D /* MortgageCalculatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F7BE9A71C189A4A00ECF12D /* MortgageCalculatorView.swift */; };
 		4F8815711C04B192001488C1 /* Branch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8815701C04B192001488C1 /* Branch.swift */; };
 		4F8F92FD1C061C0F00639F55 /* icn-calculator.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F92FC1C061C0F00639F55 /* icn-calculator.png */; };
 		4F8F92FF1C061C1400639F55 /* icn-calculator@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F8F92FE1C061C1400639F55 /* icn-calculator@2x.png */; };
@@ -51,8 +55,6 @@
 		4FAF3CDC1BE106EB00A89A9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF3CDA1BE106EB00A89A9A /* LaunchScreen.storyboard */; };
 		4FAF3CE71BE106EB00A89A9A /* FirstMortgageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CE61BE106EB00A89A9A /* FirstMortgageTests.swift */; };
 		4FAF3CF21BE106EB00A89A9A /* FirstMortgageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CF11BE106EB00A89A9A /* FirstMortgageUITests.swift */; };
-		4FAF3D001BE1081700A89A9A /* InitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CFF1BE1081700A89A9A /* InitialViewController.swift */; };
-		4FAF3D021BE1084200A89A9A /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D011BE1084200A89A9A /* CreateAccountViewController.swift */; };
 		4FAF3D041BE1085400A89A9A /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D031BE1085400A89A9A /* HomeViewController.swift */; };
 		4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D051BE1093600A89A9A /* MyHomesViewController.swift */; };
 		4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */; };
@@ -100,10 +102,8 @@
 		4FD37AB81C29A49C008A1F3C /* expand_white_up@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37AB51C29A49C008A1F3C /* expand_white_up@3x.png */; };
 		4FD37AB91C29A49C008A1F3C /* expand_white_up@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37AB61C29A49C008A1F3C /* expand_white_up@2x.png */; };
 		4FD37ABA1C29A49C008A1F3C /* expand_white_up.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37AB71C29A49C008A1F3C /* expand_white_up.png */; };
-		4FD37ABC1C29B17F008A1F3C /* CustomLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD37ABB1C29B17F008A1F3C /* CustomLoginViewController.swift */; };
 		4FD6F4291C12381A004FDDC0 /* Star_empty-01.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD6F4281C12381A004FDDC0 /* Star_empty-01.png */; };
 		4FE275A51C11FF2200385449 /* home_in.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FE275A41C11FF2200385449 /* home_in.png */; };
-		4FF179211C21BC6F00A00CE0 /* CustomSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FF179201C21BC6F00A00CE0 /* CustomSignUpViewController.swift */; };
 		4FF179241C2200A300A00CE0 /* account_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF179221C2200A300A00CE0 /* account_icon.png */; };
 		4FF179251C2200A300A00CE0 /* add_icon_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FF179231C2200A300A00CE0 /* add_icon_grey.png */; };
 /* End PBXBuildFile section */
@@ -127,11 +127,16 @@
 
 /* Begin PBXFileReference section */
 		2C54BCC61C2F1F02001EC096 /* save_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = save_icon.png; path = images/save_icon.png; sourceTree = "<group>"; };
+		2C9CA23A1C39A95000F648EA /* DownArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = DownArrow.png; path = images/DownArrow.png; sourceTree = "<group>"; };
+		2C9CA23B1C39A95000F648EA /* DownArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "DownArrow@2x.png"; path = "images/DownArrow@2x.png"; sourceTree = "<group>"; };
+		2C9CA23C1C39A95000F648EA /* DownArrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "DownArrow@3x.png"; path = "images/DownArrow@3x.png"; sourceTree = "<group>"; };
+		2C9CA23D1C39A95000F648EA /* UpArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = UpArrow.png; path = images/UpArrow.png; sourceTree = "<group>"; };
+		2C9CA23E1C39A95000F648EA /* UpArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UpArrow@2x.png"; path = "images/UpArrow@2x.png"; sourceTree = "<group>"; };
+		2C9CA23F1C39A95000F648EA /* UpArrow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "UpArrow@3x.png"; path = "images/UpArrow@3x.png"; sourceTree = "<group>"; };
 		2CD798601C3233710052C18C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = FirstMortgage/Reachability.swift; sourceTree = "<group>"; };
 		4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = FirstMortgage/DeviceExtension.swift; sourceTree = "<group>"; };
 		4F1ED5131C1B790900E40F4B /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = frameworks/ParseUI.framework; sourceTree = "<group>"; };
-		4F1ED5151C1B85EB00E40F4B /* MyCustonViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MyCustonViewController.swift; path = FirstMortgage/MyCustonViewController.swift; sourceTree = "<group>"; };
 		4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicCell.swift; path = FirstMortgage/BasicCell.swift; sourceTree = "<group>"; };
 		4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndividualHomeViewController.swift; sourceTree = "<group>"; };
 		4F5AD5F11BFA3547000AF1A2 /* btn-calculate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn-calculate.png"; path = "images/btn-calculate.png"; sourceTree = "<group>"; };
@@ -148,7 +153,6 @@
 		4F7A4CB91C19ED93009F3684 /* long_shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = long_shadow.png; path = images/long_shadow.png; sourceTree = "<group>"; };
 		4F7A4CBA1C19ED93009F3684 /* backbutton_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = backbutton_icon.png; path = images/backbutton_icon.png; sourceTree = "<group>"; };
 		4F7A4CC21C19F4A4009F3684 /* forwardbutton_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = forwardbutton_icon.png; path = images/forwardbutton_icon.png; sourceTree = "<group>"; };
-		4F7BE9A71C189A4A00ECF12D /* MortgageCalculatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MortgageCalculatorView.swift; path = FirstMortgage/MortgageCalculatorView.swift; sourceTree = "<group>"; };
 		4F8815701C04B192001488C1 /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branch.swift; path = FirstMortgage/Branch.swift; sourceTree = "<group>"; };
 		4F8F92FC1C061C0F00639F55 /* icn-calculator.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-calculator.png"; path = "images/icn-calculator.png"; sourceTree = "<group>"; };
 		4F8F92FE1C061C1400639F55 /* icn-calculator@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icn-calculator@2x.png"; path = "images/icn-calculator@2x.png"; sourceTree = "<group>"; };
@@ -187,8 +191,6 @@
 		4FAF3CED1BE106EB00A89A9A /* FirstMortgageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FirstMortgageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4FAF3CF11BE106EB00A89A9A /* FirstMortgageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstMortgageUITests.swift; sourceTree = "<group>"; };
 		4FAF3CF31BE106EB00A89A9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4FAF3CFF1BE1081700A89A9A /* InitialViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitialViewController.swift; sourceTree = "<group>"; };
-		4FAF3D011BE1084200A89A9A /* CreateAccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
 		4FAF3D031BE1085400A89A9A /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4FAF3D051BE1093600A89A9A /* MyHomesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyHomesViewController.swift; sourceTree = "<group>"; };
 		4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddHomeViewController.swift; sourceTree = "<group>"; };
@@ -236,10 +238,8 @@
 		4FD37AB51C29A49C008A1F3C /* expand_white_up@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "expand_white_up@3x.png"; path = "images/expand_white_up@3x.png"; sourceTree = "<group>"; };
 		4FD37AB61C29A49C008A1F3C /* expand_white_up@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "expand_white_up@2x.png"; path = "images/expand_white_up@2x.png"; sourceTree = "<group>"; };
 		4FD37AB71C29A49C008A1F3C /* expand_white_up.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = expand_white_up.png; path = images/expand_white_up.png; sourceTree = "<group>"; };
-		4FD37ABB1C29B17F008A1F3C /* CustomLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomLoginViewController.swift; path = FirstMortgage/CustomLoginViewController.swift; sourceTree = "<group>"; };
 		4FD6F4281C12381A004FDDC0 /* Star_empty-01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Star_empty-01.png"; path = "images/Star_empty-01.png"; sourceTree = "<group>"; };
 		4FE275A41C11FF2200385449 /* home_in.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = home_in.png; path = images/home_in.png; sourceTree = "<group>"; };
-		4FF179201C21BC6F00A00CE0 /* CustomSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomSignUpViewController.swift; path = FirstMortgage/CustomSignUpViewController.swift; sourceTree = "<group>"; };
 		4FF179221C2200A300A00CE0 /* account_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = account_icon.png; path = images/account_icon.png; sourceTree = "<group>"; };
 		4FF179231C2200A300A00CE0 /* add_icon_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_icon_grey.png; path = images/add_icon_grey.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -331,8 +331,6 @@
 			isa = PBXGroup;
 			children = (
 				4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */,
-				4FAF3CFF1BE1081700A89A9A /* InitialViewController.swift */,
-				4FAF3D011BE1084200A89A9A /* CreateAccountViewController.swift */,
 				4FAF3D031BE1085400A89A9A /* HomeViewController.swift */,
 				4FAF3D051BE1093600A89A9A /* MyHomesViewController.swift */,
 				4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */,
@@ -392,6 +390,12 @@
 		4FAF3D2C1BE119E200A89A9A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				2C9CA23A1C39A95000F648EA /* DownArrow.png */,
+				2C9CA23B1C39A95000F648EA /* DownArrow@2x.png */,
+				2C9CA23C1C39A95000F648EA /* DownArrow@3x.png */,
+				2C9CA23D1C39A95000F648EA /* UpArrow.png */,
+				2C9CA23E1C39A95000F648EA /* UpArrow@2x.png */,
+				2C9CA23F1C39A95000F648EA /* UpArrow@3x.png */,
 				2C54BCC61C2F1F02001EC096 /* save_icon.png */,
 				4F9970FA1C2B0E22005173B8 /* hide_keyboard.png */,
 				4FD37AB51C29A49C008A1F3C /* expand_white_up@3x.png */,
@@ -460,11 +464,7 @@
 				4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */,
 				4F8815701C04B192001488C1 /* Branch.swift */,
 				4FADCA6C1C0E2B7E000186A8 /* Model.swift */,
-				4F7BE9A71C189A4A00ECF12D /* MortgageCalculatorView.swift */,
 				4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */,
-				4F1ED5151C1B85EB00E40F4B /* MyCustonViewController.swift */,
-				4FF179201C21BC6F00A00CE0 /* CustomSignUpViewController.swift */,
-				4FD37ABB1C29B17F008A1F3C /* CustomLoginViewController.swift */,
 				2CD798601C3233710052C18C /* Reachability.swift */,
 			);
 			name = "Supporting Classes";
@@ -577,6 +577,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FADCA691C0E27B1000186A8 /* camera_icon.png in Resources */,
+				2C9CA2421C39A95000F648EA /* DownArrow@3x.png in Resources */,
+				2C9CA2401C39A95000F648EA /* DownArrow.png in Resources */,
 				4F7A4CBE1C19ED93009F3684 /* branch_icon.png in Resources */,
 				4FE275A51C11FF2200385449 /* home_in.png in Resources */,
 				4FD37AA51C299778008A1F3C /* profile_white@3x.png in Resources */,
@@ -591,6 +593,7 @@
 				4FADCA641C0E2798000186A8 /* edit_icon.png in Resources */,
 				2C54BCC71C2F1F02001EC096 /* save_icon.png in Resources */,
 				4FF179251C2200A300A00CE0 /* add_icon_grey.png in Resources */,
+				2C9CA2411C39A95000F648EA /* DownArrow@2x.png in Resources */,
 				4FD37AA41C299778008A1F3C /* profile_white@2x.png in Resources */,
 				4F6B03221C2498190055521B /* loadscreen@3x.png in Resources */,
 				4F8F93031C061E0B00639F55 /* icn-firstTime@2x.png in Resources */,
@@ -618,6 +621,7 @@
 				4FD37A9E1C299778008A1F3C /* expand_white@2x.png in Resources */,
 				4FD37A9D1C299778008A1F3C /* expand_white.png in Resources */,
 				4FD37AB11C299C50008A1F3C /* star-2.png in Resources */,
+				2C9CA2441C39A95000F648EA /* UpArrow@2x.png in Resources */,
 				4FD37AA11C299778008A1F3C /* default_home@3x.png in Resources */,
 				4F8F92FF1C061C1400639F55 /* icn-calculator@2x.png in Resources */,
 				4FAF3D2F1BE11BEC00A89A9A /* blue_check.png in Resources */,
@@ -631,6 +635,8 @@
 				4FD37A9F1C299778008A1F3C /* expand_white@3x.png in Resources */,
 				4FAF3CD71BE106EB00A89A9A /* Main.storyboard in Resources */,
 				4FD37A9B1C299778008A1F3C /* divider.png in Resources */,
+				2C9CA2431C39A95000F648EA /* UpArrow.png in Resources */,
+				2C9CA2451C39A95000F648EA /* UpArrow@3x.png in Resources */,
 				4FD37AA81C299778008A1F3C /* loadscreen@3x.png in Resources */,
 				4FD6F4291C12381A004FDDC0 /* Star_empty-01.png in Resources */,
 				4F7A4CBF1C19ED93009F3684 /* right_shadow.png in Resources */,
@@ -680,18 +686,12 @@
 			files = (
 				4FAF3D041BE1085400A89A9A /* HomeViewController.swift in Sources */,
 				4FAF3D0C1BE10A9000A89A9A /* WebViewController.swift in Sources */,
-				4FAF3D021BE1084200A89A9A /* CreateAccountViewController.swift in Sources */,
-				4FAF3D001BE1081700A89A9A /* InitialViewController.swift in Sources */,
-				4F7BE9A81C189A4A00ECF12D /* MortgageCalculatorView.swift in Sources */,
 				4FADCA6D1C0E2B7E000186A8 /* Model.swift in Sources */,
 				4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */,
 				4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */,
-				4FF179211C21BC6F00A00CE0 /* CustomSignUpViewController.swift in Sources */,
 				4F8815711C04B192001488C1 /* Branch.swift in Sources */,
-				4F1ED5161C1B85EB00E40F4B /* MyCustonViewController.swift in Sources */,
 				4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */,
 				4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */,
-				4FD37ABC1C29B17F008A1F3C /* CustomLoginViewController.swift in Sources */,
 				4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */,
 				4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */,
 				4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */,
