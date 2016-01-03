@@ -1426,6 +1426,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller
         
+        if segue.identifier == "addHomeViewController" {
+            let destViewController: AddHomeViewController = segue.destinationViewController as! AddHomeViewController
+            destViewController.cameFromHomeScreen = true
+        }
+        
         if segue.identifier == "profileViewController" {
             let destViewController: ProfileViewController = segue.destinationViewController as! ProfileViewController
             destViewController.loanOfficerArray = loanOfficerArray

@@ -403,7 +403,16 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             }
         }
         catch {
-            print("error serializing JSON: \(error)")
+            let alertController = UIAlertController(title: "HomeIn", message: "An error occurred getting the loan officer information.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                // ...
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
         }
     }
     
@@ -474,7 +483,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     func searchLoanOfficerArray(searchText: String) {
-        //searchTxtField.resignFirstResponder()
         removeViews(scrollView)
         tempArray.removeAll()
         
@@ -548,13 +556,21 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 self.removeViews(self.profileView)
                 self.buildProfileView()
                 self.overlayView.hidden = true
-                //self.buildLoanOfficerCard(loDict as! Dictionary<String, String>, yVal: 160, count: 0, view: self.profileView, isSingleView: true)
                 
                 self.loadingOverlay.hidden = true
                 self.activityIndicator.stopAnimating()
             }
             else {
-                print("error")
+                let alertController = UIAlertController(title: "HomeIn", message: String(format: "%@", error!), preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    // ...
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
             }
         }
     }
@@ -626,17 +642,12 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidBeginEditing(textField: UITextField) {
-        //textField.text = ""
-        print("letter 1")
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        print("letter 2")
     }
     
     func textFieldDidChange(textField: UITextField) {
-        //your code
-        print(textField.text!)
         if textField.text != "" {
             textField.becomeFirstResponder()
             searchLoanOfficerArray(textField.text!)

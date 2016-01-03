@@ -411,7 +411,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK:
     // MARK: - Navigation
     func navigateBackHome(sender: UIButton) {
-        print("navigateBackHome")
         homeButton.enabled = false
         navigationController?.popViewControllerAnimated(true)
     }

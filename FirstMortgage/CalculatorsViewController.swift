@@ -13,7 +13,6 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     // MARK:
     // MARK: Properties
     let model = Model()
-    let mortgageView = MortgageCalculatorView()
     let modelName = UIDevice.currentDevice().modelName
     
     // UIView
@@ -862,7 +861,6 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: taxes))
         
         let newloanamount = loan - model.calculateBalancePaid(loan, intRate: interest, mortgage: mortgage, year: year)
-        print(newloanamount)
         
         var newInterest = 3.5
         if newInterestTextField.text?.isEmpty != true {

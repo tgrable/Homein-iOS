@@ -90,9 +90,6 @@
 		4FD37AA31C299778008A1F3C /* profile_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37A951C299778008A1F3C /* profile_white.png */; };
 		4FD37AA41C299778008A1F3C /* profile_white@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37A961C299778008A1F3C /* profile_white@2x.png */; };
 		4FD37AA51C299778008A1F3C /* profile_white@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37A971C299778008A1F3C /* profile_white@3x.png */; };
-		4FD37AA61C299778008A1F3C /* loadscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37A981C299778008A1F3C /* loadscreen@2x.png */; };
-		4FD37AA71C299778008A1F3C /* loadscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37A991C299778008A1F3C /* loadscreen.png */; };
-		4FD37AA81C299778008A1F3C /* loadscreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37A9A1C299778008A1F3C /* loadscreen@3x.png */; };
 		4FD37AAF1C299C50008A1F3C /* star-5.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37AA91C299C50008A1F3C /* star-5.png */; };
 		4FD37AB01C299C50008A1F3C /* star-3.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37AAA1C299C50008A1F3C /* star-3.png */; };
 		4FD37AB11C299C50008A1F3C /* star-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD37AAB1C299C50008A1F3C /* star-2.png */; };
@@ -534,7 +531,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0710;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Trekk Design";
 				TargetAttributes = {
 					4FAF3CCD1BE106EB00A89A9A = {
@@ -629,7 +626,6 @@
 				4FAF3D361BE151DA00A89A9A /* homebackground.png in Resources */,
 				4F8F93021C061E0B00639F55 /* icn-firstTime.png in Resources */,
 				4FD37AB91C29A49C008A1F3C /* expand_white_up@2x.png in Resources */,
-				4FD37AA61C299778008A1F3C /* loadscreen@2x.png in Resources */,
 				4FADCA6B1C0E2A29000186A8 /* FORZA-LIGHT.OTF in Resources */,
 				4FD37AAF1C299C50008A1F3C /* star-5.png in Resources */,
 				4FD37A9F1C299778008A1F3C /* expand_white@3x.png in Resources */,
@@ -637,11 +633,9 @@
 				4FD37A9B1C299778008A1F3C /* divider.png in Resources */,
 				2C9CA2431C39A95000F648EA /* UpArrow.png in Resources */,
 				2C9CA2451C39A95000F648EA /* UpArrow@3x.png in Resources */,
-				4FD37AA81C299778008A1F3C /* loadscreen@3x.png in Resources */,
 				4FD6F4291C12381A004FDDC0 /* Star_empty-01.png in Resources */,
 				4F7A4CBF1C19ED93009F3684 /* right_shadow.png in Resources */,
 				4F6B03241C24C4520055521B /* Money_icon-04.png in Resources */,
-				4FD37AA71C299778008A1F3C /* loadscreen.png in Resources */,
 				4FD37AA21C299778008A1F3C /* default_home@2x.png in Resources */,
 				4F7A4CBD1C19ED93009F3684 /* sortby_icon.png in Resources */,
 			);

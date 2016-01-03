@@ -777,8 +777,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         imageScollView.delegate = self
         overlayView.addSubview(imageScollView)
         
-        print(imageArray.count)
-        
         var xLocation = 0.0 as CGFloat
         for img: PFFile in imageArray {
             addImageToOverlayAtLocation(img, xLocation: xLocation)
@@ -1162,25 +1160,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     //MARK: UIImagePickerController Delegates
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            //defaultImageView.contentMode = .ScaleAspectFit
-            //defaultImageView.image = pickedImage
 
             if (picker.sourceType.rawValue == 1) {
                 UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
             }
-            
-            /*let nsDocumentDirectory = NSSearchPathDirectory.DocumentDirectory
-            let nsUserDomainMask = NSSearchPathDomainMask.UserDomainMask
-            let paths = NSSearchPathForDirectoriesInDomains(nsDocumentDirectory, nsUserDomainMask, true)
-            
-            
-            if paths.count > 0
-            {
-                print(paths[0])
-            }
-            
-            loadingOverlay.hidden = false
-            activityIndicator.startAnimating()*/
 
             self.newImg = self.scaleImagesForParse(pickedImage)
             self.updateHomeObjectImageArray()
@@ -1295,7 +1278,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let alertController = UIAlertController(title: "HomeIn", message: "Are you sure you want to delete this home?", preferredStyle: .Alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
-            print(action)
+
         }
         alertController.addAction(cancelAction)
         
@@ -1303,13 +1286,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             self.homeObject.deleteInBackgroundWithBlock {
                 (success: Bool, error: NSError?) -> Void in
                 if (success) {
-                    print("The object was deleted")
                     let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
                     self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true);
                     
                 } else {
-                    // There was a problem, check error.description
-                    print("error: %@", error)
                     let alertController = UIAlertController(title: "HomeIn", message: String(format: "error: %@", error!), preferredStyle: .Alert)
                     let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                         // ...

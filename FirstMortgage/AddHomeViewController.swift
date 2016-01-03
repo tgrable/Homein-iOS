@@ -52,12 +52,14 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     var logoImageView = UIImageView()
     
-    var isSmallerScreen = Bool()
     var cameFromHomeScreen = Bool()
+    var isSmallerScreen = Bool()
     
     var imageArray: [PFFile] = []
     var ratingButtonArray: [UIButton] = []
     
+    // MARK:
+    // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -72,16 +74,26 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         if (self.view.bounds.size.width == 320) {
             isSmallerScreen = true
         }
-        print("AddHomeViewController cameFromHomeScreen: ", cameFromHomeScreen)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
         
         buildView()
     }
 
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    // MARK:
+    // MARK: Build Views
     func buildView() {
         addHomeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         addHomeView.backgroundColor = model.lightGrayColor
@@ -374,6 +386,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         descTxtView.resignFirstResponder()
     }
     
+    // MARK:
+    // MARK: Navigation
     func navigateBackHome(sender: UIButton) {
         navigationController?.popViewControllerAnimated(true)
     }
@@ -457,14 +471,13 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
             imageView.image = pickedImage
             imageView.frame = (frame: CGRectMake((scrollView.bounds.size.width / 2) - 125, 25, 250, 175))
             img = pickedImage
-            //dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                self.img = self.scaleImagesForParse(self.img)
-                let imageData = UIImagePNGRepresentation(self.img)
-                if (imageData != nil) {
-                    let imageFile = PFFile(name:"image.png", data:imageData!)
-                    self.imageArray.append(imageFile!)
-                }
-            //}
+            
+            self.img = self.scaleImagesForParse(self.img)
+            let imageData = UIImagePNGRepresentation(self.img)
+            if (imageData != nil) {
+                let imageFile = PFFile(name:"image.png", data:imageData!)
+                self.imageArray.append(imageFile!)
+            }
 
             if (picker.sourceType.rawValue == 1) {
                 UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
@@ -562,7 +575,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 
                 home.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
                     if (success) {
-                        print("The object was saved")
                         self.homeNameTxtField.text = ""
                         self.homePriceTxtField.text = ""
                         self.homeAddressTxtField.text = ""
@@ -582,7 +594,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                         let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                             self.overlayView.hidden = true
                             if (self.cameFromHomeScreen) {
-                                self.navigationController?.popViewControllerAnimated(true)
                                 self.navigationController?.popToRootViewControllerAnimated(true)
                             }
                             else {
@@ -597,7 +608,16 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                         
                     }
                     else {
-                        print("The object was not saved")
+                        let alertController = UIAlertController(title: "HomeIn", message: "An error occurred trying to add this home.", preferredStyle: .Alert)
+                        
+                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                            
+                        }
+                        alertController.addAction(OKAction)
+                        
+                        self.presentViewController(alertController, animated: true) {
+                            // ...
+                        }
                     }
                 }
             }
@@ -647,16 +667,12 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         hideKeyboardButton.alpha = 0.0
     }
     
-
-    // MARK: - Navigation
-
+    /*
+    // MARK: - prepareForSegue
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if segue.identifier == "addHomeToTableView" {
-            let destViewController: MyHomesViewController = segue.destinationViewController as! MyHomesViewController
-            destViewController.cameFromHomeScreen = cameFromHomeScreen
-        }
     }
+    */
 }
