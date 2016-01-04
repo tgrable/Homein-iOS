@@ -97,16 +97,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         else {
             isUserLoggedIn = false
         }
-
+        
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+            let manager = CLLocationManager()
+            // TODO: This needs to update the view
+            if CLLocationManager.authorizationStatus() == .NotDetermined {
+                manager.requestWhenInUseAuthorization()
+            }
+            
             if CLLocationManager.locationServicesEnabled() {
                 switch(CLLocationManager.authorizationStatus()) {
                 case .NotDetermined, .Restricted: //, .Denied:
                     self.locationServicesIsAllowed = false
+                    print("no 1")
                 case .AuthorizedAlways, .AuthorizedWhenInUse:
                     self.locationServicesIsAllowed = true
+                    print("yes")
                 default:
                     self.locationServicesIsAllowed = false
+                    print("no 2")
                 }
             }
         }

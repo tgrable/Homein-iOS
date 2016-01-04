@@ -184,29 +184,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         overlayView.addSubview(scrollView)
         
         buildProfileView()
-        
-        var userLo = ""
-        if let _ = user!["officerName"] {
-            userLo = user!["officerName"] as! String
-            if loanOfficerArray.count > 0 {
-                print("if")
-                let filteredVisitors = loanOfficerArray.filter({
-                    $0["name"] == userLo
-                })
-                
-                print(filteredVisitors)
-            }
-            else {
-                getBranchLoanOfficers()
-                
-                print("else")
-                let filteredVisitors = loanOfficerArray.filter({
-                    $0["name"] == userLo
-                })
-                
-                print(filteredVisitors)
-            }
-        }
     }
 
     override func viewDidAppear(animated: Bool) {
