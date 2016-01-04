@@ -571,15 +571,17 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         else {
             buildSeachOverlay(loanOfficerArray)
             
-            let alertController = UIAlertController(title: "HomeIn", message: "We could not find any loan officers with that name.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                // ...
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
+            if (searchText.characters.count > 0) {
+                let alertController = UIAlertController(title: "HomeIn", message: "We could not find any loan officers with that name.", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    // ...
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
             }
         }
     }
@@ -722,10 +724,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidChange(textField: UITextField) {
-        if textField.text != "" {
-            textField.becomeFirstResponder()
-            searchLoanOfficerArray(textField.text!)
-        }
+        textField.becomeFirstResponder()
+        searchLoanOfficerArray(textField.text!)
     }
     
     func removeViews(views: UIView) {
