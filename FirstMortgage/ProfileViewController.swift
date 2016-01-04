@@ -15,6 +15,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let model = Model()
     let modelName = UIDevice.currentDevice().modelName
     
+    //Reachability
+    let reachability = Reachability()
+    
     // UIView
     //let profileView = UIView()
     let overlayView = UIView()
@@ -181,19 +184,57 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         overlayView.addSubview(scrollView)
         
         buildProfileView()
+        
+        var userLo = ""
+        if let _ = user!["officerName"] {
+            userLo = user!["officerName"] as! String
+            if loanOfficerArray.count > 0 {
+                print("if")
+                let filteredVisitors = loanOfficerArray.filter({
+                    $0["name"] == userLo
+                })
+                
+                print(filteredVisitors)
+            }
+            else {
+                getBranchLoanOfficers()
+                
+                print("else")
+                let filteredVisitors = loanOfficerArray.filter({
+                    $0["name"] == userLo
+                })
+                
+                print(filteredVisitors)
+            }
+        }
     }
 
     override func viewDidAppear(animated: Bool) {
-        if (loanOfficerArray.count <= 0) {
-            let nodes = self.model.getBranchLoanOfficers()
+        if self.reachability.isConnectedToNetwork() == false {
+            let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection.\n\nUpdating a loan officer will not be possible until an internet connection is reestablished.", preferredStyle: .Alert)
             
-            self.loanOfficerArray.removeAll()
-            self.tempArray.removeAll()
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                
+            }
+            alertController.addAction(OKAction)
             
-            for node in nodes {
-                if let nodeDict = node as? NSDictionary {
-                    self.loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
-                    self.tempArray.append(nodeDict as! Dictionary<String, String>)
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+        }
+        else {
+            if (loanOfficerArray.count <= 0) {
+                
+                let nodes = self.model.getBranchLoanOfficers()
+                
+                self.loanOfficerArray.removeAll()
+                self.tempArray.removeAll()
+                
+                for node in nodes {
+                    if let nodeDict = node as? NSDictionary {
+                        self.loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
+                        self.tempArray.append(nodeDict as! Dictionary<String, String>)
+                    }
                 }
             }
         }
@@ -248,46 +289,97 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         emailTxtField.enabled = false
         userView.addSubview(emailTxtField)
         
-        // TODO: This does not working if logging in from two different phones
+        let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
         let defaults = NSUserDefaults.standardUserDefaults()
-        if let loDict = defaults.dictionaryForKey("loanOfficerDict") {
+        if let loDict = defaults.dictionaryForKey(dictString) {
             buildLoanOfficerCard(loDict as! Dictionary<String, String>, yVal: 110, count: 0, view: profileView, isSingleView: true)
         }
         else {
-            // UIView
-            let loView = UIView(frame: CGRectMake(15, 110, scrollView.bounds.size.width - 30, 150))
-            loView.backgroundColor = UIColor.whiteColor()
-            profileView.addSubview(loView)
-            
-            let loLabel = UILabel (frame: CGRectMake(15, 10, loView.bounds.size.width - 30, 24))
-            loLabel.textAlignment = NSTextAlignment.Left
-            loLabel.text = "LOAN OFFICER:"
-            loLabel.numberOfLines = 1
-            loLabel.font = UIFont(name: "forza-light", size: 24)
-            loView.addSubview(loLabel)
-            
-            let loMessage = UILabel (frame: CGRectMake(15, 45, loView.bounds.size.width - 30, 0))
-            loMessage.textAlignment = NSTextAlignment.Left
-            loMessage.text = "You are not currently assigned to a loan officer. Enable edit mode then press here to see a list avaliable loan officers."
-            loMessage.font = UIFont(name: "forza-light", size: 18)
-            loMessage.numberOfLines = 0
-            loMessage.sizeToFit()
-            loView.addSubview(loMessage)
-            
-            // UIButton
-            let selectButton = UIButton (frame: CGRectMake(0, 0, loView.bounds.size.width, loView.bounds.size.height))
-            selectButton.addTarget(self, action: "setLoanOfficer:", forControlEvents: .TouchUpInside)
-            selectButton.backgroundColor = UIColor.clearColor()
-            selectButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-            selectButton.contentHorizontalAlignment = .Right
-            selectButton.tag = 999
-            loView.addSubview(selectButton)
-            
-            let shadowImg = UIImage(named: "long_shadow") as UIImage?
-            // UIImageView
-            let shadowView = UIImageView(frame: CGRectMake(15, loView.bounds.size.height, loView.bounds.size.width, 15))
-            shadowView.image = shadowImg
-            loView.addSubview(shadowView)
+            var userLo = ""
+            if let _ = user!["officerName"] {
+                userLo = user!["officerName"] as! String
+                if loanOfficerArray.count > 0 {
+                    let filteredVisitors = loanOfficerArray.filter({
+                        $0["name"] == userLo
+                    })
+                    
+                    // TODO: Fix DRYness here
+                    var nodeDict = Dictionary<String, String>()
+                    nodeDict["nid"] = filteredVisitors[0]["nid"]
+                    nodeDict["email"] = filteredVisitors[0]["email"]
+                    nodeDict["mobile"] = filteredVisitors[0]["mobile"]
+                    nodeDict["office"] = filteredVisitors[0]["office"]
+                    nodeDict["url"] = filteredVisitors[0]["url"]
+                    nodeDict["name"] = filteredVisitors[0]["name"]
+                    
+                    let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
+                    
+                    let defaults = NSUserDefaults.standardUserDefaults()
+                    defaults.removeObjectForKey(dictString)
+                    defaults.setObject(nodeDict, forKey: dictString)
+                    
+                    buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+                }
+                else {
+                    getBranchLoanOfficers()
+                    
+                    let filteredVisitors = loanOfficerArray.filter({
+                        $0["name"] == userLo
+                    })
+                    
+                    var nodeDict = Dictionary<String, String>()
+                    nodeDict["nid"] = filteredVisitors[0]["nid"]
+                    nodeDict["email"] = filteredVisitors[0]["email"]
+                    nodeDict["mobile"] = filteredVisitors[0]["mobile"]
+                    nodeDict["office"] = filteredVisitors[0]["office"]
+                    nodeDict["url"] = filteredVisitors[0]["url"]
+                    nodeDict["name"] = filteredVisitors[0]["name"]
+                    
+                    let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
+                    
+                    let defaults = NSUserDefaults.standardUserDefaults()
+                    defaults.removeObjectForKey(dictString)
+                    defaults.setObject(nodeDict, forKey: dictString)
+                    
+                    buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+                }
+            }
+            else {
+                // UIView
+                let loView = UIView(frame: CGRectMake(15, 110, scrollView.bounds.size.width - 30, 150))
+                loView.backgroundColor = UIColor.whiteColor()
+                profileView.addSubview(loView)
+                
+                let loLabel = UILabel (frame: CGRectMake(15, 10, loView.bounds.size.width - 30, 24))
+                loLabel.textAlignment = NSTextAlignment.Left
+                loLabel.text = "LOAN OFFICER:"
+                loLabel.numberOfLines = 1
+                loLabel.font = UIFont(name: "forza-light", size: 24)
+                loView.addSubview(loLabel)
+                
+                let loMessage = UILabel (frame: CGRectMake(15, 45, loView.bounds.size.width - 30, 0))
+                loMessage.textAlignment = NSTextAlignment.Left
+                loMessage.text = "You are not currently assigned to a loan officer. Enable edit mode then press here to see a list avaliable loan officers."
+                loMessage.font = UIFont(name: "forza-light", size: 18)
+                loMessage.numberOfLines = 0
+                loMessage.sizeToFit()
+                loView.addSubview(loMessage)
+                
+                // UIButton
+                let selectButton = UIButton (frame: CGRectMake(0, 0, loView.bounds.size.width, loView.bounds.size.height))
+                selectButton.addTarget(self, action: "setLoanOfficer:", forControlEvents: .TouchUpInside)
+                selectButton.backgroundColor = UIColor.clearColor()
+                selectButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+                selectButton.contentHorizontalAlignment = .Right
+                selectButton.tag = 999
+                loView.addSubview(selectButton)
+                
+                let shadowImg = UIImage(named: "long_shadow") as UIImage?
+                // UIImageView
+                let shadowView = UIImageView(frame: CGRectMake(15, loView.bounds.size.height, loView.bounds.size.width, 15))
+                shadowView.image = shadowImg
+                loView.addSubview(shadowView)
+            }
         }
         
         // UIView
@@ -470,6 +562,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         selectButton.backgroundColor = UIColor.clearColor()
         selectButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         selectButton.contentHorizontalAlignment = .Right
+        if reachability.isConnectedToNetwork() == false {
+            selectButton.enabled = false
+        }
         selectButton.tag = count
         loView.addSubview(selectButton)
         
@@ -525,9 +620,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             let name = dict["name"]! as String
             let officerURL = dict["url"]! as String
             
+            let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
+            
             let defaults = NSUserDefaults.standardUserDefaults()
-            defaults.removeObjectForKey("loanOfficerDict")
-            defaults.setObject(dict, forKey: "loanOfficerDict")
+            defaults.removeObjectForKey(dictString)
+            defaults.setObject(dict, forKey: dictString)
 
             nameTxtField.enabled = false
             emailTxtField.enabled = false
@@ -687,21 +784,28 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     // MARK:
     // MARK: Navigation
     func navigateBackHome(sender: UIButton) {
+        loadingOverlay.hidden = false
+        activityIndicator.startAnimating()
+        
         switch sender.tag {
+        case 0:
+            self.navigationController!.popToRootViewControllerAnimated(true)
         case 1:
-            let defaults = NSUserDefaults.standardUserDefaults()
-            defaults.removeObjectForKey("loanOfficerDict")
-            
-            PFUser.logOut()
-            
-            let hvc = self.storyboard!.instantiateViewControllerWithIdentifier("homeViewController") as! HomeViewController
-            hvc.homeView.removeFromSuperview()
-            hvc.isUserLoggedIn = false
+            PFUser.logOutInBackgroundWithBlock { (error: NSError?) -> Void in
+                if (error == nil) {
+                    let hvc = self.storyboard!.instantiateViewControllerWithIdentifier("homeViewController") as! HomeViewController
+                    hvc.homeView.removeFromSuperview()
+                    hvc.isUserLoggedIn = false
+                    
+                    self.navigationController!.popToRootViewControllerAnimated(true)
+                }
+                else {
+                    print("logout error: ", error?.userInfo)
+                }
+            }
         default:
             break
         }
-        
-        self.navigationController!.popToRootViewControllerAnimated(true)
     }
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

@@ -16,6 +16,9 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     let model = Model()
     let modelName = UIDevice.currentDevice().modelName
 
+    //Reachability
+    let reachability = Reachability()
+    
     @IBOutlet weak var homeTableView: UITableView!
     let basicCellIdentifier = "BasicCell"
     
@@ -344,6 +347,9 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         else {
             query.orderByDescending(sortOrder)
         }
+        if self.reachability.isConnectedToNetwork() == false {
+            query.fromLocalDatastore()
+        }
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             
@@ -355,6 +361,9 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                     self.userHomes.append(object)
                 }
                 self.homeTableView.reloadData()
+                
+                PFObject.pinAllInBackground(objects)
+                
             } else {
                 // Log details of the failure
                 let alertController = UIAlertController(title: "HomeIn", message: String(format: "%@", error!.userInfo), preferredStyle: .Alert)

@@ -16,11 +16,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     var model = Model()
     let modelName = UIDevice.currentDevice().modelName
     
+    //Reachability
+    let reachability = Reachability()
+    
     //UIView
     let homeView = UIView()
     let myHomesView = UIView()
     let addHomesView = UIView()
-    let preQualifiedView = UIView()
     let caView = UIView()
     let loginView = UIView()
     let signUpView = UIView()
@@ -56,6 +58,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     let findBranchButton = UIButton()
     let preQualifiedButton = UIButton()
     let userButton = UIButton()
+    let getStartedButton = UIButton ()
+    let loginButton = UIButton ()
     
     //Bool
     var locationServicesIsAllowed = Bool()
@@ -81,9 +85,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     
     //UIActivityIndicatorView
     var activityIndicator = UIActivityIndicatorView()
-    
-    //Reachability
-    let reachability = Reachability()
     
     // MARK:
     // MARK: View Life Cycle
@@ -158,6 +159,25 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
+        
+        if reachability.isConnectedToNetwork() == false {
+            getStartedButton.enabled = false
+            getStartedButton.backgroundColor = UIColor.grayColor()
+            
+            loginButton.enabled = false
+            loginButton.backgroundColor = UIColor.grayColor()
+            
+            let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection. An internet connection is required to create a new account or login to an existing account.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -386,7 +406,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         /********************************************************* Get Prequalified Button ********************************************************************/
          // UIView
-        preQualifiedView.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
+        let preQualifiedView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
         let user = PFUser.currentUser()
         var url = ""
         if (PFUser.currentUser() != nil) {
@@ -394,7 +414,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                 url = user!["officerURL"] as! String
             }
         }
-
+        print("preQualifiedView")
         if (user != nil && url.characters.count > 0 && reachability.isConnectedToNetwork()) {
             let preQualifiedGradientLayer = CAGradientLayer()
             preQualifiedGradientLayer.frame = preQualifiedView.bounds
@@ -444,7 +464,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     }
     
     func buildCreateAccountView() {
-        getBranchJSON()
+        if reachability.isConnectedToNetwork() {
+            getBranchJSON()
+        }
         
         var fontSize = 16 as CGFloat
         if modelName.rangeOfString("5") != nil{
@@ -569,7 +591,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         getStartedArrow.textColor = UIColor.whiteColor()
         getStartedView.addSubview(getStartedArrow)
         
-        let getStartedButton = UIButton (frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
+        getStartedButton.frame = (frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
         getStartedButton.setTitle("GET STARTED", forState: .Normal)
         getStartedButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -599,7 +621,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         loginArrow.textColor = UIColor.whiteColor()
         loginButtonView.addSubview(loginArrow)
         
-        let loginButton = UIButton (frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
+        loginButton.frame = (frame: CGRectMake(35, offset, contentScrollView.bounds.size.width - 70, 40))
         loginButton.setTitle("LOGIN", forState: .Normal)
         loginButton.addTarget(self, action: "showHideLoginView", forControlEvents: .TouchUpInside)
         loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -1138,6 +1160,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                         
                         self.checkIfLoggedIn()
                         self.caView.removeFromSuperview()
+                        self.loginView.removeFromSuperview()
+                        self.signUpView.removeFromSuperview()
                         self.removeViews(self.homeView)
                         self.buildHomeView()
                         self.showHideLoginView()
@@ -1217,6 +1241,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
                     
                     self.checkIfLoggedIn()
                     self.caView.removeFromSuperview()
+                    self.loginView.removeFromSuperview()
+                    self.signUpView.removeFromSuperview()
                     self.removeViews(self.homeView)
                     self.buildHomeView()
                     self.showHideSignUpView()
@@ -1302,6 +1328,15 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         self.presentViewController(alertController, animated: true) {
             // ...
         }
+    }
+    
+    func continueWithoutLogin(sender: UIButton) {
+        self.checkIfLoggedIn()
+        self.caView.removeFromSuperview()
+        self.removeViews(self.homeView)
+        self.buildHomeView()
+        buildLoginView()
+        buildSignUpView()
     }
     
     // MARK:
@@ -1635,16 +1670,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             myHomesButton.enabled = true
             addAHomeButton.enabled = true
             
-            var url = ""
-            if var _ = user!["officerURL"] {
-                url = user!["officerURL"] as! String
-            }
-            
-            if (url.characters.count > 0) {
-                preQualifiedButton.enabled = true
-            }
-            else {
-                preQualifiedButton.enabled = false
+            if reachability.isConnectedToNetwork() {
+                var url = ""
+                if var _ = user!["officerURL"] {
+                    url = user!["officerURL"] as! String
+                }
+                
+                if (url.characters.count > 0) {
+                    preQualifiedButton.enabled = true
+                }
+                else {
+                    preQualifiedButton.enabled = false
+                }
             }
         }
     }
