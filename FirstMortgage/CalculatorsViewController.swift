@@ -30,13 +30,11 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     let mortMortgageTxtField = UITextField() as UITextField
     let mortInterestTxtField = UITextField() as UITextField
     let mortDownPaymentTxtField = UITextField() as UITextField
-    let mortTaxesTxtField = UITextField() as UITextField
     
     // UITextField
     let loanAmountTxtField = UITextField() as UITextField
     let mortgageTextField = UITextField() as UITextField
     let interestTextField = UITextField() as UITextField
-    let taxesTxtField = UITextField() as UITextField
     let currentYearTxtField = UITextField() as UITextField
     let newMortgageTextField = UITextField() as UITextField
     let newInterestTextField = UITextField() as UITextField
@@ -165,15 +163,15 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     
     func buildMortgageCalcView() {
         
-        calcWindowView.frame = (frame: CGRectMake(10, 0, calcView.bounds.size.width - 20, 300))
+        calcWindowView.frame = (frame: CGRectMake(10, 0, calcView.bounds.size.width - 20, 250))
 
-        let mortView = UIView(frame: CGRectMake(0, 0, calcWindowView.bounds.size.width, 300))
+        let mortView = UIView(frame: CGRectMake(0, 0, calcWindowView.bounds.size.width, 250))
         mortView.backgroundColor = UIColor.whiteColor()
         calcWindowView.addSubview(mortView)
         
         let shadowImg = UIImage(named: "long_shadow") as UIImage?
         // UIImageView
-        let shadowView = UIImageView(frame: CGRectMake(0, 300, mortView.bounds.size.width, 15))
+        let shadowView = UIImageView(frame: CGRectMake(0, 250, mortView.bounds.size.width, 15))
         shadowView.image = shadowImg
         mortView.addSubview(shadowView)
 
@@ -277,34 +275,8 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         mortDownPaymentTxtField.font = UIFont(name: "forza-light", size: 22)
         mortView.addSubview(mortDownPaymentTxtField)
         
-        /********************************************************* Property Taxes ********************************************************************/
-         // UILabel
-        let taxesLabel = UILabel(frame: CGRectMake(10, 225, (mortView.bounds.size.width / 2) - 20, 40))
-        taxesLabel.text = "PROPERTY TAXES = "
-        taxesLabel.font = UIFont(name: "forza-light", size: 14)
-        taxesLabel.textAlignment = NSTextAlignment.Right
-        taxesLabel.textColor = UIColor.darkTextColor()
-        mortView.addSubview(taxesLabel)
-        
-        // UITextField
-        let taxesPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        mortTaxesTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 225,(mortView.bounds.size.width / 2) - 20, 40));
-        mortTaxesTxtField.layer.borderColor = model.lightGrayColor.CGColor
-        mortTaxesTxtField.layer.borderWidth = 1.0
-        mortTaxesTxtField.layer.cornerRadius = 2.0
-        mortTaxesTxtField.placeholder = "3.750%"
-        mortTaxesTxtField.leftView = taxesPaddingView
-        mortTaxesTxtField.leftViewMode = UITextFieldViewMode.Always
-        mortTaxesTxtField.backgroundColor = UIColor.clearColor()
-        mortTaxesTxtField.delegate = self
-        mortTaxesTxtField.returnKeyType = .Done
-        mortTaxesTxtField.keyboardType = UIKeyboardType.DecimalPad
-        mortTaxesTxtField.font = UIFont(name: "forza-light", size: 22)
-        mortView.addSubview(mortTaxesTxtField)
-        
-        
         // UIView
-        let calculateView = UIView(frame: CGRectMake(25, 325, scrollView.bounds.size.width - 50, 50))
+        let calculateView = UIView(frame: CGRectMake(25, 275, scrollView.bounds.size.width - 50, 50))
         let calcGradientLayer = CAGradientLayer()
         calcGradientLayer.frame = calculateView.bounds
         calcGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
@@ -330,21 +302,21 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         calculateButton.tag = 0
         calculateView.addSubview(calculateButton)
         
-        let btnImg = UIImage(named: "right_shadow") as UIImage?
         // UIImageView
-        let btnView = UIImageView(frame: CGRectMake(25, 375, calculateView.bounds.size.width - 50, 15))
+        let btnImg = UIImage(named: "right_shadow") as UIImage?
+        let btnView = UIImageView(frame: CGRectMake(25, 325, calculateView.bounds.size.width - 50, 15))
         btnView.image = btnImg
         scrollView.addSubview(btnView)
         
         // UILabel
-        let estPaymentLabel = UILabel(frame: CGRectMake(25, 375, calcView.bounds.size.width - 50, 40))
+        let estPaymentLabel = UILabel(frame: CGRectMake(25, 325, calcView.bounds.size.width - 50, 40))
         estPaymentLabel.text = "YOUR ESTIMATED PAYMENT IS:"
         estPaymentLabel.font = UIFont(name: "forza-light", size: 14)
         estPaymentLabel.textAlignment = NSTextAlignment.Left
         scrollView.addSubview(estPaymentLabel)
         
         // UIView
-        let paymentView = UIView(frame: CGRectMake(25, 410, calcView.bounds.size.width - 50, 50))
+        let paymentView = UIView(frame: CGRectMake(25, 355, calcView.bounds.size.width - 50, 50))
         paymentView.backgroundColor = model.lightGreenColor
         scrollView.addSubview(paymentView)
         
@@ -362,12 +334,12 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         scrollView.addGestureRecognizer(tapGesture)
         
-        scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 575)
+        scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 525)
     }
     
     func buildRefiCalcView() {
         
-        calcWindowView.frame = (frame: CGRectMake(10, 0, calcView.bounds.size.width - 20, 387))
+        calcWindowView.frame = (frame: CGRectMake(10, 0, calcView.bounds.size.width - 20, 337))
         let fontSize = 14
         
         let refiCalcView = UIView(frame: CGRectMake(0, 0, calcWindowView.bounds.size.width, calcWindowView.bounds.size.height))
@@ -377,7 +349,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         let shadowImg = UIImage(named: "long_shadow") as UIImage?
         // UIImageView
-        let shadowView = UIImageView(frame: CGRectMake(0, 387, refiCalcView.bounds.size.width, 15))
+        let shadowView = UIImageView(frame: CGRectMake(0, 337, refiCalcView.bounds.size.width, 15))
         shadowView.image = shadowImg
         refiCalcView.addSubview(shadowView)
         
@@ -518,48 +490,14 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         currentYearTxtField.font = UIFont(name: "forza-light", size: 22)
         refiCalcView.addSubview(currentYearTxtField)
 
-        /********************************************************* Refinance Fees ********************************************************************/
-         // UILabel
-        let taxesLabel = UILabel(frame: CGRectMake(10, 225, (refiCalcView.bounds.size.width / 2) - 25, 40))
-        taxesLabel.text = "PROPERTY TAXES"
-        taxesLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
-        taxesLabel.textAlignment = NSTextAlignment.Right
-        taxesLabel.textColor = UIColor.darkTextColor()
-        taxesLabel.numberOfLines = 2
-        refiCalcView.addSubview(taxesLabel)
-        
-        // UILabel
-        let equalSixLabel = UILabel(frame: CGRectMake((refiCalcView.bounds.size.width / 2) - 20, 225, 20, 40))
-        equalSixLabel.text = " = "
-        equalSixLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
-        equalSixLabel.textAlignment = NSTextAlignment.Right
-        equalSixLabel.numberOfLines = 2
-        refiCalcView.addSubview(equalSixLabel)
-        
-        // UITextField
-        let feePaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        taxesTxtField.frame = (frame: CGRectMake((refiCalcView.bounds.size.width / 2) + 10, 225,(refiCalcView.bounds.size.width / 2) - 20, 40));
-        taxesTxtField.layer.borderColor = model.lightGrayColor.CGColor
-        taxesTxtField.layer.borderWidth = 1.0
-        taxesTxtField.layer.cornerRadius = 2.0
-        taxesTxtField.leftView = feePaddingView
-        taxesTxtField.leftViewMode = UITextFieldViewMode.Always
-        taxesTxtField.placeholder = "3.75%"
-        taxesTxtField.backgroundColor = UIColor.clearColor()
-        taxesTxtField.delegate = self
-        taxesTxtField.returnKeyType = .Done
-        taxesTxtField.keyboardType = UIKeyboardType.DecimalPad
-        taxesTxtField.font = UIFont(name: "forza-light", size: 22)
-        refiCalcView.addSubview(taxesTxtField)
-
-        let refiDividerView = UIView(frame: CGRectMake(10, 275, calcWindowView.bounds.size.width - 20, 2))
+        let refiDividerView = UIView(frame: CGRectMake(10, 225, calcWindowView.bounds.size.width - 20, 2))
         refiDividerView.backgroundColor = model.lightGrayColor
         refiDividerView.hidden = false
         calcWindowView.addSubview(refiDividerView)
         
         /********************************************************* New Mortgage Term ********************************************************************/
          // UILabel
-        let newTermLabel = UILabel(frame: CGRectMake(10, 287, (refiCalcView.bounds.size.width / 2) - 25, 40))
+        let newTermLabel = UILabel(frame: CGRectMake(10, 237, (refiCalcView.bounds.size.width / 2) - 25, 40))
         newTermLabel.text = "NEW MORTGAGE TERM"
         newTermLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         newTermLabel.textAlignment = NSTextAlignment.Right
@@ -568,7 +506,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         refiCalcView.addSubview(newTermLabel)
         
         // UILabel
-        let equalSevenLabel = UILabel(frame: CGRectMake((refiCalcView.bounds.size.width / 2) - 20, 287, 20, 40))
+        let equalSevenLabel = UILabel(frame: CGRectMake((refiCalcView.bounds.size.width / 2) - 20, 237, 20, 40))
         equalSevenLabel.text = " = "
         equalSevenLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         equalSevenLabel.textAlignment = NSTextAlignment.Right
@@ -577,7 +515,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         // UITextField
         let newMortgagePaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        newMortgageTextField.frame = (frame: CGRectMake((refiCalcView.bounds.size.width / 2) + 10, 287,(refiCalcView.bounds.size.width / 2) - 20, 40));
+        newMortgageTextField.frame = (frame: CGRectMake((refiCalcView.bounds.size.width / 2) + 10, 237,(refiCalcView.bounds.size.width / 2) - 20, 40));
         newMortgageTextField.layer.borderColor = model.lightGrayColor.CGColor
         newMortgageTextField.layer.borderWidth = 1.0
         newMortgageTextField.layer.cornerRadius = 2.0
@@ -593,7 +531,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         /********************************************************* Current Interest Rate ********************************************************************/
          // UILabel
-        let newInterestRateLabel = UILabel(frame: CGRectMake(10, 337, (refiCalcView.bounds.size.width / 2) - 25, 40))
+        let newInterestRateLabel = UILabel(frame: CGRectMake(10, 287, (refiCalcView.bounds.size.width / 2) - 25, 40))
         newInterestRateLabel.text = "NEW INTEREST RATE"
         newInterestRateLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         newInterestRateLabel.textAlignment = NSTextAlignment.Right
@@ -602,7 +540,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         refiCalcView.addSubview(newInterestRateLabel)
         
         // UILabel
-        let equalEightLabel = UILabel(frame: CGRectMake((refiCalcView.bounds.size.width / 2) - 20, 337, 20, 40))
+        let equalEightLabel = UILabel(frame: CGRectMake((refiCalcView.bounds.size.width / 2) - 20, 287, 20, 40))
         equalEightLabel.text = " = "
         equalEightLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         equalEightLabel.textAlignment = NSTextAlignment.Right
@@ -611,7 +549,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         // UITextField
         let newInterestPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        newInterestTextField.frame = (frame: CGRectMake((refiCalcView.bounds.size.width / 2) + 10, 337,(refiCalcView.bounds.size.width / 2) - 20, 40));
+        newInterestTextField.frame = (frame: CGRectMake((refiCalcView.bounds.size.width / 2) + 10, 287,(refiCalcView.bounds.size.width / 2) - 20, 40));
         newInterestTextField.layer.borderColor = model.lightGrayColor.CGColor
         newInterestTextField.layer.borderWidth = 1.0
         newInterestTextField.layer.cornerRadius = 2.0
@@ -626,7 +564,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         refiCalcView.addSubview(newInterestTextField)
         
         // UIView
-        let calculateView = UIView(frame: CGRectMake(25, 412, scrollView.bounds.size.width - 50, 50))
+        let calculateView = UIView(frame: CGRectMake(25, 367, scrollView.bounds.size.width - 50, 50))
         let calcGradientLayer = CAGradientLayer()
         calcGradientLayer.frame = calculateView.bounds
         calcGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
@@ -654,19 +592,19 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         let btnImg = UIImage(named: "right_shadow") as UIImage?
         // UIImageView
-        let btnView = UIImageView(frame: CGRectMake(15, 462, calculateView.bounds.size.width, 15))
+        let btnView = UIImageView(frame: CGRectMake(0, 50, calculateView.bounds.size.width, 15))
         btnView.image = btnImg
-        refiCalcView.addSubview(btnView)
+        calculateView.addSubview(btnView)
         
         // UILabel
-        let estPaymentLabel = UILabel(frame: CGRectMake(25, 477, calcView.bounds.size.width - 50, 40))
+        let estPaymentLabel = UILabel(frame: CGRectMake(25, 417, calcView.bounds.size.width - 50, 40))
         estPaymentLabel.text = "UNDER ORIGINAL TERMS YOU PAY:"
         estPaymentLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         estPaymentLabel.textAlignment = NSTextAlignment.Left
         scrollView.addSubview(estPaymentLabel)
         
         // UIView
-        let paymentView = UIView(frame: CGRectMake(25, 512, calcView.bounds.size.width - 50, 50))
+        let paymentView = UIView(frame: CGRectMake(25, 447, calcView.bounds.size.width - 50, 50))
         paymentView.backgroundColor = model.lightOrangeColor
         scrollView.addSubview(paymentView)
         
@@ -679,14 +617,14 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         paymentView.addSubview(paymentLabel)
         
         // UILabel
-        let estRefiPaymentLabel = UILabel(frame: CGRectMake(25, 562, calcView.bounds.size.width - 50, 40))
+        let estRefiPaymentLabel = UILabel(frame: CGRectMake(25, 497, calcView.bounds.size.width - 50, 40))
         estRefiPaymentLabel.text = "AFTER REFINANCING YOU PAY:"
         estRefiPaymentLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         estRefiPaymentLabel.textAlignment = NSTextAlignment.Left
         scrollView.addSubview(estRefiPaymentLabel)
         
         // UIView
-        let refiPaymentView = UIView(frame: CGRectMake(25, 597, calcView.bounds.size.width - 50, 50))
+        let refiPaymentView = UIView(frame: CGRectMake(25, 527, calcView.bounds.size.width - 50, 50))
         refiPaymentView.backgroundColor = model.lightGreenColor
         scrollView.addSubview(refiPaymentView)
         
@@ -704,7 +642,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         let refiTapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         refiCalcView.addGestureRecognizer(refiTapGesture)
         
-        scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 775)
+        scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 675)
     }
     
     // MARK:
@@ -732,19 +670,14 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
                 self.scrollView.contentOffset.y = 275
                 }, completion: nil)
         }
-        else if textField == taxesTxtField || textField == mortTaxesTxtField {
+        else if textField == newMortgageTextField {
             UIView.animateWithDuration(0.4, animations: {
                 self.scrollView.contentOffset.y = 325
                 }, completion: nil)
         }
-        else if textField == newMortgageTextField {
-            UIView.animateWithDuration(0.4, animations: {
-                self.scrollView.contentOffset.y = 375
-                }, completion: nil)
-        }
         else if textField == newInterestTextField {
             UIView.animateWithDuration(0.4, animations: {
-                self.scrollView.contentOffset.y = 425
+                self.scrollView.contentOffset.y = 375
                 }, completion: nil)
         }
     }
@@ -759,13 +692,11 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         mortMortgageTxtField.resignFirstResponder()
         mortInterestTxtField.resignFirstResponder()
         mortDownPaymentTxtField.resignFirstResponder()
-        mortTaxesTxtField.resignFirstResponder()
         
         loanAmountTxtField.resignFirstResponder()
         mortgageTextField.resignFirstResponder()
         interestTextField.resignFirstResponder()
         currentYearTxtField.resignFirstResponder()
-        taxesTxtField.resignFirstResponder()
         newMortgageTextField.resignFirstResponder()
         newInterestTextField.resignFirstResponder()
     }
@@ -806,12 +737,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        var taxes = 3.75
-        if mortTaxesTxtField.text?.isEmpty != true {
-            taxes = Double(mortTaxesTxtField.text!)!
-        }
-        
-        paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: taxes))
+        paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: 0.0))
     }
     
     func calculateRefinanceButtonPress(sender: UIButton) {
@@ -852,13 +778,8 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
                 year = Double(currentYearTxtField.text!)!
             }
         }
-
-        var taxes = 3.75
-        if taxesTxtField.text?.isEmpty != true {
-            taxes = Double(taxesTxtField.text!)!
-        }
         
-        paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: taxes))
+        paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: 0.0))
         
         let newloanamount = loan - model.calculateBalancePaid(loan, intRate: interest, mortgage: mortgage, year: year)
         
@@ -872,7 +793,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
             newMortgage = Double(newMortgageTextField.text!)!
         }
 
-        refiPaymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(newloanamount, interest: newInterest, mortgage: newMortgage, taxes: taxes))
+        refiPaymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(newloanamount, interest: newInterest, mortgage: newMortgage, taxes: 0.0))
     }
     
     func keyboardWillAppear(notification: NSNotification){

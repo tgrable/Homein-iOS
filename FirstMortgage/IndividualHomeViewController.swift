@@ -42,7 +42,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     let mortgageTxtField = UITextField() as UITextField
     let interestTxtField = UITextField() as UITextField
     let downPaymentTxtField = UITextField() as UITextField
-    let taxesTxtField = UITextField() as UITextField
     
     // UIImagePickerController
     let picker = UIImagePickerController()
@@ -227,7 +226,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         activityIndicator.center = view.center
         loadingOverlay.addSubview(activityIndicator)
         
-        scrollView.contentSize = CGSize(width: myHomesView.bounds.size.width, height: 900)
+        scrollView.contentSize = CGSize(width: myHomesView.bounds.size.width, height: 800)
     }
 
     func buildHomeTray() {
@@ -239,15 +238,21 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         defaultImageView.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, 250))
         homeTray.addSubview(defaultImageView)
         
-        let attributes = [
-            NSForegroundColorAttributeName: UIColor.darkTextColor(),
-            NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
-        ]
+        let homeNameborder = CALayer()
+        let width = CGFloat(1.0)
         
-        let homeName = homeObject["name"] as! NSString
+        var homeName = ""
+        if let _ = homeObject["name"] {
+            homeName = homeObject["name"] as! String
+        }
         // UITextField
-        homeNameTxtField.frame = (frame: CGRectMake(10, 250, homeTray.bounds.size.width - 20, 40))
-        homeNameTxtField.attributedPlaceholder = NSAttributedString(string: homeName as String, attributes:attributes)
+        homeNameTxtField.frame = (frame: CGRectMake(10, 250, homeTray.bounds.size.width - 125, 40))
+        homeNameborder.borderColor = UIColor.darkGrayColor().CGColor
+        homeNameborder.frame = CGRect(x: 0, y: homeNameTxtField.frame.size.height - width, width:  homeNameTxtField.frame.size.width, height: homeNameTxtField.frame.size.height)
+        homeNameborder.borderWidth = width
+        homeNameTxtField.layer.addSublayer(homeNameborder)
+        homeNameTxtField.layer.masksToBounds = true
+        homeNameTxtField.text = homeName as String
         homeNameTxtField.backgroundColor = UIColor.clearColor()
         homeNameTxtField.delegate = self
         homeNameTxtField.returnKeyType = .Next
@@ -256,15 +261,55 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeNameTxtField.enabled = false
         homeTray.addSubview(homeNameTxtField)
         
-        // UILabel
-        let price = homeObject["price"] as! Double
+        let attributes = [
+            //NSForegroundColorAttributeName: UIColor.redColor(),
+            NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
+        ]
+        
+        var homeAddress = ""
+        if let _ = homeObject["address"] {
+            homeAddress = homeObject["address"] as! String
+        }
+        
+        let homeAddressborder = CALayer()
+        //UITextField
+        homeAddressTxtField.frame = (frame: CGRectMake(10, 290, homeTray.bounds.size.width - 20, 40))
+        homeAddressborder.borderColor = UIColor.darkGrayColor().CGColor
+        homeAddressborder.frame = CGRect(x: 0, y: homeAddressTxtField.frame.size.height - width, width:  homeAddressTxtField.frame.size.width, height: homeAddressTxtField.frame.size.height)
+        homeAddressborder.borderWidth = width
+        homeAddressTxtField.layer.addSublayer(homeAddressborder)
+        homeAddressTxtField.layer.masksToBounds = true
+        if (homeAddress.characters.count > 0) {
+            homeAddressTxtField.text = homeAddress as String
+        }
+        else {
+            homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: "ADDRESS" as String, attributes:attributes)
+        }
+        homeAddressTxtField.backgroundColor = UIColor.clearColor()
+        homeAddressTxtField.delegate = self
+        homeAddressTxtField.returnKeyType = .Next
+        homeAddressTxtField.keyboardType = UIKeyboardType.Default
+        homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
+        homeAddressTxtField.enabled = false
+        homeTray.addSubview(homeAddressTxtField)
+        
+        var price = 0.0
+        if let _ = homeObject["price"] {
+            price = homeObject["price"] as! Double
+        }
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .CurrencyStyle
         let homePrice = formatter.stringFromNumber(price)! as String
         
+        let homePriceborder = CALayer()
         // UITextField
-        homePriceTxtField.frame = (frame: CGRectMake(10, 290, homeTray.bounds.size.width - 90, 40))
-        homePriceTxtField.attributedPlaceholder = NSAttributedString(string: homePrice as String, attributes:attributes)
+        homePriceTxtField.frame = (frame: CGRectMake(10, 330, homeTray.bounds.size.width - 20, 40))
+        homePriceborder.borderColor = UIColor.darkGrayColor().CGColor
+        homePriceborder.frame = CGRect(x: 0, y: homePriceTxtField.frame.size.height - width, width:  homePriceTxtField.frame.size.width, height: homePriceTxtField.frame.size.height)
+        homePriceborder.borderWidth = width
+        homePriceTxtField.layer.addSublayer(homePriceborder)
+        homePriceTxtField.layer.masksToBounds = true
+        homePriceTxtField.text = homePrice as String
         homePriceTxtField.backgroundColor = UIColor.clearColor()
         homePriceTxtField.delegate = self
         homePriceTxtField.returnKeyType = .Next
@@ -275,7 +320,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         // UIButton
         let addIcn = UIImage(named: "camera_icon") as UIImage?
-        let addIcon = UIImageView(frame: CGRectMake(homeTray.bounds.size.width - 115, 255, 34.29, 30))
+        let addIcon = UIImageView(frame: CGRectMake(homeTray.bounds.size.width - 105, 255, 34.29, 30))
         addIcon.image = addIcn
         homeTray.addSubview(addIcon)
         
@@ -305,7 +350,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         for i in 1...5 {
             // UIButton
-            let ratingButton = UIButton(frame: CGRectMake(CGFloat(10 + xOffset), 330, 35, 35))
+            let ratingButton = UIButton(frame: CGRectMake(CGFloat(10 + xOffset), 380, 35, 35))
             ratingButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
             ratingButton.backgroundColor = model.darkBlueColor
             if i <= userRating {
@@ -321,127 +366,105 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             
             xOffset += 40
         }
-        
-        let dividerView = UIView(frame: CGRectMake(10, 375, homeTray.bounds.size.width - 20, 1))
-        dividerView.backgroundColor = UIColor.darkGrayColor()
-        dividerView.hidden = false
-        homeTray.addSubview(dividerView)
-        
-        let bed = homeObject["beds"] as? Int
-        let attributedHomeBed = NSMutableAttributedString(
-            string: String(format: "%d", bed!),
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
-                name: "Arial",
-                size: 12.0)!])
 
+        var bed = 0
+        if let _ = homeObject["beds"] {
+            bed = (homeObject["beds"] as? Int)!
+        }
         
         // UITextField
-        bedsTxtField.frame = (frame: CGRectMake(15, 385, (homeTray.bounds.size.width / 3) - 10, 30))
-        bedsTxtField.attributedPlaceholder = attributedHomeBed
+        bedsTxtField.frame = (frame: CGRectMake(15, 425, (homeTray.bounds.size.width / 3) - 20, 30))
+        let bedPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
+        bedsTxtField.leftView = bedPaddingView
+        bedsTxtField.leftViewMode = UITextFieldViewMode.Always
+        bedsTxtField.text = String(format: "%d", bed)
         bedsTxtField.backgroundColor = UIColor.clearColor()
         bedsTxtField.delegate = self
         bedsTxtField.returnKeyType = .Next
         bedsTxtField.keyboardType = UIKeyboardType.NumberPad
-        bedsTxtField.font = UIFont(name: "Arial", size: 12)
+        bedsTxtField.font = UIFont(name: "Arial", size: 14)
         bedsTxtField.enabled = false
         homeTray.addSubview(bedsTxtField)
         
-        let bedsLabel = UILabel(frame: CGRectMake(15, 410, (homeTray.bounds.size.width / 3) - 10, 30))
+        let bedsLabel = UILabel(frame: CGRectMake(15, 450, (homeTray.bounds.size.width / 3) - 20, 30))
         bedsLabel.text = "Beds"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        bedsLabel.textAlignment = NSTextAlignment.Left
+        bedsLabel.textAlignment = NSTextAlignment.Center
         bedsLabel.numberOfLines = 1
-        bedsLabel.font = bedsLabel.font.fontWithSize(12)
+        bedsLabel.font = bedsLabel.font.fontWithSize(14)
         bedsLabel.textColor = UIColor.darkTextColor()
         homeTray.addSubview(bedsLabel)
         
-        let vertDividerTwoView = UIView(frame: CGRectMake(homeTray.bounds.size.width / 3, 385, 1, 50))
+        let vertDividerTwoView = UIView(frame: CGRectMake(homeTray.bounds.size.width / 3, 425, 1, 50))
         vertDividerTwoView.backgroundColor = UIColor.darkGrayColor()
         vertDividerTwoView.hidden = false
         homeTray.addSubview(vertDividerTwoView)
         
-        let bath = homeObject["baths"] as? Double
-        let attributedHomeBath = NSMutableAttributedString(
-            string: String(format: "%.1f", bath!),
-            attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
-                name: "Arial",
-                size: 12.0)!])
-        
+        var bath = 0.0
+        if let _ = homeObject["baths"] {
+            bath = (homeObject["baths"] as? Double)!
+        }
+
         // UITextField
-        bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 385, (homeTray.bounds.size.width / 3) - 10, 30))
-        bathsTxtField.attributedPlaceholder = attributedHomeBath
+        bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 425, (homeTray.bounds.size.width / 3) - 20, 30))
+        let bathPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
+        bathsTxtField.leftView = bathPaddingView
+        bathsTxtField.leftViewMode = UITextFieldViewMode.Always
+        bathsTxtField.text = String(format: "%d", bath)
         bathsTxtField.backgroundColor = UIColor.clearColor()
         bathsTxtField.delegate = self
         bathsTxtField.returnKeyType = .Next
         bathsTxtField.keyboardType = UIKeyboardType.DecimalPad
-        bathsTxtField.font = UIFont(name: "Arial", size: 12)
+        bathsTxtField.font = UIFont(name: "Arial", size: 14)
         bathsTxtField.enabled = false
         homeTray.addSubview(bathsTxtField)
         
-        let bathsLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 410, (homeTray.bounds.size.width / 3) - 10, 30))
+        let bathsLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 450, (homeTray.bounds.size.width / 3) - 20, 30))
         bathsLabel.text = "Baths"
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        bathsLabel.textAlignment = NSTextAlignment.Left
+        bathsLabel.textAlignment = NSTextAlignment.Center
         bathsLabel.numberOfLines = 1
-        bathsLabel.font = bathsLabel.font.fontWithSize(12)
+        bathsLabel.font = bathsLabel.font.fontWithSize(14)
         bathsLabel.textColor = UIColor.darkTextColor()
         homeTray.addSubview(bathsLabel)
         
-        let vertDividerThreeView = UIView(frame: CGRectMake(homeTray.bounds.size.width * 0.66, 385, 1, 50))
+        let vertDividerThreeView = UIView(frame: CGRectMake(homeTray.bounds.size.width * 0.66, 425, 1, 50))
         vertDividerThreeView.backgroundColor = UIColor.darkGrayColor()
         vertDividerThreeView.hidden = false
         homeTray.addSubview(vertDividerThreeView)
-        
-        var attributedHomeSqft = NSMutableAttributedString()
-        if let homeSqft = homeObject["footage"] as? Double {
-            attributedHomeSqft = NSMutableAttributedString(
-                string: String(format: "%.1f", homeSqft),
-                attributes: [NSForegroundColorAttributeName: UIColor.darkTextColor(),NSFontAttributeName:UIFont(
-                    name: "Arial",
-                    size: 12.0)!])
+
+        var homeSqft = 0.0
+        if let _ = homeObject["footage"] {
+            homeSqft = (homeObject["footage"] as? Double)!
         }
-        
         // UITextField
-        sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 385, (homeTray.bounds.size.width / 3) - 10, 30))
-        sqFeetTxtField.attributedPlaceholder = attributedHomeSqft
+        sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 425, (homeTray.bounds.size.width / 3) - 20, 30))
+        let sqFeetPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 15, 50))
+        sqFeetTxtField.leftView = sqFeetPaddingView
+        sqFeetTxtField.leftViewMode = UITextFieldViewMode.Always
+        sqFeetTxtField.text = String(format: "%d", homeSqft)
         sqFeetTxtField.backgroundColor = UIColor.clearColor()
         sqFeetTxtField.delegate = self
         sqFeetTxtField.returnKeyType = .Next
         sqFeetTxtField.keyboardType = UIKeyboardType.NumberPad
-        sqFeetTxtField.font = UIFont(name: "Arial", size: 12)
+        sqFeetTxtField.font = UIFont(name: "Arial", size: 14)
         sqFeetTxtField.enabled = false
         homeTray.addSubview(sqFeetTxtField)
         
-        let sqFeetLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 410, (homeTray.bounds.size.width / 3) - 10, 30))
+        let sqFeetLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 450, (homeTray.bounds.size.width / 3) - 20, 30))
         sqFeetLabel.text = "Sq. Ft."
-        //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
-        sqFeetLabel.textAlignment = NSTextAlignment.Left
+        sqFeetLabel.textAlignment = NSTextAlignment.Center
         sqFeetLabel.numberOfLines = 1
-        sqFeetLabel.font = sqFeetLabel.font.fontWithSize(12)
+        sqFeetLabel.font = sqFeetLabel.font.fontWithSize(14)
         sqFeetLabel.textColor = UIColor.darkTextColor()
         homeTray.addSubview(sqFeetLabel)
         
-        let arialAttributes = [
-            NSForegroundColorAttributeName: UIColor.darkTextColor(),
-            NSFontAttributeName : UIFont(name: "Arial", size: 18)!
-        ]
-        
-        let homeAddress = homeObject["address"] as! NSString
-        //UITextField
-        homeAddressTxtField.frame = (frame: CGRectMake(10, 450, homeTray.bounds.size.width - 20, 40))
-        homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: homeAddress as String, attributes:arialAttributes)
-        homeAddressTxtField.backgroundColor = UIColor.clearColor()
-        homeAddressTxtField.delegate = self
-        homeAddressTxtField.returnKeyType = .Next
-        homeAddressTxtField.keyboardType = UIKeyboardType.Default
-        homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
-        homeAddressTxtField.enabled = false
-        homeTray.addSubview(homeAddressTxtField)
-        
+        var desc = "Add notes about this house."
+        if let _ = homeObject["desc"] {
+            desc =  homeObject["desc"] as! String
+        }
         //Create textview
-        descTxtView.frame = (frame : CGRectMake(10, 500, homeTray.bounds.size.width - 20, 150))
+        descTxtView.frame = (frame : CGRectMake(10, 490, homeTray.bounds.size.width - 20, 150))
         descTxtView.backgroundColor = UIColor.whiteColor()
-        descTxtView.text = homeObject["desc"] as? String
+        descTxtView.text = desc
         descTxtView.autocorrectionType = .Yes
         descTxtView.editable = false
         descTxtView.font = UIFont(name: "forza-light", size: 22)
@@ -455,7 +478,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calcTray.backgroundColor = UIColor.clearColor()
         scrollView.addSubview(calcTray)
         
-        let mortView = UIView(frame: CGRectMake(0, 0, calcTray.bounds.size.width, 300))
+        let mortView = UIView(frame: CGRectMake(0, 0, calcTray.bounds.size.width, 250))
         mortView.backgroundColor = UIColor.whiteColor()
         calcTray.addSubview(mortView)
         
@@ -560,34 +583,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         downPaymentTxtField.keyboardType = UIKeyboardType.NumberPad
         downPaymentTxtField.font = UIFont(name: "forza-light", size: 22)
         mortView.addSubview(downPaymentTxtField)
-        
-        /********************************************************* Property Taxes ********************************************************************/
-        // UILabel
-        let taxesLabel = UILabel(frame: CGRectMake(10, 225, (mortView.bounds.size.width / 2) - 20, 40))
-        taxesLabel.text = "PROPERTY TAXES = "
-        taxesLabel.font = UIFont(name: "forza-light", size: 14)
-        taxesLabel.textAlignment = NSTextAlignment.Right
-        taxesLabel.textColor = UIColor.darkTextColor()
-        mortView.addSubview(taxesLabel)
-        
-        // UITextField
-        let taxesPaddingView = UIView(frame: CGRectMake(0, 0, 15, 40))
-        taxesTxtField.frame = (frame: CGRectMake((mortView.bounds.size.width / 2) + 10, 225,(mortView.bounds.size.width / 2) - 20, 40));
-        taxesTxtField.layer.borderColor = model.lightGrayColor.CGColor
-        taxesTxtField.layer.borderWidth = 1.0
-        taxesTxtField.layer.cornerRadius = 2.0
-        taxesTxtField.placeholder = "3.750%"
-        taxesTxtField.leftView = taxesPaddingView
-        taxesTxtField.leftViewMode = UITextFieldViewMode.Always
-        taxesTxtField.backgroundColor = UIColor.clearColor()
-        taxesTxtField.delegate = self
-        taxesTxtField.returnKeyType = .Done
-        taxesTxtField.keyboardType = UIKeyboardType.DecimalPad
-        taxesTxtField.font = UIFont(name: "forza-light", size: 22)
-        mortView.addSubview(taxesTxtField)
-        
+         
         // UIView
-        let calculateView = UIView(frame: CGRectMake(25, 310, calcTray.bounds.size.width - 50, 50))
+        let calculateView = UIView(frame: CGRectMake(25, 275, calcTray.bounds.size.width - 50, 50))
         let calcGradientLayer = CAGradientLayer()
         calcGradientLayer.frame = calculateView.bounds
         calcGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
@@ -604,7 +602,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         // UIButton
         let calculateButton = UIButton (frame: CGRectMake(25, 0, calculateView.bounds.size.width - 25, 50))
-        calculateButton.addTarget(self, action: "calculateRefinanceButtonPress:", forControlEvents: .TouchUpInside)
+        calculateButton.addTarget(self, action: "calculateMortgagePaymentButtonPress:", forControlEvents: .TouchUpInside)
         calculateButton.setTitle("CALCULATE", forState: .Normal)
         calculateButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         calculateButton.backgroundColor = UIColor.clearColor()
@@ -620,14 +618,14 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calculateView.addSubview(btnView)
         
         // UILabel
-        estPaymentLabel.frame = (frame: CGRectMake(25, 360, calcTray.bounds.size.width - 50, 25))
+        estPaymentLabel.frame = (frame: CGRectMake(25, 335, calcTray.bounds.size.width - 50, 25))
         estPaymentLabel.text = "YOUR ESTIMATED PAYMENT IS:"
         estPaymentLabel.font = UIFont(name: "forza-light", size: 14)
         estPaymentLabel.textAlignment = NSTextAlignment.Left
         calcTray.addSubview(estPaymentLabel)
         
         // UIView
-        let paymentView = UIView(frame: CGRectMake(25, 390, calcTray.bounds.size.width - 50, 50))
+        let paymentView = UIView(frame: CGRectMake(25, 355, calcTray.bounds.size.width - 50, 50))
         let paymentGradientLayer = CAGradientLayer()
         paymentGradientLayer.frame = paymentView.bounds
         paymentGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
@@ -696,8 +694,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         saveButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         saveButton.contentHorizontalAlignment = .Center
         saveButton.tag = 0
-        saveButton.hidden = true
-        saveButton.enabled = false
+        //saveButton.hidden = true
+        //saveButton.enabled = false
         saveView.addSubview(saveButton)
         
         let saveButtonShadowImg = UIImage(named: "right_shadow") as UIImage?
@@ -711,22 +709,22 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if (!isCalcTrayOpen) {
             UIView.animateWithDuration(0.8, animations: {
                 self.expandIcon.image = UIImage(named: "expand_white_up")
-                self.calcTray.frame = (frame: CGRectMake(0, 730, self.scrollView.bounds.size.width, 450))
-                self.saveDeleteTray.frame = (frame: CGRectMake(0, 1180, self.scrollView.bounds.size.width, 450))
+                self.calcTray.frame = (frame: CGRectMake(0, 730, self.scrollView.bounds.size.width, 400))
+                self.saveDeleteTray.frame = (frame: CGRectMake(0, 1140, self.scrollView.bounds.size.width, 400))
                 }, completion: {
                     (value: Bool) in
-                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1500)
+                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1400)
                     self.isCalcTrayOpen = true
             })
         }
         else {
             UIView.animateWithDuration(0.8, animations: {
                 self.expandIcon.image = UIImage(named: "expand_white")
-                self.calcTray.frame = (frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 450))
-                self.saveDeleteTray.frame = (frame: CGRectMake(0, 720, self.scrollView.bounds.size.width, 450))
+                self.calcTray.frame = (frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 400))
+                self.saveDeleteTray.frame = (frame: CGRectMake(0, 720, self.scrollView.bounds.size.width, 400))
                 }, completion: {
                     (value: Bool) in
-                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 900)
+                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 800)
                     self.isCalcTrayOpen = false
             })
         }
@@ -744,6 +742,19 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                         if let imageData = imageData {
                             let image = UIImage(data:imageData)
                             self.defaultImageView.image = image
+                            
+                            let imageCountView = UIView(frame: CGRectMake(self.defaultImageView.bounds.size.width - 85, 10, 75, 25))
+                            imageCountView.backgroundColor = UIColor.darkGrayColor()
+                            imageCountView.alpha = 0.85
+                            self.defaultImageView.addSubview(imageCountView)
+                            
+                            // UILabel
+                            let imageCountLabel = UILabel(frame: CGRectMake(0, 0, imageCountView.bounds.size.width, 25))
+                            imageCountLabel.text = String(format: "1 of %d", self.imageArray.count)
+                            imageCountLabel.font = UIFont(name: "Arial", size: 15)
+                            imageCountLabel.textAlignment = NSTextAlignment.Center
+                            imageCountLabel.textColor = UIColor.whiteColor()
+                            imageCountView.addSubview(imageCountLabel)
                             
                             let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
                             overlayButton.backgroundColor = UIColor.clearColor()
@@ -788,15 +799,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             labelWidth = 125.0
         }
         
-        saveImageDefaultButton.frame = (frame: CGRectMake(10, 25, 40, 40))
-        saveImageDefaultButton.addTarget(self, action: "setImageAsDefault:", forControlEvents: .TouchUpInside)
-        saveImageDefaultButton.setBackgroundImage(UIImage(named: "save_icon"), forState: .Normal)
-        saveImageDefaultButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        saveImageDefaultButton.backgroundColor = UIColor.clearColor()
-        saveImageDefaultButton.titleLabel!.font = UIFont(name: "forza-light", size: 45)
-        saveImageDefaultButton.tag = 0
-        overlayView.addSubview(saveImageDefaultButton)
-        
         imageIndexLabel.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) - (labelWidth / 2), 25, labelWidth, 50))
         imageIndexLabel.text = String(format: "%d of %d", 1, imageArray.count)
         imageIndexLabel.font = UIFont(name: "forza-light", size: 35)
@@ -809,18 +811,17 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         closeButton.setTitle("X", forState: .Normal)
         closeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         closeButton.backgroundColor = UIColor.clearColor()
-        closeButton.titleLabel!.font = UIFont(name: "forza-light", size: 45)
+        closeButton.titleLabel!.font = UIFont(name: "forza-light", size: 32)
         closeButton.tag = 0
         overlayView.addSubview(closeButton)
         
-        let setDefaultLabel = UILabel(frame: CGRectMake(0, self.view.bounds.size.height - 65, self.view.bounds.size.width, 65))
-        setDefaultLabel.text = "Use the save button to set an image as the new default image for this home."
-        setDefaultLabel.font = UIFont(name: "forza-light", size: 18)
-        setDefaultLabel.textAlignment = NSTextAlignment.Center
-        setDefaultLabel.textColor = UIColor.whiteColor()
-        setDefaultLabel.numberOfLines = 3
-        setDefaultLabel.backgroundColor = UIColor(red:0.0/255.0, green:0.0/255.0, blue:0.0/255.0, alpha:90.0)
-        overlayView.addSubview(setDefaultLabel)
+        saveImageDefaultButton.frame = (frame: CGRectMake(10, self.view.bounds.size.height - 65, self.view.bounds.size.width - 20, 50))
+        saveImageDefaultButton.addTarget(self, action: "setImageAsDefault:", forControlEvents: .TouchUpInside)
+        saveImageDefaultButton.backgroundColor = model.lightRedColor
+        saveImageDefaultButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        saveImageDefaultButton.setTitle("SET AS DEFAULT", forState: .Normal)
+        saveImageDefaultButton.tag = 0
+        overlayView.addSubview(saveImageDefaultButton)
         
         imageScollView.contentSize = CGSize(width: CGFloat(Int(scrollView.bounds.size.width) * imageArray.count), height: 250)
     }
@@ -959,12 +960,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 self.scrollView.contentOffset.y = 950
                 }, completion: nil)
         }
-        else if textField == taxesTxtField {
-            UIView.animateWithDuration(0.4, animations: {
-                self.scrollView.contentOffset.y = 1000
-                }, completion: nil)
-        }
-        
         
         return true
     }
@@ -1053,6 +1048,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             
             isTextFieldEnabled = true
             editIcon.image = UIImage(named: "edit_icon_onstate")
+            
+            homeNameTxtField.becomeFirstResponder()
         }
         else {
             homeNameTxtField.enabled = false
@@ -1123,13 +1120,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
         
         let loan = saleAmount - downPayment
-
-        var taxes = 3.75
-        if taxesTxtField.text?.isEmpty != true {
-            taxes = Double(taxesTxtField.text!)!
-        }
         
-        estimatedPaymentDefault = model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: taxes)
+        estimatedPaymentDefault = model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: 0.0)
         paymentLabel.text = String(format:"$%.2f / MONTH", estimatedPaymentDefault)
     }
     
@@ -1234,7 +1226,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
-            self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(self.homePriceTxtField.text!) : self.homeObject["price"]
+            var price = self.homePriceTxtField.text! as String
+            if price.rangeOfString("$") != nil{
+                price = price.stringByReplacingOccurrencesOfString("$", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            }
+            self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(price) : self.homeObject["price"]
             self.homeObject["rating"] = self.userRating
             self.homeObject["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : self.homeObject["beds"]
             self.homeObject["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : self.homeObject["baths"]
@@ -1286,8 +1282,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             self.homeObject.deleteInBackgroundWithBlock {
                 (success: Bool, error: NSError?) -> Void in
                 if (success) {
-                    let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
-                    self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true);
+                    //let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
+                    //self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true);
+                    self.navigationController!.popToRootViewControllerAnimated(true)
                     
                 } else {
                     let alertController = UIAlertController(title: "HomeIn", message: String(format: "error: %@", error!), preferredStyle: .Alert)
@@ -1323,23 +1320,22 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         mortgageTxtField.resignFirstResponder()
         interestTxtField.resignFirstResponder()
         downPaymentTxtField.resignFirstResponder()
-        taxesTxtField.resignFirstResponder()
     }
     
     //MARK:
     //MARK: NSNotification
     func keyboardWillAppear(notification: NSNotification){
-        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1500)
+        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1400)
         hideKeyboardButton.enabled = true
         hideKeyboardButton.alpha = 1.0
     }
     
     func keyboardWillDisappear(notification: NSNotification){
         if isCalcTrayOpen {
-            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1500)
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1400)
         }
         else {
-            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 900)
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 800)
         }
         
         hideKeyboardButton.enabled = false

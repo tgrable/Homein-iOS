@@ -164,7 +164,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         dismissView.hidden = true
         self.view.addSubview(dismissView)
         
-        sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 175))
+        sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 200))
         sortTrayGradientLayer.frame = sortTrayView.bounds
         sortTrayGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
         sortTrayView.layer.insertSublayer(sortTrayGradientLayer, atIndex: 0)
@@ -173,7 +173,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         self.view.addSubview(sortTrayView)
         
         // UILabel
-        let sortByLabel = UILabel(frame: CGRectMake(15, 10, sortTrayView.bounds.size.width - 65, 0))
+        let sortByLabel = UILabel(frame: CGRectMake(15, 5, sortTrayView.bounds.size.width - 65, 0))
         sortByLabel.text = "SORT BY"
         //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
         sortByLabel.textAlignment = NSTextAlignment.Left
@@ -184,8 +184,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortTrayView.addSubview(sortByLabel)
         
         //UIImageView
-        let sortDirIcn = UIImage(named: "DownArrow") as UIImage?
-        sortDirIcon.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 50, 5, 25, 25))
+        let sortDirIcn = UIImage(named: "expand_white") as UIImage?
+        sortDirIcon.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 50, -5, 45, 45))
         sortDirIcon.image = sortDirIcn
         sortTrayView.addSubview(sortDirIcon)
         
@@ -197,19 +197,19 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortDirectionButton.tag = 0
         sortTrayView.addSubview(sortDirectionButton)
         
-        let dividerView = UIView(frame: CGRectMake(15, 34, self.view.bounds.size.width - 30, 1))
+        let dividerView = UIView(frame: CGRectMake(15, 37, self.view.bounds.size.width - 30, 1))
         dividerView.backgroundColor = UIColor.whiteColor()
         dividerView.hidden = false
         sortTrayView.addSubview(dividerView)
         
         let nameImage = UIImage(named: "icn-firstTime") as UIImage?
         // UIImageView
-        let nameImageView = UIImageView(frame: CGRectMake(15, 45, 30, 30))
+        let nameImageView = UIImageView(frame: CGRectMake(15, 50, 30, 30))
         nameImageView.image = nameImage
         sortTrayView.addSubview(nameImageView)
         
         // UIButton
-        sortNameButton.frame = (frame: CGRectMake(50, 40, sortTrayView.bounds.size.width - 50, 40))
+        sortNameButton.frame = (frame: CGRectMake(50, 45, sortTrayView.bounds.size.width - 50, 40))
         sortNameButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortNameButton.setTitle("NAME", forState: .Normal)
         sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -221,12 +221,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let starImage = UIImage(named: "Star_empty-01") as UIImage?
         // UIImageView
-        let ratingImageView = UIImageView(frame: CGRectMake(15, 90, 30, 30))
+        let ratingImageView = UIImageView(frame: CGRectMake(15, 95, 30, 30))
         ratingImageView.image = starImage
         sortTrayView.addSubview(ratingImageView)
         
         // UIButton
-        sortRatingButton.frame = (frame: CGRectMake(50, 85, sortTrayView.bounds.size.width - 50, 40))
+        sortRatingButton.frame = (frame: CGRectMake(50, 90, sortTrayView.bounds.size.width - 50, 40))
         sortRatingButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortRatingButton.setTitle("RATING", forState: .Normal)
         sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -238,12 +238,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let priceImage = UIImage(named: "Money_icon-04") as UIImage?
         // UIImageView
-        let priceImageView = UIImageView(frame: CGRectMake(15, 135, 30, 30))
+        let priceImageView = UIImageView(frame: CGRectMake(15, 140, 30, 30))
         priceImageView.image = priceImage
         sortTrayView.addSubview(priceImageView)
         
         // UIButton
-        sortPriceButton.frame = (frame: CGRectMake(50, 130, sortTrayView.bounds.size.width, 40))
+        sortPriceButton.frame = (frame: CGRectMake(50, 135, sortTrayView.bounds.size.width, 40))
         sortPriceButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortPriceButton.setTitle("PRICE", forState: .Normal)
         sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -296,11 +296,11 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func setSortDirection(sender: UIButton) {
         if sortAscending {
             sortAscending = false
-            sortDirIcon.image = UIImage(named: "DownArrow") as UIImage?
+            sortDirIcon.image = UIImage(named: "expand_white") as UIImage?
         }
         else {
             sortAscending = true
-            sortDirIcon.image = UIImage(named: "UpArrow") as UIImage?
+            sortDirIcon.image = UIImage(named: "expand_white_up") as UIImage?
         }
         if sortCriteria == "createdAt" {
             getAllHomesForUser(sortCriteria)

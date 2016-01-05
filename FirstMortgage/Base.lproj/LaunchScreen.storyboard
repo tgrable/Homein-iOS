@@ -3,6 +3,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -17,20 +18,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loadscreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="SUP-iR-BHM">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchscreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="NcD-3V-jdi">
                                 <rect key="frame" x="75" y="0.0" width="450" height="600"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="600" id="upz-90-RK4"/>
-                                    <constraint firstAttribute="width" constant="450" id="vvi-R7-9uW"/>
+                                    <constraint firstAttribute="width" constant="450" id="XcI-vi-Wia"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="SUP-iR-BHM" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="2Xc-XO-lOI"/>
-                            <constraint firstItem="SUP-iR-BHM" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="LO6-KI-ZuH"/>
-                            <constraint firstItem="SUP-iR-BHM" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Q5S-27-aR5"/>
-                            <constraint firstItem="SUP-iR-BHM" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="iDu-mI-c35"/>
+                            <constraint firstItem="NcD-3V-jdi" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="topMargin" id="Gnk-Iv-kX4"/>
+                            <constraint firstItem="NcD-3V-jdi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="htG-kS-yMZ"/>
+                            <constraint firstItem="NcD-3V-jdi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="mcx-Xg-N6P"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="NcD-3V-jdi" secondAttribute="bottom" id="v9t-ZJ-9XJ"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -40,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="loadscreen.png" width="720" height="960"/>
+        <image name="launchscreen.png" width="720" height="960"/>
     </resources>
 </document>

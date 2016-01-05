@@ -10,6 +10,7 @@ import UIKit
 import CoreLocation
 import AddressBook
 import MapKit
+import Contacts
 
 class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
@@ -319,6 +320,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     func printLocations(filteredBranchArray: Array<Branch>) {
+        
+        filteredArray.removeAll()
+        filteredArray = filteredBranchArray
+        
         var yOffset = 15.0 as CGFloat
         var count = 0
         
@@ -421,14 +426,30 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     func phoneButtonPressed(sender: UIButton) {
-        let branch = filteredArray[sender.tag]
-        openPhoneApp(branch.phone)
+        let branch = self.filteredArray[sender.tag]
+        print(branch.address)
+        
+        let alertController = UIAlertController(title: "HomeIn", message: String(format: "Call %@", model.formatPhoneString(branch.phone)), preferredStyle: .Alert)
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
+            // ...
+        }
+        alertController.addAction(cancelAction)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            self.openPhoneApp(branch.phone)
+        }
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
+        }
     }
     
     func openMapForPlace(branch: Branch) {
         let coords = CLLocationCoordinate2DMake(branch.lat, branch.long)
         
-        let address : [String : AnyObject] = [kABPersonAddressStreetKey as String: branch.address, kABPersonAddressCityKey as String: branch.city, kABPersonAddressStateKey as String: branch.state, kABPersonAddressCountryCodeKey as String: "US"]
+        let address : [String : AnyObject] = [CNPostalAddressStreetKey as String: branch.address, CNPostalAddressCityKey as String: branch.city, CNPostalAddressStateKey as String: branch.state, CNPostalAddressCountryKey as String: "US"]
         
         let place = MKPlacemark(coordinate: coords, addressDictionary: address)
         let mapItem = MKMapItem(placemark: place)
