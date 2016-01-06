@@ -53,6 +53,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     let overLayTextLabel = UILabel()
     let calculateArrow = UILabel ()
+    let editModeLabel = UILabel()
     
     var isTextFieldEnabled = Bool()
     var didComeFromAccountPage = Bool()
@@ -63,8 +64,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("didComeFromAccountPage: ", didComeFromAccountPage)
     }
 
     override func didReceiveMemoryWarning() {
@@ -96,6 +95,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             backIcon.image = backIcn
             whiteBar.addSubview(backIcon)
         }
+        
+        // UILabel
+        editModeLabel.frame = (frame: CGRectMake(25, 0, whiteBar.bounds.size.width - 50, 50))
+        editModeLabel.text = "EDIT MODE"
+        editModeLabel.textAlignment = NSTextAlignment.Center
+        editModeLabel.textColor = UIColor.whiteColor()
+        editModeLabel.font = UIFont(name: "forza-light", size: 24)
+        whiteBar.addSubview(editModeLabel)
         
         // UIButton
         let editIcn = UIImage(named: "edit_icon") as UIImage?
@@ -209,17 +216,31 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             }
         }
         else {
-            if (loanOfficerArray.count <= 0) {
+            if (self.loanOfficerArray.count <= 0) {
+                let defaults = NSUserDefaults.standardUserDefaults()
                 
-                let nodes = self.model.getBranchLoanOfficers()
-                
-                self.loanOfficerArray.removeAll()
-                self.tempArray.removeAll()
-                
-                for node in nodes {
-                    if let nodeDict = node as? NSDictionary {
-                        self.loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
-                        self.tempArray.append(nodeDict as! Dictionary<String, String>)
+                if (defaults.objectForKey("loanOfficerArray") != nil) {
+                    print("from defaults")
+                    self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
+                    self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+                }
+                else {
+                    dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                        print("from web")
+                        let nodes = self.model.getBranchLoanOfficers()
+                        
+                        self.loanOfficerArray.removeAll()
+                        self.tempArray.removeAll()
+                        
+                        for node in nodes {
+                            if let nodeDict = node as? NSDictionary {
+                                self.loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
+                                self.tempArray.append(nodeDict as! Dictionary<String, String>)
+                            }
+                        }
+                        
+                        // TODO: set a date to recheck these LO's
+                        defaults.setObject(self.loanOfficerArray, forKey: "loanOfficerArray")
                     }
                 }
             }
@@ -362,7 +383,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         }
         
         // UIView
-        let logOutView = UIView(frame: CGRectMake(15, 275, profileView.bounds.size.width - 30, 50))
+        let logOutView = UIView(frame: CGRectMake(15, 250, profileView.bounds.size.width - 30, 50))
         let logOutGradientLayer = CAGradientLayer()
         logOutGradientLayer.frame = logOutView.bounds
         logOutGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
@@ -395,7 +416,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         logOutView.addSubview(logoutBtnView)
         
         // UIView
-        calculateView.frame = (frame: CGRectMake(15, 335, profileView.bounds.size.width - 30, 50))
+        calculateView.frame = (frame: CGRectMake(15, 310, profileView.bounds.size.width - 30, 50))
         calculateView.alpha = 0
         calcGradientLayer.hidden = true
         calcGradientLayer.frame = calculateView.bounds
@@ -460,7 +481,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     func getBranchLoanOfficers() {
-        let endpoint = NSURL(string: "http://www.trekkdev1.com/loan-officers-json")
+        print("getBranchLoanOfficers")
+        let endpoint = NSURL(string: "https://www.firstmortgageco.com/loan-officers-json")
         let data = NSData(contentsOfURL: endpoint!)
         do {
             let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
@@ -512,12 +534,20 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         emailLabel.font = UIFont(name: "forza-light", size: 18)
         loView.addSubview(emailLabel)
         
+        let office = UILabel (frame: CGRectMake(15, 65, 60, 24))
+        office.textAlignment = NSTextAlignment.Left
+        office.text = String(format: "Office: ")
+        office.numberOfLines = 1
+        office.font = UIFont(name: "forza-light", size: 18)
+        loView.addSubview(office)
+        
         let officePhone = (nodeDict["office"] != nil) ? nodeDict["office"] : ""
-        let officeLabel = UILabel (frame: CGRectMake(15, 65, loView.bounds.size.width - 30, 24))
+        let officeLabel = UILabel (frame: CGRectMake(75, 65, loView.bounds.size.width - 80, 24))
         officeLabel.textAlignment = NSTextAlignment.Left
-        officeLabel.text = String(format: "Office: %@", officePhone!)
+        officeLabel.text = String(format: "%@", officePhone!)
         officeLabel.numberOfLines = 1
         officeLabel.font = UIFont(name: "forza-light", size: 18)
+        officeLabel.textColor = model.darkBlueColor
         loView.addSubview(officeLabel)
         
         if isSingleView && officePhone?.characters.count > 0 {
@@ -531,12 +561,20 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             loView.addSubview(officeButton)
         }
         
-        let mobilePhone = (nodeDict["mobile"] != nil) ? nodeDict["office"] : ""
-        let mobileLabel = UILabel (frame: CGRectMake(15, 95, loView.bounds.size.width - 30, 24))
+        let mobile = UILabel (frame: CGRectMake(15, 95, 65, 24))
+        mobile.textAlignment = NSTextAlignment.Left
+        mobile.text = String(format: "Mobile: ")
+        mobile.numberOfLines = 1
+        mobile.font = UIFont(name: "forza-light", size: 18)
+        loView.addSubview(mobile)
+        
+        let mobilePhone = (nodeDict["mobile"] != nil) ? nodeDict["mobile"] : ""
+        let mobileLabel = UILabel (frame: CGRectMake(80, 95, loView.bounds.size.width - 85, 24))
         mobileLabel.textAlignment = NSTextAlignment.Left
-        mobileLabel.text = String(format: "Mobile: %@", mobilePhone!)
+        mobileLabel.text = String(format: "%@", mobilePhone!)
         mobileLabel.numberOfLines = 1
         mobileLabel.font = UIFont(name: "forza-light", size: 18)
+        mobileLabel.textColor = model.darkBlueColor
         loView.addSubview(mobileLabel)
         
         if isSingleView && mobilePhone?.characters.count > 0 {
@@ -765,6 +803,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             
             isTextFieldEnabled = true
             editIcon.image = UIImage(named: "edit_icon_onstate")
+            
+            editModeLabel.textColor = model.lightRedColor
         }
         else {
             nameTxtField.enabled = false
@@ -773,6 +813,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             
             isTextFieldEnabled = false
             editIcon.image = UIImage(named: "edit_icon")
+            
+            editModeLabel.textColor = UIColor.whiteColor()
         }
     }
     

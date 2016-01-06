@@ -150,7 +150,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         whiteBar.addSubview(homeButton)
         
         // UIButton
-        hideKeyboardButton.frame = (frame: CGRectMake((whiteBar.bounds.size.width / 2) - 20, 5, 40, 40))
+        hideKeyboardButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 110, 10, 40, 40))
         hideKeyboardButton.addTarget(self, action: "tapGesture", forControlEvents: .TouchUpInside)
         hideKeyboardButton.setImage(UIImage(named: "hide_keyboard"), forState: .Normal)
         hideKeyboardButton.backgroundColor = UIColor.clearColor()
@@ -190,7 +190,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         addHomeView.addSubview(scrollView)
         
         imgScrollView.frame = (frame: CGRectMake(0, 0, addHomeView.bounds.size.width, 175))
-        imgScrollView.backgroundColor = UIColor.clearColor()
+        imgScrollView.backgroundColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
         scrollView.addSubview(imgScrollView)
         
         addImagesToImageScrollArray()
@@ -200,8 +200,16 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
             NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
         ]
         
+        let homeNameborder = CALayer()
+        let width = CGFloat(1.0)
+        
         // UITextField
-        homeNameTxtField.frame = (frame: CGRectMake(10, 170, addHomeView.bounds.size.width - 20, 40))
+        homeNameTxtField.frame = (frame: CGRectMake(10, 175, addHomeView.bounds.size.width - 20, 40))
+        homeNameborder.borderColor = UIColor.lightGrayColor().CGColor
+        homeNameborder.frame = CGRect(x: 0, y: homeNameTxtField.frame.size.height - width, width:  homeNameTxtField.frame.size.width, height: homeNameTxtField.frame.size.height)
+        homeNameborder.borderWidth = width
+        homeNameTxtField.layer.addSublayer(homeNameborder)
+        homeNameTxtField.layer.masksToBounds = true
         homeNameTxtField.attributedPlaceholder = NSAttributedString(string: "NAME YOUR HOME", attributes:attributes)
         homeNameTxtField.backgroundColor = UIColor.clearColor()
         homeNameTxtField.delegate = self
@@ -211,7 +219,13 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.addSubview(homeNameTxtField)
         
         //UITextField
-        homeAddressTxtField.frame = (frame: CGRectMake(10, 210, addHomeView.bounds.size.width - 20, 40))
+        let homeAddressborder = CALayer()
+        homeAddressTxtField.frame = (frame: CGRectMake(10, 215, addHomeView.bounds.size.width - 20, 40))
+        homeAddressborder.borderColor = UIColor.lightGrayColor().CGColor
+        homeAddressborder.frame = CGRect(x: 0, y: homeAddressTxtField.frame.size.height - width, width:  homeAddressTxtField.frame.size.width, height: homeAddressTxtField.frame.size.height)
+        homeAddressborder.borderWidth = width
+        homeAddressTxtField.layer.addSublayer(homeAddressborder)
+        homeAddressTxtField.layer.masksToBounds = true
         homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: "ADDRESS", attributes:attributes)
         homeAddressTxtField.backgroundColor = UIColor.clearColor()
         homeAddressTxtField.delegate = self
@@ -221,7 +235,13 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.addSubview(homeAddressTxtField)
         
         // UITextField
-        homePriceTxtField.frame = (frame: CGRectMake(10, 250, addHomeView.bounds.size.width - 20, 40))
+        let homePriceborder = CALayer()
+        homePriceTxtField.frame = (frame: CGRectMake(10, 255, addHomeView.bounds.size.width - 20, 40))
+        homePriceborder.borderColor = UIColor.lightGrayColor().CGColor
+        homePriceborder.frame = CGRect(x: 0, y: homePriceTxtField.frame.size.height - width, width:  homePriceTxtField.frame.size.width, height: homePriceTxtField.frame.size.height)
+        homePriceborder.borderWidth = width
+        homePriceTxtField.layer.addSublayer(homePriceborder)
+        homePriceTxtField.layer.masksToBounds = true
         homePriceTxtField.attributedPlaceholder = NSAttributedString(string: "$Price", attributes:attributes)
         homePriceTxtField.backgroundColor = UIColor.clearColor()
         homePriceTxtField.delegate = self
@@ -234,7 +254,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         var xOffset = 0
         for i in 1...5 {
             // UIButton
-            let ratingButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), 290, 35, 35))
+            let ratingButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), 305, 35, 35))
             ratingButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
             ratingButton.backgroundColor = model.darkBlueColor
             ratingButton.setImage(starImage, forState: .Normal)
@@ -246,11 +266,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
             xOffset += 40
         }
         
-        let dividerView = UIView(frame: CGRectMake(10, 335, addHomeView.bounds.size.width - 20, 1))
-        dividerView.backgroundColor = UIColor.darkGrayColor()
-        dividerView.hidden = false
-        scrollView.addSubview(dividerView)
-        
         let bed = "4"
         let attributedHomeBed = NSMutableAttributedString(
             string: bed,
@@ -259,7 +274,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 size: 14.0)!])
         
         // UITextField
-        bedsTxtField.frame = (frame: CGRectMake(15, 345, (scrollView.bounds.size.width / 3) - 20, 30))
+        bedsTxtField.frame = (frame: CGRectMake(15, 350, (scrollView.bounds.size.width / 3) - 20, 30))
         let bedPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
         bedsTxtField.attributedPlaceholder = attributedHomeBed
         bedsTxtField.backgroundColor = UIColor.clearColor()
@@ -271,7 +286,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bedsTxtField.font = UIFont(name: "Arial", size: 14)
         scrollView.addSubview(bedsTxtField)
         
-        let bedsLabel = UILabel(frame: CGRectMake(15, 370, (scrollView.bounds.size.width / 3) - 20, 30))
+        let bedsLabel = UILabel(frame: CGRectMake(15, 375, (scrollView.bounds.size.width / 3) - 20, 30))
         bedsLabel.text = "Beds"
         bedsLabel.backgroundColor = UIColor.clearColor()
         bedsLabel.textAlignment = NSTextAlignment.Center
@@ -280,8 +295,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bedsLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(bedsLabel)
         
-        let vertDividerTwoView = UIView(frame: CGRectMake(scrollView.bounds.size.width / 3, 345, 1, 50))
-        vertDividerTwoView.backgroundColor = UIColor.darkGrayColor()
+        let vertDividerTwoView = UIView(frame: CGRectMake(scrollView.bounds.size.width / 3, 350, 1, 50))
+        vertDividerTwoView.backgroundColor = UIColor.lightGrayColor()
         vertDividerTwoView.hidden = false
         scrollView.addSubview(vertDividerTwoView)
         
@@ -293,7 +308,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 size: 14.0)!])
         
         // UITextField
-        bathsTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 345, (scrollView.bounds.size.width / 3) - 20, 30))
+        bathsTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 350, (scrollView.bounds.size.width / 3) - 20, 30))
         let bathPaddingView = UIView(frame: CGRectMake(0, 0, (bathsTxtField.bounds.size.width / 2) - 5, 50))
         bathsTxtField.attributedPlaceholder = attributedHomeBath
         bathsTxtField.backgroundColor = UIColor.clearColor()
@@ -305,7 +320,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bathsTxtField.font = UIFont(name: "Arial", size: 14)
         scrollView.addSubview(bathsTxtField)
         
-        let bathsLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 370, (scrollView.bounds.size.width / 3) - 20, 30))
+        let bathsLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 375, (scrollView.bounds.size.width / 3) - 20, 30))
         bathsLabel.text = "Baths"
         bathsLabel.textAlignment = NSTextAlignment.Center
         bathsLabel.backgroundColor = UIColor.clearColor()
@@ -314,8 +329,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bathsLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(bathsLabel)
         
-        let vertDividerThreeView = UIView(frame: CGRectMake(scrollView.bounds.size.width * 0.66, 345, 1, 50))
-        vertDividerThreeView.backgroundColor = UIColor.darkGrayColor()
+        let vertDividerThreeView = UIView(frame: CGRectMake(scrollView.bounds.size.width * 0.66, 355, 1, 50))
+        vertDividerThreeView.backgroundColor = UIColor.lightGrayColor()
         vertDividerThreeView.hidden = false
         scrollView.addSubview(vertDividerThreeView)
         
@@ -327,7 +342,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 size: 14.0)!])
         
         // UITextField
-        sqFeetTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 345, (scrollView.bounds.size.width / 3) - 20, 30))
+        sqFeetTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 350, (scrollView.bounds.size.width / 3) - 20, 30))
         let sqFeetPaddingView = UIView(frame: CGRectMake(0, 0, (sqFeetTxtField.bounds.size.width / 2) - 15, 50))
         sqFeetTxtField.attributedPlaceholder = attributedHomeSqft
         sqFeetTxtField.backgroundColor = UIColor.clearColor()
@@ -339,7 +354,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         sqFeetTxtField.font = UIFont(name: "Arial", size: 14)
         scrollView.addSubview(sqFeetTxtField)
         
-        let sqFeetLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 370, (scrollView.bounds.size.width / 3) - 20, 30))
+        let sqFeetLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 375, (scrollView.bounds.size.width / 3) - 20, 30))
         sqFeetLabel.text = "Sq. Ft."
         sqFeetLabel.textAlignment = NSTextAlignment.Center
         sqFeetLabel.backgroundColor = UIColor.clearColor()
@@ -349,7 +364,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.addSubview(sqFeetLabel)
         
         //Create textview
-        descTxtView.frame = (frame : CGRectMake(10, 410, addHomeView.bounds.size.width - 20, 220))
+        descTxtView.frame = (frame : CGRectMake(10, 415, addHomeView.bounds.size.width - 20, 220))
         descTxtView.backgroundColor = UIColor.whiteColor()
         descTxtView.autocorrectionType = .Yes
         descTxtView.returnKeyType = .Done
@@ -360,7 +375,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.addSubview(descTxtView)
         
         // UIView
-        let saveView = UIView(frame: CGRectMake(15, 645, scrollView.bounds.size.width - 30, 50))
+        let saveView = UIView(frame: CGRectMake(15, 650, scrollView.bounds.size.width - 30, 50))
         let saveGradientLayer = CAGradientLayer()
         saveGradientLayer.frame = saveView.bounds
         saveGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]

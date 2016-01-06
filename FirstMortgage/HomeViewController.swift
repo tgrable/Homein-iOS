@@ -405,8 +405,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             let findBranchOverlay = UIView(frame: CGRectMake(0, 0, findBranchView.bounds.width, findBranchView.bounds.size.height))
             findBranchOverlay.backgroundColor = UIColor.darkGrayColor()
             findBranchOverlay.alpha = 0.45
-            findBranchOverlay.layer.borderWidth = 2
-            findBranchOverlay.layer.borderColor = UIColor.whiteColor().CGColor
             findBranchView.addSubview(findBranchOverlay)
         }
         

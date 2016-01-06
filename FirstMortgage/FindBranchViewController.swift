@@ -203,7 +203,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     func getBranchJson() {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             var states = [String]()
-            let endpoint = NSURL(string: "http://www.trekkdev1.com/branch-json")
+            let endpoint = NSURL(string: "https://www.firstmortgageco.com/branch-json")
             let data = NSData(contentsOfURL: endpoint!)
             do {
                 let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
@@ -371,6 +371,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             phoneLabel.text = String(format: "%@", pl)
             phoneLabel.numberOfLines = 0
             phoneLabel.sizeToFit()
+            phoneLabel.textColor = model.darkBlueColor
             branchView.addSubview(phoneLabel)
             offset += phoneLabel.bounds.size.height
             

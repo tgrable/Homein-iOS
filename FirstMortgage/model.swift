@@ -68,7 +68,7 @@ class Model: NSObject {
     }
     
     func getBranchLoanOfficers() -> NSArray {
-        let endpoint = NSURL(string: "http://www.trekkdev1.com/loan-officers-json")
+        let endpoint = NSURL(string: "https://www.firstmortgageco.com/loan-officers-json")
         let data = NSData(contentsOfURL: endpoint!)
         do {
             let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
@@ -115,5 +115,19 @@ class Model: NSObject {
         
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluateWithObject(testStr)
+    }
+
+    func cleanPhoneNumnerString(phoneNumber: String) -> String {
+        let stringArray = phoneNumber.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+        let newString = stringArray.joinWithSeparator("")
+        return newString
+    }
+    
+    func formatPhoneString(phoneString: String) -> String {
+        let areaCode = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(0), end: phoneString.endIndex.advancedBy(-7)))
+        let prefix = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(3), end: phoneString.endIndex.advancedBy(-4)))
+        let number = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(6), end: phoneString.endIndex.advancedBy(0)))
+        
+        return String(format: "(%@) %@-%@", areaCode, prefix, number)
     }
 }

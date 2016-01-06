@@ -50,6 +50,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     // UILabel
     var paymentLabel = UILabel() as UILabel
+    let editModeLabel = UILabel()
     
     var estimatedPaymentDefault = 1835.26
     
@@ -126,6 +127,14 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
+        
+        // UILabel
+        editModeLabel.frame = (frame: CGRectMake(25, 0, whiteBar.bounds.size.width - 50, 50))
+        editModeLabel.text = "EDIT MODE"
+        editModeLabel.textAlignment = NSTextAlignment.Center
+        editModeLabel.textColor = UIColor.whiteColor()
+        editModeLabel.font = UIFont(name: "forza-light", size: 24)
+        whiteBar.addSubview(editModeLabel)
         
         // UIButton
         hideKeyboardButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 40, 40))
@@ -247,7 +256,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
         // UITextField
         homeNameTxtField.frame = (frame: CGRectMake(10, 250, homeTray.bounds.size.width - 125, 40))
-        homeNameborder.borderColor = UIColor.darkGrayColor().CGColor
+        homeNameborder.borderColor = UIColor.lightGrayColor().CGColor
         homeNameborder.frame = CGRect(x: 0, y: homeNameTxtField.frame.size.height - width, width:  homeNameTxtField.frame.size.width, height: homeNameTxtField.frame.size.height)
         homeNameborder.borderWidth = width
         homeNameTxtField.layer.addSublayer(homeNameborder)
@@ -274,7 +283,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let homeAddressborder = CALayer()
         //UITextField
         homeAddressTxtField.frame = (frame: CGRectMake(10, 290, homeTray.bounds.size.width - 20, 40))
-        homeAddressborder.borderColor = UIColor.darkGrayColor().CGColor
+        homeAddressborder.borderColor = UIColor.lightGrayColor().CGColor
         homeAddressborder.frame = CGRect(x: 0, y: homeAddressTxtField.frame.size.height - width, width:  homeAddressTxtField.frame.size.width, height: homeAddressTxtField.frame.size.height)
         homeAddressborder.borderWidth = width
         homeAddressTxtField.layer.addSublayer(homeAddressborder)
@@ -304,7 +313,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let homePriceborder = CALayer()
         // UITextField
         homePriceTxtField.frame = (frame: CGRectMake(10, 330, homeTray.bounds.size.width - 20, 40))
-        homePriceborder.borderColor = UIColor.darkGrayColor().CGColor
+        homePriceborder.borderColor = UIColor.lightGrayColor().CGColor
         homePriceborder.frame = CGRect(x: 0, y: homePriceTxtField.frame.size.height - width, width:  homePriceTxtField.frame.size.width, height: homePriceTxtField.frame.size.height)
         homePriceborder.borderWidth = width
         homePriceTxtField.layer.addSublayer(homePriceborder)
@@ -395,7 +404,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeTray.addSubview(bedsLabel)
         
         let vertDividerTwoView = UIView(frame: CGRectMake(homeTray.bounds.size.width / 3, 425, 1, 50))
-        vertDividerTwoView.backgroundColor = UIColor.darkGrayColor()
+        vertDividerTwoView.backgroundColor = UIColor.lightGrayColor()
         vertDividerTwoView.hidden = false
         homeTray.addSubview(vertDividerTwoView)
         
@@ -405,11 +414,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
 
         // UITextField
-        bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 425, (homeTray.bounds.size.width / 3) - 20, 30))
+        bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 5, 425, (homeTray.bounds.size.width / 3) - 20, 30))
         let bathPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
         bathsTxtField.leftView = bathPaddingView
         bathsTxtField.leftViewMode = UITextFieldViewMode.Always
-        bathsTxtField.text = String(format: "%d", bath)
+        bathsTxtField.text = String(format: "%.1f", bath)
         bathsTxtField.backgroundColor = UIColor.clearColor()
         bathsTxtField.delegate = self
         bathsTxtField.returnKeyType = .Next
@@ -427,14 +436,15 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeTray.addSubview(bathsLabel)
         
         let vertDividerThreeView = UIView(frame: CGRectMake(homeTray.bounds.size.width * 0.66, 425, 1, 50))
-        vertDividerThreeView.backgroundColor = UIColor.darkGrayColor()
+        vertDividerThreeView.backgroundColor = UIColor.lightGrayColor()
         vertDividerThreeView.hidden = false
         homeTray.addSubview(vertDividerThreeView)
 
-        var homeSqft = 0.0
+        var homeSqft = 0
         if let _ = homeObject["footage"] {
-            homeSqft = (homeObject["footage"] as? Double)!
+            homeSqft = (homeObject["footage"] as? Int)!
         }
+        
         // UITextField
         sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 425, (homeTray.bounds.size.width / 3) - 20, 30))
         let sqFeetPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 15, 50))
@@ -1049,6 +1059,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             isTextFieldEnabled = true
             editIcon.image = UIImage(named: "edit_icon_onstate")
             
+            editModeLabel.textColor = model.lightRedColor
+            
             homeNameTxtField.becomeFirstResponder()
         }
         else {
@@ -1062,6 +1074,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             
             isTextFieldEnabled = false
             editIcon.image = UIImage(named: "edit_icon")
+            
+            editModeLabel.textColor = UIColor.whiteColor()
+            
         }
     }
     
@@ -1335,7 +1350,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1400)
         }
         else {
-            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 800)
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 900)
         }
         
         hideKeyboardButton.enabled = false
