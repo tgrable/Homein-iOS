@@ -121,8 +121,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         whiteBar.backgroundColor = UIColor.whiteColor()
         addHomeView.addSubview(whiteBar)
 
-        let backIcn = UIImage(named: "backbutton_icon") as UIImage?
-        let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+        let backIcn = UIImage(named: "back_grey") as UIImage?
+        let backIcon = UIImageView(frame: CGRectMake(20, 10, 30, 30))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
         
@@ -171,7 +171,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         let labelFontSize = isSmallerScreen ? 20.0 : 24.0;
         
         //UIImageView
-        let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let homeIcn = UIImage(named: "home_icon") as UIImage?
         let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 100), 12.5, 25, 25))
         homeIcon.image = homeIcn
         addHomeBannerView.addSubview(homeIcon)
@@ -218,25 +218,9 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homeNameTxtField.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(homeNameTxtField)
         
-        //UITextField
-        let homeAddressborder = CALayer()
-        homeAddressTxtField.frame = (frame: CGRectMake(10, 215, addHomeView.bounds.size.width - 20, 40))
-        homeAddressborder.borderColor = UIColor.lightGrayColor().CGColor
-        homeAddressborder.frame = CGRect(x: 0, y: homeAddressTxtField.frame.size.height - width, width:  homeAddressTxtField.frame.size.width, height: homeAddressTxtField.frame.size.height)
-        homeAddressborder.borderWidth = width
-        homeAddressTxtField.layer.addSublayer(homeAddressborder)
-        homeAddressTxtField.layer.masksToBounds = true
-        homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: "ADDRESS", attributes:attributes)
-        homeAddressTxtField.backgroundColor = UIColor.clearColor()
-        homeAddressTxtField.delegate = self
-        homeAddressTxtField.returnKeyType = .Next
-        homeAddressTxtField.keyboardType = UIKeyboardType.Default
-        homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
-        scrollView.addSubview(homeAddressTxtField)
-        
         // UITextField
         let homePriceborder = CALayer()
-        homePriceTxtField.frame = (frame: CGRectMake(10, 255, addHomeView.bounds.size.width - 20, 40))
+        homePriceTxtField.frame = (frame: CGRectMake(10, 215, addHomeView.bounds.size.width - 20, 40))
         homePriceborder.borderColor = UIColor.lightGrayColor().CGColor
         homePriceborder.frame = CGRect(x: 0, y: homePriceTxtField.frame.size.height - width, width:  homePriceTxtField.frame.size.width, height: homePriceTxtField.frame.size.height)
         homePriceborder.borderWidth = width
@@ -249,6 +233,22 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
         homePriceTxtField.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(homePriceTxtField)
+        
+        //UITextField
+        let homeAddressborder = CALayer()
+        homeAddressTxtField.frame = (frame: CGRectMake(10, 255, addHomeView.bounds.size.width - 20, 40))
+        homeAddressborder.borderColor = UIColor.lightGrayColor().CGColor
+        homeAddressborder.frame = CGRect(x: 0, y: homeAddressTxtField.frame.size.height - width, width:  homeAddressTxtField.frame.size.width, height: homeAddressTxtField.frame.size.height)
+        homeAddressborder.borderWidth = width
+        homeAddressTxtField.layer.addSublayer(homeAddressborder)
+        homeAddressTxtField.layer.masksToBounds = true
+        homeAddressTxtField.attributedPlaceholder = NSAttributedString(string: "ADDRESS", attributes:attributes)
+        homeAddressTxtField.backgroundColor = UIColor.clearColor()
+        homeAddressTxtField.delegate = self
+        homeAddressTxtField.returnKeyType = .Next
+        homeAddressTxtField.keyboardType = UIKeyboardType.Default
+        homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
+        scrollView.addSubview(homeAddressTxtField)
         
         let starImage = UIImage(named: "star_off_icon") as UIImage?
         var xOffset = 0

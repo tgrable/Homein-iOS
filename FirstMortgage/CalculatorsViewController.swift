@@ -95,8 +95,8 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         whiteBar.backgroundColor = UIColor.whiteColor()
         calcView.addSubview(whiteBar)
         
-        let backIcn = UIImage(named: "backbutton_icon") as UIImage?
-        let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+        let backIcn = UIImage(named: "back_grey") as UIImage?
+        let backIcon = UIImageView(frame: CGRectMake(20, 10, 30, 30))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
         
@@ -127,7 +127,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         calcBannerView.hidden = false
         calcView.addSubview(calcBannerView)
         
-        let calcIcn = UIImage(named: "icn-calculator") as UIImage?
+        let calcIcn = UIImage(named: "calculator_icon") as UIImage?
         let calcIcon = UIImageView(frame: CGRectMake(15, 12.5, 25, 25))
         calcIcon.image = calcIcn
         calcBannerView.addSubview(calcIcon)

@@ -93,8 +93,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         whiteBar.backgroundColor = UIColor.whiteColor()
         myHomesView.addSubview(whiteBar)
         
-        let backIcn = UIImage(named: "backbutton_icon") as UIImage?
-        let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+        let backIcn = UIImage(named: "back_grey") as UIImage?
+        let backIcon = UIImageView(frame: CGRectMake(20, 10, 30, 30))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
 
@@ -106,7 +106,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         homeButton.tag = 0
         whiteBar.addSubview(homeButton)
         
-        let addIcn = UIImage(named: "add_icon_grey") as UIImage?
+        let addIcn = UIImage(named: "add_grey") as UIImage?
         let addIcon = UIImageView(frame: CGRectMake(whiteBar.bounds.size.width - 50, 12.5, 25, 25))
         addIcon.image = addIcn
         whiteBar.addSubview(addIcon)
@@ -129,8 +129,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         
         let labelFontSize = isSmallerScreen ? 20.0 : 24.0;
 
-        let sortIcn = UIImage(named: "sortby_icon") as UIImage?
-        let sortIconView = UIImageView(frame: CGRectMake(20, 12.5, 5.25, 25))
+        let sortIcn = UIImage(named: "sort_icon") as UIImage?
+        let sortIconView = UIImageView(frame: CGRectMake(10, 12.5, 25, 25))
         sortIconView.image = sortIcn
         addHomeBannerView.addSubview(sortIconView)
         
@@ -142,7 +142,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         addHomeBannerView.addSubview(sortButton)
         
         //UIImageView
-        let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let homeIcn = UIImage(named: "home_icon") as UIImage?
         let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 100), 12.5, 25, 25))
         homeIcon.image = homeIcn
         addHomeBannerView.addSubview(homeIcon)
@@ -202,7 +202,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         dividerView.hidden = false
         sortTrayView.addSubview(dividerView)
         
-        let nameImage = UIImage(named: "icn-firstTime") as UIImage?
+        let nameImage = UIImage(named: "home_icon") as UIImage?
         // UIImageView
         let nameImageView = UIImageView(frame: CGRectMake(15, 50, 30, 30))
         nameImageView.image = nameImage

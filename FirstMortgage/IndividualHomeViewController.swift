@@ -22,6 +22,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     let calcTray = UIView()
     let saveDeleteTray = UIView()
     let loadingOverlay = UIView()
+    let homeAddressBorderView = UIView()
     
     // UIScrollView
     let scrollView = UIScrollView()
@@ -51,6 +52,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     // UILabel
     var paymentLabel = UILabel() as UILabel
     let editModeLabel = UILabel()
+    let homeAddressLabel = UILabel()
     
     var estimatedPaymentDefault = 1835.26
     
@@ -68,6 +70,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     var activityIndicator = UIActivityIndicatorView()
     
     var isCalcTrayOpen = Bool()
+    var didEnterEditMode = Bool()
     
     let estPaymentLabel = UILabel()
     let imageIndexLabel = UILabel()
@@ -84,6 +87,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     var imageIndex = 0
     var scrollLocation = 0.0 as CGFloat
     
+    var yOffset = 0.0 as CGFloat
+    
     // MARK:
     // MARK: View Life Cycle
     override func viewDidLoad() {
@@ -96,8 +101,16 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         buildView()
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true);
+        
+        // TODO: I'd like this here and build the image portion in viewDidLoad
+        //buildView()
+    }
+    
     override func viewDidAppear(animated: Bool) {
-
+        super.viewDidAppear(true);
+    
     }
     
     override func didReceiveMemoryWarning() {
@@ -123,8 +136,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         whiteBar.backgroundColor = UIColor.whiteColor()
         myHomesView.addSubview(whiteBar)
         
-        let backIcn = UIImage(named: "backbutton_icon") as UIImage?
-        let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+        let backIcn = UIImage(named: "back_grey") as UIImage?
+        let backIcon = UIImageView(frame: CGRectMake(20, 10, 30, 30))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
         
@@ -166,7 +179,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let labelFontSize = isSmallerScreen ? 20.0 : 24.0;
         
         //UIImageView
-        let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let homeIcn = UIImage(named: "home_icon") as UIImage?
         let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 100), 12.5, 25, 25))
         homeIcon.image = homeIcn
         addHomeBannerView.addSubview(homeIcon)
@@ -185,6 +198,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         buildCalcTray()
         buildHomeTray()
+        
+        yOffset += 164
+        
         buildSaveDeleteTray()
         
         var fontSize = 24 as CGFloat
@@ -192,7 +208,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             fontSize = 18
         }
         
-        let calcBannerView = UIView(frame: CGRectMake(0, 670, scrollView.bounds.size.width, 50))
+        let calcBannerView = UIView(frame: CGRectMake(0, yOffset, scrollView.bounds.size.width, 50))
         let calcBannerGradientLayer = CAGradientLayer()
         calcBannerGradientLayer.frame = calcBannerView.bounds
         calcBannerGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
@@ -201,7 +217,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         calcBannerView.hidden = false
         scrollView.addSubview(calcBannerView)
         
-        let calcIcn = UIImage(named: "icn-calculator") as UIImage?
+        let calcIcn = UIImage(named: "calculator_icon") as UIImage?
         let calcIcon = UIImageView(frame: CGRectMake(15, 12.5, 25, 25))
         calcIcon.image = calcIcn
         calcBannerView.addSubview(calcIcon)
@@ -235,11 +251,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         activityIndicator.center = view.center
         loadingOverlay.addSubview(activityIndicator)
         
-        scrollView.contentSize = CGSize(width: myHomesView.bounds.size.width, height: 800)
+        scrollView.contentSize = CGSize(width: myHomesView.bounds.size.width, height: yOffset + 250)
     }
 
     func buildHomeTray() {
-        
         let homeTray = UIView(frame: CGRectMake(0, 0, scrollView.bounds.size.width, 670))
         homeTray.backgroundColor = model.lightGrayColor
         scrollView.addSubview(homeTray)
@@ -270,6 +285,31 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeNameTxtField.enabled = false
         homeTray.addSubview(homeNameTxtField)
         
+        var price = 0.0
+        if let _ = homeObject["price"] {
+            price = homeObject["price"] as! Double
+        }
+        let formatter = NSNumberFormatter()
+        formatter.numberStyle = .CurrencyStyle
+        let homePrice = formatter.stringFromNumber(price)! as String
+        
+        let homePriceborder = CALayer()
+        // UITextField
+        homePriceTxtField.frame = (frame: CGRectMake(10, 290, homeTray.bounds.size.width - 20, 40))
+        homePriceborder.borderColor = UIColor.lightGrayColor().CGColor
+        homePriceborder.frame = CGRect(x: 0, y: homePriceTxtField.frame.size.height - width, width:  homePriceTxtField.frame.size.width, height: homePriceTxtField.frame.size.height)
+        homePriceborder.borderWidth = width
+        homePriceTxtField.layer.addSublayer(homePriceborder)
+        homePriceTxtField.layer.masksToBounds = true
+        homePriceTxtField.text = homePrice as String
+        homePriceTxtField.backgroundColor = UIColor.clearColor()
+        homePriceTxtField.delegate = self
+        homePriceTxtField.returnKeyType = .Next
+        homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
+        homePriceTxtField.font = UIFont(name: "forza-light", size: 22)
+        homePriceTxtField.enabled = false
+        homeTray.addSubview(homePriceTxtField)
+        
         let attributes = [
             //NSForegroundColorAttributeName: UIColor.redColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
@@ -282,7 +322,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         let homeAddressborder = CALayer()
         //UITextField
-        homeAddressTxtField.frame = (frame: CGRectMake(10, 290, homeTray.bounds.size.width - 20, 40))
+        homeAddressTxtField.frame = (frame: CGRectMake(10, 330, homeTray.bounds.size.width - 20, 40))
         homeAddressborder.borderColor = UIColor.lightGrayColor().CGColor
         homeAddressborder.frame = CGRect(x: 0, y: homeAddressTxtField.frame.size.height - width, width:  homeAddressTxtField.frame.size.width, height: homeAddressTxtField.frame.size.height)
         homeAddressborder.borderWidth = width
@@ -300,32 +340,32 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeAddressTxtField.keyboardType = UIKeyboardType.Default
         homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
         homeAddressTxtField.enabled = false
+        homeAddressTxtField.hidden = true
         homeTray.addSubview(homeAddressTxtField)
         
-        var price = 0.0
-        if let _ = homeObject["price"] {
-            price = homeObject["price"] as! Double
+        // UILabel
+        homeAddressLabel.frame = (frame: CGRectMake(10, 337, homeTray.bounds.size.width - 20, 0))
+        if (homeAddress.characters.count > 0) {
+            homeAddressLabel.text = homeAddress as String
+            homeAddressLabel.textColor = UIColor.darkTextColor()
         }
-        let formatter = NSNumberFormatter()
-        formatter.numberStyle = .CurrencyStyle
-        let homePrice = formatter.stringFromNumber(price)! as String
+        else {
+            homeAddressLabel.text = "ADDRESS"
+            homeAddressLabel.textColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
+        }
+        homeAddressLabel.textAlignment = NSTextAlignment.Left
+        homeAddressLabel.font = UIFont(name: "forza-light", size: 22)
+        homeAddressLabel.hidden = false
+        homeAddressLabel.numberOfLines = 0
+        homeAddressLabel.sizeToFit()
+        homeTray.addSubview(homeAddressLabel)
         
-        let homePriceborder = CALayer()
-        // UITextField
-        homePriceTxtField.frame = (frame: CGRectMake(10, 330, homeTray.bounds.size.width - 20, 40))
-        homePriceborder.borderColor = UIColor.lightGrayColor().CGColor
-        homePriceborder.frame = CGRect(x: 0, y: homePriceTxtField.frame.size.height - width, width:  homePriceTxtField.frame.size.width, height: homePriceTxtField.frame.size.height)
-        homePriceborder.borderWidth = width
-        homePriceTxtField.layer.addSublayer(homePriceborder)
-        homePriceTxtField.layer.masksToBounds = true
-        homePriceTxtField.text = homePrice as String
-        homePriceTxtField.backgroundColor = UIColor.clearColor()
-        homePriceTxtField.delegate = self
-        homePriceTxtField.returnKeyType = .Next
-        homePriceTxtField.keyboardType = UIKeyboardType.NumberPad
-        homePriceTxtField.font = UIFont(name: "forza-light", size: 22)
-        homePriceTxtField.enabled = false
-        homeTray.addSubview(homePriceTxtField)
+        yOffset = 337 + homeAddressLabel.bounds.size.height
+        
+        homeAddressBorderView.frame = (frame: CGRectMake(10, yOffset + 5, homeTray.bounds.size.width - 20, 1))
+        homeAddressBorderView.backgroundColor = UIColor.lightGrayColor()
+        homeAddressBorderView.hidden = false
+        homeTray.addSubview(homeAddressBorderView)
         
         // UIButton
         let addIcn = UIImage(named: "camera_icon") as UIImage?
@@ -353,13 +393,13 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         editButton.tag = 0
         homeTray.addSubview(editButton)
         
-        
+        yOffset += 15
         var xOffset = 0
         userRating = homeObject["rating"] as! Int
         
         for i in 1...5 {
             // UIButton
-            let ratingButton = UIButton(frame: CGRectMake(CGFloat(10 + xOffset), 380, 35, 35))
+            let ratingButton = UIButton(frame: CGRectMake(CGFloat(10 + xOffset), yOffset, 35, 35))
             ratingButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
             ratingButton.backgroundColor = model.darkBlueColor
             if i <= userRating {
@@ -376,13 +416,14 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             xOffset += 40
         }
 
+        yOffset += 45
         var bed = 0
         if let _ = homeObject["beds"] {
             bed = (homeObject["beds"] as? Int)!
         }
         
         // UITextField
-        bedsTxtField.frame = (frame: CGRectMake(15, 425, (homeTray.bounds.size.width / 3) - 20, 30))
+        bedsTxtField.frame = (frame: CGRectMake(15, yOffset, (homeTray.bounds.size.width / 3) - 20, 30))
         let bedPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
         bedsTxtField.leftView = bedPaddingView
         bedsTxtField.leftViewMode = UITextFieldViewMode.Always
@@ -395,7 +436,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bedsTxtField.enabled = false
         homeTray.addSubview(bedsTxtField)
         
-        let bedsLabel = UILabel(frame: CGRectMake(15, 450, (homeTray.bounds.size.width / 3) - 20, 30))
+        let bedsLabel = UILabel(frame: CGRectMake(15, yOffset + 20, (homeTray.bounds.size.width / 3) - 20, 30))
         bedsLabel.text = "Beds"
         bedsLabel.textAlignment = NSTextAlignment.Center
         bedsLabel.numberOfLines = 1
@@ -403,7 +444,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bedsLabel.textColor = UIColor.darkTextColor()
         homeTray.addSubview(bedsLabel)
         
-        let vertDividerTwoView = UIView(frame: CGRectMake(homeTray.bounds.size.width / 3, 425, 1, 50))
+        let vertDividerTwoView = UIView(frame: CGRectMake(homeTray.bounds.size.width / 3, yOffset, 1, 50))
         vertDividerTwoView.backgroundColor = UIColor.lightGrayColor()
         vertDividerTwoView.hidden = false
         homeTray.addSubview(vertDividerTwoView)
@@ -414,7 +455,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
 
         // UITextField
-        bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 5, 425, (homeTray.bounds.size.width / 3) - 20, 30))
+        bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 5, yOffset, (homeTray.bounds.size.width / 3) - 20, 30))
         let bathPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
         bathsTxtField.leftView = bathPaddingView
         bathsTxtField.leftViewMode = UITextFieldViewMode.Always
@@ -427,7 +468,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bathsTxtField.enabled = false
         homeTray.addSubview(bathsTxtField)
         
-        let bathsLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, 450, (homeTray.bounds.size.width / 3) - 20, 30))
+        let bathsLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width / 3) + 10, yOffset + 20, (homeTray.bounds.size.width / 3) - 20, 30))
         bathsLabel.text = "Baths"
         bathsLabel.textAlignment = NSTextAlignment.Center
         bathsLabel.numberOfLines = 1
@@ -435,7 +476,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         bathsLabel.textColor = UIColor.darkTextColor()
         homeTray.addSubview(bathsLabel)
         
-        let vertDividerThreeView = UIView(frame: CGRectMake(homeTray.bounds.size.width * 0.66, 425, 1, 50))
+        let vertDividerThreeView = UIView(frame: CGRectMake(homeTray.bounds.size.width * 0.66, yOffset, 1, 50))
         vertDividerThreeView.backgroundColor = UIColor.lightGrayColor()
         vertDividerThreeView.hidden = false
         homeTray.addSubview(vertDividerThreeView)
@@ -446,7 +487,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
         
         // UITextField
-        sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 425, (homeTray.bounds.size.width / 3) - 20, 30))
+        sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, yOffset, (homeTray.bounds.size.width / 3) - 20, 30))
         let sqFeetPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 15, 50))
         sqFeetTxtField.leftView = sqFeetPaddingView
         sqFeetTxtField.leftViewMode = UITextFieldViewMode.Always
@@ -459,7 +500,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         sqFeetTxtField.enabled = false
         homeTray.addSubview(sqFeetTxtField)
         
-        let sqFeetLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, 450, (homeTray.bounds.size.width / 3) - 20, 30))
+        let sqFeetLabel = UILabel(frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, yOffset + 20, (homeTray.bounds.size.width / 3) - 20, 30))
         sqFeetLabel.text = "Sq. Ft."
         sqFeetLabel.textAlignment = NSTextAlignment.Center
         sqFeetLabel.numberOfLines = 1
@@ -467,12 +508,14 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         sqFeetLabel.textColor = UIColor.darkTextColor()
         homeTray.addSubview(sqFeetLabel)
         
+        yOffset += 65
+        
         var desc = "Add notes about this house."
         if let _ = homeObject["desc"] {
             desc =  homeObject["desc"] as! String
         }
         //Create textview
-        descTxtView.frame = (frame : CGRectMake(10, 490, homeTray.bounds.size.width - 20, 150))
+        descTxtView.frame = (frame : CGRectMake(10, yOffset, homeTray.bounds.size.width - 20, 150))
         descTxtView.backgroundColor = UIColor.whiteColor()
         descTxtView.text = desc
         descTxtView.autocorrectionType = .Yes
@@ -655,7 +698,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     func buildSaveDeleteTray() {
         
-        saveDeleteTray.frame = (frame: CGRectMake(0, 730, scrollView.bounds.size.width, 450))
+        saveDeleteTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 60), scrollView.bounds.size.width, 450))
         saveDeleteTray.backgroundColor = UIColor.clearColor()
         scrollView.addSubview(saveDeleteTray)
         
@@ -716,11 +759,13 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     }
 
     func showHideCalcTray(sender: UIButton) {
+        print(self.yOffset)
+        
         if (!isCalcTrayOpen) {
             UIView.animateWithDuration(0.8, animations: {
                 self.expandIcon.image = UIImage(named: "expand_white_up")
-                self.calcTray.frame = (frame: CGRectMake(0, 730, self.scrollView.bounds.size.width, 400))
-                self.saveDeleteTray.frame = (frame: CGRectMake(0, 1140, self.scrollView.bounds.size.width, 400))
+                self.calcTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 60), self.scrollView.bounds.size.width, 400))
+                self.saveDeleteTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 480), self.scrollView.bounds.size.width, 400))
                 }, completion: {
                     (value: Bool) in
                     self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1400)
@@ -731,10 +776,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             UIView.animateWithDuration(0.8, animations: {
                 self.expandIcon.image = UIImage(named: "expand_white")
                 self.calcTray.frame = (frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 400))
-                self.saveDeleteTray.frame = (frame: CGRectMake(0, 720, self.scrollView.bounds.size.width, 400))
+                self.saveDeleteTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 60), self.scrollView.bounds.size.width, 400))
                 }, completion: {
                     (value: Bool) in
-                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 800)
+                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: self.yOffset + 250)
                     self.isCalcTrayOpen = false
             })
         }
@@ -1004,7 +1049,28 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     // MARK:
     // MARK: Navigation
     func navigateBackHome(sender: UIButton) {
-        navigationController?.popViewControllerAnimated(true)
+        if didEnterEditMode {
+            let alertController = UIAlertController(title: "HomeIn", message: "You entered into edit mode but have not saved your home. If you exit now any changes will not be saved.", preferredStyle: .Alert)
+            
+            let CancelAction = UIAlertAction(title: "Cancel", style: .Default) { (action) in
+                
+            }
+            
+            let OKAction = UIAlertAction(title: "Exit Anyway", style: .Default) { (action) in
+                self.navigationController?.popViewControllerAnimated(true)
+            }
+            
+            alertController.addAction(CancelAction)
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
+        }
+        else {
+            navigationController?.popViewControllerAnimated(true)
+        }
+        
     }
     
     // MARK:
@@ -1043,10 +1109,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     }
     
     func allowEdit(sender: UIButton) {
+        didEnterEditMode = true
         saveView.hidden = false
         saveButton.hidden = false
         saveButton.enabled = true
-        
+
         if (!isTextFieldEnabled) {
             homeNameTxtField.enabled = true
             homePriceTxtField.enabled = true
@@ -1056,8 +1123,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             sqFeetTxtField.enabled = true
             descTxtView.editable = true
             
+            homeAddressTxtField.hidden = false
+            homeAddressBorderView.hidden = true
+            homeAddressLabel.hidden = true
+            
             isTextFieldEnabled = true
-            editIcon.image = UIImage(named: "edit_icon_onstate")
+            editIcon.image = UIImage(named: "edit_red")
             
             editModeLabel.textColor = model.lightRedColor
             
@@ -1071,6 +1142,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             bathsTxtField.enabled = false
             sqFeetTxtField.enabled = false
             descTxtView.editable = false
+            
+            homeAddressTxtField.hidden = true
+            homeAddressBorderView.hidden = false
+            homeAddressLabel.hidden = false
             
             isTextFieldEnabled = false
             editIcon.image = UIImage(named: "edit_icon")
@@ -1263,7 +1338,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                     let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
                     
                     let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        
+                        self.didEnterEditMode = false
                     }
                     alertController.addAction(OKAction)
                     
@@ -1350,7 +1425,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1400)
         }
         else {
-            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 900)
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: yOffset + 250)
         }
         
         hideKeyboardButton.enabled = false

@@ -94,8 +94,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         whiteBar.backgroundColor = UIColor.whiteColor()
         addHomeView.addSubview(whiteBar)
         
-        let backIcn = UIImage(named: "backbutton_icon") as UIImage?
-        let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+        let backIcn = UIImage(named: "back_grey") as UIImage?
+        let backIcon = UIImageView(frame: CGRectMake(20, 10, 30, 30))
         backIcon.image = backIcn
         whiteBar.addSubview(backIcon)
         
@@ -117,7 +117,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         addHomeView.addSubview(addHomeBannerView)
         
         //UIImageView
-        let homeIcn = UIImage(named: "branch_icon") as UIImage?
+        let homeIcn = UIImage(named: "bank_icon") as UIImage?
         let homeIcon = UIImageView(frame: CGRectMake((addHomeBannerView.bounds.size.width / 2) - (12.5 + 125), 12.5, 25, 25))
         homeIcon.image = homeIcn
         addHomeBannerView.addSubview(homeIcon)

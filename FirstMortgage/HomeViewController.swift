@@ -11,6 +11,8 @@ import Parse
 
 class HomeViewController: UIViewController, UITextFieldDelegate {
     
+    //TODO: remove background image to see why home view is being built twice
+    
     // MARK:
     // MARK: Properties
     var model = Model()
@@ -242,7 +244,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         myHomesView.layer.addSublayer(myHomesGradientLayer)
         scrollView.addSubview(myHomesView)
         
-        let homeIcn = UIImage(named: "icn-firstTime") as UIImage?
+        let homeIcn = UIImage(named: "home_icon") as UIImage?
         let homeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 25, 36, 36))
         homeIcon.image = homeIcn
         myHomesView.addSubview(homeIcon)
@@ -275,7 +277,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         addHomesView.layer.addSublayer(addHomesGradientLayer)
         scrollView.addSubview(addHomesView)
  
-        let addIcn = UIImage(named: "add_icon") as UIImage?
+        let addIcn = UIImage(named: "add_white") as UIImage?
         let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 25, 26, 26))
         addHomeIcon.image = addIcn
         addHomesView.addSubview(addHomeIcon)
@@ -310,7 +312,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         mortgageCalculatorView.layer.addSublayer(mortgageCalculatorGradientLayer)
         scrollView.addSubview(mortgageCalculatorView)
         
-        let calcIcn = UIImage(named: "icn-calculator") as UIImage?
+        let calcIcn = UIImage(named: "calculator_icon") as UIImage?
         let calcIcon = UIImageView(frame: CGRectMake((mortgageCalculatorView.bounds.size.width / 2) - 18, 25, 36, 36))
         calcIcon.image = calcIcn
         mortgageCalculatorView.addSubview(calcIcon)
@@ -378,7 +380,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         findBranchView.layer.addSublayer(findBranchGradientLayer)
         scrollView.addSubview(findBranchView)
         
-        let brnchIcn = UIImage(named: "branch_icon") as UIImage?
+        let brnchIcn = UIImage(named: "bank_icon") as UIImage?
         let branchIcon = UIImageView(frame: CGRectMake((findBranchView.bounds.size.width / 2) - 18, 25, 36, 36))
         branchIcon.image = brnchIcn
         findBranchView.addSubview(branchIcon)
@@ -417,7 +419,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         preQualifiedView.layer.addSublayer(preQualifiedGradientLayer)
         scrollView.addSubview(preQualifiedView)
         
-        let checkIcn = UIImage(named: "icn-applyOnline") as UIImage?
+        let checkIcn = UIImage(named: "checkmark_white") as UIImage?
         let checkIcon = UIImageView(frame: CGRectMake((preQualifiedView.bounds.size.width / 2) - 18, 25, 36, 36))
         checkIcon.image = checkIcn
         preQualifiedView.addSubview(checkIcon)
@@ -495,7 +497,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         descLabel.sizeToFit()
         contentScrollView.addSubview(descLabel)
         
-        let checkMarkImage = UIImage(named: "blue_check") as UIImage?
+        let checkMarkImage = UIImage(named: "checkmark_gray") as UIImage?
         
         var offset = descLabel.bounds.size.height + 25.0 as CGFloat
         
@@ -1700,7 +1702,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         else {
             userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
             userButton.setTitle("", forState: .Normal)
-            userButton.setBackgroundImage(UIImage(named: "account_icon"), forState: .Normal)
+            userButton.setBackgroundImage(UIImage(named: "profile_icon"), forState: .Normal)
             
             userButton.tag = 7
             myHomesButton.enabled = true

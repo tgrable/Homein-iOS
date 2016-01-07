@@ -90,8 +90,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(whiteBar)
         
         if didComeFromAccountPage == false {
-            let backIcn = UIImage(named: "backbutton_icon") as UIImage?
-            let backIcon = UIImageView(frame: CGRectMake(20, 10, 12.5, 25))
+            let backIcn = UIImage(named: "back_grey") as UIImage?
+            let backIcon = UIImageView(frame: CGRectMake(20, 10, 30, 30))
             backIcon.image = backIcn
             whiteBar.addSubview(backIcon)
         }
@@ -802,7 +802,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             loButton.enabled = true
             
             isTextFieldEnabled = true
-            editIcon.image = UIImage(named: "edit_icon_onstate")
+            editIcon.image = UIImage(named: "edit_red")
             
             editModeLabel.textColor = model.lightRedColor
         }
