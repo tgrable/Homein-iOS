@@ -377,7 +377,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             
             branchView.frame = CGRectMake(15, yOffset, self.view.bounds.size.width - 30, offset + 20)
             
-            let shadowImg = UIImage(named: "long_shadow") as UIImage?
+            let shadowImg = UIImage(named: "Long_shadow") as UIImage?
             // UIImageView
             let shadowView = UIImageView(frame: CGRectMake(15, yOffset + offset + 20, branchView.bounds.size.width, 15))
             shadowView.image = shadowImg

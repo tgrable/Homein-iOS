@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2CD798611C3233710052C18C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD798601C3233710052C18C /* Reachability.swift */; };
+		4F0700361C4043A600A97034 /* Long_shadow.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F0700351C4043A600A97034 /* Long_shadow.png */; };
 		4F10B1DA1C3F236000676D93 /* add_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F10B1AD1C3F236000676D93 /* add_grey.png */; };
 		4F10B1DB1C3F236000676D93 /* add_grey@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F10B1AE1C3F236000676D93 /* add_grey@2x.png */; };
 		4F10B1DC1C3F236000676D93 /* add_grey@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4F10B1AF1C3F236000676D93 /* add_grey@3x.png */; };
@@ -135,6 +136,7 @@
 
 /* Begin PBXFileReference section */
 		2CD798601C3233710052C18C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = FirstMortgage/Reachability.swift; sourceTree = "<group>"; };
+		4F0700351C4043A600A97034 /* Long_shadow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Long_shadow.png; path = images/Long_shadow.png; sourceTree = "<group>"; };
 		4F10B1AD1C3F236000676D93 /* add_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_grey.png; path = images/add_grey.png; sourceTree = "<group>"; };
 		4F10B1AE1C3F236000676D93 /* add_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add_grey@2x.png"; path = "images/add_grey@2x.png"; sourceTree = "<group>"; };
 		4F10B1AF1C3F236000676D93 /* add_grey@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add_grey@3x.png"; path = "images/add_grey@3x.png"; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 		4F10B1AC1C3F234600676D93 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				4F0700351C4043A600A97034 /* Long_shadow.png */,
 				4F10B2411C3F24C200676D93 /* hide_keyboard.png */,
 				4F10B2311C3F246900676D93 /* star_off_icon.png */,
 				4F10B2321C3F246900676D93 /* star_on_icon.png */,
@@ -609,6 +612,7 @@
 				4F10B21B1C3F236700676D93 /* profile_white@2x.png in Resources */,
 				4F10B1EB1C3F236000676D93 /* camera_icon@3x.png in Resources */,
 				4F10B2181C3F236700676D93 /* profile_icon@2x.png in Resources */,
+				4F0700361C4043A600A97034 /* Long_shadow.png in Resources */,
 				4F10B21E1C3F236700676D93 /* sort_icon@2x.png in Resources */,
 				4F10B1E41C3F236000676D93 /* bank_icon@2x.png in Resources */,
 				4F10B1DB1C3F236000676D93 /* add_grey@2x.png in Resources */,

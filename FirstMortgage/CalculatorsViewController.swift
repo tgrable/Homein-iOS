@@ -57,6 +57,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(modelName)
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
@@ -139,7 +140,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
             titleLabel = "REFINANCE CALCULATOR"
         }
         
-        var fontSize = 25
+        var fontSize = 22
         if modelName.rangeOfString("5") != nil{
             fontSize = 20
         }
@@ -169,7 +170,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         mortView.backgroundColor = UIColor.whiteColor()
         calcWindowView.addSubview(mortView)
         
-        let shadowImg = UIImage(named: "long_shadow") as UIImage?
+        let shadowImg = UIImage(named: "Long_shadow") as UIImage?
         // UIImageView
         let shadowView = UIImageView(frame: CGRectMake(0, 250, mortView.bounds.size.width, 15))
         shadowView.image = shadowImg
@@ -347,7 +348,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         refiCalcView.hidden = false
         calcWindowView.addSubview(refiCalcView)
         
-        let shadowImg = UIImage(named: "long_shadow") as UIImage?
+        let shadowImg = UIImage(named: "Long_shadow") as UIImage?
         // UIImageView
         let shadowView = UIImageView(frame: CGRectMake(0, 337, refiCalcView.bounds.size.width, 15))
         shadowView.image = shadowImg

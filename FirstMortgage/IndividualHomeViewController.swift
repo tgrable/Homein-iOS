@@ -260,6 +260,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         scrollView.addSubview(homeTray)
         
         defaultImageView.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, 250))
+        defaultImageView.contentMode = .ScaleAspectFill
+        defaultImageView.clipsToBounds = true
         homeTray.addSubview(defaultImageView)
         
         let homeNameborder = CALayer()
@@ -989,6 +991,16 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             UIView.animateWithDuration(0.4, animations: {
                 self.scrollView.contentOffset.y = 350
                 }, completion: nil)
+            // TODO: Maybe reset these if nothing changes
+            if textField == bedsTxtField {
+                bedsTxtField.text = ""
+            }
+            else if textField == bathsTxtField {
+                bathsTxtField.text = ""
+            }
+            else if textField == sqFeetTxtField {
+                sqFeetTxtField.text = ""
+            }
         }
         else if textField == homeAddressTxtField {
             UIView.animateWithDuration(0.4, animations: {
@@ -1030,6 +1042,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             textView.text = nil
             textView.textColor = UIColor.blackColor()
         }
+        
     }
     
     func textViewDidEndEditing(textView: UITextView) {
@@ -1317,8 +1330,14 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
             var price = self.homePriceTxtField.text! as String
+            if price.rangeOfString(",") != nil{
+                price = price.stringByReplacingOccurrencesOfString(",", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            }
             if price.rangeOfString("$") != nil{
                 price = price.stringByReplacingOccurrencesOfString("$", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            }
+            else {
+                print("does not have $")
             }
             self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(price) : self.homeObject["price"]
             self.homeObject["rating"] = self.userRating

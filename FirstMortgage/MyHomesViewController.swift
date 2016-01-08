@@ -428,6 +428,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                         if let imageData = imageData {
                             let image = UIImage(data:imageData)
                             cell.backgroundImage?.image = image
+                            cell.backgroundImage.contentMode = .ScaleAspectFill
                         }
                     }
                 }
@@ -435,11 +436,13 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             else {
                 let fillerImage = UIImage(named: "default_home") as UIImage?
                 cell.backgroundImage?.image = fillerImage
+                cell.backgroundImage.contentMode = .ScaleAspectFill
             }
         }
         else {
             let fillerImage = UIImage(named: "default_home") as UIImage?
             cell.backgroundImage?.image = fillerImage
+            cell.backgroundImage.contentMode = .ScaleAspectFill
         }
     }
     

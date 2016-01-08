@@ -9,7 +9,7 @@
 import UIKit
 import Parse
 
-class HomeViewController: UIViewController, UITextFieldDelegate {
+class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate {
     
     //TODO: remove background image to see why home view is being built twice
     
@@ -33,6 +33,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     let searchOverlayView = UIView()
     let whiteBar = UIView()
     let loadingOverlay = UIView()
+    let findBranchOverlay = UIView()
     
     //CAGradientLayer
     let myHomesGradientLayer = CAGradientLayer()
@@ -101,8 +102,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        print("viewDidLoad")
+        print(CLLocationManager.authorizationStatus().rawValue)
+        
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             let manager = CLLocationManager()
+            
             // TODO: This needs to update the view
             if CLLocationManager.authorizationStatus() == .NotDetermined {
                 manager.requestWhenInUseAuthorization()
@@ -110,7 +116,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             
             if CLLocationManager.locationServicesEnabled() {
                 switch(CLLocationManager.authorizationStatus()) {
-                case .NotDetermined, .Restricted: //, .Denied:
+                case .NotDetermined, .Restricted, .Denied:
                     self.locationServicesIsAllowed = false
                 case .AuthorizedAlways, .AuthorizedWhenInUse:
                     self.locationServicesIsAllowed = true
@@ -127,7 +133,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        if reachability.isConnectedToNetwork() == false {
+        if self.reachability.isConnectedToNetwork() == false {
             let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection. An internet connection is required to create a new account or login to an existing account.", preferredStyle: .Alert)
             
             let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
@@ -142,7 +148,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     }
 
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         self.view.backgroundColor = model.lightGrayColor
+        
+        print("viewWillAppear")
+        print(CLLocationManager.authorizationStatus().rawValue)
         
         // UIImageView
         let fmcLogo = UIImage(named: "home_in") as UIImage?
@@ -186,6 +197,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
         
+        
         if reachability.isConnectedToNetwork() == false {
             let getStartedOverlay = UIView(frame: CGRectMake(0, 0, getStartedButton.bounds.width, getStartedButton.bounds.size.height))
             getStartedOverlay.backgroundColor = UIColor.darkGrayColor()
@@ -211,6 +223,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         var labelDist = 65.0 as CGFloat
         if (modelName.rangeOfString("6") != nil) {
             labelDist = 75.0
+        }
+        
+        var height = (self.view.bounds.size.width / 2) - 20
+        if (modelName.rangeOfString("iPad") != nil) {
+            height = (self.view.bounds.size.width / 2) - 225
         }
         
         homeView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
@@ -278,12 +295,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         scrollView.addSubview(addHomesView)
  
         let addIcn = UIImage(named: "add_white") as UIImage?
-        let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 25, 26, 26))
+        let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 30, 26, 26))
         addHomeIcon.image = addIcn
         addHomesView.addSubview(addHomeIcon)
         
         // UILabel
-        let addHomesLabel = UILabel(frame: CGRectMake(0, labelDist, myHomesView.bounds.size.width, 48))
+        let addHomesLabel = UILabel(frame: CGRectMake(0, labelDist - 5, myHomesView.bounds.size.width, 48))
         addHomesLabel.text = "ADD A\nHOME"
         addHomesLabel.font = UIFont(name: "forza-light", size: 18)
         addHomesLabel.textAlignment = NSTextAlignment.Center
@@ -304,7 +321,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         /********************************************************* Mortgage Calculator Button ********************************************************************/
         // UIView
-        let mortgageCalculatorView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
+        let mortgageCalculatorView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, height))
         let mortgageCalculatorGradientLayer = CAGradientLayer()
         mortgageCalculatorGradientLayer.frame = mortgageCalculatorView.bounds
         mortgageCalculatorGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
@@ -338,7 +355,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         /********************************************************* Refinance Calculator Button ********************************************************************/
         // UIView
-        let refiCalculatorView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
+        let refiCalculatorView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, height))
         let refiCalculatorGradientLayer = CAGradientLayer()
         refiCalculatorGradientLayer.frame = refiCalculatorView.bounds
         refiCalculatorGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
@@ -369,10 +386,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         refiCalculatorView.addSubview(refiCalculatorButton)
         
         offset = (((width / 2) * 0.75) + (width / 2)) + 15
-        
+       
         /********************************************************* Find Branch Button ********************************************************************/
         // UIView
-        let findBranchView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
+        let findBranchView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, height))
         let findBranchGradientLayer = CAGradientLayer()
         findBranchGradientLayer.frame = findBranchView.bounds
         findBranchGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
@@ -404,7 +421,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         findBranchView.addSubview(findBranchButton)
         
         if (locationServicesIsAllowed == false || reachability.isConnectedToNetwork() == false) {
-            let findBranchOverlay = UIView(frame: CGRectMake(0, 0, findBranchView.bounds.width, findBranchView.bounds.size.height))
+            findBranchOverlay.frame = (frame: CGRectMake(0, 0, findBranchView.bounds.width, findBranchView.bounds.size.height))
             findBranchOverlay.backgroundColor = UIColor.darkGrayColor()
             findBranchOverlay.alpha = 0.45
             findBranchView.addSubview(findBranchOverlay)
@@ -412,7 +429,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         
         /********************************************************* Get Prequalified Button ********************************************************************/
          // UIView
-        preQualifiedView.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, (self.view.bounds.size.width / 2) - 20))
+        preQualifiedView.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, height))
         preQualifiedGradientLayer.frame = preQualifiedView.bounds
         preQualifiedGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         preQualifiedView.layer.insertSublayer(preQualifiedGradientLayer, atIndex: 0)
@@ -653,7 +670,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 32)
         loginView.addSubview(dismissButton)
         
-        let bannerView = UIView(frame: CGRectMake(0, 85, model.deviceWidth(), 50))
+        let bannerView = UIView(frame: CGRectMake(0, 85, self.view.bounds.width, 50))
         let bannerGradientLayer = CAGradientLayer()
         bannerGradientLayer.frame = bannerView.bounds
         bannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
@@ -753,7 +770,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
         dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 32)
         signUpView.addSubview(dismissButton)
         
-        let bannerView = UIView(frame: CGRectMake(0, 85, model.deviceWidth(), 50))
+        let bannerView = UIView(frame: CGRectMake(0, 85, self.view.bounds.width, 50))
         let bannerGradientLayer = CAGradientLayer()
         bannerGradientLayer.frame = bannerView.bounds
         bannerGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
@@ -987,8 +1004,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             let nodeDict = loanOfficer as NSDictionary
             buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count)
             
-            scrollView.contentSize = CGSize(width: overlayView.bounds.size.width, height: CGFloat(loArray.count * 135))
-            yVal += 130
+            scrollView.contentSize = CGSize(width: overlayView.bounds.size.width, height: CGFloat(loArray.count * 145))
+            yVal += 145
             count++
         }
     }
@@ -1677,6 +1694,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
     }
     
     func checkIfLoggedIn() {
+        if CLLocationManager.authorizationStatus() == .NotDetermined || CLLocationManager.authorizationStatus() == .Restricted || CLLocationManager.authorizationStatus() == .Denied {
+            findBranchOverlay.hidden = false
+        }
+        else {
+            findBranchOverlay.hidden = true
+        }
+        
         let user = PFUser.currentUser()
         if (user == nil) {
             userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 100, 0, 90, 50))
@@ -1698,6 +1722,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             preQualifiedOverlay.backgroundColor = UIColor.darkGrayColor()
             preQualifiedOverlay.alpha = 0.45
             preQualifiedView.addSubview(preQualifiedOverlay)
+
         }
         else {
             userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
@@ -1817,4 +1842,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate {
             view.removeFromSuperview()
         }
     }
+    
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        print("Updated Status")
+    }
+    
 }
