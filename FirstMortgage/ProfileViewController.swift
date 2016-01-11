@@ -949,6 +949,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         user!["email"] = (emailTxtField.text != "") ? emailTxtField.text : user!["email"]
         
         user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            
             var message = ""
             if (success) {
                 message = "Your profile information was updated."
@@ -963,6 +964,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             
             self.isTextFieldEnabled = false
             self.editIcon.image = UIImage(named: "edit_icon")
+            self.editModeLabel.textColor = UIColor.whiteColor()
             
             self.loadingOverlay.hidden = true
             self.activityIndicator.stopAnimating()
