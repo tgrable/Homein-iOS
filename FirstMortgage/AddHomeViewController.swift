@@ -128,7 +128,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         let cameraImage = UIImage(named: "camera_icon") as UIImage?
         // UIImageView
-        print("camera image")
         imageView.frame = ( frame: CGRectMake(whiteBar.bounds.size.width - 60, 10, 34.29, 30))
         imageView.image = cameraImage
         whiteBar.addSubview(imageView)
@@ -669,10 +668,10 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                     }
                 }
                 else {
-                    print("seveEventually")
                     home.saveEventually{
                         (success: Bool, error: NSError?) -> Void in
                         if (success) {
+                            // TODO: add an alert view
                             print("The post has been added to the user's likes relation.")
                         } else {
                             print("There was a problem, check error.description.")

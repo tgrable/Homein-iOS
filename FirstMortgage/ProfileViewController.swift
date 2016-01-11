@@ -73,7 +73,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     override func viewWillAppear(animated: Bool) {
         self.view.backgroundColor = model.lightGrayColor
-        
+
         let attributes = [
             NSForegroundColorAttributeName: UIColor.darkTextColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 22)!
@@ -220,13 +220,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 let defaults = NSUserDefaults.standardUserDefaults()
                 
                 if (defaults.objectForKey("loanOfficerArray") != nil) {
-                    print("from defaults")
                     self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
                     self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
                 }
                 else {
                     dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                        print("from web")
                         let nodes = self.model.getBranchLoanOfficers()
                         
                         self.loanOfficerArray.removeAll()
@@ -320,12 +318,27 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                     nodeDict["name"] = filteredVisitors[0]["name"]
                     nodeDict["image"] = filteredVisitors[0]["image"]
                     
+                    if let nodeImage = nodeDict["image"] {
+                        if let nid = nodeDict["nid"] {
+                            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                                let urlString = nodeImage as String
+                                if let checkedUrl = NSURL(string: urlString) {
+                                    let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
+                                    let image = UIImage(data: data!)
+                                    var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+                                    documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
+                                    UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
+                                }
+                            }
+                        }
+                    }
+                    
                     let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
                     
                     let defaults = NSUserDefaults.standardUserDefaults()
                     defaults.removeObjectForKey(dictString)
                     defaults.setObject(nodeDict, forKey: dictString)
-                    
+
                     buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
                 }
                 else {
@@ -343,6 +356,21 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                     nodeDict["url"] = filteredVisitors[0]["url"]
                     nodeDict["name"] = filteredVisitors[0]["name"]
                     nodeDict["image"] = filteredVisitors[0]["image"]
+                    
+                    if let nodeImage = nodeDict["image"] {
+                        if let nid = nodeDict["nid"] {
+                            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                                let urlString = nodeImage as String
+                                if let checkedUrl = NSURL(string: urlString) {
+                                    let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
+                                    let image = UIImage(data: data!)
+                                    var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+                                    documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
+                                    UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
+                                }
+                            }
+                        }
+                    }
                     
                     let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
                     
@@ -365,7 +393,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 
                 let loMessage = UILabel (frame: CGRectMake(15, 10, loView.bounds.size.width - 30, 0))
                 loMessage.textAlignment = NSTextAlignment.Left
-                loMessage.text = "You are not currently assigned to a loan officer. Enable edit mode then press here to see a list avaliable loan officers."
+                loMessage.text = "You are not currently assigned to a loan officer. Use the change loan officer button to assign a loan officer to your account."
                 loMessage.font = UIFont(name: "forza-light", size: 18)
                 loMessage.textColor = UIColor.whiteColor()
                 loMessage.numberOfLines = 0
@@ -423,7 +451,45 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         logOutView.addSubview(logoutBtnView)
         
         // UIView
-        calculateView.frame = (frame: CGRectMake(15, 345, profileView.bounds.size.width - 30, 50))
+        let changeLoView = UIView(frame: CGRectMake(15, 345, profileView.bounds.size.width - 30, 50))
+        let changeLoGradientLayer = CAGradientLayer()
+        changeLoGradientLayer.frame = changeLoView.bounds
+        changeLoGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
+        changeLoView.layer.insertSublayer(changeLoGradientLayer, atIndex: 0)
+        changeLoView.layer.addSublayer(changeLoGradientLayer)
+        profileView.addSubview(changeLoView)
+        
+        let changeLoArrow = UILabel(frame: CGRectMake(logOutView.bounds.size.width - 50, 0, 40, 50))
+        changeLoArrow.textAlignment = NSTextAlignment.Right
+        changeLoArrow.font = UIFont(name: "forza-light", size: 40)
+        changeLoArrow.text = ">"
+        changeLoArrow.textColor = UIColor.whiteColor()
+        changeLoView.addSubview(changeLoArrow)
+        
+        var fontSize = 25
+        if modelName.rangeOfString("5") != nil{
+            fontSize = 20
+        }
+        
+        // UIButton
+        let changeLoButton = UIButton(frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
+        changeLoButton.addTarget(self, action: "showSearchOverLay:", forControlEvents: .TouchUpInside)
+        changeLoButton.setTitle("CHANGE LOAN OFFICER", forState: .Normal)
+        changeLoButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        changeLoButton.backgroundColor = UIColor.clearColor()
+        changeLoButton.titleLabel!.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
+        changeLoButton.contentHorizontalAlignment = .Left
+        changeLoButton.tag = 1
+        changeLoView.addSubview(changeLoButton)
+        
+        let changeLoBtnImg = UIImage(named: "right_shadow") as UIImage?
+        // UIImageView
+        let changeLoBtnView = UIImageView(frame: CGRectMake(0, logOutView.bounds.size.height, logOutView.bounds.size.width, 15))
+        changeLoBtnView.image = changeLoBtnImg
+        changeLoView.addSubview(changeLoBtnView)
+        
+        // UIView
+        calculateView.frame = (frame: CGRectMake(15, 405, profileView.bounds.size.width - 30, 50))
         calculateView.alpha = 0
         calcGradientLayer.hidden = true
         calcGradientLayer.frame = calculateView.bounds
@@ -469,7 +535,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         activityIndicator.center = view.center
         loadingOverlay.addSubview(activityIndicator)
         
-        profileView.contentSize = CGSize(width: userView.bounds.size.width, height: 475)
+        profileView.contentSize = CGSize(width: userView.bounds.size.width, height: 550)
     }
     
     func buildSeachOverlay(loArray: Array<Dictionary<String, String>>) {
@@ -488,7 +554,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
 
     func getBranchLoanOfficers() {
-        print("getBranchLoanOfficers")
         let endpoint = NSURL(string: "https://www.firstmortgageco.com/loan-officers-json")
         let data = NSData(contentsOfURL: endpoint!)
         do {
@@ -522,34 +587,70 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             count = 999
         }
         
-        // UIView
-        let loView = UIView(frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 160))
-        loView.backgroundColor = UIColor.whiteColor()
-        view.addSubview(loView)
-        
-        let shadowImg = UIImage(named: "Long_shadow") as UIImage?
-        // UIImageView
-        let shadowView = UIImageView(frame: CGRectMake(15, loView.bounds.size.height, loView.bounds.size.width, 15))
-        shadowView.image = shadowImg
-        loView.addSubview(shadowView)
-        
         if isSingleView {
+            
+            // UIView
+            let loView = UIView(frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 160))
+            loView.backgroundColor = UIColor.whiteColor()
+            view.addSubview(loView)
+            
+            let shadowImg = UIImage(named: "Long_shadow") as UIImage?
+            // UIImageView
+            let shadowView = UIImageView(frame: CGRectMake(15, loView.bounds.size.height, loView.bounds.size.width, 15))
+            shadowView.image = shadowImg
+            loView.addSubview(shadowView)
             
             let loImageView = UIImageView(frame: CGRectMake(5, 5, 100, 120))
             loImageView.contentMode = .ScaleAspectFit
+            loImageView.image = UIImage(named: "profile_icon")
             loView.addSubview(loImageView)
             
-            if let _ = nodeDict["image"] {
-                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                    let urlString = nodeDict["image"]! as String
-                    if let checkedUrl = NSURL(string: urlString) {
-                        let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
-                        loImageView.image = UIImage(data: data!)
+            
+            
+            if let nid = nodeDict["nid"] {
+                var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+                documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
+                
+                let checkValidation = NSFileManager.defaultManager()
+                if (checkValidation.fileExistsAtPath(documentsPath)) {
+                    print("FILE AVAILABLE");
+                    loImageView.image = UIImage(contentsOfFile: documentsPath)
+                }
+                else {
+                    if let nodeImage = nodeDict["image"] {
+                        if let nid = nodeDict["nid"] {
+                            let loImageOverLayView = UIView(frame: CGRectMake(5, 5, 100, 120))
+                            loImageOverLayView.backgroundColor = UIColor.darkGrayColor()
+                            loImageOverLayView.alpha = 0.85
+                            loImageView.addSubview(loImageOverLayView)
+                            
+                            let loActivityIndicator = UIActivityIndicatorView()
+                            loActivityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
+                            loActivityIndicator.center = loImageOverLayView.center
+                            loImageOverLayView.addSubview(loActivityIndicator)
+                            loActivityIndicator.startAnimating()
+                            
+                            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                                let urlString = nodeImage as String
+                                if let checkedUrl = NSURL(string: urlString) {
+                                    let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
+                                    let image = UIImage(data: data!)
+                                    var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+                                    documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
+                                    UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
+                                    
+                                    loImageView.image = UIImage(contentsOfFile: documentsPath)
+                                    loActivityIndicator.stopAnimating()
+                                    loImageOverLayView.hidden = true
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        loImageView.image = UIImage(named: "profile_icon")
                     }
                 }
-            }
-            else {
-                loImageView.image = UIImage(named: "profile_icon")
+                
             }
             
             let nameLabel = UILabel (frame: CGRectMake(115, 10, loView.bounds.size.width - 120, 24))
@@ -559,15 +660,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             nameLabel.font = UIFont(name: "forza-medium", size: 20)
             loView.addSubview(nameLabel)
             
-            let selectButton = UIButton (frame: CGRectMake(115, 10, loView.bounds.size.width - 120, 24))
-            selectButton.addTarget(self, action: "setLoanOfficer:", forControlEvents: .TouchUpInside)
-            selectButton.backgroundColor = UIColor.clearColor()
-            selectButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-            selectButton.contentHorizontalAlignment = .Right
-            if reachability.isConnectedToNetwork() == false {
-                selectButton.enabled = false
-            }
-            
             let office = UILabel (frame: CGRectMake(115, 35, 60, 24))
             office.textAlignment = NSTextAlignment.Left
             office.text = String(format: "Office:")
@@ -576,19 +668,19 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             loView.addSubview(office)
             
             let officePhone = (nodeDict["office"] != nil) ? nodeDict["office"] : ""
-            /*let officeLabel = UILabel (frame: CGRectMake(115, 60, loView.bounds.size.width - 120, 24))
+            let officeLabel = UILabel (frame: CGRectMake(115, 60, loView.bounds.size.width - 120, 24))
             officeLabel.textAlignment = NSTextAlignment.Left
             officeLabel.text = String(format: "%@", officePhone!)
             officeLabel.numberOfLines = 1
             officeLabel.font = UIFont(name: "forza-light", size: 18)
             officeLabel.textColor = model.darkBlueColor
-            loView.addSubview(officeLabel)*/
+            loView.addSubview(officeLabel)
             
             let officeButton = UIButton (frame: CGRectMake(115, 60, loView.bounds.size.width - 120, 24))
             officeButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
             officeButton.backgroundColor = UIColor.clearColor()
             officeButton.setTitle(model.cleanPhoneNumnerString(officePhone!), forState: .Normal)
-            officeButton.setTitleColor(UIColor.redColor(), forState: .Normal)
+            officeButton.setTitleColor(UIColor.clearColor(), forState: .Normal)
             officeButton.tag = 0
             loView.addSubview(officeButton)
             
@@ -612,7 +704,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             mobileButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
             mobileButton.backgroundColor = UIColor.clearColor()
             mobileButton.setTitle(model.cleanPhoneNumnerString(mobilePhone!), forState: .Normal)
-            mobileButton.setTitleColor(UIColor.redColor(), forState: .Normal)
+            mobileButton.setTitleColor(UIColor.clearColor(), forState: .Normal)
             mobileButton.tag = 1
             loView.addSubview(mobileButton)
             
@@ -636,6 +728,17 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             loView.addSubview(emailButton)
         }
         else {
+            // UIView
+            let loView = UIView(frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 130))
+            loView.backgroundColor = UIColor.whiteColor()
+            view.addSubview(loView)
+            
+            let shadowImg = UIImage(named: "Long_shadow") as UIImage?
+            // UIImageView
+            let shadowView = UIImageView(frame: CGRectMake(15, loView.bounds.size.height, loView.bounds.size.width, 15))
+            shadowView.image = shadowImg
+            loView.addSubview(shadowView)
+            
             let nameLabel = UILabel (frame: CGRectMake(15, 10, loView.bounds.size.width - 30, 24))
             nameLabel.textAlignment = NSTextAlignment.Left
             nameLabel.text = nodeDict["name"]
@@ -771,6 +874,24 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             let defaults = NSUserDefaults.standardUserDefaults()
             defaults.removeObjectForKey(dictString)
             defaults.setObject(dict, forKey: dictString)
+            
+            if let nodeImage = dict["image"] {
+                if let nid = dict["nid"] {
+                    dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                        let urlString = nodeImage as String
+                        if let checkedUrl = NSURL(string: urlString) {
+                            let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
+                            let image = UIImage(data: data!)
+                            var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+                            documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
+                            print(documentsPath)
+                            UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
+                        }
+                    }
+                }
+            }
+            
+            defaults.synchronize()
 
             nameTxtField.enabled = false
             emailTxtField.enabled = false
@@ -863,6 +984,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     // MARK: Acctions
     func dismissOverlayView(sender: UIButton) {
         self.overlayView.hidden = true
+    }
+    
+    func showSearchOverLay(sender: UIButton) {
+        buildSeachOverlay(loanOfficerArray)
     }
     
     // MARK:

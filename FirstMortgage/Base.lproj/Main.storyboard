@@ -141,15 +141,6 @@
                                                         <constraint firstAttribute="height" constant="85" id="d0g-q4-BX0"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="44Q-wU-L6w">
-                                                    <rect key="frame" x="18" y="89" width="250" height="22"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="250" id="8FI-3s-dKx"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="Forza-Light" family="Forza" pointSize="22"/>
-                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cUd-fb-Jdy">
                                                     <rect key="frame" x="18" y="118" width="250" height="18"/>
                                                     <constraints>
@@ -249,6 +240,12 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="44Q-wU-L6w">
+                                                    <rect key="frame" x="18" y="88" width="462" height="22"/>
+                                                    <fontDescription key="fontDescription" name="Forza-Light" family="Forza" pointSize="22"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="cUd-fb-Jdy" firstAttribute="leading" secondItem="sQY-fp-Flx" secondAttribute="leadingMargin" constant="10" id="1XZ-Dc-QHV"/>
@@ -260,11 +257,12 @@
                                                 <constraint firstItem="cej-gV-Pwj" firstAttribute="top" secondItem="sQY-fp-Flx" secondAttribute="topMargin" constant="-8" id="FCl-ch-nD8"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="gPT-0B-eAw" secondAttribute="bottom" constant="25" id="FGB-GA-Bez"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="bgM-s4-PVc" secondAttribute="bottom" constant="36" id="IkH-O8-7L7"/>
+                                                <constraint firstItem="Gwb-4I-wuA" firstAttribute="leading" secondItem="44Q-wU-L6w" secondAttribute="trailing" constant="5" id="Iky-2M-D3r"/>
                                                 <constraint firstItem="jPa-Xt-TIz" firstAttribute="leading" secondItem="xMd-ge-1w1" secondAttribute="trailing" constant="5" id="IxJ-0u-kgJ"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="44Q-wU-L6w" secondAttribute="bottom" constant="55" id="J9O-id-nfZ"/>
                                                 <constraint firstItem="HvT-JN-1jk" firstAttribute="leading" secondItem="sQY-fp-Flx" secondAttribute="leadingMargin" id="M0c-Il-WKN"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="xMd-ge-1w1" secondAttribute="bottom" constant="25" id="NNx-MC-SaO"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="EVg-U3-KXr" secondAttribute="trailing" constant="10" id="OEU-Yd-KJD"/>
+                                                <constraint firstItem="bgM-s4-PVc" firstAttribute="top" secondItem="44Q-wU-L6w" secondAttribute="bottom" constant="6" id="PPn-Ui-yKO"/>
                                                 <constraint firstItem="xMd-ge-1w1" firstAttribute="leading" secondItem="21S-lI-TiD" secondAttribute="trailing" constant="5" id="Pbh-8z-I6N"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="rPd-pr-zta" secondAttribute="trailing" constant="10" id="QHj-VI-Y64"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Gwb-4I-wuA" secondAttribute="trailing" constant="10" id="SO2-5p-7gh"/>
@@ -273,6 +271,7 @@
                                                 <constraint firstAttribute="bottomMargin" secondItem="rPd-pr-zta" secondAttribute="bottom" constant="1" id="UbO-K5-M6e"/>
                                                 <constraint firstItem="xMd-ge-1w1" firstAttribute="leading" secondItem="bgM-s4-PVc" secondAttribute="trailing" constant="5" id="Ujf-zU-DpD"/>
                                                 <constraint firstItem="HvT-JN-1jk" firstAttribute="trailing" secondItem="sQY-fp-Flx" secondAttribute="trailingMargin" id="Vqt-jo-nZh"/>
+                                                <constraint firstItem="44Q-wU-L6w" firstAttribute="leading" secondItem="sQY-fp-Flx" secondAttribute="leadingMargin" constant="10" id="aMa-nX-hgj"/>
                                                 <constraint firstItem="HvT-JN-1jk" firstAttribute="bottom" secondItem="sQY-fp-Flx" secondAttribute="bottomMargin" id="cRA-uG-7Wk"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="cej-gV-Pwj" secondAttribute="trailing" constant="-8" id="gQd-0i-OF1"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="ttH-ku-Erx" secondAttribute="bottom" constant="36" id="hjf-SE-SVE"/>
@@ -282,7 +281,6 @@
                                                 <constraint firstItem="cej-gV-Pwj" firstAttribute="leading" secondItem="sQY-fp-Flx" secondAttribute="leadingMargin" constant="-8" id="pZk-a4-c7W"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="jPa-Xt-TIz" secondAttribute="bottom" constant="23" id="wZc-yh-zBV"/>
                                                 <constraint firstItem="gPT-0B-eAw" firstAttribute="leading" secondItem="jPa-Xt-TIz" secondAttribute="trailing" constant="5" id="xwf-ih-GIJ"/>
-                                                <constraint firstItem="44Q-wU-L6w" firstAttribute="leading" secondItem="sQY-fp-Flx" secondAttribute="leadingMargin" constant="10" id="zxb-kF-cHg"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -363,7 +361,7 @@
         <image name="overlay.png" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="a3N-fD-XZ6"/>
         <segue reference="Xrc-RK-Ivf"/>
-        <segue reference="8Yr-cE-60D"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -59,6 +59,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
 
     //UIGestureRecognizer
     let swipeRec = UISwipeGestureRecognizer()
+    let swipeRecReg = UISwipeGestureRecognizer()
+    let swipeRecLog = UISwipeGestureRecognizer()
     
     // UIButton
     let myHomesButton = UIButton()
@@ -102,10 +104,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print("viewDidLoad")
-        print(CLLocationManager.authorizationStatus().rawValue)
-        
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             let manager = CLLocationManager()
             
@@ -149,11 +147,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         self.view.backgroundColor = model.lightGrayColor
-        
-        print("viewWillAppear")
-        print(CLLocationManager.authorizationStatus().rawValue)
         
         // UIImageView
         let fmcLogo = UIImage(named: "home_in") as UIImage?
@@ -509,7 +504,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         let descLabel = UILabel (frame: CGRectMake(15, 10, contentScrollView.bounds.size.width - 30, 0))
         descLabel.textAlignment = NSTextAlignment.Left
         descLabel.font = UIFont(name: "Arial", size: fontSize)
-        descLabel.text = "When you create a HomeIn account, you’re building a personal portfolio of all of the homes you visit. And you’ll be able to HomeIn on all of the features you loved (or didn’t love) about each property on your home buying  journey.\n\nHere’s what you can do with a HomeIn account:"
+        descLabel.text = "When you create a HomeIn account, you’re building a personal portfolio of all of the homes you visit. And you’ll be able to HomeIn on all of the features you loved (or didn’t love) about each property on your home buying  journey."
         descLabel.numberOfLines = 0
         descLabel.sizeToFit()
         contentScrollView.addSubview(descLabel)
@@ -517,6 +512,19 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         let checkMarkImage = UIImage(named: "checkmark_gray") as UIImage?
         
         var offset = descLabel.bounds.size.height + 25.0 as CGFloat
+        
+        var benLabelFontSize = 18 as CGFloat
+        if modelName.rangeOfString("5") != nil{
+            benLabelFontSize = 16
+        }
+        let benLabel = UILabel (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 24))
+        benLabel.textAlignment = NSTextAlignment.Center
+        benLabel.textColor = model.lightOrangeColor
+        benLabel.font = UIFont(name: "forza-medium", size: benLabelFontSize)
+        benLabel.text = "BENEFITS OF A HOMEIN ACCOUNT:"
+        contentScrollView.addSubview(benLabel)
+        
+        offset = offset + 35.0 as CGFloat
         
         let checkImageOne = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
         checkImageOne.image = checkMarkImage
@@ -530,9 +538,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         optionOneLabel.sizeToFit()
         contentScrollView.addSubview(optionOneLabel)
         
-        offset += optionOneLabel.bounds.size.height + 10.0
+        offset += optionOneLabel.bounds.size.height + 15.0
         
-        let checkImageTwo = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
+        let checkImageTwo = UIImageView(frame: CGRectMake(20, offset + 5, 25, 25))
         checkImageTwo.image = checkMarkImage
         contentScrollView.addSubview(checkImageTwo)
         
@@ -544,7 +552,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         optionTwoLabel.sizeToFit()
         contentScrollView.addSubview(optionTwoLabel)
         
-        offset += optionTwoLabel.bounds.size.height + 10.0
+        offset += optionTwoLabel.bounds.size.height + 15.0
         
         let checkImageThree = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
         checkImageThree.image = checkMarkImage
@@ -558,7 +566,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         optionThreeLabel.sizeToFit()
         contentScrollView.addSubview(optionThreeLabel)
         
-        offset += optionThreeLabel.bounds.size.height + 10.0
+        offset += optionThreeLabel.bounds.size.height + 15.0
         
         let checkImageFive = UIImageView(frame: CGRectMake(20, offset + 3, 25, 25))
         checkImageFive.image = checkMarkImage
@@ -572,7 +580,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         optionFiveLabel.sizeToFit()
         contentScrollView.addSubview(optionFiveLabel)
         
-        offset += optionFiveLabel.bounds.size.height + 10.0
+        offset += optionFiveLabel.bounds.size.height + 15.0
         
         let setUpLabel = UILabel (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 0))
         setUpLabel.textAlignment = NSTextAlignment.Left
@@ -651,7 +659,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         continueWithoutButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
         contentScrollView.addSubview(continueWithoutButton)
         
-        contentScrollView.contentSize = CGSize(width: caView.bounds.size.width, height: 575)
+        contentScrollView.contentSize = CGSize(width: caView.bounds.size.width, height: 590)
     }
     
     func buildLoginView() {
@@ -752,10 +760,20 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         closeSignUpFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
         closeSignUpFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 15)
         loginView.addSubview(closeSignUpFormButton)
+        
+        swipeRecLog.direction = UISwipeGestureRecognizerDirection.Down
+        swipeRecLog.addTarget(self, action: "swipeDownToMoveLoginViewDown")
+        loginView.addGestureRecognizer(swipeRecLog)
+        
+        signUpView.userInteractionEnabled = true
+        
+        let statusBarView = UIView(frame: CGRectMake(0, 0, self.view.bounds.width, 25))
+        statusBarView.backgroundColor = model.lightGrayColor
+        self.view.addSubview(statusBarView)
     }
     
     func buildSignUpView() {
-        let signUpView = UIView(frame: CGRectMake(self.view.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height))
+        signUpView.frame = (frame: CGRectMake(self.view.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         signUpView.backgroundColor = UIColor.clearColor()
         loginView.addSubview(signUpView)
         
@@ -893,7 +911,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         swipeRec.direction = UISwipeGestureRecognizerDirection.Right
         swipeRec.addTarget(self, action: "swipeBackToLogin")
         signUpView.addGestureRecognizer(swipeRec)
+        
+        swipeRecReg.direction = UISwipeGestureRecognizerDirection.Down
+        swipeRecReg.addTarget(self, action: "swipeDownToMoveSignUpViewDown")
+        signUpView.addGestureRecognizer(swipeRecReg)
+        
         signUpView.userInteractionEnabled = true
+        
+        let statusBarView = UIView(frame: CGRectMake(0, 0, self.view.bounds.width, 25))
+        statusBarView.backgroundColor = model.lightGrayColor
+        self.view.addSubview(statusBarView)
     }
     
     // MARK:
@@ -1149,6 +1176,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                 
                 self.isRegisterViewOpen = false
                 self.isRegisterView = false
+        })
+    }
+    
+    func swipeDownToMoveSignUpViewDown() {
+        UIView.animateWithDuration(0.4, animations: {
+            self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, 0, self.view.bounds.width * 2, self.view.bounds.height))
+            }, completion: {
+                (value: Bool) in
+                self.isLoginViewOpen = false
+        })
+    }
+    
+    func swipeDownToMoveLoginViewDown() {
+        UIView.animateWithDuration(0.4, animations: {
+            self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width * 2, self.view.bounds.height))
+            }, completion: {
+                (value: Bool) in
         })
     }
 

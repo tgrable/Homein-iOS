@@ -120,7 +120,15 @@ class Model: NSObject {
     func cleanPhoneNumnerString(phoneNumber: String) -> String {
         let stringArray = phoneNumber.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
         let newString = stringArray.joinWithSeparator("")
-        return newString
+        var finalString = String()
+        var count = 0
+        for i in newString.characters {
+            if count <= 9 {
+                finalString.append(i)
+            }
+            count++
+        }
+        return finalString
     }
     
     func formatPhoneString(phoneString: String) -> String {
