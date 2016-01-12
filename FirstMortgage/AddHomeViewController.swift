@@ -103,6 +103,11 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         // Dispose of any resources that can be recreated.
     }
     
+    deinit {
+        removeViews(self.view)
+        print("deinit being called in AddHomesViewController")
+    }
+    
     // MARK:
     // MARK: Build Views
     func buildView() {
@@ -728,12 +733,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         hideKeyboardButton.alpha = 0.0
     }
     
-    func removeViews(views: UIView) {
-        for view in views.subviews {
-            view.removeFromSuperview()
-        }
-    }
-    
     /*
     // MARK: - prepareForSegue
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -742,4 +741,12 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK:
+    // MARK: Memory Management
+    func removeViews(views: UIView) {
+        for view in views.subviews {
+            view.removeFromSuperview()
+        }
+    }
 }

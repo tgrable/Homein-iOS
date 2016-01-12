@@ -220,11 +220,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             labelDist = 75.0
         }
         
-        var height = (self.view.bounds.size.width / 2) - 20
-        if (modelName.rangeOfString("iPad") != nil) {
-            height = (self.view.bounds.size.width / 2) - 225
-        }
-        
         homeView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
         homeView.backgroundColor = model.lightGrayColor
         homeView.hidden = false
@@ -247,9 +242,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         var offset = 0.0
         let width = Double(self.view.bounds.size.width)
         
+        var fullButtonheight = (self.view.bounds.size.width / 2) * 0.75
+        if (modelName.rangeOfString("iPad") != nil) {
+            fullButtonheight = (self.view.bounds.size.width / 2) - 225
+        }
+        
         /********************************************************* My Homes Button ********************************************************************/
         // UIView
-        myHomesView.frame = (frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
+        myHomesView.frame = (frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, fullButtonheight))
         myHomesGradientLayer.frame = myHomesView.bounds
         myHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         myHomesView.layer.insertSublayer(myHomesGradientLayer, atIndex: 0)
@@ -282,7 +282,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         /********************************************************* Add Homes Button ********************************************************************/
         // UIView
-        addHomesView.frame = (frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, (self.view.bounds.size.width / 2) * 0.75))
+        addHomesView.frame = (frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, fullButtonheight))
         addHomesGradientLayer.frame = addHomesView.bounds
         addHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         addHomesView.layer.insertSublayer(addHomesGradientLayer, atIndex: 0)
@@ -313,6 +313,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         addHomesView.addSubview(addAHomeButton)
         
         offset = ((width / 2) * 0.75) + 15
+        var height = (self.view.bounds.size.width / 2) - 20
+        if (modelName.rangeOfString("iPad") != nil) {
+            height = (self.view.bounds.size.width / 2) - 225
+            offset = Double((self.view.bounds.size.width / 2)) - 215.0
+        }
         
         /********************************************************* Mortgage Calculator Button ********************************************************************/
         // UIView
@@ -381,7 +386,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         refiCalculatorView.addSubview(refiCalculatorButton)
         
         offset = (((width / 2) * 0.75) + (width / 2)) + 15
-       
+        if (modelName.rangeOfString("iPad") != nil) {
+            offset = Double(self.view.bounds.size.width / 2) - 225 + Double(self.view.bounds.size.width / 2) - 215.0 + 10.0;
+        }
+        
         /********************************************************* Find Branch Button ********************************************************************/
         // UIView
         let findBranchView = UIView(frame: CGRectMake(10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, height))

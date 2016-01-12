@@ -76,6 +76,11 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    deinit {
+        print("deinit being called in CalculatorsViewController")
+        removeViews(self.view)
+    }
+    
     // MARK:
     // MARK: Build View
     
@@ -836,4 +841,11 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     }
     */
 
+    // MARK:
+    // MARK: Memory Management
+    func removeViews(views: UIView) {
+        for view in views.subviews {
+            view.removeFromSuperview()
+        }
+    }
 }

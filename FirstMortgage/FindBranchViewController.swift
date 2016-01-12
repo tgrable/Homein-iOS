@@ -32,8 +32,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     var currentLocation = CLLocation()
     var coords: CLLocationCoordinate2D?
     
-    var dictionary = Dictionary<String, String>()
-    
     var branchArray = [Branch]()
     var filteredArray = [Branch]()
     var stateArray = [String]()
@@ -43,9 +41,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     var isPickerTrayOpen = Bool() as Bool
     var stateToCheck = String() as String
-    
 
-    
     // UIPickerView
     let statesPicker = UIPickerView() as UIPickerView
     
@@ -76,6 +72,16 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    deinit {
+        print("deinit being called in FindBranchViewController")
+        branchArray.removeAll()
+        filteredArray.removeAll()
+        stateArray.removeAll()
+        stateDictionary.removeAll()
+        
+        removeViews(self.view)
     }
     
     func buildView() {
@@ -553,6 +559,13 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         stateToCheck = "AZ"
     }
 
+    // MARK:
+    // MARK: Memory Management
+    func removeViews(views: UIView) {
+        for view in views.subviews {
+            view.removeFromSuperview()
+        }
+    }
     
     /*
     // In a storyboard-based application, you will often want to do a little preparation before navigation

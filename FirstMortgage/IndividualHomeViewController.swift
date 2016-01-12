@@ -61,6 +61,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     let bedsLabel = UILabel()
     let bathsLabel = UILabel()
     let sqFeetLabel = UILabel()
+    let imageCountLabel = UILabel()
     
     var estimatedPaymentDefault = 1835.26
     
@@ -123,6 +124,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    deinit {
+        print("deinit being called in IndividualHomeViewController")
+        removeViews(self.view)
     }
     
     // MARK:
@@ -316,6 +322,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeNameBorderView.hidden = false
         homeTray.addSubview(homeNameBorderView)
         
+        let attributes = [
+            NSForegroundColorAttributeName:  UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1),
+            NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
+        ]
+        
         var price = 0.0
         if let _ = homeObject["price"] {
             price = homeObject["price"] as! Double
@@ -332,7 +343,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homePriceborder.borderWidth = width
         homePriceTxtField.layer.addSublayer(homePriceborder)
         homePriceTxtField.layer.masksToBounds = true
-        homePriceTxtField.text = homePrice as String
+        if (price > 0) {
+            homePriceTxtField.text = homePrice as String
+        }
+        else {
+            homePriceTxtField.attributedPlaceholder = NSAttributedString(string: homePrice as String, attributes:attributes)
+        }
         homePriceTxtField.backgroundColor = UIColor.clearColor()
         homePriceTxtField.delegate = self
         homePriceTxtField.returnKeyType = .Next
@@ -342,12 +358,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeTray.addSubview(homePriceTxtField)
         
         y += Double(homePriceTxtField.bounds.size.height) + 5.0
-        
-        let attributes = [
-            //NSForegroundColorAttributeName: UIColor.redColor(),
-            NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
-        ]
-        
+
         var homeAddress = ""
         if let _ = homeObject["address"] {
             homeAddress = homeObject["address"] as! String
@@ -461,7 +472,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let bedPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
         bedsTxtField.leftView = bedPaddingView
         bedsTxtField.leftViewMode = UITextFieldViewMode.Always
-        bedsTxtField.text = String(format: "%d", bed)
+        if (bed > 0) {
+            bedsTxtField.text = String(format: "%d", bed)
+        }
+        else {
+            bedsTxtField.attributedPlaceholder = NSAttributedString(string: String(format: "%d", bed), attributes:attributes)
+        }
         bedsTxtField.backgroundColor = UIColor.clearColor()
         bedsTxtField.delegate = self
         bedsTxtField.returnKeyType = .Next
@@ -493,7 +509,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let bathPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
         bathsTxtField.leftView = bathPaddingView
         bathsTxtField.leftViewMode = UITextFieldViewMode.Always
-        bathsTxtField.text = String(format: "%.1f", bath)
+        if (bath > 0) {
+            bathsTxtField.text = String(format: "%.1f", bath)
+        }
+        else {
+            bathsTxtField.attributedPlaceholder = NSAttributedString(string: String(format: "%.1f", bath), attributes:attributes)
+        }
         bathsTxtField.backgroundColor = UIColor.clearColor()
         bathsTxtField.delegate = self
         bathsTxtField.returnKeyType = .Next
@@ -525,7 +546,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         let sqFeetPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 15, 50))
         sqFeetTxtField.leftView = sqFeetPaddingView
         sqFeetTxtField.leftViewMode = UITextFieldViewMode.Always
-        sqFeetTxtField.text = String(format: "%d", homeSqft)
+        if (homeSqft > 0) {
+            sqFeetTxtField.text = String(format: "%d", homeSqft)
+        }
+        else {
+            sqFeetTxtField.attributedPlaceholder = NSAttributedString(string: String(format: "%d", homeSqft), attributes:attributes)
+        }
         sqFeetTxtField.backgroundColor = UIColor.clearColor()
         sqFeetTxtField.delegate = self
         sqFeetTxtField.returnKeyType = .Next
@@ -544,17 +570,22 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         y += 65
         
-        var desc = "Add notes about this house."
+        var desc = ""
         if let _ = homeObject["desc"] {
             desc =  homeObject["desc"] as! String
         }
+        
         //Create textview
         descTxtView.frame = (frame : CGRectMake(10, CGFloat(y), homeTray.bounds.size.width - 20, 150))
         descTxtView.backgroundColor = UIColor.whiteColor()
         descTxtView.text = desc
         descTxtView.autocorrectionType = .Yes
         descTxtView.editable = false
+        if desc == "Add notes about this house." {
+            descTxtView.textColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
+        }
         descTxtView.font = UIFont(name: "forza-light", size: 22)
+        descTxtView.delegate = self
         homeTray.addSubview(descTxtView)
         
         yOffset = CGFloat(y)
@@ -838,12 +869,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                             self.defaultImageView.addSubview(imageCountView)
                             
                             // UILabel
-                            let imageCountLabel = UILabel(frame: CGRectMake(0, 0, imageCountView.bounds.size.width, 25))
-                            imageCountLabel.text = String(format: "1 of %d", self.imageArray.count)
-                            imageCountLabel.font = UIFont(name: "Arial", size: 15)
-                            imageCountLabel.textAlignment = NSTextAlignment.Center
-                            imageCountLabel.textColor = UIColor.whiteColor()
-                            imageCountView.addSubview(imageCountLabel)
+                            self.imageCountLabel.frame = (frame: CGRectMake(0, 0, imageCountView.bounds.size.width, 25))
+                            self.imageCountLabel.text = String(format: "1 of %d", self.imageArray.count)
+                            self.imageCountLabel.font = UIFont(name: "Arial", size: 15)
+                            self.imageCountLabel.textAlignment = NSTextAlignment.Center
+                            self.imageCountLabel.textColor = UIColor.whiteColor()
+                            imageCountView.addSubview(self.imageCountLabel)
                             
                             let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
                             overlayButton.backgroundColor = UIColor.clearColor()
@@ -1073,6 +1104,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if textView.textColor == UIColor.lightGrayColor() {
             textView.text = nil
             textView.textColor = UIColor.blackColor()
+        }
+        
+        if textView.text == "Add notes about this house." {
+            textView.text = ""
         }
         
     }
@@ -1349,7 +1384,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if (imageData != nil) {
             let imageFile = PFFile(name:"image.png", data:imageData!)
             imageArray.append(imageFile!)
-            
+            self.imageCountLabel.text = String(format: "1 of %d", self.imageArray.count)
             imageOverlay(imageArray)
         }
         
@@ -1360,12 +1395,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             overlayButton.backgroundColor = UIColor.clearColor()
             overlayButton.addTarget(self, action: "showImageOverlay:", forControlEvents: .TouchUpInside)
             self.scrollView.addSubview(overlayButton)
-        }
-    }
-    
-    func removeViews(views: UIView) {
-        for view in views.subviews {
-            view.removeFromSuperview()
         }
     }
     
@@ -1511,4 +1540,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     }
     */
     
+    // MARK:
+    // MARK: Memory Management
+    func removeViews(views: UIView) {
+        for view in views.subviews {
+            view.removeFromSuperview()
+        }
+    }
 }

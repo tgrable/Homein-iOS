@@ -47,6 +47,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     var userHomes = [PFObject]()
     var home: PFObject!
     
+    // MARK:
+    // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -77,6 +79,13 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
+    deinit {
+        print("deinit being called in MyHomesViewController")
+        removeViews(self.view)
+    }
+    
+    // MARK:
+    // MARK: Build Views
     func buildView() {
         myHomesView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, 185))
         myHomesView.backgroundColor = model.lightGrayColor
@@ -429,6 +438,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                             let image = UIImage(data:imageData)
                             cell.backgroundImage?.image = image
                             cell.backgroundImage.contentMode = .ScaleAspectFill
+                            cell.backgroundImage.clipsToBounds = true
                         }
                     }
                 }
@@ -437,12 +447,14 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                 let fillerImage = UIImage(named: "default_home") as UIImage?
                 cell.backgroundImage?.image = fillerImage
                 cell.backgroundImage.contentMode = .ScaleAspectFill
+                cell.backgroundImage.clipsToBounds = true
             }
         }
         else {
             let fillerImage = UIImage(named: "default_home") as UIImage?
             cell.backgroundImage?.image = fillerImage
             cell.backgroundImage.contentMode = .ScaleAspectFill
+            cell.backgroundImage.clipsToBounds = true
         }
     }
     
@@ -554,7 +566,13 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        return 225.0
+        if (modelName.rangeOfString("iPad") != nil) {
+            return 450.0
+        }
+        else {
+            return 225.0
+        }
+        
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -612,7 +630,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         self.navigationController?.popToRootViewControllerAnimated(true)
     }
     
-    func addNewHome(sender: UIButton) {
+    func addNewHome(sender: UIButton) {        
         let ahvc = self.storyboard!.instantiateViewControllerWithIdentifier("addHomeViewController") as! AddHomeViewController
         self.navigationController!.pushViewController(ahvc, animated: true)
     }
@@ -623,6 +641,14 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             let viewController = segue.destinationViewController as! IndividualHomeViewController
             // your new view controller should have property that will store passed value
             viewController.homeObject = home
+        }
+    }
+    
+    // MARK:
+    // MARK: Memory Management
+    func removeViews(views: UIView) {
+        for view in views.subviews {
+            view.removeFromSuperview()
         }
     }
 }
