@@ -660,30 +660,32 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     func textFieldDidBeginEditing(textField: UITextField) {
         textField.text = ""
         
-        if textField == mortgageTextField || textField == mortMortgageTxtField {
-            UIView.animateWithDuration(0.4, animations: {
-                self.scrollView.contentOffset.y = 175
-                }, completion: nil)
-        }
-        else if textField == interestTextField || textField == mortInterestTxtField {
-            UIView.animateWithDuration(0.4, animations: {
-                self.scrollView.contentOffset.y = 225
-                }, completion: nil)
-        }
-        else if textField == currentYearTxtField || textField == mortDownPaymentTxtField {
-            UIView.animateWithDuration(0.4, animations: {
-                self.scrollView.contentOffset.y = 275
-                }, completion: nil)
-        }
-        else if textField == newMortgageTextField {
-            UIView.animateWithDuration(0.4, animations: {
-                self.scrollView.contentOffset.y = 325
-                }, completion: nil)
-        }
-        else if textField == newInterestTextField {
-            UIView.animateWithDuration(0.4, animations: {
-                self.scrollView.contentOffset.y = 375
-                }, completion: nil)
+        if (modelName.rangeOfString("iPad") == nil) {
+            if textField == mortgageTextField || textField == mortMortgageTxtField {
+                UIView.animateWithDuration(0.4, animations: {
+                    self.scrollView.contentOffset.y = 175
+                    }, completion: nil)
+            }
+            else if textField == interestTextField || textField == mortInterestTxtField {
+                UIView.animateWithDuration(0.4, animations: {
+                    self.scrollView.contentOffset.y = 225
+                    }, completion: nil)
+            }
+            else if textField == currentYearTxtField || textField == mortDownPaymentTxtField {
+                UIView.animateWithDuration(0.4, animations: {
+                    self.scrollView.contentOffset.y = 275
+                    }, completion: nil)
+            }
+            else if textField == newMortgageTextField {
+                UIView.animateWithDuration(0.4, animations: {
+                    self.scrollView.contentOffset.y = 325
+                    }, completion: nil)
+            }
+            else if textField == newInterestTextField {
+                UIView.animateWithDuration(0.4, animations: {
+                    self.scrollView.contentOffset.y = 375
+                    }, completion: nil)
+            }
         }
     }
     
@@ -709,10 +711,6 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     // MARK:
     // MARK: Action Methods
     func calculateMortgagePaymentButtonPress(sender: UIButton) {
-        UIView.animateWithDuration(0.4, animations: {
-            self.scrollView.contentOffset.y = 225
-            }, completion: nil)
-        
         tapGesture()
         
         var saleAmount = 250000.0

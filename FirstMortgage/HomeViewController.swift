@@ -23,9 +23,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     
     //UIView
     let homeView = UIView()
-    let myHomesView = UIView()
-    let addHomesView = UIView()
-    let preQualifiedView = UIView()
     let caView = UIView()
     let loginView = UIView()
     let signUpView = UIView()
@@ -33,12 +30,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     let searchOverlayView = UIView()
     let whiteBar = UIView()
     let loadingOverlay = UIView()
+    let myHomesOverlay = UIView()
+    let addAHomeOverlay = UIView()
+    let preQualifiedOverlay = UIView()
     let findBranchOverlay = UIView()
-    
-    //CAGradientLayer
-    let myHomesGradientLayer = CAGradientLayer()
-    let addHomesGradientLayer = CAGradientLayer()
-    let preQualifiedGradientLayer = CAGradientLayer()
     
     //UIScrollView
     let scrollView = UIScrollView()
@@ -84,6 +79,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     var hasLoanOfficer = Bool()
     var didContinueWithOut = Bool()
     var didComeFromAccountPage = Bool()
+    var isOverlayAdded = Bool()
     
     //Array
     var loanOfficerArray = Array<Dictionary<String, String>>()
@@ -107,7 +103,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             let manager = CLLocationManager()
             
-            // TODO: This needs to update the view
             if CLLocationManager.authorizationStatus() == .NotDetermined {
                 manager.requestWhenInUseAuthorization()
             }
@@ -143,11 +138,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                 // ...
             }
         }
-    }
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-
+        
+        /*************************** was in viewWillAppear *****************************************/
         self.view.backgroundColor = model.lightGrayColor
         
         // UIImageView
@@ -156,20 +148,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         imageView.image = fmcLogo
         self.view.addSubview(imageView)
         
-        if (PFUser.currentUser() != nil) {
-            buildHomeView()
-        }
-        else {
-            if didContinueWithOut {
-                buildHomeView()
-            }
-            else {
-                buildCreateAccountView()
-                buildLoginView()
-                buildSignUpView()
-            }
-        }
-
+        buildHomeView()
+        buildCreateAccountView()
+        buildLoginView()
+        buildSignUpView()
+        
         loadingOverlay.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.size.height))
         loadingOverlay.backgroundColor = UIColor.darkGrayColor()
         loadingOverlay.alpha = 0.85
@@ -187,12 +170,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
         activityIndicator.center = view.center
         loadingOverlay.addSubview(activityIndicator)
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(true)
         
-        
+        /*************************** was in viewDidAppear *****************************************/
         if reachability.isConnectedToNetwork() == false {
             let getStartedOverlay = UIView(frame: CGRectMake(0, 0, getStartedButton.bounds.width, getStartedButton.bounds.size.height))
             getStartedOverlay.backgroundColor = UIColor.darkGrayColor()
@@ -205,6 +184,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             loginButton.addSubview(loginOverlay)
         }
     }
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        isLoginViewOpen = false
+        checkIfLoggedIn()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -214,7 +203,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     // MARK:
     // MARK: Build Views
     func buildHomeView() {
-        
         var labelDist = 65.0 as CGFloat
         if (modelName.rangeOfString("6") != nil) {
             labelDist = 75.0
@@ -249,7 +237,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         /********************************************************* My Homes Button ********************************************************************/
         // UIView
-        myHomesView.frame = (frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, fullButtonheight))
+        let myHomesView = UIView(frame: CGRectMake(0, CGFloat(offset), self.view.bounds.size.width / 2, fullButtonheight))
+        let myHomesGradientLayer = CAGradientLayer()
         myHomesGradientLayer.frame = myHomesView.bounds
         myHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         myHomesView.layer.insertSublayer(myHomesGradientLayer, atIndex: 0)
@@ -280,9 +269,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         myHomesButton.tag = 0
         myHomesView.addSubview(myHomesButton)
         
+        myHomesOverlay.frame = (frame: CGRectMake(0, 0, myHomesView.bounds.width, myHomesView.bounds.size.height))
+        myHomesOverlay.backgroundColor = UIColor.darkGrayColor()
+        myHomesOverlay.alpha = 0.45
+        myHomesOverlay.hidden = true
+        myHomesView.addSubview(myHomesOverlay)
+        
         /********************************************************* Add Homes Button ********************************************************************/
         // UIView
-        addHomesView.frame = (frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, fullButtonheight))
+        let addHomesView = UIView(frame: CGRectMake(self.view.bounds.size.width / 2, CGFloat(offset), self.view.bounds.size.width / 2, fullButtonheight))
+        let addHomesGradientLayer = CAGradientLayer()
         addHomesGradientLayer.frame = addHomesView.bounds
         addHomesGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         addHomesView.layer.insertSublayer(addHomesGradientLayer, atIndex: 0)
@@ -311,6 +307,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         addAHomeButton.layer.borderColor = UIColor.whiteColor().CGColor
         addAHomeButton.tag = 1
         addHomesView.addSubview(addAHomeButton)
+        
+        addAHomeOverlay.frame = (frame: CGRectMake(0, 0, addHomesView.bounds.width, addHomesView.bounds.size.height))
+        addAHomeOverlay.backgroundColor = UIColor.darkGrayColor()
+        addAHomeOverlay.alpha = 0.45
+        addAHomeOverlay.hidden = true
+        addHomesView.addSubview(addAHomeOverlay)
         
         offset = ((width / 2) * 0.75) + 15
         var height = (self.view.bounds.size.width / 2) - 20
@@ -432,7 +434,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         /********************************************************* Get Prequalified Button ********************************************************************/
          // UIView
-        preQualifiedView.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, height))
+        let preQualifiedView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, height))
+        let preQualifiedGradientLayer = CAGradientLayer()
         preQualifiedGradientLayer.frame = preQualifiedView.bounds
         preQualifiedGradientLayer.colors = [model.lightBlueColor.CGColor, model.darkBlueColor.CGColor]
         preQualifiedView.layer.insertSublayer(preQualifiedGradientLayer, atIndex: 0)
@@ -462,6 +465,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         preQualifiedButton.tag = 5
         preQualifiedView.addSubview(preQualifiedButton)
         
+        preQualifiedOverlay.frame = (frame: CGRectMake(0, 0, preQualifiedView.bounds.width, preQualifiedView.bounds.size.height))
+        preQualifiedOverlay.backgroundColor = UIColor.darkGrayColor()
+        preQualifiedOverlay.alpha = 0.45
+        preQualifiedOverlay.hidden = true
+        preQualifiedView.addSubview(preQualifiedOverlay)
+        
         scrollView.contentSize = CGSize(width: self.view.bounds.size.width, height: ((self.view.bounds.size.width / 2) * 2) + (135 + 15))
         
         userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
@@ -487,6 +496,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         caView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
         caView.backgroundColor = UIColor.whiteColor()
         caView.hidden = false
+        if ((PFUser.currentUser()) != nil) {
+            caView.hidden = true
+        }
+        else {
+            caView.hidden = false
+        }
         self.view.addSubview(caView)
         
         let createAccountView = UIView(frame: CGRectMake(0, 0, caView.bounds.size.width, 40))
@@ -1031,7 +1046,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         searchTxtField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
         searchOverlayView.addSubview(searchTxtField)
         
-        scrollView.frame = (frame: CGRectMake(0, 135, overlayView.bounds.size.width, overlayView.bounds.size.height - 135))
+        scrollView.frame = (frame: CGRectMake(0, 145, overlayView.bounds.size.width, overlayView.bounds.size.height - 135))
         scrollView.backgroundColor = UIColor.clearColor()
         searchOverlayView.addSubview(scrollView)
         
@@ -1118,8 +1133,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     func showHideLoginView() {
         username.resignFirstResponder()
         password.resignFirstResponder()
+
+        print("isLoginViewOpen: ", isLoginViewOpen)
         
         if (!isLoginViewOpen) {
+            print("1")
             UIView.animateWithDuration(0.4, animations: {
                 self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width  * 2, self.view.bounds.height))
                 }, completion: {
@@ -1129,6 +1147,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             })
         }
         else {
+            print("2")
             UIView.animateWithDuration(0.4, animations: {
                 self.loginView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width  * 2, self.view.bounds.height))
                 }, completion: {
@@ -1224,17 +1243,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                         
                         self.contentScrollView.contentOffset.y = 0
                         
-                        self.isLoginViewOpen = false
+                        self.isLoginViewOpen = true
+                        
+                        self.myHomesOverlay.hidden = true
+                        self.addAHomeOverlay.hidden = true
                         
                         self.checkIfLoggedIn()
-                        if self.didContinueWithOut {
-                            self.loginView.removeFromSuperview()
-                        }
-                        self.caView.removeFromSuperview()
-                        self.loginView.removeFromSuperview()
-                        self.signUpView.removeFromSuperview()
-                        self.homeView.removeFromSuperview()
-                        self.buildHomeView()
                         self.showHideLoginView()
                     }
                     else {
@@ -1310,13 +1324,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     
                     self.contentScrollView.contentOffset.y = 0
                     
+                    self.myHomesOverlay.hidden = true
+                    self.addAHomeOverlay.hidden = true
+                    
                     self.checkIfLoggedIn()
                     self.searchOverlayView.removeFromSuperview()
                     self.caView.removeFromSuperview()
-                    self.loginView.removeFromSuperview()
-                    self.signUpView.removeFromSuperview()
-                    self.homeView.removeFromSuperview()
-                    self.buildHomeView()
                     self.showHideSignUpView()
                     
                     self.activityIndicator.stopAnimating()
@@ -1410,10 +1423,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         self.checkIfLoggedIn()
         self.caView.removeFromSuperview()
-        self.homeView.removeFromSuperview()
-        self.buildHomeView()
-        buildLoginView()
-        buildSignUpView()
     }
     
     // MARK:
@@ -1442,8 +1451,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             }
             
         case 6:
+            print("case 6:")
             showHideLoginView()
         case 7:
+            print("case 7:")
             didComeFromAccountPage = false
             performSegueWithIdentifier("profileViewController", sender: nil)
         default:
@@ -1573,7 +1584,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(0, -75, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = true
+
                 })
             }
             else {
@@ -1581,7 +1592,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
                 textField.resignFirstResponder()
                 self.checkInputFields(0)
@@ -1596,7 +1607,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -50, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
             else if textField == emailreg {
@@ -1605,7 +1616,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -100, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
             else if textField == usernamereg {
@@ -1614,7 +1625,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -150, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
             else if textField == passwordreg {
@@ -1623,7 +1634,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -200, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
             else {
@@ -1631,7 +1642,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, 0, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
                 
                 textField.resignFirstResponder()
@@ -1650,7 +1661,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(0, -65, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
         }
@@ -1662,7 +1673,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -50, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
             else if textField == emailreg {
@@ -1670,7 +1681,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -100, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
             else if textField == usernamereg {
@@ -1678,7 +1689,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -150, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+ 
                 })
             }
             else if textField == passwordreg {
@@ -1686,7 +1697,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -200, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
             else if textField == confirmpasswordreg {
@@ -1694,7 +1705,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.loginView.frame = (frame: CGRectMake(self.view.bounds.width * -1, -200, self.view.bounds.width * 2, self.view.bounds.height))
                     }, completion: {
                         (value: Bool) in
-                        self.isLoginViewOpen = false
+
                 })
             }
             else {
@@ -1755,26 +1766,15 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         let user = PFUser.currentUser()
         if (user == nil) {
+
             userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 100, 0, 90, 50))
             userButton.setTitle("LOGIN", forState: .Normal)
             userButton.setBackgroundImage(UIImage(named: ""), forState: .Normal)
             userButton.tag = 6
             
-            let myHomesOverlay = UIView(frame: CGRectMake(0, 0, myHomesView.bounds.width, myHomesView.bounds.size.height))
-            myHomesOverlay.backgroundColor = UIColor.darkGrayColor()
-            myHomesOverlay.alpha = 0.45
-            myHomesView.addSubview(myHomesOverlay)
-            
-            let addAHomeOverlay = UIView(frame: CGRectMake(0, 0, addHomesView.bounds.width, addHomesView.bounds.size.height))
-            addAHomeOverlay.backgroundColor = UIColor.darkGrayColor()
-            addAHomeOverlay.alpha = 0.45
-            addHomesView.addSubview(addAHomeOverlay)
-            
-            let preQualifiedOverlay = UIView(frame: CGRectMake(0, 0, preQualifiedView.bounds.width, preQualifiedView.bounds.size.height))
-            preQualifiedOverlay.backgroundColor = UIColor.darkGrayColor()
-            preQualifiedOverlay.alpha = 0.45
-            preQualifiedView.addSubview(preQualifiedOverlay)
-
+            myHomesOverlay.hidden = false
+            addAHomeOverlay.hidden = false
+            preQualifiedOverlay.hidden = false
         }
         else {
             userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
@@ -1791,11 +1791,15 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     url = user!["officerURL"] as! String
                 }
                 
-                if (url.characters.count <= 0) {
-                    let preQualifiedOverlay = UIView(frame: CGRectMake(0, 0, preQualifiedView.bounds.width, preQualifiedView.bounds.size.height))
-                    preQualifiedOverlay.backgroundColor = UIColor.darkGrayColor()
-                    preQualifiedOverlay.alpha = 0.45
-                    preQualifiedView.addSubview(preQualifiedOverlay)
+                print("url.characters.count: ", url.characters.count)
+                
+                if (url.characters.count > 0) {
+                    preQualifiedOverlay.hidden = true
+                    print("preQualifiedOverlay.hidden = true")
+                }
+                else {
+                    preQualifiedOverlay.hidden = false
+                    print("preQualifiedOverlay.hidden = false")
                 }
             }
         }

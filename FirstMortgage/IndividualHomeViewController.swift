@@ -267,16 +267,26 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     }
 
     func buildHomeTray() {
-        homeTray.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, 670))
+        
+        var h = 670.0
+        if (modelName.rangeOfString("iPad") != nil) {
+            h = 920.0
+        }
+        
+        homeTray.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, CGFloat(h)))
         homeTray.backgroundColor = model.lightGrayColor
         scrollView.addSubview(homeTray)
         
-        defaultImageView.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, 250))
+        var y = 250.0
+        if (modelName.rangeOfString("iPad") != nil) {
+            y = 500.0
+        }
+        
+        defaultImageView.frame = (frame: CGRectMake(0, 0, scrollView.bounds.size.width, CGFloat(y)))
         defaultImageView.contentMode = .ScaleAspectFill
         defaultImageView.clipsToBounds = true
+        defaultImageView.image = UIImage(named: "default_home") as UIImage?
         homeTray.addSubview(defaultImageView)
-        
-        var y = 250.0
         
         let homeNameborder = CALayer()
         let width = CGFloat(1.0)
@@ -315,7 +325,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeTray.addSubview(homeNameLabel)
         
         y += (Double(homeNameLabel.bounds.size.height) > 40) ? Double(homeNameLabel.bounds.size.height) + 10.0 : 40.0
-        print("homeNameLabel.bounds.size.height: ", homeNameLabel.bounds.size.height)
         
         homeNameBorderView.frame = (frame: CGRectMake(10, CGFloat(y), homeTray.bounds.size.width - 125, 1))
         homeNameBorderView.backgroundColor = UIColor.lightGrayColor()
@@ -404,7 +413,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeAddressLabel.sizeToFit()
         homeTray.addSubview(homeAddressLabel)
         
-        print("homeAddressLabel.bounds.size.height: ", homeAddressLabel.bounds.size.height)
         y += (Double(homeAddressLabel.bounds.size.height) > 40) ? Double(homeAddressLabel.bounds.size.height) + 7 : 40.0
         
         homeAddressBorderView.frame = (frame: CGRectMake(10, CGFloat(y), homeTray.bounds.size.width - 20, 1))
@@ -412,13 +420,18 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeAddressBorderView.hidden = false
         homeTray.addSubview(homeAddressBorderView)
         
+        var buttonY = 250.0
+        if (modelName.rangeOfString("iPad") != nil) {
+            buttonY = 500.0
+        }
+        
         // UIButton
         let addIcn = UIImage(named: "camera_icon") as UIImage?
-        let addIcon = UIImageView(frame: CGRectMake(homeTray.bounds.size.width - 105, 255, 34.29, 30))
+        let addIcon = UIImageView(frame: CGRectMake(homeTray.bounds.size.width - 105, CGFloat(buttonY + 5), 34.29, 30))
         addIcon.image = addIcn
         homeTray.addSubview(addIcon)
         
-        let addImagesButton = UIButton (frame: CGRectMake(homeTray.bounds.size.width - 120, 250, 60, 50))
+        let addImagesButton = UIButton (frame: CGRectMake(homeTray.bounds.size.width - 120, CGFloat(buttonY), 60, 50))
         addImagesButton.addTarget(self, action: "selectWhereToGetImage:", forControlEvents: .TouchUpInside)
         addImagesButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         addImagesButton.backgroundColor = UIColor.clearColor()
@@ -427,11 +440,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         // UIButton
         let editIcn = UIImage(named: "edit_icon") as UIImage?
-        editIcon.frame = (frame: CGRectMake(homeTray.bounds.size.width - 55, 255, 34.27, 30))
+        editIcon.frame = (frame: CGRectMake(homeTray.bounds.size.width - 55, CGFloat(buttonY + 5), 34.27, 30))
         editIcon.image = editIcn
         homeTray.addSubview(editIcon)
         
-        editButton.frame = (frame: CGRectMake(homeTray.bounds.size.width - 60, 250, 60, 50))
+        editButton.frame = (frame: CGRectMake(homeTray.bounds.size.width - 60, CGFloat(buttonY), 60, 50))
         editButton.addTarget(self, action: "allowEdit:", forControlEvents: .TouchUpInside)
         editButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         editButton.backgroundColor = UIColor.clearColor()
@@ -478,7 +491,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         else {
             bedsTxtField.attributedPlaceholder = NSAttributedString(string: String(format: "%d", bed), attributes:attributes)
         }
-        bedsTxtField.backgroundColor = UIColor.clearColor()
+        bedsTxtField.backgroundColor = model.lightGrayColor
         bedsTxtField.delegate = self
         bedsTxtField.returnKeyType = .Next
         bedsTxtField.keyboardType = UIKeyboardType.NumberPad
@@ -515,7 +528,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         else {
             bathsTxtField.attributedPlaceholder = NSAttributedString(string: String(format: "%.1f", bath), attributes:attributes)
         }
-        bathsTxtField.backgroundColor = UIColor.clearColor()
+        bathsTxtField.backgroundColor = model.lightGrayColor
         bathsTxtField.delegate = self
         bathsTxtField.returnKeyType = .Next
         bathsTxtField.keyboardType = UIKeyboardType.DecimalPad
@@ -552,7 +565,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         else {
             sqFeetTxtField.attributedPlaceholder = NSAttributedString(string: String(format: "%d", homeSqft), attributes:attributes)
         }
-        sqFeetTxtField.backgroundColor = UIColor.clearColor()
+        sqFeetTxtField.backgroundColor = model.lightGrayColor
         sqFeetTxtField.delegate = self
         sqFeetTxtField.returnKeyType = .Next
         sqFeetTxtField.keyboardType = UIKeyboardType.NumberPad
@@ -833,7 +846,13 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 self.saveDeleteTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 480), self.scrollView.bounds.size.width, 400))
                 }, completion: {
                     (value: Bool) in
-                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1400)
+                    if (self.modelName.rangeOfString("iPad") != nil) {
+                        self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1950)
+                    }
+                    else {
+                        self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: 1400)
+                    }
+                    
                     self.isCalcTrayOpen = true
             })
         }
@@ -844,7 +863,13 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 self.saveDeleteTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 60), self.scrollView.bounds.size.width, 400))
                 }, completion: {
                     (value: Bool) in
-                    self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: self.yOffset + 250)
+                    if (self.modelName.rangeOfString("iPad") != nil) {
+                        self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: self.yOffset + 750)
+                    }
+                    else {
+                        self.scrollView.contentSize = CGSize(width: self.myHomesView.bounds.size.width, height: self.yOffset + 250)
+                    }
+                    
                     self.isCalcTrayOpen = false
             })
         }
@@ -883,6 +908,13 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                             
                             self.imageOverlay(self.imageArray)
                         }
+                    }
+                    else {
+                        
+                        // TODO: Check if image is loading
+                        print("Error: ", error?.userInfo)
+                        let fillerImage = UIImage(named: "default_home") as UIImage?
+                        self.defaultImageView.image = fillerImage
                     }
                 }
             }
@@ -1037,6 +1069,34 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     func textFieldDidEndEditing(textField: UITextField) {
         homeNameString = homeNameTxtField.text!
+        
+        if textField == bedsTxtField {
+            if bedsTxtField.text == "" {
+                var bed = 0
+                if let _ = homeObject["beds"] {
+                    bed = (homeObject["beds"] as? Int)!
+                    bedsTxtField.text = String(format: "%d", bed)
+                }
+            }
+        }
+        else if textField == bathsTxtField {
+            if bathsTxtField.text == "" {
+                var bath = 0.0
+                if let _ = homeObject["baths"] {
+                    bath = (homeObject["baths"] as? Double)!
+                    bathsTxtField.text = String(format: "%.1f", bath)
+                }
+            }
+        }
+        else if textField == sqFeetTxtField {
+            if sqFeetTxtField.text == "" {
+                var homeSqft = 0
+                if let _ = homeObject["footage"] {
+                    homeSqft = (homeObject["footage"] as? Int)!
+                    sqFeetTxtField.text = String(format: "%d", homeSqft)
+                }
+            }
+        }
     }
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
@@ -1054,7 +1114,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             UIView.animateWithDuration(0.4, animations: {
                 self.scrollView.contentOffset.y = 350
                 }, completion: nil)
-            // TODO: Maybe reset these if nothing changes
+
             if textField == bedsTxtField {
                 bedsTxtField.text = ""
             }
@@ -1274,7 +1334,17 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         imageAlertController.addAction(photoLibAction)
         imageAlertController.addAction(cameraAction)
         imageAlertController.addAction(cancelAction)
-        presentViewController(imageAlertController, animated: true, completion: nil)
+        
+        if (modelName.rangeOfString("iPad") != nil) {
+            if let popoverController = imageAlertController.popoverPresentationController {
+                popoverController.sourceView = sender
+                popoverController.sourceRect = sender.bounds
+            }
+            self.presentViewController(imageAlertController, animated: true, completion: nil)
+        }
+        else {
+            presentViewController(imageAlertController, animated: true, completion: nil)
+        }
     }
     
     func calculateMortgagePaymentButtonPress(sender: UIButton) {
@@ -1361,15 +1431,44 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     //MARK:
     //MARK: Utility Methods
     func scaleImagesForParse(img: UIImage) -> UIImage {
-        let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(0.33, 0.33))
+        var height = 0.0
+        var width = 0.0
+        
+        switch (img.imageOrientation) {
+        case .Up:
+            height = 414 / Double(img.size.height)
+            width = 736 / Double(img.size.width)
+        case .Down:
+            height = 414 / Double(img.size.height)
+            width = 736 / Double(img.size.width)
+        case .Left:
+            height = 736 / Double(img.size.height)
+            width = 414 / Double(img.size.width)
+        case .Right:
+            height = 736 / Double(img.size.height)
+            width = 414 / Double(img.size.width)
+        default:
+            break;
+        }
+        
+        let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(CGFloat(width), CGFloat(height)))
         let hasAlpha = false
-        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+        let scale: CGFloat = 1.0 // Automatically use scale factor of main screen
         
         UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
         img.drawInRect(CGRect(origin: CGPointZero, size: size))
         
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+        
+        /*let data = UIImagePNGRepresentation(scaledImage)
+        let formatter = NSByteCountFormatter()
+        
+        formatter.allowedUnits = NSByteCountFormatterUnits.UseBytes
+        formatter.countStyle = NSByteCountFormatterCountStyle.File
+        
+        let formatted = formatter.stringFromByteCount(Int64(data!.length))*/
+        
         return scaledImage
     }
     
@@ -1515,19 +1614,35 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     //MARK:
     //MARK: NSNotification
     func keyboardWillAppear(notification: NSNotification){
-        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1400)
+        if (modelName.rangeOfString("iPad") != nil) {
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1950)
+        }
+        else {
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1400)
+        }
+        
         hideKeyboardButton.enabled = true
         hideKeyboardButton.alpha = 1.0
     }
     
     func keyboardWillDisappear(notification: NSNotification){
-        if isCalcTrayOpen {
-            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1400)
+        if (modelName.rangeOfString("iPad") != nil) {
+            if isCalcTrayOpen {
+                scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1950)
+            }
+            else {
+                scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: yOffset + 750)
+            }
         }
         else {
-            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: yOffset + 250)
+            if isCalcTrayOpen {
+                scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1400)
+            }
+            else {
+                scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: yOffset + 250)
+            }
         }
-        
+
         hideKeyboardButton.enabled = false
         hideKeyboardButton.alpha = 0.0
     }

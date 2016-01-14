@@ -41,7 +41,11 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     var isPickerTrayOpen = Bool() as Bool
     var stateToCheck = String() as String
-
+    
+    var stateLocatorTimer: NSTimer!
+    var timerHasFired: Bool!
+    var geoLocatorHasFired: Bool!
+    
     // UIPickerView
     let statesPicker = UIPickerView() as UIPickerView
     
@@ -56,6 +60,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         locationManager.distanceFilter = 10;
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
+        
+        geoLocatorHasFired = false
+        timerHasFired = false
+        stateLocatorTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "runTimedCode", userInfo: nil, repeats: false)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -149,7 +157,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         
         // UILabel
         let messageLabel = UILabel(frame: CGRectMake(25, 75, addHomeView.bounds.size.width - 50, 0))
-        messageLabel.text = "We were not able to find any branches in your current state. Please select a state from the list below to find a branch near you."
+        messageLabel.text = "Please select a state from the list below to find a branch near you."
         messageLabel.font = UIFont(name: "forza-light", size: 25)
         messageLabel.textAlignment = NSTextAlignment.Left
         messageLabel.numberOfLines = 0
@@ -197,7 +205,9 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         locationManager.stopUpdatingLocation()
         
         if( CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedWhenInUse || CLLocationManager.authorizationStatus() == CLAuthorizationStatus.AuthorizedAlways) {
-            currentLocation = locationManager.location!
+            if let _ = locationManager.location {
+                currentLocation = locationManager.location!
+            }
         }
     }
     
@@ -235,11 +245,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                     }
                 }
                 self.stateArray = self.removeDuplicates(states)
-                
-                // TODO: this works for now but need to find a better way
+
                 let center = NSNotificationCenter.defaultCenter()
                 center.addObserverForName(nil, object: nil, queue: nil) { notification in
-                    print("\(notification.name): \(notification.userInfo ?? [:])")
+                    //print("\(notification.name): \(notification.userInfo ?? [:])")
                     self.statesPicker.reloadAllComponents()
                 }
                 self.getUsersAdministrativeArea()
@@ -264,17 +273,38 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 result.append(value)
             }
         }
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.removeObjectForKey("branchOfficeArray")
+        defaults.setObject(result, forKey: "branchOfficeArray")
+        
         return result
     }
 
     
     func getUsersAdministrativeArea() {
         let geocoder = CLGeocoder()
+        
         geocoder.reverseGeocodeLocation(currentLocation, completionHandler: { (placemarks, e) -> Void in
-            let placemark = placemarks!.last! as CLPlacemark
-            let state = placemark.administrativeArea
-            self.findBranchesInMyState(state!)
+            self.geoLocatorHasFired = true
+            if self.timerHasFired == false {
+                let placemark = placemarks!.last! as CLPlacemark
+                let state = placemark.administrativeArea
+                print(state!)
+                self.findBranchesInMyState(state!)
+                print("geoCode")
+            }
         })
+    }
+
+    func runTimedCode() {
+        timerHasFired = true
+        if geoLocatorHasFired == false {
+            statesPicker.reloadAllComponents()
+            activityIndicator.stopAnimating()
+            showHideSortTray()
+            print("timeCode")
+        }
     }
     
     func findBranchesInMyState(state: String) {
@@ -474,16 +504,38 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-       return stateArray.count
+        if stateArray.count > 0 {
+            return stateArray.count
+        }
+        else {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            var defaultsStateArray = [String]()
+            if let _ = defaults.objectForKey("branchOfficeArray") {
+                defaultsStateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
+            }
+            return defaultsStateArray.count
+        }
     }
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        let stateFullName = stateDictionary[stateArray[row]]
-        return stateFullName
+        if stateArray.count > 0 {
+            let stateFullName = stateDictionary[stateArray[row]]
+            return stateFullName
+        }
+        else {
+
+            let defaults = NSUserDefaults.standardUserDefaults()
+            var defaultsStateArray = [String]()
+            defaultsStateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
+            let stateFullName = stateDictionary[defaultsStateArray[row]]
+            return stateFullName
+        }
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        stateToCheck = stateArray[row]
+        if stateArray.count > 0 {
+            stateToCheck = stateArray[row]
+        }
     }
     
     // MARK:
@@ -556,7 +608,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             "WI":"Wisconsin",
             "WY":"Wyoming",
         ]
-        stateToCheck = "AZ"
+        stateToCheck = "NC"
     }
 
     // MARK:

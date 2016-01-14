@@ -18,6 +18,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     let reachability = Reachability()
     
     let model = Model()
+    let modelName = UIDevice.currentDevice().modelName
+    
     let addHomeView = UIView()
     let overlayView = UIView()
     
@@ -193,7 +195,11 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.backgroundColor = UIColor.clearColor()
         addHomeView.addSubview(scrollView)
         
-        imgScrollView.frame = (frame: CGRectMake(0, 0, addHomeView.bounds.size.width, 175))
+        var y = 250.0
+        if (modelName.rangeOfString("iPad") != nil) {
+            y = 500.0
+        }
+        imgScrollView.frame = (frame: CGRectMake(0, 0, addHomeView.bounds.size.width, CGFloat(y)))
         imgScrollView.backgroundColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
         scrollView.addSubview(imgScrollView)
         
@@ -208,7 +214,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         let width = CGFloat(1.0)
         
         // UITextField
-        homeNameTxtField.frame = (frame: CGRectMake(10, 175, addHomeView.bounds.size.width - 20, 40))
+        homeNameTxtField.frame = (frame: CGRectMake(10, CGFloat(y), addHomeView.bounds.size.width - 20, 40))
         homeNameborder.borderColor = UIColor.lightGrayColor().CGColor
         homeNameborder.frame = CGRect(x: 0, y: homeNameTxtField.frame.size.height - width, width:  homeNameTxtField.frame.size.width, height: homeNameTxtField.frame.size.height)
         homeNameborder.borderWidth = width
@@ -222,9 +228,11 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homeNameTxtField.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(homeNameTxtField)
         
+        y += 40
+        
         // UITextField
         let homePriceborder = CALayer()
-        homePriceTxtField.frame = (frame: CGRectMake(10, 215, addHomeView.bounds.size.width - 20, 40))
+        homePriceTxtField.frame = (frame: CGRectMake(10, CGFloat(y), addHomeView.bounds.size.width - 20, 40))
         homePriceborder.borderColor = UIColor.lightGrayColor().CGColor
         homePriceborder.frame = CGRect(x: 0, y: homePriceTxtField.frame.size.height - width, width:  homePriceTxtField.frame.size.width, height: homePriceTxtField.frame.size.height)
         homePriceborder.borderWidth = width
@@ -238,9 +246,11 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homePriceTxtField.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(homePriceTxtField)
         
+        y += 40
+        
         //UITextField
         let homeAddressborder = CALayer()
-        homeAddressTxtField.frame = (frame: CGRectMake(10, 255, addHomeView.bounds.size.width - 20, 40))
+        homeAddressTxtField.frame = (frame: CGRectMake(10, CGFloat(y), addHomeView.bounds.size.width - 20, 40))
         homeAddressborder.borderColor = UIColor.lightGrayColor().CGColor
         homeAddressborder.frame = CGRect(x: 0, y: homeAddressTxtField.frame.size.height - width, width:  homeAddressTxtField.frame.size.width, height: homeAddressTxtField.frame.size.height)
         homeAddressborder.borderWidth = width
@@ -254,11 +264,13 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homeAddressTxtField.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(homeAddressTxtField)
         
+        y += 50
+        
         let starImage = UIImage(named: "star_off_icon") as UIImage?
         var xOffset = 0
         for i in 1...5 {
             // UIButton
-            let ratingButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), 305, 35, 35))
+            let ratingButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), CGFloat(y), 35, 35))
             ratingButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
             ratingButton.backgroundColor = model.darkBlueColor
             ratingButton.setImage(starImage, forState: .Normal)
@@ -277,8 +289,10 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 name: "Arial",
                 size: 14.0)!])
         
+        y += 45
+        
         // UITextField
-        bedsTxtField.frame = (frame: CGRectMake(15, 350, (scrollView.bounds.size.width / 3) - 20, 30))
+        bedsTxtField.frame = (frame: CGRectMake(15, CGFloat(y), (scrollView.bounds.size.width / 3) - 20, 30))
         let bedPaddingView = UIView(frame: CGRectMake(0, 0, (bedsTxtField.bounds.size.width / 2) - 5, 50))
         bedsTxtField.attributedPlaceholder = attributedHomeBed
         bedsTxtField.backgroundColor = UIColor.clearColor()
@@ -290,7 +304,9 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bedsTxtField.font = UIFont(name: "Arial", size: 14)
         scrollView.addSubview(bedsTxtField)
         
-        let bedsLabel = UILabel(frame: CGRectMake(15, 375, (scrollView.bounds.size.width / 3) - 20, 30))
+        y += 25
+        
+        let bedsLabel = UILabel(frame: CGRectMake(15, CGFloat(y), (scrollView.bounds.size.width / 3) - 20, 30))
         bedsLabel.text = "Beds"
         bedsLabel.backgroundColor = UIColor.clearColor()
         bedsLabel.textAlignment = NSTextAlignment.Center
@@ -299,7 +315,9 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bedsLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(bedsLabel)
         
-        let vertDividerTwoView = UIView(frame: CGRectMake(scrollView.bounds.size.width / 3, 350, 1, 50))
+        y -= 25
+        
+        let vertDividerTwoView = UIView(frame: CGRectMake(scrollView.bounds.size.width / 3, CGFloat(y), 1, 50))
         vertDividerTwoView.backgroundColor = UIColor.lightGrayColor()
         vertDividerTwoView.hidden = false
         scrollView.addSubview(vertDividerTwoView)
@@ -312,7 +330,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 size: 14.0)!])
         
         // UITextField
-        bathsTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 350, (scrollView.bounds.size.width / 3) - 20, 30))
+        bathsTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, CGFloat(y), (scrollView.bounds.size.width / 3) - 20, 30))
         let bathPaddingView = UIView(frame: CGRectMake(0, 0, (bathsTxtField.bounds.size.width / 2) - 5, 50))
         bathsTxtField.attributedPlaceholder = attributedHomeBath
         bathsTxtField.backgroundColor = UIColor.clearColor()
@@ -324,7 +342,9 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bathsTxtField.font = UIFont(name: "Arial", size: 14)
         scrollView.addSubview(bathsTxtField)
         
-        let bathsLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, 375, (scrollView.bounds.size.width / 3) - 20, 30))
+        y += 25
+        
+        let bathsLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width / 3) + 10, CGFloat(y), (scrollView.bounds.size.width / 3) - 20, 30))
         bathsLabel.text = "Baths"
         bathsLabel.textAlignment = NSTextAlignment.Center
         bathsLabel.backgroundColor = UIColor.clearColor()
@@ -333,7 +353,9 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         bathsLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(bathsLabel)
         
-        let vertDividerThreeView = UIView(frame: CGRectMake(scrollView.bounds.size.width * 0.66, 355, 1, 50))
+        y -= 25
+        
+        let vertDividerThreeView = UIView(frame: CGRectMake(scrollView.bounds.size.width * 0.66, CGFloat(y), 1, 50))
         vertDividerThreeView.backgroundColor = UIColor.lightGrayColor()
         vertDividerThreeView.hidden = false
         scrollView.addSubview(vertDividerThreeView)
@@ -346,7 +368,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 size: 14.0)!])
         
         // UITextField
-        sqFeetTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 350, (scrollView.bounds.size.width / 3) - 20, 30))
+        sqFeetTxtField.frame = (frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, CGFloat(y), (scrollView.bounds.size.width / 3) - 20, 30))
         let sqFeetPaddingView = UIView(frame: CGRectMake(0, 0, (sqFeetTxtField.bounds.size.width / 2) - 15, 50))
         sqFeetTxtField.attributedPlaceholder = attributedHomeSqft
         sqFeetTxtField.backgroundColor = UIColor.clearColor()
@@ -358,7 +380,9 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         sqFeetTxtField.font = UIFont(name: "Arial", size: 14)
         scrollView.addSubview(sqFeetTxtField)
         
-        let sqFeetLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, 375, (scrollView.bounds.size.width / 3) - 20, 30))
+        y += 25
+        
+        let sqFeetLabel = UILabel(frame: CGRectMake((scrollView.bounds.size.width * 0.66) + 10, CGFloat(y), (scrollView.bounds.size.width / 3) - 20, 30))
         sqFeetLabel.text = "Sq. Ft."
         sqFeetLabel.textAlignment = NSTextAlignment.Center
         sqFeetLabel.backgroundColor = UIColor.clearColor()
@@ -367,8 +391,10 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         sqFeetLabel.textColor = UIColor.darkTextColor()
         scrollView.addSubview(sqFeetLabel)
         
+        y += 40
+        
         //Create textview
-        descTxtView.frame = (frame : CGRectMake(10, 415, addHomeView.bounds.size.width - 20, 220))
+        descTxtView.frame = (frame : CGRectMake(10, CGFloat(y), addHomeView.bounds.size.width - 20, 220))
         descTxtView.backgroundColor = UIColor.whiteColor()
         descTxtView.autocorrectionType = .Yes
         descTxtView.returnKeyType = .Done
@@ -378,8 +404,10 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         descTxtView.font = UIFont(name: "forza-light", size: 22)
         scrollView.addSubview(descTxtView)
         
+        y += 230
+        
         // UIView
-        let saveView = UIView(frame: CGRectMake(15, 650, scrollView.bounds.size.width - 30, 50))
+        let saveView = UIView(frame: CGRectMake(15, CGFloat(y), scrollView.bounds.size.width - 30, 50))
         let saveGradientLayer = CAGradientLayer()
         saveGradientLayer.frame = saveView.bounds
         saveGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
@@ -418,30 +446,42 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         activityIndicator.center = view.center
         overlayView.addSubview(activityIndicator)
         
-        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: 815)
+        print(CGFloat(y + 165))
+        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(y + 165))
     }
     
     func addImagesToImageScrollArray() {
         removeViews(imgScrollView)
         
+        var heightWidth = 250.0
+        if (modelName.rangeOfString("iPad") != nil) {
+            heightWidth = 500.0
+        }
+        
         if (imageScrollArray.count > 0) {
             var xLocation = 0
             for defaultImage in imageScrollArray {
-                let defaultHomeIcon = UIImageView(frame: CGRectMake(CGFloat(xLocation), 0, 175, 175))
+                let defaultHomeIcon = UIImageView(frame: CGRectMake(CGFloat(xLocation), 0, CGFloat(heightWidth), CGFloat(heightWidth)))
                 defaultHomeIcon.image = defaultImage
+                defaultHomeIcon.contentMode = .ScaleAspectFill
+                defaultHomeIcon.clipsToBounds = true
                 imgScrollView.addSubview(defaultHomeIcon)
                 
-                xLocation += 175
+                xLocation += Int(heightWidth)
             }
         }
         else {
+            var heightWidth = 175.0
+            if (modelName.rangeOfString("iPad") != nil) {
+                heightWidth = 350.0
+            }
             let defaultHomeIcn = UIImage(named: "default_home") as UIImage?
-            let defaultHomeIcon = UIImageView(frame: CGRectMake((imgScrollView.bounds.size.width / 2) - 87.5, 0, 175, 175))
+            let defaultHomeIcon = UIImageView(frame: CGRectMake((imgScrollView.bounds.size.width / 2) - CGFloat((heightWidth / 2.0)), 0, CGFloat(heightWidth), CGFloat(heightWidth)))
             defaultHomeIcon.image = defaultHomeIcn
             imgScrollView.addSubview(defaultHomeIcon)
         }
         
-        imgScrollView.contentSize = CGSize(width: CGFloat(imageScrollArray.count * 175), height: imgScrollView.bounds.size.height)
+        imgScrollView.contentSize = CGSize(width: CGFloat(imageScrollArray.count * Int(heightWidth)), height: imgScrollView.bounds.size.height)
     }
     
     func tapGesture() {
@@ -567,15 +607,44 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     func scaleImagesForParse(img: UIImage) -> UIImage {
-        let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(0.33, 0.33))
+        var height = 0.0
+        var width = 0.0
+        
+        switch (img.imageOrientation) {
+        case .Up:
+            height = 414 / Double(img.size.height)
+            width = 736 / Double(img.size.width)
+        case .Down:
+            height = 414 / Double(img.size.height)
+            width = 736 / Double(img.size.width)
+        case .Left:
+            height = 736 / Double(img.size.height)
+            width = 414 / Double(img.size.width)
+        case .Right:
+            height = 736 / Double(img.size.height)
+            width = 414 / Double(img.size.width)
+        default:
+            break;
+        }
+        
+        let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(CGFloat(width), CGFloat(height)))
         let hasAlpha = false
-        let scale: CGFloat = 0.0 // Automatically use scale factor of main screen
+        let scale: CGFloat = 1.0 // Automatically use scale factor of main screen
         
         UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
         img.drawInRect(CGRect(origin: CGPointZero, size: size))
         
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
+
+        /*let data = UIImagePNGRepresentation(scaledImage)
+        let formatter = NSByteCountFormatter()
+        
+        formatter.allowedUnits = NSByteCountFormatterUnits.UseBytes
+        formatter.countStyle = NSByteCountFormatterCountStyle.File
+        
+        let formatted = formatter.stringFromByteCount(Int64(data!.length))*/
+        
         return scaledImage
     }
 
@@ -603,7 +672,17 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         imageAlertController.addAction(photoLibAction)
         imageAlertController.addAction(cameraAction)
         imageAlertController.addAction(cancelAction)
-        presentViewController(imageAlertController, animated: true, completion: nil)
+        
+        if (modelName.rangeOfString("iPad") != nil) {
+            if let popoverController = imageAlertController.popoverPresentationController {
+                popoverController.sourceView = sender
+                popoverController.sourceRect = sender.bounds
+            }
+            self.presentViewController(imageAlertController, animated: true, completion: nil)
+        }
+        else {
+            presentViewController(imageAlertController, animated: true, completion: nil)
+        }
     }
     
     func addNewHome(sender: UIButton) {
@@ -676,10 +755,30 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                     home.saveEventually{
                         (success: Bool, error: NSError?) -> Void in
                         if (success) {
-                            // TODO: add an alert view
-                            print("The post has been added to the user's likes relation.")
+                            let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
+                            
+                            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                                self.overlayView.hidden = true
+                                self.performSegueWithIdentifier("addHomeToTableView", sender: nil)
+                            }
+                            
+                            alertController.addAction(OKAction)
+                            
+                            self.presentViewController(alertController, animated: true) {
+                                // ...
+                            }
                         } else {
-                            print("There was a problem, check error.description.")
+                            
+                            let alertController = UIAlertController(title: "HomeIn", message: "An error occurred trying to add this home.", preferredStyle: .Alert)
+                            
+                            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                                
+                            }
+                            alertController.addAction(OKAction)
+                            
+                            self.presentViewController(alertController, animated: true) {
+                                // ...
+                            }
                         }
                     }
                     
@@ -722,13 +821,25 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     func keyboardWillAppear(notification: NSNotification){
-        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1050)
+        if (modelName.rangeOfString("iPad") != nil) {
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1550)
+        }
+        else {
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1050)
+        }
+        
         hideKeyboardButton.enabled = true
         hideKeyboardButton.alpha = 1.0
     }
     
     func keyboardWillDisappear(notification: NSNotification){
-        scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 815)
+        if (modelName.rangeOfString("iPad") != nil) {
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1135)
+        }
+        else {
+            scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 815)
+        }
+        
         hideKeyboardButton.enabled = false
         hideKeyboardButton.alpha = 0.0
     }
