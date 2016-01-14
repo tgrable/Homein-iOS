@@ -34,6 +34,14 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     var isSortTrayOpen = Bool()
     var sortAscending = Bool()
     
+    var sortNameAscending = Bool()
+    var sortRatingAscending = Bool()
+    var sortPriceAscending = Bool()
+    
+    var sortNameDirection = UIImageView()
+    var sortRatingDirection = UIImageView()
+    var sortPriceDirection = UIImageView()
+    
     let sortDirectionButton = UIButton()
     let sortNameButton = UIButton ()
     let sortPriceButton = UIButton ()
@@ -56,13 +64,16 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         homeTableView.dataSource = self
         
         sortAscending = false
+        sortNameAscending = false
+        sortRatingAscending = false
+        sortPriceAscending = false
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         
         sortCriteria = "createdAt"
-        getAllHomesForUser(sortCriteria)
+        getAllHomesForUser(sortCriteria, sortDirection: sortAscending)
         buildView()
         
         showSortTray()
@@ -192,20 +203,6 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortByLabel.sizeToFit()
         sortTrayView.addSubview(sortByLabel)
         
-        //UIImageView
-        let sortDirIcn = UIImage(named: "expand_white") as UIImage?
-        sortDirIcon.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 50, -5, 45, 45))
-        sortDirIcon.image = sortDirIcn
-        sortTrayView.addSubview(sortDirIcon)
-        
-        // UIButton
-        sortDirectionButton.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 75, 0, 75, 35))
-        sortDirectionButton.addTarget(self, action: "setSortDirection:", forControlEvents: .TouchUpInside)
-        sortDirectionButton.backgroundColor = UIColor.clearColor()
-        sortDirectionButton.contentHorizontalAlignment = .Left
-        sortDirectionButton.tag = 0
-        sortTrayView.addSubview(sortDirectionButton)
-        
         let dividerView = UIView(frame: CGRectMake(15, 37, self.view.bounds.size.width - 30, 1))
         dividerView.backgroundColor = UIColor.whiteColor()
         dividerView.hidden = false
@@ -228,6 +225,11 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortNameButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortNameButton)
         
+        // UIImageView
+        sortNameDirection.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 75, 40, 45, 45))
+        sortNameDirection.image = UIImage(named: "expand_white") as UIImage?
+        sortTrayView.addSubview(sortNameDirection)
+        
         let starImage = UIImage(named: "Star_empty-01") as UIImage?
         // UIImageView
         let ratingImageView = UIImageView(frame: CGRectMake(15, 95, 30, 30))
@@ -245,6 +247,11 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortRatingButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortRatingButton)
         
+        // UIImageView
+        sortRatingDirection.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 75, 85, 45, 45))
+        sortRatingDirection.image = UIImage(named: "expand_white") as UIImage?
+        sortTrayView.addSubview(sortRatingDirection)
+        
         let priceImage = UIImage(named: "Money_icon-04") as UIImage?
         // UIImageView
         let priceImageView = UIImageView(frame: CGRectMake(15, 140, 30, 30))
@@ -261,6 +268,11 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortPriceButton.tag = 0
         sortPriceButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         sortTrayView.addSubview(sortPriceButton)
+        
+        // UIImageView
+        sortPriceDirection.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 75, 130, 45, 45))
+        sortPriceDirection.image = UIImage(named: "expand_white") as UIImage?
+        sortTrayView.addSubview(sortPriceDirection)
         
         let dismissSwipe = UISwipeGestureRecognizer()
         dismissSwipe.direction = UISwipeGestureRecognizerDirection.Down
@@ -302,23 +314,6 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func setSortDirection(sender: UIButton) {
-        if sortAscending {
-            sortAscending = false
-            sortDirIcon.image = UIImage(named: "expand_white") as UIImage?
-        }
-        else {
-            sortAscending = true
-            sortDirIcon.image = UIImage(named: "expand_white_up") as UIImage?
-        }
-        if sortCriteria == "createdAt" {
-            getAllHomesForUser(sortCriteria)
-        }
-        else {
-            getAllHomesForUser(sortCriteria.lowercaseString)
-        }
-    }
-    
     func setSortOrder(sender: UIButton) {
         sortCriteria = (sender.titleLabel?.text)! as String
         
@@ -327,27 +322,56 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             sortNameButton.setTitleColor(model.darkGrayColor, forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            if (sortNameAscending) {
+                sortNameDirection.image = UIImage(named: "expand_white_up") as UIImage?
+                getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortNameAscending)
+                sortNameAscending = false
+            }
+            else {
+                sortNameDirection.image = UIImage(named: "expand_white") as UIImage?
+                getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortNameAscending)
+                sortNameAscending = true
+            }
+            
         case "PRICE":
             sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortPriceButton.setTitleColor(model.darkGrayColor, forState: .Normal)
             sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+            if (sortPriceAscending) {
+                sortPriceDirection.image = UIImage(named: "expand_white_up") as UIImage?
+                getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortPriceAscending)
+                sortPriceAscending = false
+            }
+            else {
+                sortPriceDirection.image = UIImage(named: "expand_white") as UIImage?
+                getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortPriceAscending)
+                sortPriceAscending = true
+            }
         case "RATING":
             sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortRatingButton.setTitleColor(model.darkGrayColor, forState: .Normal)
+            if (sortRatingAscending) {
+                sortRatingDirection.image = UIImage(named: "expand_white_up") as UIImage?
+                getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortRatingAscending)
+                sortRatingAscending = false
+            }
+            else {
+                sortRatingDirection.image = UIImage(named: "expand_white") as UIImage?
+                getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortRatingAscending)
+                sortRatingAscending = true
+            }
         default:
             sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            
         }
-        
-        getAllHomesForUser(sortCriteria.lowercaseString)
     }
     
     // MARK:
     // MARK: Parse Method
-    func getAllHomesForUser(sortOrder: String) {
+    func getAllHomesForUser(sortOrder: String, sortDirection: Bool) {
+        sortAscending = sortDirection
         let query = PFQuery(className:"Home")
         query.whereKey("user", equalTo:PFUser.currentUser()!)
         if sortAscending {
