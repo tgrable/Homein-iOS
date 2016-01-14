@@ -333,6 +333,15 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         paymentLabel.textAlignment = NSTextAlignment.Center
         paymentView.addSubview(paymentLabel)
         
+        // UILabel
+        let noteLabel = UILabel(frame: CGRectMake(25, 420, calcView.bounds.size.width - 50, 0))
+        noteLabel.text = "Note: The payment calculated is Principal & Interest only. It does not include property taxes, insurance or PMI, if applicable."
+        noteLabel.font = UIFont(name: "forza-light", size: 14)
+        noteLabel.numberOfLines = 0
+        noteLabel.sizeToFit()
+        noteLabel.textAlignment = NSTextAlignment.Left
+        scrollView.addSubview(noteLabel)
+        
         let mortTapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         mortView.addGestureRecognizer(mortTapGesture)
         
@@ -641,6 +650,15 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         refiPaymentLabel.textAlignment = NSTextAlignment.Center
         refiPaymentView.addSubview(refiPaymentLabel)
         
+        // UILabel
+        let noteLabel = UILabel(frame: CGRectMake(25, 593, calcView.bounds.size.width - 50, 0))
+        noteLabel.text = "Note: The payment calculated is Principal & Interest only. It does not include property taxes, insurance or PMI, if applicable."
+        noteLabel.font = UIFont(name: "forza-light", size: 14)
+        noteLabel.numberOfLines = 0
+        noteLabel.sizeToFit()
+        noteLabel.textAlignment = NSTextAlignment.Left
+        scrollView.addSubview(noteLabel)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         scrollView.addGestureRecognizer(tapGesture)
         
@@ -690,7 +708,27 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(textField: UITextField) {
-        
+
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+            
+            // Create an `NSCharacterSet` set which includes everything *but* the digits
+            let inverseSet = NSCharacterSet(charactersInString:"0123456789.").invertedSet
+            
+            // At every character in this "inverseSet" contained in the string,
+            // split the string up into components which exclude the characters
+            // in this inverse set
+            let components = string.componentsSeparatedByCharactersInSet(inverseSet)
+            
+            // Rejoin these components
+            let filtered = components.joinWithSeparator("")  // use join("", components) if you are using Swift 1.2
+            
+            // If the original string is equal to the filtered string, i.e. if no
+            // inverse characters were present to be eliminated, the input is valid
+            // and the statement returns true; else it returns false
+            return string == filtered
+            
     }
     
     func tapGesture() {

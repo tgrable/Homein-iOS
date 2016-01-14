@@ -89,6 +89,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     let editButton = UIButton ()
     let editIcon = UIImageView()
     let saveImageDefaultButton = UIButton()
+    let deleteDefaultButton = UIButton()
     
     let hideKeyboardButton = UIButton()
     
@@ -774,6 +775,15 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         paymentLabel.textAlignment = NSTextAlignment.Center
         paymentView.addSubview(paymentLabel)
         
+        // UILabel
+        let noteLabel = UILabel(frame: CGRectMake(25, 415, paymentView.bounds.size.width - 50, 0))
+        noteLabel.text = "Note: The payment calculated is Principal & Interest only. It does not include property taxes, insurance or PMI, if applicable."
+        noteLabel.font = UIFont(name: "forza-light", size: 14)
+        noteLabel.numberOfLines = 0
+        noteLabel.sizeToFit()
+        noteLabel.textAlignment = NSTextAlignment.Left
+        calcTray.addSubview(noteLabel)
+        
     }
     
     func buildSaveDeleteTray() {
@@ -843,7 +853,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             UIView.animateWithDuration(0.8, animations: {
                 self.expandIcon.image = UIImage(named: "expand_white_up")
                 self.calcTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 60), self.scrollView.bounds.size.width, 400))
-                self.saveDeleteTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 480), self.scrollView.bounds.size.width, 400))
+                self.saveDeleteTray.frame = (frame: CGRectMake(0, CGFloat(self.yOffset + 550), self.scrollView.bounds.size.width, 400))
                 }, completion: {
                     (value: Bool) in
                     if (self.modelName.rangeOfString("iPad") != nil) {
@@ -967,6 +977,14 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         closeButton.tag = 0
         overlayView.addSubview(closeButton)
         
+        deleteDefaultButton.frame = (frame: CGRectMake(10, self.view.bounds.size.height - 125, self.view.bounds.size.width - 20, 50))
+        deleteDefaultButton.addTarget(self, action: "deleteImageFromArray:", forControlEvents: .TouchUpInside)
+        deleteDefaultButton.backgroundColor = model.lightRedColor
+        deleteDefaultButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        deleteDefaultButton.setTitle("DELETE IMAGE", forState: .Normal)
+        deleteDefaultButton.tag = 0
+        overlayView.addSubview(deleteDefaultButton)
+        
         saveImageDefaultButton.frame = (frame: CGRectMake(10, self.view.bounds.size.height - 65, self.view.bounds.size.width - 20, 50))
         saveImageDefaultButton.addTarget(self, action: "setImageAsDefault:", forControlEvents: .TouchUpInside)
         saveImageDefaultButton.backgroundColor = model.lightRedColor
@@ -1044,6 +1062,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         targetContentOffset.memory.x = scrollLocation
         imageIndexLabel.text = String(format: "%d of %d", Int(imageIndex) + 1, imageArray.count)
         saveImageDefaultButton.tag = Int(imageIndex)
+        deleteDefaultButton.tag = Int(imageIndex)
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView){
@@ -1152,6 +1171,48 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
         
         return true
+    }
+    
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        if textField == homePriceTxtField || textField == bathsTxtField || textField == loanAmountTxtField || textField == mortgageTxtField || textField == interestTxtField || textField == downPaymentTxtField {
+            // Create an `NSCharacterSet` set which includes everything *but* the digits
+            let inverseSet = NSCharacterSet(charactersInString:"0123456789.").invertedSet
+            
+            // At every character in this "inverseSet" contained in the string,
+            // split the string up into components which exclude the characters
+            // in this inverse set
+            let components = string.componentsSeparatedByCharactersInSet(inverseSet)
+            
+            // Rejoin these components
+            let filtered = components.joinWithSeparator("")  // use join("", components) if you are using Swift 1.2
+            
+            // If the original string is equal to the filtered string, i.e. if no
+            // inverse characters were present to be eliminated, the input is valid
+            // and the statement returns true; else it returns false
+            return string == filtered
+        }
+        else if textField == bedsTxtField || textField == sqFeetTxtField {
+            // Create an `NSCharacterSet` set which includes everything *but* the digits
+            let inverseSet = NSCharacterSet(charactersInString:"0123456789").invertedSet
+            
+            // At every character in this "inverseSet" contained in the string,
+            // split the string up into components which exclude the characters
+            // in this inverse set
+            let components = string.componentsSeparatedByCharactersInSet(inverseSet)
+            
+            // Rejoin these components
+            let filtered = components.joinWithSeparator("")  // use join("", components) if you are using Swift 1.2
+            
+            // If the original string is equal to the filtered string, i.e. if no
+            // inverse characters were present to be eliminated, the input is valid
+            // and the statement returns true; else it returns false
+            return string == filtered
+
+        }
+        else {
+            return true
+        }
     }
     
     // MARK:
@@ -1381,6 +1442,23 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         paymentLabel.text = String(format:"$%.2f / MONTH", estimatedPaymentDefault)
     }
     
+    func deleteImageFromArray(sender: UIButton) {
+        imageArray.removeAtIndex(sender.tag)
+        
+        removeViews(imageScollView)
+        self.homeObject["imageArray"] = self.imageArray
+        setDefaultImage()
+        
+        saveView.hidden = false
+        saveButton.hidden = false
+        saveButton.enabled = true
+        
+        overlayView.hidden = true
+        imageScollView.contentOffset.x = 0
+        print("imageIndex", imageIndex)
+        imageCountLabel.text = String(format: "%d of %d", Int(imageIndex), self.imageArray.count)
+    }
+    
     func setImageAsDefault(sender: UIButton) {
         let img = imageArray[sender.tag]
         imageArray.removeAtIndex(sender.tag)
@@ -1467,7 +1545,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         let imageData = UIImagePNGRepresentation(self.newImg)
         if (imageData != nil) {
-            let imageFile = PFFile(name:"image.png", data:imageData!)
+            let imageFile = PFFile(name:"image.jpg", data:imageData!)
             imageArray.append(imageFile!)
             self.imageCountLabel.text = String(format: "1 of %d", self.imageArray.count)
             imageOverlay(imageArray)

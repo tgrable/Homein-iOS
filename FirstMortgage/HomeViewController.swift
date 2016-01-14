@@ -10,9 +10,6 @@ import UIKit
 import Parse
 
 class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate {
-    
-    //TODO: remove background image to see why home view is being built twice
-    
     // MARK:
     // MARK: Properties
     var model = Model()
@@ -245,8 +242,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         myHomesView.layer.addSublayer(myHomesGradientLayer)
         scrollView.addSubview(myHomesView)
         
+        var yIconOffset = 25.0
+        if (modelName.rangeOfString("iPad") != nil) {
+            yIconOffset = 50.0
+            labelDist += 25
+        }
         let homeIcn = UIImage(named: "home_icon") as UIImage?
-        let homeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 25, 36, 36))
+        let homeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
         homeIcon.image = homeIcn
         myHomesView.addSubview(homeIcon)
         
@@ -286,17 +288,17 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         scrollView.addSubview(addHomesView)
  
         let addIcn = UIImage(named: "add_white") as UIImage?
-        let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, 30, 26, 26))
+        let addHomeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, CGFloat(yIconOffset + 5), 26, 26))
         addHomeIcon.image = addIcn
         addHomesView.addSubview(addHomeIcon)
         
         // UILabel
-        let addHomesLabel = UILabel(frame: CGRectMake(0, labelDist - 5, myHomesView.bounds.size.width, 48))
-        addHomesLabel.text = "ADD A\nHOME"
+        let addHomesLabel = UILabel(frame: CGRectMake(0, labelDist, myHomesView.bounds.size.width, 24))
+        addHomesLabel.text = "ADD A HOME"
         addHomesLabel.font = UIFont(name: "forza-light", size: 18)
         addHomesLabel.textAlignment = NSTextAlignment.Center
         addHomesLabel.textColor = UIColor.whiteColor()
-        addHomesLabel.numberOfLines = 2
+        addHomesLabel.numberOfLines = 1
         addHomesView.addSubview(addHomesLabel)
         
         addAHomeButton.frame = (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
@@ -332,7 +334,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         scrollView.addSubview(mortgageCalculatorView)
         
         let calcIcn = UIImage(named: "calculator_icon") as UIImage?
-        let calcIcon = UIImageView(frame: CGRectMake((mortgageCalculatorView.bounds.size.width / 2) - 18, 25, 36, 36))
+        let calcIcon = UIImageView(frame: CGRectMake((mortgageCalculatorView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
         calcIcon.image = calcIcn
         mortgageCalculatorView.addSubview(calcIcon)
         
@@ -365,7 +367,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         refiCalculatorView.layer.addSublayer(refiCalculatorGradientLayer)
         scrollView.addSubview(refiCalculatorView)
         
-        let calcIconTwo = UIImageView(frame: CGRectMake((refiCalculatorView.bounds.size.width / 2) - 18, 25, 36, 36))
+        let calcIconTwo = UIImageView(frame: CGRectMake((refiCalculatorView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
         calcIconTwo.image = calcIcn
         refiCalculatorView.addSubview(calcIconTwo)
         
@@ -403,7 +405,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         scrollView.addSubview(findBranchView)
         
         let brnchIcn = UIImage(named: "bank_icon") as UIImage?
-        let branchIcon = UIImageView(frame: CGRectMake((findBranchView.bounds.size.width / 2) - 18, 25, 36, 36))
+        let branchIcon = UIImageView(frame: CGRectMake((findBranchView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
         branchIcon.image = brnchIcn
         findBranchView.addSubview(branchIcon)
         
@@ -443,7 +445,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         scrollView.addSubview(preQualifiedView)
         
         let checkIcn = UIImage(named: "checkmark_white") as UIImage?
-        let checkIcon = UIImageView(frame: CGRectMake((preQualifiedView.bounds.size.width / 2) - 18, 25, 36, 36))
+        let checkIcon = UIImageView(frame: CGRectMake((preQualifiedView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
         checkIcon.image = checkIcn
         preQualifiedView.addSubview(checkIcon)
         
@@ -1012,6 +1014,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         searchOverlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
         searchOverlayView.backgroundColor = model.lightGrayColor
+        searchOverlayView.hidden = false
         self.view.addSubview(searchOverlayView)
         
         var yVal = 15.0
@@ -1133,11 +1136,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     func showHideLoginView() {
         username.resignFirstResponder()
         password.resignFirstResponder()
-
-        print("isLoginViewOpen: ", isLoginViewOpen)
         
         if (!isLoginViewOpen) {
-            print("1")
             UIView.animateWithDuration(0.4, animations: {
                 self.loginView.frame = (frame: CGRectMake(0, 0, self.view.bounds.width  * 2, self.view.bounds.height))
                 }, completion: {
@@ -1147,7 +1147,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             })
         }
         else {
-            print("2")
             UIView.animateWithDuration(0.4, animations: {
                 self.loginView.frame = (frame: CGRectMake(0, self.view.bounds.height, self.view.bounds.width  * 2, self.view.bounds.height))
                 }, completion: {
@@ -1299,7 +1298,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     let alertController = UIAlertController(title: "HomeIn", message: errorString, preferredStyle: .Alert)
                     
                     let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        // ...
+                        self.searchOverlayView.hidden = true
                     }
                     alertController.addAction(OKAction)
                     
@@ -1440,8 +1439,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             isMortgageCalc = false
             performSegueWithIdentifier("calculatorsViewController", sender: nil)
         case 4:
-            let cvc = self.storyboard!.instantiateViewControllerWithIdentifier("findBranchViewController") as! FindBranchViewController
-            self.navigationController!.pushViewController(cvc, animated: true)
+            performSegueWithIdentifier("findBranchViewController", sender: nil)
         case 5:
             if let user = PFUser.currentUser() {
                 if let url = user["officerURL"] {
@@ -1451,10 +1449,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             }
             
         case 6:
-            print("case 6:")
             showHideLoginView()
         case 7:
-            print("case 7:")
             didComeFromAccountPage = false
             performSegueWithIdentifier("profileViewController", sender: nil)
         default:
@@ -1475,7 +1471,21 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     }
     
     func setLoanOfficer(sender: UIButton) {
-        let dict = tempArray[sender.tag]
+        
+        searchTxtField.text = ""
+        
+        var dict: [String:String]
+        if tempArray.count > 0 {
+            if sender.tag < tempArray.count {
+                dict = tempArray[sender.tag]
+            }
+            else {
+                dict = loanOfficerArray[sender.tag]
+            }
+        }
+        else {
+            dict = loanOfficerArray[sender.tag]
+        }
         
         hasLoanOfficer = true
         
@@ -1790,16 +1800,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                 if var _ = user!["officerURL"] {
                     url = user!["officerURL"] as! String
                 }
-                
-                print("url.characters.count: ", url.characters.count)
-                
                 if (url.characters.count > 0) {
                     preQualifiedOverlay.hidden = true
-                    print("preQualifiedOverlay.hidden = true")
                 }
                 else {
                     preQualifiedOverlay.hidden = false
-                    print("preQualifiedOverlay.hidden = false")
                 }
             }
         }

@@ -445,8 +445,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.WhiteLarge
         activityIndicator.center = view.center
         overlayView.addSubview(activityIndicator)
-        
-        print(CGFloat(y + 165))
+
         scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(y + 165))
     }
     
@@ -544,6 +543,48 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         return true
     }
     
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        
+        if textField == homePriceTxtField || textField == bathsTxtField {
+            // Create an `NSCharacterSet` set which includes everything *but* the digits
+            let inverseSet = NSCharacterSet(charactersInString:"0123456789.").invertedSet
+            
+            // At every character in this "inverseSet" contained in the string,
+            // split the string up into components which exclude the characters
+            // in this inverse set
+            let components = string.componentsSeparatedByCharactersInSet(inverseSet)
+            
+            // Rejoin these components
+            let filtered = components.joinWithSeparator("")  // use join("", components) if you are using Swift 1.2
+            
+            // If the original string is equal to the filtered string, i.e. if no
+            // inverse characters were present to be eliminated, the input is valid
+            // and the statement returns true; else it returns false
+            return string == filtered
+        }
+        else if textField == bedsTxtField || textField == sqFeetTxtField {
+            // Create an `NSCharacterSet` set which includes everything *but* the digits
+            let inverseSet = NSCharacterSet(charactersInString:"0123456789").invertedSet
+            
+            // At every character in this "inverseSet" contained in the string,
+            // split the string up into components which exclude the characters
+            // in this inverse set
+            let components = string.componentsSeparatedByCharactersInSet(inverseSet)
+            
+            // Rejoin these components
+            let filtered = components.joinWithSeparator("")  // use join("", components) if you are using Swift 1.2
+            
+            // If the original string is equal to the filtered string, i.e. if no
+            // inverse characters were present to be eliminated, the input is valid
+            // and the statement returns true; else it returns false
+            return string == filtered
+            
+        }
+        else {
+            return true
+        }
+    }
+    
     // MARK:
     // MARK: UITextViewDelegate
     func textViewDidBeginEditing(textView: UITextView) {
@@ -587,7 +628,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
             
             let imageData = UIImagePNGRepresentation(self.img)
             if (imageData != nil) {
-                let imageFile = PFFile(name:"image.png", data:imageData!)
+                let imageFile = PFFile(name:"image.jpg", data:imageData!)
                 self.imageArray.append(imageFile!)
             }
 
@@ -611,12 +652,10 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         var width = 0.0
         
         if img.size.height > img.size.width {
-            print("Portrait")
             height = 736 / Double(img.size.height)
             width = 414 / Double(img.size.width)
         }
         else {
-            print("Landscape")
             height = 414 / Double(img.size.height)
             width = 736 / Double(img.size.width)
         }

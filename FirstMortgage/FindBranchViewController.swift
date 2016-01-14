@@ -18,7 +18,21 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK: Properties
     
     // Custom Color
-    let model = Model()
+    // Custom Color
+    let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
+    let darkGrayColor = UIColor(red: 62/255, green: 65/255, blue: 69/255, alpha: 1)
+    
+    let lightBlueColor = UIColor(red: 83/255, green: 135/255, blue: 186/255, alpha: 1)
+    let darkBlueColor = UIColor(red: 53/255, green: 103/255, blue: 160/255, alpha: 1)
+    
+    let lightOrangeColor = UIColor(red: 238/255, green: 155/255, blue: 78/255, alpha: 1)
+    let darkOrangeColor = UIColor(red: 222/255, green: 123/255, blue: 37/255, alpha: 1)
+    
+    let lightGreenColor = UIColor(red: 184.0/255.0, green: 189.0/255.0, blue: 70.0/255.0, alpha: 1)
+    let darkGreenColor = UIColor(red: 154.0/255.0, green: 166.0/255.0, blue: 65.0/255.0, alpha: 1)
+    
+    let lightRedColor = UIColor(red: 204.0/255.0, green: 69.0/255.0, blue: 67.0/255.0, alpha: 1)
+    let darkRedColor = UIColor(red: 174.0/255.0, green: 58.0/255.0, blue: 55.0/255.0, alpha: 1)
     
     let addHomeView = UIView() as UIView
     let pickerView = UIView()
@@ -31,9 +45,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     var currentLocation = CLLocation()
     var coords: CLLocationCoordinate2D?
+
+    var branchArray = Array<Dictionary<String, String>>()
+    var filteredArray = Array<Dictionary<String, String>>()
     
-    var branchArray = [Branch]()
-    var filteredArray = [Branch]()
     var stateArray = [String]()
     var stateDictionary = Dictionary<String, String>()
     
@@ -94,7 +109,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     func buildView() {
         addHomeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        addHomeView.backgroundColor = model.lightGrayColor
+        addHomeView.backgroundColor = lightGrayColor
         addHomeView.hidden = false
         self.view.addSubview(addHomeView)
         
@@ -124,7 +139,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         let addHomeBannerView = UIView(frame: CGRectMake(0, 135, addHomeView.bounds.size.width, 50))
         let addHomeBannerGradientLayer = CAGradientLayer()
         addHomeBannerGradientLayer.frame = addHomeBannerView.bounds
-        addHomeBannerGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
+        addHomeBannerGradientLayer.colors = [lightRedColor.CGColor, darkRedColor.CGColor]
         addHomeBannerView.layer.insertSublayer(addHomeBannerGradientLayer, atIndex: 0)
         addHomeBannerView.layer.addSublayer(addHomeBannerGradientLayer)
         addHomeBannerView.hidden = false
@@ -226,26 +241,40 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 if let nodes = json as? NSArray {
                     for node in nodes {
                         if let nodeDict = node as? NSDictionary {
-                            let branch = Branch()
+                            //var branch: Branch?
+                            //branch = Branch()
+                            
+                            var branch: [String:String] = [:]
+                            
                             if let streetName = nodeDict["street"] as? String {
-                                branch.address = streetName
+                                //branch!.address = streetName
+                                branch["address"] = streetName
                             }
                             if let city = nodeDict["city"] as? String {
-                                branch.city = city
+                                //branch!.city = city
+                                branch["city"] = city
                             }
                             if let state = nodeDict["state"] as? String {
-                                branch.state = state
+                                //branch!.state = state
+                                branch["state"] = state
                             }
                             if let phone = nodeDict["phone"] as? String {
-                                branch.phone = self.cleanPhoneNumnerString(phone)
+                                //branch!.phone = self.cleanPhoneNumnerString(phone)
+                                branch["phone"] = self.cleanPhoneNumnerString(phone)
                             }
+                            
+                            branch["distanceFromMe"] = ""
+                            branch["lat"] = ""
+                            branch["long"] = ""
+                            
                             self.branchArray.append(branch)
-                            states.append(branch.state)
+                            states.append(branch["state"]!)
                         }
                     }
                 }
-                self.stateArray = self.removeDuplicates(states)
 
+                self.stateArray = self.removeDuplicates(states)
+                
                 let center = NSNotificationCenter.defaultCenter()
                 center.addObserverForName(nil, object: nil, queue: nil) { notification in
                     //print("\(notification.name): \(notification.userInfo ?? [:])")
@@ -290,9 +319,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             if self.timerHasFired == false {
                 let placemark = placemarks!.last! as CLPlacemark
                 let state = placemark.administrativeArea
-                print(state!)
                 self.findBranchesInMyState(state!)
-                print("geoCode")
             }
         })
     }
@@ -303,14 +330,19 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             statesPicker.reloadAllComponents()
             activityIndicator.stopAnimating()
             showHideSortTray()
-            print("timeCode")
         }
     }
     
     func findBranchesInMyState(state: String) {
-        filteredArray = branchArray.filter({ $0.state == state })
-        if (filteredArray.count > 0) {
-            calcDistance(filteredArray)
+        var filterStateArray = Array<Dictionary<String, String>>()
+        for branch in branchArray {
+            if  branch["state"] == state {
+                filterStateArray.append(branch)
+            }
+        }
+        
+        if (filterStateArray.count > 0) {
+            calcDistance(filterStateArray)
         }
         else {
             activityIndicator.stopAnimating()
@@ -318,13 +350,14 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         }
     }
     
-    func calcDistance(var filteredBranchArray: Array<Branch>) {
+    func calcDistance(filteredBranchArray: Array<Dictionary<String, String>>) {
         var count = 0;
-
-        for branch in filteredBranchArray {
+        
+        var newBranchArray = Array<Dictionary<String, String>>()
+        for var branch in filteredBranchArray {
             if (count < 25) {
                 let geocoder = CLGeocoder()
-                let branchLocation = String(format: "%@, %@, USA", branch.address, branch.state)
+                let branchLocation = String(format: "%@, %@, USA", branch["address"]!, branch["state"]!)
                 var distance = 0.0
                 dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
                     geocoder.geocodeAddressString(branchLocation, completionHandler: {(placemarks, error) -> Void in
@@ -339,14 +372,17 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
 
                             let clObj = CLLocation(latitude: lat, longitude: long)
                             distance = self.currentLocation.distanceFromLocation(clObj) * 0.000621371;
-                            branch.distanceFromMe = distance
-                            branch.lat = lat
-                            branch.long = long
+                            
+                            branch["distanceFromMe"] = String(format:"%f", distance)
+                            branch["lat"] = String(format:"%f", lat)
+                            branch["long"] = String(format:"%f", long)
                             count++
                             
+                            newBranchArray.append(branch)
+                            
                             if (count == filteredBranchArray.count) {
-                                filteredBranchArray.sortInPlace({ $0.distanceFromMe < $1.distanceFromMe })
-                                self.printLocations(filteredBranchArray)
+                                newBranchArray.sortInPlace({ $0["distanceFromMe"] < $1["distanceFromMe"] })
+                                self.printLocations(newBranchArray)
                             }
                         }
                     })
@@ -355,11 +391,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         }
     }
     
-    func printLocations(filteredBranchArray: Array<Branch>) {
-        
+    func printLocations(filteredBranchArray: Array<Dictionary<String, String>>) {
         filteredArray.removeAll()
         filteredArray = filteredBranchArray
-        
+
         var yOffset = 15.0 as CGFloat
         var count = 0
         
@@ -376,7 +411,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             let addressLabel = UILabel (frame: CGRectMake(15, 10, branchView.bounds.size.width - 30, 0))
             addressLabel.font = UIFont(name: "forza-light", size: 24)
             addressLabel.textAlignment = NSTextAlignment.Left
-            addressLabel.text = String(format: "%@", branch.address)
+            addressLabel.text = String(format: "%@", branch["address"]!)
             addressLabel.numberOfLines = 0
             addressLabel.sizeToFit()
             branchView.addSubview(addressLabel)
@@ -385,7 +420,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             let cityStateLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
             cityStateLabel.font = UIFont(name: "forza-light", size: 18)
             cityStateLabel.textAlignment = NSTextAlignment.Left
-            cityStateLabel.text = String(format: "%@, %@", branch.city, branch.state)
+            cityStateLabel.text = String(format: "%@, %@", branch["city"]!, branch["state"]!)
             cityStateLabel.numberOfLines = 0
             cityStateLabel.sizeToFit()
             branchView.addSubview(cityStateLabel)
@@ -394,20 +429,20 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             let milesLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
             milesLabel.font = UIFont(name: "forza-light", size: 18)
             milesLabel.textAlignment = NSTextAlignment.Left
-            milesLabel.text = String(format: "%.01f Miles", branch.distanceFromMe)
+            milesLabel.text = String(format: "%.01f Miles", Double(branch["distanceFromMe"]!)!)
             milesLabel.numberOfLines = 0
             milesLabel.sizeToFit()
             branchView.addSubview(milesLabel)
             offset += milesLabel.bounds.size.height
             
-            let pl = (branch.phone.characters.count > 0) ? formatPhoneString(branch.phone) : ""
+            let pl = (branch["phone"]!.characters.count > 0) ? formatPhoneString(branch["phone"]!) : ""
             let phoneLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
             phoneLabel.font = UIFont(name: "forza-light", size: 18)
             phoneLabel.textAlignment = NSTextAlignment.Left
             phoneLabel.text = String(format: "%@", pl)
             phoneLabel.numberOfLines = 0
             phoneLabel.sizeToFit()
-            phoneLabel.textColor = model.darkBlueColor
+            phoneLabel.textColor = darkBlueColor
             branchView.addSubview(phoneLabel)
             offset += phoneLabel.bounds.size.height
             
@@ -425,7 +460,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             locationButton.tag = count
             branchView.addSubview(locationButton)
             
-            let btnEnabled = (branch.phone.characters.count > 0) ? true : false
+            let btnEnabled = (branch["phone"]!.characters.count > 0) ? true : false
             let phoneButton = UIButton(frame: CGRectMake(0, offset, branchView.bounds.size.width, 20))
             phoneButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
             phoneButton.backgroundColor = UIColor.clearColor()
@@ -437,7 +472,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             count++
         }
 
-        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(filteredArray.count * 115))
+        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(filteredBranchArray.count * 115))
         
         activityIndicator.stopAnimating()
     }
@@ -464,9 +499,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     func phoneButtonPressed(sender: UIButton) {
         let branch = self.filteredArray[sender.tag]
-        print(branch.address)
         
-        let alertController = UIAlertController(title: "HomeIn", message: String(format: "Call %@", model.formatPhoneString(branch.phone)), preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "HomeIn", message: String(format: "Call %@", formatPhoneString(branch["phone"]!)), preferredStyle: .Alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
             // ...
@@ -474,7 +508,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         alertController.addAction(cancelAction)
         
         let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-            self.openPhoneApp(branch.phone)
+            self.openPhoneApp(branch["phone"]!)
         }
         alertController.addAction(OKAction)
         
@@ -483,10 +517,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         }
     }
     
-    func openMapForPlace(branch: Branch) {
-        let coords = CLLocationCoordinate2DMake(branch.lat, branch.long)
+    func openMapForPlace(branch: [String:String]) {
+        let coords = CLLocationCoordinate2DMake(Double(branch["lat"]!)!, Double(branch["long"]!)!)
         
-        let address : [String : AnyObject] = [CNPostalAddressStreetKey as String: branch.address, CNPostalAddressCityKey as String: branch.city, CNPostalAddressStateKey as String: branch.state, CNPostalAddressCountryKey as String: "US"]
+        let address : [String : AnyObject] = [CNPostalAddressStreetKey as String: branch["address"]!, CNPostalAddressCityKey as String: branch["city"]!, CNPostalAddressStateKey as String: branch["state"]!, CNPostalAddressCountryKey as String: "US"]
         
         let place = MKPlacemark(coordinate: coords, addressDictionary: address)
         let mapItem = MKMapItem(placemark: place)
@@ -547,9 +581,13 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     func formatPhoneString(phoneString: String) -> String {
-        let areaCode = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(0), end: phoneString.endIndex.advancedBy(-7)))
-        let prefix = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(3), end: phoneString.endIndex.advancedBy(-4)))
-        let number = phoneString.substringWithRange(Range<String.Index>(start: phoneString.startIndex.advancedBy(6), end: phoneString.endIndex.advancedBy(0)))
+        let stringArray = phoneString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
+        let newString = stringArray.joinWithSeparator("")
+        let finalString = cleanPhoneNumnerString(newString)
+        
+        let areaCode = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(0), end: finalString.endIndex.advancedBy(-7)))
+        let prefix = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(3), end: finalString.endIndex.advancedBy(-4)))
+        let number = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(6), end: finalString.endIndex.advancedBy(0)))
         
         return String(format: "(%@) %@-%@", areaCode, prefix, number)
     }

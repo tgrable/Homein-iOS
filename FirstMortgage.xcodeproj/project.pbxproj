@@ -86,7 +86,6 @@
 		4F1ED5141C1B790900E40F4B /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1ED5131C1B790900E40F4B /* ParseUI.framework */; };
 		4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */; };
 		4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */; };
-		4F8815711C04B192001488C1 /* Branch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F8815701C04B192001488C1 /* Branch.swift */; };
 		4FADCA6B1C0E2A29000186A8 /* FORZA-LIGHT.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA5B1C0DEC26000186A8 /* FORZA-LIGHT.OTF */; };
 		4FADCA6D1C0E2B7E000186A8 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FADCA6C1C0E2B7E000186A8 /* Model.swift */; };
 		4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3CD11BE106EB00A89A9A /* AppDelegate.swift */; };
@@ -214,7 +213,6 @@
 		4F1ED5131C1B790900E40F4B /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = frameworks/ParseUI.framework; sourceTree = "<group>"; };
 		4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicCell.swift; path = FirstMortgage/BasicCell.swift; sourceTree = "<group>"; };
 		4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndividualHomeViewController.swift; sourceTree = "<group>"; };
-		4F8815701C04B192001488C1 /* Branch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Branch.swift; path = FirstMortgage/Branch.swift; sourceTree = "<group>"; };
 		4FADCA551C0DEC26000186A8 /* FORZA-BLACK.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BLACK.OTF"; path = "fonts/FORZA-BLACK.OTF"; sourceTree = "<group>"; };
 		4FADCA561C0DEC26000186A8 /* FORZA-BLACKITALIC.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BLACKITALIC.OTF"; path = "fonts/FORZA-BLACKITALIC.OTF"; sourceTree = "<group>"; };
 		4FADCA571C0DEC26000186A8 /* FORZA-BOLD.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BOLD.OTF"; path = "fonts/FORZA-BOLD.OTF"; sourceTree = "<group>"; };
@@ -487,7 +485,6 @@
 			isa = PBXGroup;
 			children = (
 				4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */,
-				4F8815701C04B192001488C1 /* Branch.swift */,
 				4FADCA6C1C0E2B7E000186A8 /* Model.swift */,
 				4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */,
 				2CD798601C3233710052C18C /* Reachability.swift */,
@@ -723,7 +720,6 @@
 				4FADCA6D1C0E2B7E000186A8 /* Model.swift in Sources */,
 				4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */,
 				4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */,
-				4F8815711C04B192001488C1 /* Branch.swift in Sources */,
 				4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */,
 				4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */,
 				4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */,

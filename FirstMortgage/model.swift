@@ -53,8 +53,6 @@ class Model: NSObject {
         let rPower = pow(1 + r / 12.0, monthsPaid)
         let balPaid = ((12 * currentMonthlyPayment / r - loanAmount) * (rPower - 1))
         
-        print(balPaid)
-        
         return balPaid
     }
     
@@ -73,7 +71,6 @@ class Model: NSObject {
         do {
             let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
             if let nodes = json as? NSArray {
-                print(nodes.count)
                 return nodes
             }
         }

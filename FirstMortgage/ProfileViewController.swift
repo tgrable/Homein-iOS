@@ -709,7 +709,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             loView.addSubview(emailButton)
             
             offset += 35.0
-            print("buttonOffset = offset")
             buttonOffset = offset
             
             loView.frame = CGRectMake(15, yVal, scrollView.bounds.size.width - 30, CGFloat(offset))
