@@ -195,9 +195,9 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         scrollView.backgroundColor = UIColor.clearColor()
         addHomeView.addSubview(scrollView)
         
-        var y = 250.0
+        var y = 200.0
         if (modelName.rangeOfString("iPad") != nil) {
-            y = 500.0
+            y = 400.0
         }
         imgScrollView.frame = (frame: CGRectMake(0, 0, addHomeView.bounds.size.width, CGFloat(y)))
         imgScrollView.backgroundColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
@@ -610,21 +610,15 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         var height = 0.0
         var width = 0.0
         
-        switch (img.imageOrientation) {
-        case .Up:
-            height = 414 / Double(img.size.height)
-            width = 736 / Double(img.size.width)
-        case .Down:
-            height = 414 / Double(img.size.height)
-            width = 736 / Double(img.size.width)
-        case .Left:
+        if img.size.height > img.size.width {
+            print("Portrait")
             height = 736 / Double(img.size.height)
             width = 414 / Double(img.size.width)
-        case .Right:
-            height = 736 / Double(img.size.height)
-            width = 414 / Double(img.size.width)
-        default:
-            break;
+        }
+        else {
+            print("Landscape")
+            height = 414 / Double(img.size.height)
+            width = 736 / Double(img.size.width)
         }
         
         let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(CGFloat(width), CGFloat(height)))
@@ -636,14 +630,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
-        /*let data = UIImagePNGRepresentation(scaledImage)
-        let formatter = NSByteCountFormatter()
-        
-        formatter.allowedUnits = NSByteCountFormatterUnits.UseBytes
-        formatter.countStyle = NSByteCountFormatterCountStyle.File
-        
-        let formatted = formatter.stringFromByteCount(Int64(data!.length))*/
         
         return scaledImage
     }

@@ -1244,7 +1244,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                         self.contentScrollView.contentOffset.y = 0
                         
                         self.isLoginViewOpen = true
-                        
+                        self.caView.hidden = true
                         self.myHomesOverlay.hidden = true
                         self.addAHomeOverlay.hidden = true
                         

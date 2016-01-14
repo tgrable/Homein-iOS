@@ -543,12 +543,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         var yVal = 15.0
         var count = 0
         
+        scrollView.contentOffset.y = 0
         overlayView.hidden = false
         for loanOfficer in loArray {
             let nodeDict = loanOfficer as NSDictionary
-            buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count, view: scrollView, isSingleView: false)
+
+            self.buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count, view: self.scrollView, isSingleView: false)
             
-            scrollView.contentSize = CGSize(width: profileView.bounds.size.width, height: CGFloat(loArray.count * 145))
+            self.scrollView.contentSize = CGSize(width: self.profileView.bounds.size.width, height: CGFloat(loArray.count * 145))
             yVal += 145
             count++
         }
@@ -600,49 +602,15 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             loImageView.image = UIImage(named: "profile_icon")
             loView.addSubview(loImageView)
             
-            if let nid = nodeDict["nid"] {
-                var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-                documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
-                
-                let checkValidation = NSFileManager.defaultManager()
-                if (checkValidation.fileExistsAtPath(documentsPath)) {
-                    loImageView.image = UIImage(contentsOfFile: documentsPath)
+            if let nodeImage = nodeDict["image"] {
+                let urlString = nodeImage as String
+                if let checkedUrl = NSURL(string: urlString) {
+                    let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
+                    loImageView.image = UIImage(data: data!)
                 }
-                else {
-                    if let nodeImage = nodeDict["image"] {
-                        if let nid = nodeDict["nid"] {
-                            let loImageOverLayView = UIView(frame: CGRectMake(5, 5, 100, 120))
-                            loImageOverLayView.backgroundColor = UIColor.darkGrayColor()
-                            loImageOverLayView.alpha = 0.85
-                            loImageView.addSubview(loImageOverLayView)
-                            
-                            let loActivityIndicator = UIActivityIndicatorView()
-                            loActivityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.White
-                            loActivityIndicator.center = loImageOverLayView.center
-                            loImageOverLayView.addSubview(loActivityIndicator)
-                            loActivityIndicator.startAnimating()
-                            
-                            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                                let urlString = nodeImage as String
-                                if let checkedUrl = NSURL(string: urlString) {
-                                    let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
-                                    let image = UIImage(data: data!)
-                                    var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-                                    documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
-                                    UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
-                                    
-                                    loImageView.image = UIImage(contentsOfFile: documentsPath)
-                                    loActivityIndicator.stopAnimating()
-                                    loImageOverLayView.hidden = true
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        loImageView.image = UIImage(named: "profile_icon")
-                    }
-                }
-                
+            }
+            else {
+                loImageView.image = UIImage(named: "profile_icon")
             }
             
             var offset = 0.0
@@ -869,10 +837,16 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             }
         }
         else {
-            print("Temp Array Count: ", tempArray.count)
+            searchTxtField.text = ""
+            
             var dict: [String:String]
             if tempArray.count > 0 {
-                dict = tempArray[sender.tag]
+                if sender.tag < tempArray.count {
+                    dict = tempArray[sender.tag]
+                }
+                else {
+                    dict = loanOfficerArray[sender.tag]
+                }
             }
             else {
                 dict = loanOfficerArray[sender.tag]
@@ -933,8 +907,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 self.editModeLabel.textColor = UIColor.whiteColor()
                 self.overlayView.hidden = true
                 
+                self.nameTxtField.resignFirstResponder()
+                self.emailTxtField.resignFirstResponder()
+                self.searchTxtField.resignFirstResponder()
+                
                 self.loadingOverlay.hidden = true
                 self.activityIndicator.stopAnimating()
+                
+                self.tempArray.removeAll()
                 
                 self.removeViews(self.scrollView)
             }
@@ -999,7 +979,12 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     // MARK: Acctions
     func dismissOverlayView(sender: UIButton) {
         removeViews(scrollView)
-        self.overlayView.hidden = true
+        tempArray.removeAll()
+        searchTxtField.text = ""
+        nameTxtField.resignFirstResponder()
+        emailTxtField.resignFirstResponder()
+        searchTxtField.resignFirstResponder()
+        overlayView.hidden = true
     }
     
     func showSearchOverLay(sender: UIButton) {
@@ -1012,6 +997,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         if textField.tag == 999 {
             if (textField.text != "") {
                 searchLoanOfficerArray(searchTxtField.text!)
+                tempArray.removeAll()
+                nameTxtField.resignFirstResponder()
+                emailTxtField.resignFirstResponder()
+                searchTxtField.resignFirstResponder()
+                searchTxtField.text = ""
             }
             
             textField.resignFirstResponder()

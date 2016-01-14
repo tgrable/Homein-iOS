@@ -928,10 +928,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     func imageOverlay(imageArray: Array<PFFile>) {
         
         imageScollView.contentOffset.x = 0
-        let overlayColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.6)
+        //let overlayColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.6)
         
         overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        overlayView.backgroundColor = overlayColor
+        overlayView.backgroundColor = model.lightGrayColor
         overlayView.hidden = true
         self.view.addSubview(overlayView)
         
@@ -1434,21 +1434,15 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         var height = 0.0
         var width = 0.0
         
-        switch (img.imageOrientation) {
-        case .Up:
-            height = 414 / Double(img.size.height)
-            width = 736 / Double(img.size.width)
-        case .Down:
-            height = 414 / Double(img.size.height)
-            width = 736 / Double(img.size.width)
-        case .Left:
+        if img.size.height > img.size.width {
+            print("Portrait")
             height = 736 / Double(img.size.height)
             width = 414 / Double(img.size.width)
-        case .Right:
-            height = 736 / Double(img.size.height)
-            width = 414 / Double(img.size.width)
-        default:
-            break;
+        }
+        else {
+            print("Landscape")
+            height = 414 / Double(img.size.height)
+            width = 736 / Double(img.size.width)
         }
         
         let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(CGFloat(width), CGFloat(height)))
@@ -1460,14 +1454,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        
-        /*let data = UIImagePNGRepresentation(scaledImage)
-        let formatter = NSByteCountFormatter()
-        
-        formatter.allowedUnits = NSByteCountFormatterUnits.UseBytes
-        formatter.countStyle = NSByteCountFormatterCountStyle.File
-        
-        let formatted = formatter.stringFromByteCount(Int64(data!.length))*/
         
         return scaledImage
     }
