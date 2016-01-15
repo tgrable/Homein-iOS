@@ -1457,6 +1457,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         self.homeObject["imageArray"] = self.imageArray
         setDefaultImage()
         
+        updateHomeObject()
+        
         saveView.hidden = false
         saveButton.hidden = false
         saveButton.enabled = true
