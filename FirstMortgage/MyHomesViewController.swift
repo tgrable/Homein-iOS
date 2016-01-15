@@ -469,7 +469,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     else {
                         if self.alreadyDisplayedAlert != true {
-                            let alertController = UIAlertController(title: "HomeIn", message: "We appologize but there was an error downloading some of your images.", preferredStyle: .Alert)
+                            let alertController = UIAlertController(title: "HomeIn", message: "There was an error downloading some of your images.", preferredStyle: .Alert)
                             
                             let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                                 // ...

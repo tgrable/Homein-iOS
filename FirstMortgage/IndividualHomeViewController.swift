@@ -924,7 +924,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                         let fillerImage = UIImage(named: "default_home") as UIImage?
                         self.defaultImageView.image = fillerImage
                         
-                        let alertController = UIAlertController(title: "HomeIn", message: "We appologize but there was an error downloading your images.", preferredStyle: .Alert)
+                        let alertController = UIAlertController(title: "HomeIn", message: "There was an error downloading your images.", preferredStyle: .Alert)
                         
                         let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                             // ...
