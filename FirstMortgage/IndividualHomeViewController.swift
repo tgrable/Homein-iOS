@@ -830,7 +830,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         // UIButton
         saveButton.frame = (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
-        saveButton.addTarget(self, action: "updateHomeObject:", forControlEvents: .TouchUpInside)
+        saveButton.addTarget(self, action: "updateHomeObject", forControlEvents: .TouchUpInside)
         saveButton.setTitle("SAVE HOME", forState: .Normal)
         saveButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         saveButton.backgroundColor = UIColor.clearColor()
@@ -887,8 +887,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     func setDefaultImage() {
         if (homeObject["imageArray"] != nil) {
-            imageArray = homeObject["imageArray"] as! [PFFile]
             
+            imageArray = homeObject["imageArray"] as! [PFFile]
             if imageArray.count > 0 {
                 let img = imageArray[0] as PFFile
                 img.getDataInBackgroundWithBlock {
@@ -920,15 +920,29 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                         }
                     }
                     else {
-                        
-                        // TODO: Check if image is loading
-                        print("Error: ", error?.userInfo)
+
                         let fillerImage = UIImage(named: "default_home") as UIImage?
                         self.defaultImageView.image = fillerImage
+                        
+                        let alertController = UIAlertController(title: "HomeIn", message: "We appologize but there was an error downloading your images.", preferredStyle: .Alert)
+                        
+                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                            // ...
+                        }
+                        alertController.addAction(OKAction)
+                        
+                        self.presentViewController(alertController, animated: true) {
+                            // ...
+                        }
+                        
+                        self.homeObject["imageArray"] = []
+                        self.homeObject.saveEventually()
+                    
                     }
                 }
             }
             else {
+                print("Load Default")
                 let fillerImage = UIImage(named: "default_home") as UIImage?
                 defaultImageView.image = fillerImage
             }
@@ -1363,12 +1377,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             editIcon.image = UIImage(named: "edit_icon")
             
             editModeLabel.textColor = UIColor.whiteColor()
-            
-            /*myHomesView.removeFromSuperview()
-            homeTray.removeFromSuperview()
-            calcTray.removeFromSuperview()
-            saveDeleteTray.removeFromSuperview()
-            buildView()*/
         }
     }
     
@@ -1468,6 +1476,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         self.homeObject["imageArray"] = self.imageArray
         setDefaultImage()
         
+        updateHomeObject()
+        
         saveView.hidden = false
         saveButton.hidden = false
         saveButton.enabled = true
@@ -1563,7 +1573,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     //MARK:
     //MARK: Parse Update Object
-    func updateHomeObject(sender: UIButton) {
+    func updateHomeObject() {
+        print("updateHomeObject")
         loadingOverlay.hidden = false
         activityIndicator.startAnimating()
         
@@ -1597,6 +1608,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 self.loadingOverlay.hidden = true
                 
                 if (success) {
+                    self.homeObject.pinInBackground()
+                    
                     let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
                     
                     let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
@@ -1635,8 +1648,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
             self.homeObject.deleteInBackgroundWithBlock {
                 (success: Bool, error: NSError?) -> Void in
                 if (success) {
-                    //let viewControllers: [UIViewController] = self.navigationController!.viewControllers as [UIViewController];
-                    //self.navigationController!.popToViewController(viewControllers[viewControllers.count - 3], animated: true);
+                    self.homeObject.unpinInBackground()
+                    
                     self.navigationController!.popToRootViewControllerAnimated(true)
                     
                 } else {

@@ -51,6 +51,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     var sortCriteria = String()
     
+    var alreadyDisplayedAlert = Bool()
+    
     // Parse
     var userHomes = [PFObject]()
     var home: PFObject!
@@ -464,6 +466,30 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                             cell.backgroundImage.contentMode = .ScaleAspectFill
                             cell.backgroundImage.clipsToBounds = true
                         }
+                    }
+                    else {
+                        if self.alreadyDisplayedAlert != true {
+                            let alertController = UIAlertController(title: "HomeIn", message: "We appologize but there was an error downloading some of your images.", preferredStyle: .Alert)
+                            
+                            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                                // ...
+                            }
+                            alertController.addAction(OKAction)
+                            
+                            self.presentViewController(alertController, animated: true) {
+                                // ...
+                            }
+                            
+                            self.alreadyDisplayedAlert = true
+                        }
+                        
+                        item["imageArray"] = []
+                        item.saveEventually()
+                        
+                        let fillerImage = UIImage(named: "default_home") as UIImage?
+                        cell.backgroundImage?.image = fillerImage
+                        cell.backgroundImage.contentMode = .ScaleAspectFill
+                        cell.backgroundImage.clipsToBounds = true
                     }
                 }
             }
