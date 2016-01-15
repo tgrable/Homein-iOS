@@ -1454,6 +1454,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         imageArray.removeAtIndex(sender.tag)
         
         removeViews(imageScollView)
+        print(sender.tag)
         self.homeObject["imageArray"] = self.imageArray
         setDefaultImage()
         
@@ -1462,7 +1463,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         saveView.hidden = false
         saveButton.hidden = false
         saveButton.enabled = true
-        
+        imageIndex = 0
         overlayView.hidden = true
         imageScollView.contentOffset.x = 0
         print("imageIndex", imageIndex)
@@ -1470,6 +1471,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     }
     
     func setImageAsDefault(sender: UIButton) {
+        print(sender.tag)
         let img = imageArray[sender.tag]
         imageArray.removeAtIndex(sender.tag)
         imageArray.insert(img, atIndex: 0)
@@ -1498,9 +1500,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     //MARK: UIImagePickerController Delegates
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-
+            img = pickedImage
             if (picker.sourceType.rawValue == 1) {
                 UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
+                print("write to album")
             }
 
             self.newImg = self.scaleImagesForParse(pickedImage)
