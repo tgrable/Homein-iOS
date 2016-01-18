@@ -238,8 +238,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                                 self.tempArray.append(nodeDict as! Dictionary<String, String>)
                             }
                         }
-                        
-                        // TODO: set a date to recheck these LO's
+
                         defaults.setObject(self.loanOfficerArray, forKey: "loanOfficerArray")
                     }
                 }
@@ -309,83 +308,27 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             var userLo = ""
             if let _ = user!["officerName"] {
                 userLo = user!["officerName"] as! String
-                if loanOfficerArray.count > 0 {
-                    let filteredArray = loanOfficerArray.filter({
-                        $0["name"] == userLo
-                    })
-                    
-                    // TODO: Fix DRYness here
-                    var nodeDict = Dictionary<String, String>()
-                    nodeDict["nid"] = filteredArray[0]["nid"]
-                    nodeDict["email"] = filteredArray[0]["email"]
-                    nodeDict["mobile"] = filteredArray[0]["mobile"]
-                    nodeDict["office"] = filteredArray[0]["office"]
-                    nodeDict["url"] = filteredArray[0]["url"]
-                    nodeDict["name"] = filteredArray[0]["name"]
-                    nodeDict["image"] = filteredArray[0]["image"]
-                    
-                    if let nodeImage = nodeDict["image"] {
-                        if let nid = nodeDict["nid"] {
-                            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                                let urlString = nodeImage as String
-                                if let checkedUrl = NSURL(string: urlString) {
-                                    let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
-                                    let image = UIImage(data: data!)
-                                    var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-                                    documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
-                                    UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
-                                }
-                            }
-                        }
-                    }
-                    
-                    let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
-                    
-                    let defaults = NSUserDefaults.standardUserDefaults()
-                    defaults.removeObjectForKey(dictString)
-                    defaults.setObject(nodeDict, forKey: dictString)
 
-                    buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
-                }
-                else {
-                    getBranchLoanOfficers()
-                    
-                    let filteredVisitors = loanOfficerArray.filter({
-                        $0["name"] == userLo
-                    })
-                    
-                    var nodeDict = Dictionary<String, String>()
-                    nodeDict["nid"] = filteredVisitors[0]["nid"]
-                    nodeDict["email"] = filteredVisitors[0]["email"]
-                    nodeDict["mobile"] = filteredVisitors[0]["mobile"]
-                    nodeDict["office"] = filteredVisitors[0]["office"]
-                    nodeDict["url"] = filteredVisitors[0]["url"]
-                    nodeDict["name"] = filteredVisitors[0]["name"]
-                    nodeDict["image"] = filteredVisitors[0]["image"]
-                    
-                    if let nodeImage = nodeDict["image"] {
-                        if let nid = nodeDict["nid"] {
-                            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                                let urlString = nodeImage as String
-                                if let checkedUrl = NSURL(string: urlString) {
-                                    let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
-                                    let image = UIImage(data: data!)
-                                    var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-                                    documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
-                                    UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
-                                }
-                            }
-                        }
-                    }
-                    
-                    let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
-                    
-                    let defaults = NSUserDefaults.standardUserDefaults()
-                    defaults.removeObjectForKey(dictString)
-                    defaults.setObject(nodeDict, forKey: dictString)
-                    
-                    buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
-                }
+                let filteredArray = loanOfficerArray.filter({
+                    $0["name"] == userLo
+                })
+                
+                var nodeDict = Dictionary<String, String>()
+                nodeDict["nid"] = filteredArray[0]["nid"]
+                nodeDict["email"] = filteredArray[0]["email"]
+                nodeDict["mobile"] = filteredArray[0]["mobile"]
+                nodeDict["office"] = filteredArray[0]["office"]
+                nodeDict["url"] = filteredArray[0]["url"]
+                nodeDict["name"] = filteredArray[0]["name"]
+                nodeDict["image"] = filteredArray[0]["image"]
+                
+                let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
+                
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.removeObjectForKey(dictString)
+                defaults.setObject(nodeDict, forKey: dictString)
+                
+                buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
             }
             else {
                 // UIView
@@ -414,6 +357,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         buttonOffset += 125
         
+        
+        
         // UIView
         let logOutView = UIView(frame: CGRectMake(15, CGFloat(buttonOffset), profileView.bounds.size.width - 30, 50))
         let logOutGradientLayer = CAGradientLayer()
@@ -421,7 +366,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         logOutGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
         logOutView.layer.insertSublayer(logOutGradientLayer, atIndex: 0)
         logOutView.layer.addSublayer(logOutGradientLayer)
-        profileView.addSubview(logOutView)
+        if reachability.isConnectedToNetwork() {
+            profileView.addSubview(logOutView)
+        }
         
         let logOutArrow = UILabel (frame: CGRectMake(logOutView.bounds.size.width - 50, 0, 40, 50))
         logOutArrow.textAlignment = NSTextAlignment.Right
@@ -447,7 +394,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         logoutBtnView.image = logoutBtnImg
         logOutView.addSubview(logoutBtnView)
         
-        buttonOffset += 60
+        if reachability.isConnectedToNetwork() {
+            buttonOffset += 60
+        }
+        
         
         // UIView
         let changeLoView = UIView(frame: CGRectMake(15, CGFloat(buttonOffset), profileView.bounds.size.width - 30, 50))
@@ -456,7 +406,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         changeLoGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
         changeLoView.layer.insertSublayer(changeLoGradientLayer, atIndex: 0)
         changeLoView.layer.addSublayer(changeLoGradientLayer)
-        profileView.addSubview(changeLoView)
+        if reachability.isConnectedToNetwork() {
+            profileView.addSubview(changeLoView)
+        }
+        
         
         let changeLoArrow = UILabel(frame: CGRectMake(logOutView.bounds.size.width - 50, 0, 40, 50))
         changeLoArrow.textAlignment = NSTextAlignment.Right
@@ -487,7 +440,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         changeLoBtnView.image = changeLoBtnImg
         changeLoView.addSubview(changeLoBtnView)
         
-        buttonOffset += 60
+        if reachability.isConnectedToNetwork() {
+            buttonOffset += 60
+        }
         
         // UIView
         calculateView.frame = (frame: CGRectMake(15, CGFloat(buttonOffset), profileView.bounds.size.width - 30, 50))
@@ -602,11 +557,16 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             loImageView.image = UIImage(named: "profile_icon")
             loView.addSubview(loImageView)
             
-            if let nodeImage = nodeDict["image"] {
-                let urlString = nodeImage as String
-                if let checkedUrl = NSURL(string: urlString) {
-                    let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
-                    loImageView.image = UIImage(data: data!)
+            if reachability.isConnectedToNetwork() != false {
+                if let nodeImage = nodeDict["image"] {
+                    let urlString = nodeImage as String
+                    if let checkedUrl = NSURL(string: urlString) {
+                        let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
+                        loImageView.image = UIImage(data: data!)
+                    }
+                }
+                else {
+                    loImageView.image = UIImage(named: "profile_icon")
                 }
             }
             else {
@@ -940,31 +900,53 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         user!["additional"] = (nameTxtField.text != "") ? nameTxtField.text : user!["additional"]
         user!["email"] = (emailTxtField.text != "") ? emailTxtField.text : user!["email"]
         
-        user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-            
-            var message = ""
-            if (success) {
-                message = "Your profile information was updated."
+        if reachability.isConnectedToNetwork() {
+            user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                
+                var message = ""
+                if (success) {
+                    message = "Your profile information was updated."
+                }
+                else {
+                    message = String(format: "There was an error updating your profile information. %@", error!)
+                }
+                
+                let alertController = UIAlertController(title: "HomeIn", message: message, preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    self.nameTxtField.enabled = false
+                    self.emailTxtField.enabled = false
+                    self.loButton.enabled = false
+                    
+                    self.isTextFieldEnabled = false
+                    self.editIcon.image = UIImage(named: "edit_icon")
+                    self.editModeLabel.textColor = UIColor.whiteColor()
+                    
+                    self.loadingOverlay.hidden = true
+                    self.activityIndicator.stopAnimating()
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
             }
-            else {
-                message = String(format: "There was an error updating your profile information. %@", error!)
-            }
-            
-            self.nameTxtField.enabled = false
-            self.emailTxtField.enabled = false
-            self.loButton.enabled = false
-            
-            self.isTextFieldEnabled = false
-            self.editIcon.image = UIImage(named: "edit_icon")
-            self.editModeLabel.textColor = UIColor.whiteColor()
-            
-            self.loadingOverlay.hidden = true
-            self.activityIndicator.stopAnimating()
-            
-            let alertController = UIAlertController(title: "HomeIn", message: message, preferredStyle: .Alert)
+        }
+        else {
+            user?.saveEventually()
+            let alertController = UIAlertController(title: "HomeIn", message: "Your profile information was updated.", preferredStyle: .Alert)
             
             let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                // ...
+                self.nameTxtField.enabled = false
+                self.emailTxtField.enabled = false
+                self.loButton.enabled = false
+                
+                self.isTextFieldEnabled = false
+                self.editIcon.image = UIImage(named: "edit_icon")
+                self.editModeLabel.textColor = UIColor.whiteColor()
+                
+                self.loadingOverlay.hidden = true
+                self.activityIndicator.stopAnimating()
             }
             alertController.addAction(OKAction)
             

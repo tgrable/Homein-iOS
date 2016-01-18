@@ -64,11 +64,17 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // UIPickerView
     let statesPicker = UIPickerView() as UIPickerView
     
+    let reachability = Reachability()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         statesPicker.delegate = self
         statesPicker.dataSource = self
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        createStateDictionary()
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -76,20 +82,28 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         
-        geoLocatorHasFired = false
-        timerHasFired = false
-        stateLocatorTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "runTimedCode", userInfo: nil, repeats: false)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        createStateDictionary()
-        
         buildView()
         buildPickerViewTray()
+        
+        geoLocatorHasFired = false
+        timerHasFired = false
     }
     
     override func viewDidAppear(animated: Bool) {
-        getBranchJson()
+        
+        if reachability.isConnectedToNetwork() {
+            stateLocatorTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "runTimedCode", userInfo: nil, repeats: false)
+            
+            getBranchJson()
+        }
+        else {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
+            branchArray = defaults.objectForKey("branchOfficeArrayDict") as! Array<Dictionary<String, String>>
+            
+            runTimedCode()
+        }
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -241,9 +255,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 if let nodes = json as? NSArray {
                     for node in nodes {
                         if let nodeDict = node as? NSDictionary {
-                            //var branch: Branch?
-                            //branch = Branch()
-                            
                             var branch: [String:String] = [:]
                             
                             if let streetName = nodeDict["street"] as? String {
@@ -271,6 +282,9 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                             states.append(branch["state"]!)
                         }
                     }
+                    
+                    let defaults = NSUserDefaults.standardUserDefaults()
+                    defaults.setObject(self.branchArray, forKey: "branchOfficeArrayDict")
                 }
 
                 self.stateArray = self.removeDuplicates(states)
@@ -319,7 +333,13 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             if self.timerHasFired == false {
                 let placemark = placemarks!.last! as CLPlacemark
                 let state = placemark.administrativeArea
-                self.findBranchesInMyState(state!)
+                
+                if (CLLocationManager.authorizationStatus() == .AuthorizedAlways || CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse) {
+                    self.findBranchesInMyState(state!)
+                }
+                else {
+                    self.geoLocatorHasFired = false
+                }
             }
         })
     }
@@ -341,12 +361,19 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             }
         }
         
-        if (filterStateArray.count > 0) {
-            calcDistance(filterStateArray)
+        if reachability.isConnectedToNetwork() {
+            if (filterStateArray.count > 0) {
+                calcDistance(filterStateArray)
+            }
+            else {
+                activityIndicator.stopAnimating()
+                showHideSortTray()
+            }
         }
         else {
             activityIndicator.stopAnimating()
             showHideSortTray()
+            self.printLocations(filterStateArray)
         }
     }
     
@@ -394,7 +421,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     func printLocations(filteredBranchArray: Array<Dictionary<String, String>>) {
         filteredArray.removeAll()
         filteredArray = filteredBranchArray
-
+        
         var yOffset = 15.0 as CGFloat
         var count = 0
         
@@ -426,14 +453,25 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             branchView.addSubview(cityStateLabel)
             offset += cityStateLabel.bounds.size.height
             
-            let milesLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
-            milesLabel.font = UIFont(name: "forza-light", size: 18)
-            milesLabel.textAlignment = NSTextAlignment.Left
-            milesLabel.text = String(format: "%.01f Miles", Double(branch["distanceFromMe"]!)!)
-            milesLabel.numberOfLines = 0
-            milesLabel.sizeToFit()
-            branchView.addSubview(milesLabel)
-            offset += milesLabel.bounds.size.height
+            if let _ = branch["distanceFromMe"] {
+                let dist = branch["distanceFromMe"]! as String
+                if dist.characters.count > 0 {
+                    let milesLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
+                    milesLabel.font = UIFont(name: "forza-light", size: 18)
+                    milesLabel.textAlignment = NSTextAlignment.Left
+                    milesLabel.text = String(format: "%.01f Miles", Double(branch["distanceFromMe"]!)!)
+                    milesLabel.numberOfLines = 0
+                    milesLabel.sizeToFit()
+                    branchView.addSubview(milesLabel)
+                    offset += milesLabel.bounds.size.height
+                    
+                    let locationButton = UIButton(frame: CGRectMake(0, 0, branchView.bounds.size.width, offset))
+                    locationButton.addTarget(self, action: "mapButtonPressed:", forControlEvents: .TouchUpInside)
+                    locationButton.backgroundColor = UIColor.clearColor()
+                    locationButton.tag = count
+                    branchView.addSubview(locationButton)
+                }
+            }
             
             let pl = (branch["phone"]!.characters.count > 0) ? formatPhoneString(branch["phone"]!) : ""
             let phoneLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
@@ -453,12 +491,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             let shadowView = UIImageView(frame: CGRectMake(15, yOffset + offset + 20, branchView.bounds.size.width, 15))
             shadowView.image = shadowImg
             scrollView.addSubview(shadowView)
-            
-            let locationButton = UIButton(frame: CGRectMake(0, 0, branchView.bounds.size.width, offset))
-            locationButton.addTarget(self, action: "mapButtonPressed:", forControlEvents: .TouchUpInside)
-            locationButton.backgroundColor = UIColor.clearColor()
-            locationButton.tag = count
-            branchView.addSubview(locationButton)
             
             let btnEnabled = (branch["phone"]!.characters.count > 0) ? true : false
             let phoneButton = UIButton(frame: CGRectMake(0, offset, branchView.bounds.size.width, 20))
@@ -481,7 +513,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK: - Action Methods
     func searchNewState(sender: UIButton) {
         findBranchesInMyState(stateToCheck)
-        activityIndicator.startAnimating()
+        //activityIndicator.startAnimating()
         showHideSortTray()
     }
     

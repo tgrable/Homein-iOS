@@ -45,9 +45,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     let passwordreg = UITextField()
     let confirmpasswordreg = UITextField()
     let searchTxtField = UITextField()
-    
-    //UIImageView
-    var imageView = UIImageView()
 
     //UIGestureRecognizer
     let swipeRec = UISwipeGestureRecognizer()
@@ -77,6 +74,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     var didContinueWithOut = Bool()
     var didComeFromAccountPage = Bool()
     var isOverlayAdded = Bool()
+    var didDisplayNoConnectionMessage = Bool()
     
     //Array
     var loanOfficerArray = Array<Dictionary<String, String>>()
@@ -97,6 +95,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        didDisplayNoConnectionMessage = false
+        
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             let manager = CLLocationManager()
             
@@ -106,7 +106,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             
             if CLLocationManager.locationServicesEnabled() {
                 switch(CLLocationManager.authorizationStatus()) {
-                case .NotDetermined, .Restricted, .Denied:
+                case .NotDetermined, .Restricted: //, .Denied:
                     self.locationServicesIsAllowed = false
                 case .AuthorizedAlways, .AuthorizedWhenInUse:
                     self.locationServicesIsAllowed = true
@@ -123,25 +123,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             }
         }
         
-        if self.reachability.isConnectedToNetwork() == false {
-            let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection. An internet connection is required to create a new account or login to an existing account.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
-            }
-        }
-        
         /*************************** was in viewWillAppear *****************************************/
         self.view.backgroundColor = model.lightGrayColor
         
         // UIImageView
         let fmcLogo = UIImage(named: "home_in") as UIImage?
-        imageView.frame = (frame: CGRectMake((self.view.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
+        let imageView = UIImageView(frame: CGRectMake((self.view.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
         imageView.image = fmcLogo
         self.view.addSubview(imageView)
         
@@ -190,6 +177,21 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
+        
+        if didDisplayNoConnectionMessage != true {
+            if self.reachability.isConnectedToNetwork() == false {
+                let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection. An internet connection is required to create a new account or login to an existing account.", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    self.didDisplayNoConnectionMessage = true
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -486,10 +488,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     }
     
     func buildCreateAccountView() {
-        if reachability.isConnectedToNetwork() {
-            getBranchJSON()
-        }
         
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if (defaults.objectForKey("loanOfficerArray") != nil) {
+            self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
+            self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+        }
+        else {
+            if reachability.isConnectedToNetwork() {
+                getBranchJSON()
+            }
+        }
+
         var fontSize = 16 as CGFloat
         if modelName.rangeOfString("5") != nil{
             fontSize = 14
@@ -632,7 +642,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         getStartedArrow.textColor = UIColor.whiteColor()
         getStartedView.addSubview(getStartedArrow)
         
-        getStartedButton.frame = (frame: CGRectMake(5, offset, contentScrollView.bounds.size.width - 30, 40))
+        getStartedButton.frame = (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
         getStartedButton.setTitle("CREATE AN ACCOUNT", forState: .Normal)
         getStartedButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -1115,6 +1125,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         loadingOverlay.hidden = false
         activityIndicator.startAnimating()
         
+        let defaults = NSUserDefaults.standardUserDefaults()
+        
         let nodes = self.model.getBranchLoanOfficers()
         
         self.loanOfficerArray.removeAll()
@@ -1126,6 +1138,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                 self.tempArray.append(nodeDict as! Dictionary<String, String>)
             }
         }
+        
+        defaults.setObject(self.loanOfficerArray, forKey: "loanOfficerArray")
         
         self.activityIndicator.stopAnimating()
         self.loadingOverlay.hidden = true
@@ -1336,13 +1350,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     
                     self.didComeFromAccountPage = true
                     self.performSegueWithIdentifier("profileViewController", sender: nil)
-                    
-                    // TODO: Uncomment this when ready to deploy
-                    /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
+
+                    PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
                     
                     print("----- Email LO -----")
                     // TODO: [Error]: success/error was not called (Code: 141, Version: 1.10.0)
-                    }*/
+                    }
                 }
             }
         }
@@ -1466,7 +1479,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             loginSignupUser(1)
         }
         else {
-            
+            print("Default")
         }
     }
     
@@ -1776,11 +1789,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         let user = PFUser.currentUser()
         if (user == nil) {
-
+            
             userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 100, 0, 90, 50))
             userButton.setTitle("LOGIN", forState: .Normal)
             userButton.setBackgroundImage(UIImage(named: ""), forState: .Normal)
             userButton.tag = 6
+            
+            if reachability.isConnectedToNetwork() == false {
+                userButton.enabled = false
+            }
+            else {
+                userButton.enabled = true
+            }
             
             myHomesOverlay.hidden = false
             addAHomeOverlay.hidden = false
@@ -1806,6 +1826,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                 else {
                     preQualifiedOverlay.hidden = false
                 }
+            }
+            else {
+                preQualifiedOverlay.hidden = false
             }
         }
     }
@@ -1903,9 +1926,4 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             view.removeFromSuperview()
         }
     }
-    
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        print("Updated Status")
-    }
-    
 }

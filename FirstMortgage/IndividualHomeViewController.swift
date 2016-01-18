@@ -13,6 +13,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     // MARK:
     // MARK: Properties
+    
+    //Reachability
+    let reachability = Reachability()
+    
     let model = Model()
     let modelName = UIDevice.currentDevice().modelName
     
@@ -80,6 +84,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     var isCalcTrayOpen = Bool()
     var didEnterEditMode = Bool()
+    var didDisplayNoConnectionMessage = Bool()
     
     let estPaymentLabel = UILabel()
     let imageIndexLabel = UILabel()
@@ -120,6 +125,23 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true);
+        
+        if self.reachability.isConnectedToNetwork() == false {
+            if didDisplayNoConnectionMessage != true {
+                if self.reachability.isConnectedToNetwork() == false {
+                    let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection.\n\nAny images added will be saved to the photo library on this device. Once an internet connection is reestablished, images may be added to any existing home.", preferredStyle: .Alert)
+                    
+                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                        self.didDisplayNoConnectionMessage = true
+                    }
+                    alertController.addAction(OKAction)
+                    
+                    self.presentViewController(alertController, animated: true) {
+                        // ...
+                    }
+                }
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -289,12 +311,28 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         defaultImageView.image = UIImage(named: "default_home") as UIImage?
         homeTray.addSubview(defaultImageView)
         
+        let imageCountView = UIView(frame: CGRectMake(self.defaultImageView.bounds.size.width - 85, 10, 75, 25))
+        imageCountView.backgroundColor = UIColor.darkGrayColor()
+        imageCountView.alpha = 0.85
+        defaultImageView.addSubview(imageCountView)
+        
+        // UILabel
+        self.imageCountLabel.frame = (frame: CGRectMake(0, 0, imageCountView.bounds.size.width, 25))
+        self.imageCountLabel.font = UIFont(name: "Arial", size: 15)
+        self.imageCountLabel.text = String(format: "0 of 0", self.imageArray.count)
+        self.imageCountLabel.textAlignment = NSTextAlignment.Center
+        self.imageCountLabel.textColor = UIColor.whiteColor()
+        imageCountView.addSubview(self.imageCountLabel)
+        
         let homeNameborder = CALayer()
         let width = CGFloat(1.0)
         
         var homeName = ""
         if let _ = homeObject["name"] {
             homeName = homeObject["name"] as! String
+        }
+        else {
+            homeObject["name"] = homeName
         }
         
         // UITextField
@@ -341,6 +379,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if let _ = homeObject["price"] {
             price = homeObject["price"] as! Double
         }
+        else {
+            homeObject["price"] = price
+        }
         let formatter = NSNumberFormatter()
         formatter.numberStyle = .CurrencyStyle
         let homePrice = formatter.stringFromNumber(price)! as String
@@ -372,6 +413,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         var homeAddress = ""
         if let _ = homeObject["address"] {
             homeAddress = homeObject["address"] as! String
+        }
+        else {
+            homeObject["address"] = homeAddress
         }
         
         let homeAddressborder = CALayer()
@@ -454,7 +498,13 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         
         y += 10.0
         var xOffset = 0
-        userRating = homeObject["rating"] as! Int
+        userRating = 0
+        if let _ = homeObject["rating"] {
+            userRating = homeObject["rating"] as! Int
+        }
+        else {
+            homeObject["rating"] = userRating
+        }
         
         for i in 1...5 {
             // UIButton
@@ -479,6 +529,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         var bed = 0
         if let _ = homeObject["beds"] {
             bed = (homeObject["beds"] as? Int)!
+        }
+        else {
+            homeObject["beds"] = bed
         }
         
         // UITextField
@@ -517,6 +570,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if let _ = homeObject["baths"] {
             bath = (homeObject["baths"] as? Double)!
         }
+        else {
+            homeObject["baths"] = bath
+        }
 
         // UITextField
         bathsTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width / 3) + 5, CGFloat(y), (homeTray.bounds.size.width / 3) - 20, 30))
@@ -554,6 +610,9 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if let _ = homeObject["footage"] {
             homeSqft = (homeObject["footage"] as? Int)!
         }
+        else {
+            homeObject["footage"] = homeSqft
+        }
         
         // UITextField
         sqFeetTxtField.frame = (frame: CGRectMake((homeTray.bounds.size.width * 0.66) + 10, CGFloat(y), (homeTray.bounds.size.width / 3) - 20, 30))
@@ -585,22 +644,25 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         y += 65
         
         var desc = ""
-        if let _ = homeObject["desc"] {
-            desc =  homeObject["desc"] as! String
+        if let _ = self.homeObject["desc"] {
+            desc =  self.homeObject["desc"] as! String
+        }
+        else {
+            self.homeObject["desc"] = desc
         }
         
         //Create textview
-        descTxtView.frame = (frame : CGRectMake(10, CGFloat(y), homeTray.bounds.size.width - 20, 150))
-        descTxtView.backgroundColor = UIColor.whiteColor()
-        descTxtView.text = desc
-        descTxtView.autocorrectionType = .Yes
-        descTxtView.editable = false
+        self.descTxtView.frame = (frame : CGRectMake(10, CGFloat(y), self.homeTray.bounds.size.width - 20, 150))
+        self.descTxtView.backgroundColor = UIColor.whiteColor()
+        self.descTxtView.text = desc
+        self.descTxtView.autocorrectionType = .Yes
+        self.descTxtView.editable = false
         if desc == "Add notes about this house." {
-            descTxtView.textColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
+            self.descTxtView.textColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
         }
-        descTxtView.font = UIFont(name: "forza-light", size: 22)
-        descTxtView.delegate = self
-        homeTray.addSubview(descTxtView)
+        self.descTxtView.font = UIFont(name: "forza-light", size: 22)
+        self.descTxtView.delegate = self
+        self.homeTray.addSubview(self.descTxtView)
         
         yOffset = CGFloat(y)
         
@@ -898,18 +960,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                             let image = UIImage(data:imageData)
                             self.defaultImageView.image = image
                             
-                            let imageCountView = UIView(frame: CGRectMake(self.defaultImageView.bounds.size.width - 85, 10, 75, 25))
-                            imageCountView.backgroundColor = UIColor.darkGrayColor()
-                            imageCountView.alpha = 0.85
-                            self.defaultImageView.addSubview(imageCountView)
-                            
-                            // UILabel
-                            self.imageCountLabel.frame = (frame: CGRectMake(0, 0, imageCountView.bounds.size.width, 25))
                             self.imageCountLabel.text = String(format: "1 of %d", self.imageArray.count)
-                            self.imageCountLabel.font = UIFont(name: "Arial", size: 15)
-                            self.imageCountLabel.textAlignment = NSTextAlignment.Center
-                            self.imageCountLabel.textColor = UIColor.whiteColor()
-                            imageCountView.addSubview(self.imageCountLabel)
                             
                             let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
                             overlayButton.backgroundColor = UIColor.clearColor()
@@ -942,7 +993,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 }
             }
             else {
-                print("Load Default")
                 let fillerImage = UIImage(named: "default_home") as UIImage?
                 defaultImageView.image = fillerImage
             }
@@ -1232,14 +1282,11 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     // MARK:
     // MARK: UITextViewDelegate
     func textViewDidBeginEditing(textView: UITextView) {
+        textView.textColor = UIColor.blackColor()
+        
         UIView.animateWithDuration(0.4, animations: {
             self.scrollView.contentOffset.y = 500
             }, completion: nil)
-        
-        if textView.textColor == UIColor.lightGrayColor() {
-            textView.text = nil
-            textView.textColor = UIColor.blackColor()
-        }
         
         if textView.text == "Add notes about this house." {
             textView.text = ""
@@ -1562,6 +1609,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if (imageData != nil) {
             let imageFile = PFFile(name:"image.jpg", data:imageData!)
             imageArray.append(imageFile!)
+            
             self.imageCountLabel.text = String(format: "1 of %d", self.imageArray.count)
             imageOverlay(imageArray)
         }
@@ -1583,60 +1631,91 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         loadingOverlay.hidden = false
         activityIndicator.startAnimating()
         
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-            self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
-            var price = self.homePriceTxtField.text! as String
-            if price.rangeOfString(",") != nil{
-                price = price.stringByReplacingOccurrencesOfString(",", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            }
-            if price.rangeOfString("$") != nil{
-                price = price.stringByReplacingOccurrencesOfString("$", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-            }
-            self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(price) : self.homeObject["price"]
-            self.homeObject["rating"] = self.userRating
-            self.homeObject["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : self.homeObject["beds"]
-            self.homeObject["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : self.homeObject["baths"]
-            self.homeObject["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : self.homeObject["footage"]
-            self.homeObject["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : self.homeObject["address"]
-            self.homeObject["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : self.homeObject["desc"]
-            self.homeObject["imageArray"] = self.imageArray
-            self.homeObject["monthlyPayment"] = self.estimatedPaymentDefault
-            
-            self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-                self.myHomesView.removeFromSuperview()
-                self.homeTray.removeFromSuperview()
-                self.calcTray.removeFromSuperview()
-                self.saveDeleteTray.removeFromSuperview()
-                self.buildView()
+        self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
+        var price = "0"
+        if let _ = self.homePriceTxtField.text {
+            price = self.homePriceTxtField.text! as String
+        }
+        if price.rangeOfString(",") != nil{
+            price = price.stringByReplacingOccurrencesOfString(",", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        }
+        if price.rangeOfString("$") != nil{
+            price = price.stringByReplacingOccurrencesOfString("$", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        }
+        self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(price) : self.homeObject["price"]
+        self.homeObject["rating"] = self.userRating
+        self.homeObject["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : self.homeObject["beds"]
+        self.homeObject["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : self.homeObject["baths"]
+        self.homeObject["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : self.homeObject["footage"]
+        self.homeObject["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : self.homeObject["address"]
+        self.homeObject["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : self.homeObject["desc"]
+        self.homeObject["monthlyPayment"] = self.estimatedPaymentDefault
+        
+        if self.reachability.isConnectedToNetwork() {
+            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                self.homeObject["imageArray"] = self.imageArray
                 
-                self.activityIndicator.stopAnimating()
-                self.loadingOverlay.hidden = true
-                
-                if (success) {
-                    self.homeObject.pinInBackground()
+                self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+                    self.myHomesView.removeFromSuperview()
+                    self.homeTray.removeFromSuperview()
+                    self.calcTray.removeFromSuperview()
+                    self.saveDeleteTray.removeFromSuperview()
+                    self.buildView()
                     
-                    let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
+                    self.activityIndicator.stopAnimating()
+                    self.loadingOverlay.hidden = true
                     
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    if (success) {
+                        self.homeObject.pinInBackground()
                         
-                        self.didEnterEditMode = false
+                        let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
+                        
+                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                            
+                            self.didEnterEditMode = false
+                        }
+                        alertController.addAction(OKAction)
+                        
+                        self.presentViewController(alertController, animated: true) {
+                            // ...
+                        }
                     }
-                    alertController.addAction(OKAction)
-                    
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
+                    else {
+                        let errorString = error!.userInfo["error"] as? String
+                        
+                        let alertController = UIAlertController(title: "HomeIn", message: errorString, preferredStyle: .Alert)
+                        
+                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                            // ...
+                        }
+                        alertController.addAction(OKAction)
                     }
                 }
-                else {
-                    let errorString = error!.userInfo["error"] as? String
-                    
-                    let alertController = UIAlertController(title: "HomeIn", message: errorString, preferredStyle: .Alert)
-                    
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        // ...
-                    }
-                    alertController.addAction(OKAction)
-                }
+            }
+        }
+        else {
+            self.homeObject.saveEventually()
+            self.myHomesView.removeFromSuperview()
+            self.homeTray.removeFromSuperview()
+            self.calcTray.removeFromSuperview()
+            self.saveDeleteTray.removeFromSuperview()
+            self.buildView()
+            
+            self.activityIndicator.stopAnimating()
+            self.loadingOverlay.hidden = true
+            
+            self.homeObject.pinInBackground()
+            
+            let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                
+                self.didEnterEditMode = false
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
             }
         }
     }
@@ -1649,24 +1728,18 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
         alertController.addAction(cancelAction)
         
-        let destroyAction = UIAlertAction(title: "Delete", style: .Destructive) { (action) in
-            self.homeObject.deleteInBackgroundWithBlock {
-                (success: Bool, error: NSError?) -> Void in
-                if (success) {
-                    self.homeObject.unpinInBackground()
-                    
-                    self.navigationController!.popToRootViewControllerAnimated(true)
-                    
-                } else {
-                    let alertController = UIAlertController(title: "HomeIn", message: String(format: "error: %@", error!), preferredStyle: .Alert)
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        // ...
-                    }
-                    alertController.addAction(OKAction)
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
-                    }
-                }
+        let destroyAction = UIAlertAction(title: "Delete", style: .Destructive) { (action) in            
+            self.homeObject.deleteEventually()
+            
+            let alertController = UIAlertController(title: "HomeIn", message: "The home was deleted", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                self.navigationController!.popToRootViewControllerAnimated(true)
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
             }
         }
         alertController.addAction(destroyAction)

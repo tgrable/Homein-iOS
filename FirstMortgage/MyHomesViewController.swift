@@ -387,7 +387,6 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
-            
             if error == nil {
                 // The find succeeded.
                 // Do something with the found objects
@@ -644,33 +643,17 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func deleteHomeObject(homeObject: PFObject) {
+        homeObject.deleteEventually()
         
-        homeObject.deleteInBackgroundWithBlock {
-            (success: Bool, error: NSError?) -> Void in
-            if (success) {
-                let alertController = UIAlertController(title: "HomeIn", message: "The home was deleted", preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
-                
-            } else {
-                let alertController = UIAlertController(title: "HomeIn", message: String(format: "%@", error!), preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
-            }
+        let alertController = UIAlertController(title: "HomeIn", message: "The home was deleted", preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
     

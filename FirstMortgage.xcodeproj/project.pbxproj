@@ -81,6 +81,7 @@
 		2C2B5A681C41708800789055 /* launchscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C2B5A661C41708800789055 /* launchscreen@2x.png */; };
 		2C2B5A6A1C41708E00789055 /* homebackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 2C2B5A691C41708E00789055 /* homebackground.png */; };
 		2CD798611C3233710052C18C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD798601C3233710052C18C /* Reachability.swift */; };
+		2CF9697A1C4BDA890000D77B /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF969791C4BDA890000D77B /* ModelTest.swift */; };
 		4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */; };
 		4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */; };
 		4F1ED5141C1B790900E40F4B /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1ED5131C1B790900E40F4B /* ParseUI.framework */; };
@@ -208,6 +209,7 @@
 		2C2B5A661C41708800789055 /* launchscreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "launchscreen@2x.png"; path = "images/launchscreen@2x.png"; sourceTree = "<group>"; };
 		2C2B5A691C41708E00789055 /* homebackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = homebackground.png; path = images/homebackground.png; sourceTree = "<group>"; };
 		2CD798601C3233710052C18C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = FirstMortgage/Reachability.swift; sourceTree = "<group>"; };
+		2CF969791C4BDA890000D77B /* ModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
 		4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = FirstMortgage/DeviceExtension.swift; sourceTree = "<group>"; };
 		4F1ED5131C1B790900E40F4B /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = frameworks/ParseUI.framework; sourceTree = "<group>"; };
@@ -446,6 +448,7 @@
 			children = (
 				4FAF3CE61BE106EB00A89A9A /* FirstMortgageTests.swift */,
 				4FAF3CE81BE106EB00A89A9A /* Info.plist */,
+				2CF969791C4BDA890000D77B /* ModelTest.swift */,
 			);
 			path = FirstMortgageTests;
 			sourceTree = "<group>";
@@ -736,6 +739,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FAF3CE71BE106EB00A89A9A /* FirstMortgageTests.swift in Sources */,
+				2CF9697A1C4BDA890000D77B /* ModelTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -869,7 +873,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -887,7 +891,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
