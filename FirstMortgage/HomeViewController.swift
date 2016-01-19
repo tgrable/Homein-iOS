@@ -202,11 +202,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     // MARK:
     // MARK: Build Views
     func buildHomeView() {
-        var labelDist = 65.0 as CGFloat
-        if (modelName.rangeOfString("6") != nil) {
-            labelDist = 75.0
-        }
-        
+      
         homeView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
         homeView.backgroundColor = model.lightGrayColor
         homeView.hidden = false
@@ -230,7 +226,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         let width = Double(self.view.bounds.size.width)
         
         var fullButtonheight = (self.view.bounds.size.width / 2) * 0.75
-        if (modelName.rangeOfString("iPad") != nil) {
+        /*if (modelName.rangeOfString("iPad") != nil) {
+            fullButtonheight = (self.view.bounds.size.width / 2) - 225
+        }*/
+        
+        if (self.view.bounds.size.width >= 768) {
             fullButtonheight = (self.view.bounds.size.width / 2) - 225
         }
         
@@ -244,11 +244,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         myHomesView.layer.addSublayer(myHomesGradientLayer)
         scrollView.addSubview(myHomesView)
         
-        var yIconOffset = 25.0
-        if (modelName.rangeOfString("iPad") != nil) {
-            yIconOffset = 50.0
-            labelDist += 25
-        }
+        var yIconOffset = (Double(myHomesView.bounds.size.height) / 2.0) - 36
+        var labelDist = CGFloat((Double(myHomesView.bounds.size.height) / 2.0) + 10)
+        
         let homeIcn = UIImage(named: "home_icon") as UIImage?
         let homeIcon = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
         homeIcon.image = homeIcn
@@ -320,7 +318,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         offset = ((width / 2) * 0.75) + 15
         var height = (self.view.bounds.size.width / 2) - 20
-        if (modelName.rangeOfString("iPad") != nil) {
+        /*if (modelName.rangeOfString("iPad") != nil) {
+            height = (self.view.bounds.size.width / 2) - 225
+            offset = Double((self.view.bounds.size.width / 2)) - 215.0
+        }*/
+        
+        if (self.view.bounds.size.width >= 768) {
             height = (self.view.bounds.size.width / 2) - 225
             offset = Double((self.view.bounds.size.width / 2)) - 215.0
         }
@@ -334,6 +337,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         mortgageCalculatorView.layer.insertSublayer(mortgageCalculatorGradientLayer, atIndex: 0)
         mortgageCalculatorView.layer.addSublayer(mortgageCalculatorGradientLayer)
         scrollView.addSubview(mortgageCalculatorView)
+
+        yIconOffset = (Double(mortgageCalculatorView.bounds.size.height) / 2.0) - 36
+        labelDist = CGFloat((Double(mortgageCalculatorView.bounds.size.height) / 2.0) + 10)
         
         let calcIcn = UIImage(named: "calculator_icon") as UIImage?
         let calcIcon = UIImageView(frame: CGRectMake((mortgageCalculatorView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
@@ -392,7 +398,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         refiCalculatorView.addSubview(refiCalculatorButton)
         
         offset = (((width / 2) * 0.75) + (width / 2)) + 15
-        if (modelName.rangeOfString("iPad") != nil) {
+        /*if (modelName.rangeOfString("iPad") != nil) {
+            offset = Double(self.view.bounds.size.width / 2) - 225 + Double(self.view.bounds.size.width / 2) - 215.0 + 10.0;
+        }*/
+        
+        if (self.view.bounds.size.width >= 768) {
             offset = Double(self.view.bounds.size.width / 2) - 225 + Double(self.view.bounds.size.width / 2) - 215.0 + 10.0;
         }
         
@@ -412,7 +422,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         findBranchView.addSubview(branchIcon)
         
         // UILabel
-        let findBranchLabel = UILabel(frame: CGRectMake(0, labelDist, findBranchView.bounds.size.width, 72))
+        let findBranchLabel = UILabel(frame: CGRectMake(0, labelDist - 7, findBranchView.bounds.size.width, 72))
         findBranchLabel.text = "FIND THE\nCLOSEST\nBRANCH"
         findBranchLabel.font = UIFont(name: "forza-light", size: 18)
         findBranchLabel.textAlignment = NSTextAlignment.Center

@@ -615,7 +615,8 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if (modelName.rangeOfString("iPad") != nil) {
+        //if (modelName.rangeOfString("iPad") != nil) {
+        if (self.view.bounds.size.width >= 768) {
             return 450.0
         }
         else {

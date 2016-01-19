@@ -301,7 +301,8 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         scrollView.addSubview(homeTray)
         
         var y = 250.0
-        if (modelName.rangeOfString("iPad") != nil) {
+        //if (modelName.rangeOfString("iPad") != nil) {
+        if (self.view.bounds.size.width >= 768) {
             y = 500.0
         }
         

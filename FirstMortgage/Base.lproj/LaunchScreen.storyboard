@@ -17,19 +17,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="launchscreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="NcD-3V-jdi">
-                                <rect key="frame" x="75" y="0.0" width="450" height="600"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="450" id="XcI-vi-Wia"/>
-                                </constraints>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loadscreen_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="bfq-yq-46E">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loadscreen_overlay.png" translatesAutoresizingMaskIntoConstraints="NO" id="KjF-ol-7Kx">
+                                <rect key="frame" x="108" y="44" width="384" height="512"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="NcD-3V-jdi" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="topMargin" id="Gnk-Iv-kX4"/>
-                            <constraint firstItem="NcD-3V-jdi" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="htG-kS-yMZ"/>
-                            <constraint firstItem="NcD-3V-jdi" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="mcx-Xg-N6P"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="NcD-3V-jdi" secondAttribute="bottom" id="v9t-ZJ-9XJ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="bfq-yq-46E" secondAttribute="trailing" constant="-20" id="5LP-Rz-bt7"/>
+                            <constraint firstItem="bfq-yq-46E" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-20" id="iiX-t5-Mzg"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="bfq-yq-46E" secondAttribute="bottom" id="m66-vW-dKE"/>
+                            <constraint firstItem="KjF-ol-7Kx" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="nlr-Ls-wrZ"/>
+                            <constraint firstItem="bfq-yq-46E" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="rwX-bG-T06"/>
+                            <constraint firstItem="KjF-ol-7Kx" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="w9V-zp-gBP"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -39,6 +41,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="launchscreen.png" width="720" height="960"/>
+        <image name="loadscreen_background.png" width="384" height="512"/>
+        <image name="loadscreen_overlay.png" width="384" height="512"/>
     </resources>
 </document>

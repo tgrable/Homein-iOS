@@ -554,7 +554,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             
             let loImageView = UIImageView(frame: CGRectMake(5, 5, 100, 120))
             loImageView.contentMode = .ScaleAspectFit
-            loImageView.image = UIImage(named: "profile_icon")
+            loImageView.image = UIImage(named: "default_lo")
             loView.addSubview(loImageView)
             
             if reachability.isConnectedToNetwork() != false {
@@ -566,11 +566,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                     }
                 }
                 else {
-                    loImageView.image = UIImage(named: "profile_icon")
+                    loImageView.image = UIImage(named: "default_lo")
                 }
             }
             else {
-                loImageView.image = UIImage(named: "profile_icon")
+                loImageView.image = UIImage(named: "default_lo")
             }
             
             var offset = 0.0

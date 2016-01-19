@@ -126,7 +126,14 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         let calcBannerView = UIView(frame: CGRectMake(0, 135, calcView.bounds.size.width, 50))
         let calcBannerGradientLayer = CAGradientLayer()
         calcBannerGradientLayer.frame = calcBannerView.bounds
-        calcBannerGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
+        if (isMortgageCalc) {
+            titleLabel = "MORTGAGE CALCULATOR"
+            calcBannerGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
+        }
+        else {
+            titleLabel = "REFINANCE CALCULATOR"
+            calcBannerGradientLayer.colors = [model.lightOrangeColor.CGColor, model.darkOrangeColor.CGColor]
+        }
         calcBannerView.layer.insertSublayer(calcBannerGradientLayer, atIndex: 0)
         calcBannerView.layer.addSublayer(calcBannerGradientLayer)
         calcBannerView.hidden = false
@@ -136,13 +143,6 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         let calcIcon = UIImageView(frame: CGRectMake(15, 12.5, 25, 25))
         calcIcon.image = calcIcn
         calcBannerView.addSubview(calcIcon)
-        
-        if (isMortgageCalc) {
-            titleLabel = "MORTGAGE CALCULATOR"
-        }
-        else {
-            titleLabel = "REFINANCE CALCULATOR"
-        }
         
         var fontSize = 22
         if modelName.rangeOfString("5") != nil{
