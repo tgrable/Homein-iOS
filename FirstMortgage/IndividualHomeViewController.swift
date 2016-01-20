@@ -372,7 +372,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         homeTray.addSubview(homeNameBorderView)
         
         let attributes = [
-            NSForegroundColorAttributeName:  UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1),
+            NSForegroundColorAttributeName:  UIColor.lightGrayColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 18)!
         ]
         
@@ -450,7 +450,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         }
         else {
             homeAddressLabel.text = "ADDRESS"
-            homeAddressLabel.textColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
+            homeAddressLabel.textColor = UIColor.lightGrayColor()
         }
         homeAddressLabel.textAlignment = NSTextAlignment.Left
         homeAddressLabel.font = UIFont(name: "forza-light", size: 22)
@@ -659,7 +659,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         self.descTxtView.autocorrectionType = .Yes
         self.descTxtView.editable = false
         if desc == "Add notes about this house." {
-            self.descTxtView.textColor = UIColor(red: 201/255, green: 201/255, blue: 202/255, alpha: 1)
+            self.descTxtView.textColor = UIColor.lightGrayColor()
         }
         self.descTxtView.font = UIFont(name: "forza-light", size: 22)
         self.descTxtView.delegate = self

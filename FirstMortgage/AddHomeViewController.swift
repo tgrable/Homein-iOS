@@ -243,7 +243,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         homePriceborder.borderWidth = width
         homePriceTxtField.layer.addSublayer(homePriceborder)
         homePriceTxtField.layer.masksToBounds = true
-        homePriceTxtField.attributedPlaceholder = NSAttributedString(string: "$Price", attributes:attributes)
+        homePriceTxtField.attributedPlaceholder = NSAttributedString(string: "$PRICE", attributes:attributes)
         homePriceTxtField.backgroundColor = UIColor.clearColor()
         homePriceTxtField.delegate = self
         homePriceTxtField.returnKeyType = .Next
