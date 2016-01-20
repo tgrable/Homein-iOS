@@ -1333,12 +1333,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     // Hooray! Let them use the app now.
                     self.isUserLoggedIn = true
                     
-                    self.namereg.text = ""
-                    self.usernamereg.text = ""
-                    self.emailreg.text = ""
-                    self.passwordreg.text = ""
-                    self.confirmpasswordreg.text = ""
-                    
                     self.namereg.resignFirstResponder()
                     self.emailreg.resignFirstResponder()
                     self.usernamereg.resignFirstResponder()
@@ -1366,6 +1360,12 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     print("----- Email LO -----")
                     // TODO: [Error]: success/error was not called (Code: 141, Version: 1.10.0)
                     }
+                    
+                    self.namereg.text = ""
+                    self.usernamereg.text = ""
+                    self.emailreg.text = ""
+                    self.passwordreg.text = ""
+                    self.confirmpasswordreg.text = ""
                 }
             }
         }
