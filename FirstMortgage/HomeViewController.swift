@@ -498,11 +498,23 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     }
     
     func buildCreateAccountView() {
-        
         let defaults = NSUserDefaults.standardUserDefaults()
         if (defaults.objectForKey("loanOfficerArray") != nil) {
-            self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
-            self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+            
+            if let _ = defaults.objectForKey("loanOfficerArray") {
+                // now val is not nil and the Optional has been unwrapped, so use it
+                let val = defaults.objectForKey("loanOfficerArray")
+                let firstLo = val![0] as! Dictionary<String, String>
+                if let _ = firstLo["nmls"] {
+                    self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
+                    self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+                }
+                else {
+                    if reachability.isConnectedToNetwork() {
+                        getBranchJSON()
+                    }
+                }
+            }
         }
         else {
             if reachability.isConnectedToNetwork() {
@@ -1077,47 +1089,73 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             let nodeDict = loanOfficer as NSDictionary
             buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count)
             
-            scrollView.contentSize = CGSize(width: overlayView.bounds.size.width, height: CGFloat(loArray.count * 145))
-            yVal += 145
+            scrollView.contentSize = CGSize(width: overlayView.bounds.size.width, height: CGFloat(loArray.count * 175))
+            yVal += 175
             count++
         }
     }
     
     func buildLoanOfficerCard(nodeDict: Dictionary<String, String>, yVal: CGFloat, count: Int) -> UIView {
         // UIView
-        let loView = UIView(frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 120))
+        let loView = UIView(frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 150))
         loView.backgroundColor = UIColor.whiteColor()
         scrollView.addSubview(loView)
         
+        var name = ""
+        if let _ = nodeDict["name"] {
+            name = nodeDict["name"]!
+        }
         let nameLabel = UILabel (frame: CGRectMake(15, 10, loView.bounds.size.width - 30, 24))
         nameLabel.textAlignment = NSTextAlignment.Left
-        nameLabel.text = nodeDict["name"]
+        nameLabel.text = name
         nameLabel.numberOfLines = 1
         nameLabel.font = UIFont(name: "forza-medium", size: 20)
         loView.addSubview(nameLabel)
         
+        var email = ""
+        if let _ = nodeDict["email"] {
+            email = nodeDict["email"]!
+        }
         let emailLabel = UILabel (frame: CGRectMake(15, 35, loView.bounds.size.width - 30, 24))
         emailLabel.textAlignment = NSTextAlignment.Left
-        emailLabel.text = nodeDict["email"]
+        emailLabel.text = email
         emailLabel.numberOfLines = 1
         emailLabel.font = UIFont(name: "forza-light", size: 18)
         loView.addSubview(emailLabel)
         
-        let officePhone = (nodeDict["office"] != nil) ? nodeDict["office"] : ""
+        var officePhone = ""
+        if let _ = nodeDict["office"] {
+            officePhone = nodeDict["office"]!
+        }
         let officeLabel = UILabel (frame: CGRectMake(15, 60, loView.bounds.size.width - 30, 24))
         officeLabel.textAlignment = NSTextAlignment.Left
-        officeLabel.text = String(format: "Office: %@", officePhone!) //nodeDict["office"]
+        officeLabel.text = String(format: "Office: %@", officePhone) //nodeDict["office"]
         officeLabel.numberOfLines = 1
         officeLabel.font = UIFont(name: "forza-light", size: 18)
         loView.addSubview(officeLabel)
         
-        let mobilePhone = (nodeDict["mobile"] != nil) ? nodeDict["mobile"] : ""
+        var mobilePhone = ""
+        if let _ = nodeDict["mobile"] {
+            mobilePhone = nodeDict["mobile"]!
+        }
         let mobileLabel = UILabel (frame: CGRectMake(15, 85, loView.bounds.size.width - 30, 24))
         mobileLabel.textAlignment = NSTextAlignment.Left
-        mobileLabel.text = String(format: "Mobile: %@", mobilePhone!)
+        mobileLabel.text = String(format: "Mobile: %@", mobilePhone)
         mobileLabel.numberOfLines = 1
         mobileLabel.font = UIFont(name: "forza-light", size: 18)
         loView.addSubview(mobileLabel)
+        
+        var nmls = ""
+        if let _ = nodeDict["nmls"] {
+            nmls = nodeDict["nmls"]!
+        }
+        let nmlsLabel = UILabel (frame: CGRectMake(15, 115, loView.bounds.size.width - 30, 0))
+        nmlsLabel.font = UIFont(name: "forza-light", size: 18)
+        nmlsLabel.textAlignment = NSTextAlignment.Left
+        nmlsLabel.text = String(format: "%@", nmls)
+        nmlsLabel.numberOfLines = 0
+        nmlsLabel.sizeToFit()
+        loView.addSubview(nmlsLabel)
         
         // UIButton
         let selectButton = UIButton (frame: CGRectMake(0, 0, loView.bounds.size.width, loView.bounds.size.height))
@@ -1148,7 +1186,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                 self.tempArray.append(nodeDict as! Dictionary<String, String>)
             }
         }
-        
+
         defaults.setObject(self.loanOfficerArray, forKey: "loanOfficerArray")
         
         self.activityIndicator.stopAnimating()
@@ -1355,11 +1393,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.didComeFromAccountPage = true
                     self.performSegueWithIdentifier("profileViewController", sender: nil)
 
-                    PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
+                    /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
                     
-                    print("----- Email LO -----")
-                    // TODO: [Error]: success/error was not called (Code: 141, Version: 1.10.0)
-                    }
+                        print("----- Email LO -----")
+                    
+                    }*/
                     
                     self.namereg.text = ""
                     self.usernamereg.text = ""
@@ -1512,10 +1550,18 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         hasLoanOfficer = true
         
-        officerNid = dict["nid"]! as String
-        officerName = dict["name"]! as String
-        officerURL = dict["url"]! as String
+        if let _ = dict["nid"] {
+            officerNid = dict["nid"]! as String
+        }
         
+        if let _ = dict["name"] {
+            officerName = dict["name"]! as String
+        }
+        
+        if let _ = dict["url"] {
+            officerURL = dict["url"]! as String
+        }
+
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.removeObjectForKey("loanOfficerDict")
         defaults.setObject(dict, forKey: "loanOfficerDict")

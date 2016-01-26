@@ -370,7 +370,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         /********************************************************* Current Loan Amount ********************************************************************/
          // UILabel
         let currentLoanAmountLabel = UILabel(frame: CGRectMake(10, 25, (refiCalcView.bounds.size.width / 2) - 25, 40))
-        currentLoanAmountLabel.text = "CURRENT\nLOAN AMOUNT"
+        currentLoanAmountLabel.text = "ORIGINAL\nLOAN AMOUNT"
         currentLoanAmountLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         currentLoanAmountLabel.textAlignment = NSTextAlignment.Right
         currentLoanAmountLabel.textColor = UIColor.darkTextColor()
@@ -404,7 +404,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         /********************************************************* Current Mortgage Term ********************************************************************/
          // UILabel
         let mTermLabel = UILabel(frame: CGRectMake(10, 75, (refiCalcView.bounds.size.width / 2) - 25, 40))
-        mTermLabel.text = "CURRENT\nMORTGAGE TERM"
+        mTermLabel.text = "ORIGINAL\nMORTGAGE TERM"
         mTermLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         mTermLabel.textAlignment = NSTextAlignment.Right
         mTermLabel.textColor = UIColor.darkTextColor()
@@ -438,7 +438,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         /********************************************************* Current Interest Rate ********************************************************************/
          // UILabel
         let interestRateLabel = UILabel(frame: CGRectMake(10, 125, (refiCalcView.bounds.size.width / 2) - 25, 40))
-        interestRateLabel.text = "CURRENT\nINTEREST RATE"
+        interestRateLabel.text = "ORIGINAL\nINTEREST RATE"
         interestRateLabel.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
         interestRateLabel.textAlignment = NSTextAlignment.Right
         interestRateLabel.textColor = UIColor.darkTextColor()
@@ -659,13 +659,26 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         noteLabel.textAlignment = NSTextAlignment.Left
         scrollView.addSubview(noteLabel)
         
+        print(noteLabel.bounds.size.height)
+        
+        // UILabel
+        if (!isMortgageCalc) {
+            let disclaimerLabel = UILabel(frame: CGRectMake(25, 603 + noteLabel.bounds.size.height, calcView.bounds.size.width - 50, 0))
+            disclaimerLabel.text = "*Calculations are approximate based on your estimated outstanding loan balance."
+            disclaimerLabel.font = UIFont(name: "forza-light", size: 14)
+            disclaimerLabel.numberOfLines = 0
+            disclaimerLabel.sizeToFit()
+            disclaimerLabel.textAlignment = NSTextAlignment.Left
+            scrollView.addSubview(disclaimerLabel)
+        }
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         scrollView.addGestureRecognizer(tapGesture)
         
         let refiTapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
         refiCalcView.addGestureRecognizer(refiTapGesture)
         
-        scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 675)
+        scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 725)
     }
     
     // MARK:

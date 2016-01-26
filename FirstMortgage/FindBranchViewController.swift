@@ -274,6 +274,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                                 branch["phone"] = self.cleanPhoneNumnerString(phone)
                             }
                             
+                            if let nmls = nodeDict["nmls"] as? String {
+                                branch["nmls"] = nmls
+                            }
+                            
                             branch["distanceFromMe"] = ""
                             branch["lat"] = ""
                             branch["long"] = ""
@@ -435,19 +439,31 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             branchView.backgroundColor = UIColor.whiteColor()
             scrollView.addSubview(branchView)
             
+            var address = ""
+            if let _ = branch["address"] {
+                address = branch["address"]!
+            }
             let addressLabel = UILabel (frame: CGRectMake(15, 10, branchView.bounds.size.width - 30, 0))
             addressLabel.font = UIFont(name: "forza-light", size: 24)
             addressLabel.textAlignment = NSTextAlignment.Left
-            addressLabel.text = String(format: "%@", branch["address"]!)
+            addressLabel.text = String(format: "%@", address)
             addressLabel.numberOfLines = 0
             addressLabel.sizeToFit()
             branchView.addSubview(addressLabel)
             offset = addressLabel.bounds.size.height
             
+            var city = ""
+            if let _ = branch["city"] {
+                city = branch["city"]!
+            }
+            var state = ""
+            if let _ = branch["state"] {
+                state = branch["state"]!
+            }
             let cityStateLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
             cityStateLabel.font = UIFont(name: "forza-light", size: 18)
             cityStateLabel.textAlignment = NSTextAlignment.Left
-            cityStateLabel.text = String(format: "%@, %@", branch["city"]!, branch["state"]!)
+            cityStateLabel.text = String(format: "%@, %@", city, state)
             cityStateLabel.numberOfLines = 0
             cityStateLabel.sizeToFit()
             branchView.addSubview(cityStateLabel)
@@ -473,7 +489,12 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 }
             }
             
-            let pl = (branch["phone"]!.characters.count > 0) ? formatPhoneString(branch["phone"]!) : ""
+            var pl = ""
+            if let _ = branch["phone"] {
+                if (branch["phone"]!.characters.count > 0) {
+                    pl = formatPhoneString(branch["phone"]!)
+                }
+            }
             let phoneLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
             phoneLabel.font = UIFont(name: "forza-light", size: 18)
             phoneLabel.textAlignment = NSTextAlignment.Left
@@ -484,6 +505,21 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             branchView.addSubview(phoneLabel)
             offset += phoneLabel.bounds.size.height
             
+            var nmls = ""
+            if let _ = branch["nmls"] {
+                if (branch["nmls"]!.characters.count > 0) {
+                    nmls = branch["nmls"]!
+                }
+            }
+            let nmlsLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
+            nmlsLabel.font = UIFont(name: "forza-light", size: 18)
+            nmlsLabel.textAlignment = NSTextAlignment.Left
+            nmlsLabel.text = String(format: "%@", nmls)
+            nmlsLabel.numberOfLines = 0
+            nmlsLabel.sizeToFit()
+            branchView.addSubview(nmlsLabel)
+            offset += nmlsLabel.bounds.size.height
+            
             branchView.frame = CGRectMake(15, yOffset, self.view.bounds.size.width - 30, offset + 20)
             
             let shadowImg = UIImage(named: "Long_shadow") as UIImage?
@@ -492,8 +528,13 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             shadowView.image = shadowImg
             scrollView.addSubview(shadowView)
             
-            let btnEnabled = (branch["phone"]!.characters.count > 0) ? true : false
-            let phoneButton = UIButton(frame: CGRectMake(0, offset, branchView.bounds.size.width, 20))
+            var btnEnabled = false
+            if let _ = branch["phone"] {
+                if (branch["phone"]!.characters.count > 0) {
+                    btnEnabled = true
+                }
+            }
+            let phoneButton = UIButton(frame: CGRectMake(12, offset - 7, branchView.bounds.size.width / 2, 20))
             phoneButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
             phoneButton.backgroundColor = UIColor.clearColor()
             phoneButton.tag = count
@@ -504,7 +545,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             count++
         }
 
-        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(filteredBranchArray.count * 115))
+        scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(filteredBranchArray.count * 135))
         
         activityIndicator.stopAnimating()
     }
@@ -678,7 +719,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             "WI":"Wisconsin",
             "WY":"Wyoming",
         ]
-        stateToCheck = "NC"
+        stateToCheck = "AZ"
     }
 
     // MARK:
