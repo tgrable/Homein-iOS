@@ -534,7 +534,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                     btnEnabled = true
                 }
             }
-            let phoneButton = UIButton(frame: CGRectMake(12, offset - 7, branchView.bounds.size.width / 2, 20))
+            let phoneButton = UIButton(frame: CGRectMake(12, offset - 27, branchView.bounds.size.width / 2, 20))
             phoneButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
             phoneButton.backgroundColor = UIColor.clearColor()
             phoneButton.tag = count
