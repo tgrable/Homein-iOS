@@ -54,6 +54,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let overLayTextLabel = UILabel()
     let calculateArrow = UILabel ()
     let editModeLabel = UILabel()
+    var officerEmail = String()
     
     var isTextFieldEnabled = Bool()
     var didComeFromAccountPage = Bool()
@@ -907,6 +908,10 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 officerURL = dict["url"]! as String
             }
             
+            if let _ = dict["email"] {
+                officerEmail = dict["email"]! as String
+            }
+            
             let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
             
             let defaults = NSUserDefaults.standardUserDefaults()
@@ -968,7 +973,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 self.activityIndicator.stopAnimating()
                 
                 self.tempArray.removeAll()
-                
+                if (self.officerEmail.characters.count > 0) {
+                    PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.nameTxtField.text!, "email": self.emailTxtField.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
+                        print("----- Email LO -----")
+                    }
+                }
                 self.removeViews(self.scrollView)
             }
             else {

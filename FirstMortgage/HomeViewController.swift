@@ -84,6 +84,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     var officerNid = String()
     var officerName = String()
     var officerURL = String()
+    var officerEmail = String()
     
     //UILabel
     let loadingLabel = UILabel()
@@ -1393,11 +1394,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     self.didComeFromAccountPage = true
                     self.performSegueWithIdentifier("profileViewController", sender: nil)
 
-                    /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!]) { (result: AnyObject?, error: NSError?) in
+                    if (self.hasLoanOfficer) {
+                        if (self.officerEmail.characters.count > 0) {
+                            PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
+                                print("----- Email LO -----")
+                            }
+                        }
+                    }
                     
-                        print("----- Email LO -----")
-                    
-                    }*/
                     
                     self.namereg.text = ""
                     self.usernamereg.text = ""
@@ -1560,6 +1564,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         if let _ = dict["url"] {
             officerURL = dict["url"]! as String
+        }
+        
+        if let _ = dict["email"] {
+            officerEmail = dict["email"]! as String
+            print(officerEmail)
         }
 
         let defaults = NSUserDefaults.standardUserDefaults()
