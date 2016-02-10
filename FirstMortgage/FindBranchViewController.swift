@@ -60,6 +60,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     var stateLocatorTimer: NSTimer!
     var timerHasFired: Bool!
     var geoLocatorHasFired: Bool!
+    var locationServicesIsAllowed = Bool()
     
     // UIPickerView
     let statesPicker = UIPickerView() as UIPickerView
@@ -69,41 +70,42 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"checkIfLocationServicesEnabled", name:UIApplicationWillEnterForegroundNotification, object:nil)
+
+        createStateDictionary()
+        buildView()
+        
         statesPicker.delegate = self
         statesPicker.dataSource = self
     }
     
     override func viewWillAppear(animated: Bool) {
-        createStateDictionary()
         
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        locationManager.distanceFilter = 10;
-        locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
-        
-        buildView()
-        buildPickerViewTray()
+        checkIfLocationServicesEnabled()
         
         geoLocatorHasFired = false
         timerHasFired = false
     }
     
     override func viewDidAppear(animated: Bool) {
-        
-        if reachability.isConnectedToNetwork() {
-            stateLocatorTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "runTimedCode", userInfo: nil, repeats: false)
+        if locationServicesIsAllowed == false {
+            let alertController = UIAlertController(title: "HomeIn", message: "You must enable location services to use the feature of the app.", preferredStyle: .Alert)
             
-            getBranchJson()
-        }
-        else {
-            let defaults = NSUserDefaults.standardUserDefaults()
-            stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
-            branchArray = defaults.objectForKey("branchOfficeArrayDict") as! Array<Dictionary<String, String>>
+            let SettingsAction = UIAlertAction(title: "Settings", style: .Default) { (action) in
+                UIApplication.sharedApplication().openURL(NSURL(string: UIApplicationOpenSettingsURLString)!)
+            }
             
-            runTimedCode()
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                
+            }
+            
+            alertController.addAction(SettingsAction)
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
         }
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -119,6 +121,54 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         stateDictionary.removeAll()
         
         removeViews(self.view)
+    }
+    
+    func checkIfLocationServicesEnabled() {
+        let manager = CLLocationManager()
+        
+        if CLLocationManager.authorizationStatus() == .NotDetermined {
+            manager.requestWhenInUseAuthorization()
+        }
+        
+        if CLLocationManager.locationServicesEnabled() {
+            switch(CLLocationManager.authorizationStatus()) {
+            case .AuthorizedAlways, .AuthorizedWhenInUse:
+                locationServicesIsAllowed = true
+                
+                locationManager.delegate = self
+                locationManager.desiredAccuracy = kCLLocationAccuracyBest
+                locationManager.distanceFilter = 10;
+                locationManager.requestWhenInUseAuthorization()
+                locationManager.startUpdatingLocation()
+                
+                runLocationSearch()
+                
+            default:
+                locationServicesIsAllowed = false
+            }
+        }
+    }
+    
+    func runLocationSearch() {
+        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
+        activityIndicator.center = view.center
+        addHomeView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        buildPickerViewTray()
+        
+        if reachability.isConnectedToNetwork() {
+            stateLocatorTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "runTimedCode", userInfo: nil, repeats: false)
+            
+            getBranchJson()
+        }
+        else {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
+            branchArray = defaults.objectForKey("branchOfficeArrayDict") as! Array<Dictionary<String, String>>
+            
+            runTimedCode()
+        }
     }
     
     func buildView() {
@@ -172,11 +222,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         bannerLabel.textColor = UIColor.whiteColor()
         bannerLabel.font = UIFont(name: "forza-light", size: 25)
         addHomeBannerView.addSubview(bannerLabel)
-        
-        activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
-        activityIndicator.center = view.center
-        activityIndicator.startAnimating()
-        addHomeView.addSubview(activityIndicator)
     }
     
     func buildPickerViewTray() {
@@ -244,7 +289,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         print("Error while updating location " + error.localizedDescription)
     }
 
-    
     func getBranchJson() {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             var states = [String]()
@@ -335,11 +379,23 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         geocoder.reverseGeocodeLocation(currentLocation, completionHandler: { (placemarks, e) -> Void in
             self.geoLocatorHasFired = true
             if self.timerHasFired == false {
-                let placemark = placemarks!.last! as CLPlacemark
-                let state = placemark.administrativeArea
-                
-                if (CLLocationManager.authorizationStatus() == .AuthorizedAlways || CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse) {
-                    self.findBranchesInMyState(state!)
+                if let _ = placemarks?.last {
+                    let placemark = placemarks!.last! as CLPlacemark
+                    
+                    if let _ = placemark.administrativeArea {
+                        let state = placemark.administrativeArea
+                        print("state: ", state)
+                        
+                        if (CLLocationManager.authorizationStatus() == .AuthorizedAlways || CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse) {
+                            self.findBranchesInMyState(state!)
+                        }
+                        else {
+                            self.geoLocatorHasFired = false
+                        }
+                    }
+                    else {
+                        self.geoLocatorHasFired = false
+                    }
                 }
                 else {
                     self.geoLocatorHasFired = false

@@ -24,6 +24,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     let calculateView = UIView()
     let loView = UIView()
     let loadingOverlay = UIView()
+    let singleLoView = UIView()
     
     // UIGradientLayer
     let calcGradientLayer = CAGradientLayer()
@@ -274,11 +275,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         if let un = user!["name"] {
             name = un as! String
         }
-        else {
-            if let ua = user!["additional"] {
-                name = ua as! String
-            }
-        }
         
         // UITextField
         nameTxtField.frame = (frame: CGRectMake(15, 10, profileView.bounds.size.width - 30, 30))
@@ -360,7 +356,6 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             profileView.addSubview(changeLoView)
         }
         
-        
         let changeLoArrow = UILabel(frame: CGRectMake(logOutView.bounds.size.width - 50, 0, 40, 50))
         changeLoArrow.textAlignment = NSTextAlignment.Right
         changeLoArrow.font = UIFont(name: "forza-light", size: 40)
@@ -392,6 +387,52 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         
         if reachability.isConnectedToNetwork() {
             buttonOffset += 60
+        }
+
+        var userLo = ""
+        if let _ = user!["officerName"] {
+            userLo = user!["officerName"] as! String
+            
+            if userLo.characters.count > 0 {
+                // UIView
+                let deleteLoView = UIView(frame: CGRectMake(15, CGFloat(buttonOffset), profileView.bounds.size.width - 30, 50))
+                let deleteLoGradientLayer = CAGradientLayer()
+                deleteLoGradientLayer.frame = deleteLoView.bounds
+                deleteLoGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
+                deleteLoView.layer.insertSublayer(deleteLoGradientLayer, atIndex: 0)
+                deleteLoView.layer.addSublayer(deleteLoGradientLayer)
+                if reachability.isConnectedToNetwork() {
+                    profileView.addSubview(deleteLoView)
+                }
+                
+                let deleteLoArrow = UILabel(frame: CGRectMake(logOutView.bounds.size.width - 50, 0, 40, 50))
+                deleteLoArrow.textAlignment = NSTextAlignment.Right
+                deleteLoArrow.font = UIFont(name: "forza-light", size: 40)
+                deleteLoArrow.text = ">"
+                deleteLoArrow.textColor = UIColor.whiteColor()
+                deleteLoView.addSubview(deleteLoArrow)
+                
+                // UIButton
+                let deleteLoButton = UIButton(frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
+                deleteLoButton.addTarget(self, action: "removeLoanOfficerFromParseUser", forControlEvents: .TouchUpInside)
+                deleteLoButton.setTitle("DELETE LOAN OFFICER", forState: .Normal)
+                deleteLoButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                deleteLoButton.backgroundColor = UIColor.clearColor()
+                deleteLoButton.titleLabel!.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
+                deleteLoButton.contentHorizontalAlignment = .Left
+                deleteLoButton.tag = 1
+                deleteLoView.addSubview(deleteLoButton)
+                
+                let deleteLoBtnImg = UIImage(named: "right_shadow") as UIImage?
+                // UIImageView
+                let deleteLoBtnView = UIImageView(frame: CGRectMake(0, logOutView.bounds.size.height, logOutView.bounds.size.width, 15))
+                deleteLoBtnView.image = deleteLoBtnImg
+                deleteLoView.addSubview(deleteLoBtnView)
+                
+                if reachability.isConnectedToNetwork() {
+                    buttonOffset += 60
+                }
+            }
         }
         
         // UIView
@@ -441,7 +482,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         activityIndicator.center = view.center
         loadingOverlay.addSubview(activityIndicator)
         
-        profileView.contentSize = CGSize(width: userView.bounds.size.width, height: 550)
+        profileView.contentSize = CGSize(width: userView.bounds.size.width, height: CGFloat(200 + buttonOffset))
     }
     
     func getUserAndLoInfo() {
@@ -470,51 +511,60 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         if let _ = user!["officerName"] {
             userLo = user!["officerName"] as! String
             
-            let filteredArray = loanOfficerArray.filter({
-                $0["name"] == userLo
-            })
-            
-            var nodeDict = Dictionary<String, String>()
-            nodeDict["nid"] = filteredArray[0]["nid"]
-            nodeDict["email"] = filteredArray[0]["email"]
-            nodeDict["mobile"] = filteredArray[0]["mobile"]
-            nodeDict["office"] = filteredArray[0]["office"]
-            nodeDict["url"] = filteredArray[0]["url"]
-            nodeDict["name"] = filteredArray[0]["name"]
-            nodeDict["image"] = filteredArray[0]["image"]
-            nodeDict["nmls"] = filteredArray[0]["nmls"]
-            
-            let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
-            
-            let defaults = NSUserDefaults.standardUserDefaults()
-            defaults.removeObjectForKey(dictString)
-            defaults.setObject(nodeDict, forKey: dictString)
-            
-            buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+            if userLo.characters.count > 0 {
+                let filteredArray = loanOfficerArray.filter({
+                    $0["name"] == userLo
+                })
+                
+                var nodeDict = Dictionary<String, String>()
+                nodeDict["nid"] = filteredArray[0]["nid"]
+                nodeDict["email"] = filteredArray[0]["email"]
+                nodeDict["mobile"] = filteredArray[0]["mobile"]
+                nodeDict["office"] = filteredArray[0]["office"]
+                nodeDict["url"] = filteredArray[0]["url"]
+                nodeDict["name"] = filteredArray[0]["name"]
+                nodeDict["image"] = filteredArray[0]["image"]
+                nodeDict["nmls"] = filteredArray[0]["nmls"]
+                
+                let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
+                
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.removeObjectForKey(dictString)
+                defaults.setObject(nodeDict, forKey: dictString)
+                
+                buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+            }
+            else {
+                buildNoLoCard()
+            }
         }
         else {
-            // UIView
-            let loView = UIView(frame: CGRectMake(15, 110, scrollView.bounds.size.width - 30, 125))
-            loView.backgroundColor = UIColor.whiteColor()
-            profileView.addSubview(loView)
-            
-            let loMessage = UILabel (frame: CGRectMake(15, 10, loView.bounds.size.width - 30, 0))
-            loMessage.textAlignment = NSTextAlignment.Left
-            loMessage.text = "You are not currently assigned to a loan officer. Use the change loan officer button to assign a loan officer to your account."
-            loMessage.font = UIFont(name: "forza-light", size: 18)
-            loMessage.textColor = UIColor.darkTextColor()
-            loMessage.numberOfLines = 0
-            loMessage.sizeToFit()
-            loView.addSubview(loMessage)
-            
-            let shadowImg = UIImage(named: "Long_shadow") as UIImage?
-            // UIImageView
-            let shadowView = UIImageView(frame: CGRectMake(15, loView.bounds.size.height, loView.bounds.size.width, 15))
-            shadowView.image = shadowImg
-            loView.addSubview(shadowView)
-            
-            buttonOffset += 125
+            buildNoLoCard()
         }
+    }
+    
+    func buildNoLoCard() {
+        // UIView
+        let loView = UIView(frame: CGRectMake(15, 110, scrollView.bounds.size.width - 30, 200))
+        loView.backgroundColor = UIColor.whiteColor()
+        profileView.addSubview(loView)
+        
+        let loMessage = UILabel (frame: CGRectMake(15, 10, loView.bounds.size.width - 30, 0))
+        loMessage.textAlignment = NSTextAlignment.Left
+        loMessage.text = "You are not currently assigned to a loan officer. Use the change loan officer button to assign a loan officer to your account."
+        loMessage.font = UIFont(name: "forza-light", size: 18)
+        loMessage.textColor = UIColor.darkTextColor()
+        loMessage.numberOfLines = 0
+        loMessage.sizeToFit()
+        loView.addSubview(loMessage)
+        
+        let shadowImg = UIImage(named: "Long_shadow") as UIImage?
+        // UIImageView
+        let shadowView = UIImageView(frame: CGRectMake(15, loView.bounds.size.height, loView.bounds.size.width, 15))
+        shadowView.image = shadowImg
+        loView.addSubview(shadowView)
+        
+        buttonOffset += 125
     }
     
     func buildSeachOverlay(loArray: Array<Dictionary<String, String>>) {
@@ -571,14 +621,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         if isSingleView {
             
             // UIView
-            let loView = UIView(frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 160))
-            loView.backgroundColor = UIColor.whiteColor()
-            view.addSubview(loView)
+            singleLoView.frame = (frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 160))
+            singleLoView.backgroundColor = UIColor.whiteColor()
+            view.addSubview(singleLoView)
             
             let loImageView = UIImageView(frame: CGRectMake(5, 5, 100, 120))
             loImageView.contentMode = .ScaleAspectFit
             loImageView.image = UIImage(named: "default_lo")
-            loView.addSubview(loImageView)
+            singleLoView.addSubview(loImageView)
             
             if reachability.isConnectedToNetwork() != false {
                 if let nodeImage = nodeDict["image"] {
@@ -602,22 +652,22 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             if let _ = nodeDict["name"] {
                 name = nodeDict["name"]!
             }
-            let nameLabel = UILabel (frame: CGRectMake(115, 10, loView.bounds.size.width - 120, 0))
+            let nameLabel = UILabel (frame: CGRectMake(115, 10, singleLoView.bounds.size.width - 120, 0))
             nameLabel.textAlignment = NSTextAlignment.Left
             nameLabel.text = name
             nameLabel.font = UIFont(name: "forza-medium", size: 20)
             nameLabel.numberOfLines = 0
             nameLabel.sizeToFit()
-            loView.addSubview(nameLabel)
+            singleLoView.addSubview(nameLabel)
             
             offset += Double(nameLabel.bounds.size.height) + 10.0
             
-            let office = UILabel (frame: CGRectMake(115, CGFloat(offset), loView.bounds.size.width - 120, 24))
+            let office = UILabel (frame: CGRectMake(115, CGFloat(offset), singleLoView.bounds.size.width - 120, 24))
             office.textAlignment = NSTextAlignment.Left
             office.text = String(format: "Office:")
             office.numberOfLines = 1
             office.font = UIFont(name: "forza-light", size: 18)
-            loView.addSubview(office)
+            singleLoView.addSubview(office)
             
             offset += 25.0
             
@@ -625,7 +675,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             if let _ = nodeDict["office"] {
                 officePhone = model.formatPhoneString(nodeDict["office"]!)
             }
-            let officeLabel = UILabel (frame: CGRectMake(115, CGFloat(offset), loView.bounds.size.width - 115, 0))
+            let officeLabel = UILabel (frame: CGRectMake(115, CGFloat(offset), singleLoView.bounds.size.width - 115, 0))
             officeLabel.textAlignment = NSTextAlignment.Left
             officeLabel.text = String(format: "%@", officePhone)
             officeLabel.font = UIFont(name: "forza-light", size: 18)
@@ -633,15 +683,15 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             officeLabel.numberOfLines = 0
             officeLabel.sizeToFit()
             officeLabel.adjustsFontSizeToFitWidth = true
-            loView.addSubview(officeLabel)
+            singleLoView.addSubview(officeLabel)
             
-            let officeButton = UIButton (frame: CGRectMake(115, CGFloat(offset), loView.bounds.size.width - 120, officeLabel.bounds.size.height))
+            let officeButton = UIButton (frame: CGRectMake(115, CGFloat(offset), singleLoView.bounds.size.width - 120, officeLabel.bounds.size.height))
             officeButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
             officeButton.backgroundColor = UIColor.clearColor()
             officeButton.setTitle(model.cleanPhoneNumnerString(officePhone), forState: .Normal)
             officeButton.setTitleColor(UIColor.clearColor(), forState: .Normal)
             officeButton.tag = 0
-            loView.addSubview(officeButton)
+            singleLoView.addSubview(officeButton)
             
             offset += Double(officeLabel.bounds.size.height)
             
@@ -650,7 +700,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             mobile.text = String(format: "Mobile: ")
             mobile.numberOfLines = 1
             mobile.font = UIFont(name: "forza-light", size: 18)
-            loView.addSubview(mobile)
+            singleLoView.addSubview(mobile)
             
             offset += 25.0
             
@@ -658,7 +708,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             if let _ = nodeDict["mobile"] {
                 mobilePhone = model.formatPhoneString(nodeDict["mobile"]!)
             }
-            let mobileLabel = UILabel (frame: CGRectMake(115, CGFloat(offset), loView.bounds.size.width - 120, 0))
+            let mobileLabel = UILabel (frame: CGRectMake(115, CGFloat(offset), singleLoView.bounds.size.width - 120, 0))
             mobileLabel.textAlignment = NSTextAlignment.Left
             mobileLabel.text = String(format: "%@", mobilePhone)
             mobileLabel.font = UIFont(name: "forza-light", size: 18)
@@ -666,15 +716,15 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             mobileLabel.numberOfLines = 0
             mobileLabel.sizeToFit()
             mobileLabel.adjustsFontSizeToFitWidth = true
-            loView.addSubview(mobileLabel)
+            singleLoView.addSubview(mobileLabel)
             
-            let mobileButton = UIButton (frame: CGRectMake(115, CGFloat(offset), loView.bounds.size.width - 120, mobileLabel.bounds.size.height))
+            let mobileButton = UIButton (frame: CGRectMake(115, CGFloat(offset), singleLoView.bounds.size.width - 120, mobileLabel.bounds.size.height))
             mobileButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
             mobileButton.backgroundColor = UIColor.clearColor()
             mobileButton.setTitle(model.cleanPhoneNumnerString(mobilePhone), forState: .Normal)
             mobileButton.setTitleColor(UIColor.clearColor(), forState: .Normal)
             mobileButton.tag = 1
-            loView.addSubview(mobileButton)
+            singleLoView.addSubview(mobileButton)
             
             var emailAttributedString = ""
             if let _ = nodeDict["email"] {
@@ -688,26 +738,26 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 offset = 130
             }
             
-            let emailLabel = UILabel (frame: CGRectMake(15, CGFloat(offset), loView.bounds.size.width - 30, 24))
+            let emailLabel = UILabel (frame: CGRectMake(15, CGFloat(offset), singleLoView.bounds.size.width - 30, 24))
             emailLabel.textAlignment = NSTextAlignment.Left
             emailLabel.attributedText = underlineAttributedString
             emailLabel.numberOfLines = 1
             emailLabel.font = UIFont(name: "forza-light", size: 18.0)
             emailLabel.adjustsFontSizeToFitWidth = true
             emailLabel.textColor = model.darkBlueColor
-            loView.addSubview(emailLabel)
+            singleLoView.addSubview(emailLabel)
             
             var email = ""
             if let _ = nodeDict["email"] {
                 email = nodeDict["email"]!
             }
-            let emailButton = UIButton (frame: CGRectMake(15, CGFloat(offset), loView.bounds.size.width - 30, 24))
+            let emailButton = UIButton (frame: CGRectMake(15, CGFloat(offset), singleLoView.bounds.size.width - 30, 24))
             emailButton.addTarget(self, action: "emailButtonPressed:", forControlEvents: .TouchUpInside)
             emailButton.backgroundColor = UIColor.clearColor()
             emailButton.setTitle(email as String, forState: .Normal)
             emailButton.setTitleColor(UIColor.clearColor(), forState: .Normal)
             emailButton.tag = 1
-            loView.addSubview(emailButton)
+            singleLoView.addSubview(emailButton)
             
             offset += 35.0
             
@@ -715,24 +765,24 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             if let _ = nodeDict["nmls"] {
                 nmls = nodeDict["nmls"]!
             }
-            let nmlsLabel = UILabel (frame: CGRectMake(15, CGFloat(offset), loView.bounds.size.width - 30, 0))
+            let nmlsLabel = UILabel (frame: CGRectMake(15, CGFloat(offset), singleLoView.bounds.size.width - 30, 0))
             nmlsLabel.font = UIFont(name: "forza-light", size: 18)
             nmlsLabel.textAlignment = NSTextAlignment.Left
             nmlsLabel.text = String(format: "%@", nmls)
             nmlsLabel.numberOfLines = 0
             nmlsLabel.sizeToFit()
-            loView.addSubview(nmlsLabel)
+            singleLoView.addSubview(nmlsLabel)
             
             offset += 35.0
             buttonOffset = offset
             
-            loView.frame = CGRectMake(15, yVal, scrollView.bounds.size.width - 30, CGFloat(offset))
+            singleLoView.frame = CGRectMake(15, yVal, scrollView.bounds.size.width - 30, CGFloat(offset))
             
             let shadowImg = UIImage(named: "Long_shadow") as UIImage?
             // UIImageView
-            let shadowView = UIImageView(frame: CGRectMake(15, loView.bounds.size.height, loView.bounds.size.width, 15))
+            let shadowView = UIImageView(frame: CGRectMake(15, singleLoView.bounds.size.height, singleLoView.bounds.size.width, 15))
             shadowView.image = shadowImg
-            loView.addSubview(shadowView)
+            singleLoView.addSubview(shadowView)
         }
         else {
 
@@ -960,6 +1010,14 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
             if (success) {
                 self.removeViews(self.profileView)
+                
+                self.singleLoView.removeFromSuperview()
+                self.removeViews(self.singleLoView)
+                
+                let dictString = String(format: "loanOfficerDictfor%@", (self.user?.objectId)!)
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.removeObjectForKey(dictString)
+                
                 self.buildProfileView()
                 self.getUserAndLoInfo()
                 self.editModeLabel.textColor = UIColor.whiteColor()
@@ -974,9 +1032,11 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 
                 self.tempArray.removeAll()
                 if (self.officerEmail.characters.count > 0) {
-                    PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.nameTxtField.text!, "email": self.emailTxtField.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
+                    
+                    // TODO: Uncomment this!!!!!
+                    /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.nameTxtField.text!, "email": self.emailTxtField.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
                         print("----- Email LO -----")
-                    }
+                    }*/
                 }
                 self.removeViews(self.scrollView)
             }
@@ -995,13 +1055,59 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func removeLoanOfficerFromParseUser() {
+        loadingOverlay.hidden = false
+        activityIndicator.startAnimating()
+        
+        user!["name"] = (nameTxtField.text != "") ? nameTxtField.text : user!["name"]
+        user!["email"] = (emailTxtField.text != "") ? emailTxtField.text?.lowercaseString : user!["email"]
+        user!["officerURL"] = ""
+        user!["officerName"] = ""
+        user!["officerNid"] = 0
+        
+        user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                
+                let dictString = String(format: "loanOfficerDictfor%@", (self.user?.objectId)!)
+                
+                let defaults = NSUserDefaults.standardUserDefaults()
+                defaults.removeObjectForKey(dictString)
+                
+                let alertController = UIAlertController(title: "HomeIn", message: "Your loan officer information was updated.", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    self.nameTxtField.enabled = false
+                    self.emailTxtField.enabled = false
+                    self.loButton.enabled = false
+                    
+                    self.isTextFieldEnabled = false
+                    self.editIcon.image = UIImage(named: "edit_icon")
+                    self.editModeLabel.textColor = UIColor.whiteColor()
+                    
+                    self.singleLoView.removeFromSuperview()
+                    self.buildNoLoCard()
+                    
+                    self.loadingOverlay.hidden = true
+                    self.activityIndicator.stopAnimating()
+                }
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    // ...
+                }
+            }
+            else {
+                
+            }
+        }
+    }
+    
     func updateUser(sender: UIButton) {
         loadingOverlay.hidden = false
         activityIndicator.startAnimating()
         
         user!["name"] = (nameTxtField.text != "") ? nameTxtField.text : user!["name"]
-        user!["additional"] = (nameTxtField.text != "") ? nameTxtField.text : user!["additional"]
-        user!["email"] = (emailTxtField.text != "") ? emailTxtField.text : user!["email"]
+        user!["email"] = (emailTxtField.text != "") ? emailTxtField.text?.lowercaseString : user!["email"]
         
         if reachability.isConnectedToNetwork() {
             user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in

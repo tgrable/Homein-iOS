@@ -63,7 +63,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     let loginButton = UIButton ()
     
     //Bool
-    var locationServicesIsAllowed = Bool()
     var isLoginViewOpen = Bool()
     var isRegisterViewOpen = Bool()
     var isMortgageCalc = Bool()
@@ -96,32 +95,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:"activeAgain", name: UIApplicationWillEnterForegroundNotification, object:nil)
+        
         didDisplayNoConnectionMessage = false
         
-        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-            let manager = CLLocationManager()
-            
-            if CLLocationManager.authorizationStatus() == .NotDetermined {
-                manager.requestWhenInUseAuthorization()
-            }
-            
-            if CLLocationManager.locationServicesEnabled() {
-                switch(CLLocationManager.authorizationStatus()) {
-                case .NotDetermined, .Restricted: //, .Denied:
-                    self.locationServicesIsAllowed = false
-                case .AuthorizedAlways, .AuthorizedWhenInUse:
-                    self.locationServicesIsAllowed = true
-                default:
-                    self.locationServicesIsAllowed = false
-                }
-            }
-            
-            if (PFUser.currentUser() != nil) {
-                self.isUserLoggedIn = true
-            }
-            else {
-                self.isUserLoggedIn = false
-            }
+        if (PFUser.currentUser() != nil) {
+            self.isUserLoggedIn = true
+        }
+        else {
+            self.isUserLoggedIn = false
         }
         
         /*************************** was in viewWillAppear *****************************************/
@@ -172,6 +155,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
         isLoginViewOpen = false
         checkIfLoggedIn()
     }
@@ -198,6 +182,17 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func activeAgain() {
+        if reachability.isConnectedToNetwork() == false {
+            findBranchOverlay.hidden = false
+            preQualifiedOverlay.hidden = false
+        }
+        else {
+            findBranchOverlay.hidden = true
+            preQualifiedOverlay.hidden = true
+        }
     }
     
     // MARK:
@@ -440,11 +435,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         findBranchButton.tag = 4
         findBranchView.addSubview(findBranchButton)
         
-        if (locationServicesIsAllowed == false || reachability.isConnectedToNetwork() == false) {
-            findBranchOverlay.frame = (frame: CGRectMake(0, 0, findBranchView.bounds.width, findBranchView.bounds.size.height))
-            findBranchOverlay.backgroundColor = UIColor.darkGrayColor()
-            findBranchOverlay.alpha = 0.45
-            findBranchView.addSubview(findBranchOverlay)
+        findBranchOverlay.frame = (frame: CGRectMake(0, 0, findBranchView.bounds.width, findBranchView.bounds.size.height))
+        findBranchOverlay.backgroundColor = UIColor.darkGrayColor()
+        findBranchOverlay.alpha = 0.45
+        findBranchOverlay.hidden = true
+        findBranchView.addSubview(findBranchOverlay)
+        
+        if (reachability.isConnectedToNetwork() == false) {
+            findBranchOverlay.hidden = false
         }
         
         /********************************************************* Get Prequalified Button ********************************************************************/
@@ -485,6 +483,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         preQualifiedOverlay.alpha = 0.45
         preQualifiedOverlay.hidden = true
         preQualifiedView.addSubview(preQualifiedOverlay)
+        
+        if (reachability.isConnectedToNetwork() == false) {
+            preQualifiedOverlay.hidden = false
+        }
         
         scrollView.contentSize = CGSize(width: self.view.bounds.size.width, height: ((self.view.bounds.size.width / 2) * 2) + (135 + 15))
         
@@ -1054,14 +1056,22 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         var count = 0
         
         // UILabel
-        let overLayTextLabel = UILabel(frame: CGRectMake(15, 25, overlayView.bounds.size.width - 30, 0))
+        let overLayTextLabel = UILabel(frame: CGRectMake(15, 25, overlayView.bounds.size.width - 80, 0))
         overLayTextLabel.text = "Please select a loan officer from the list below or use the search box to find your loan officer."
-        overLayTextLabel.textAlignment = NSTextAlignment.Center
+        overLayTextLabel.textAlignment = NSTextAlignment.Left
         overLayTextLabel.textColor = UIColor.darkTextColor()
-        overLayTextLabel.font = UIFont(name: "forza-light", size: 18)
+        overLayTextLabel.font = UIFont(name: "forza-light", size: 16)
         overLayTextLabel.numberOfLines = 0
         overLayTextLabel.sizeToFit()
         searchOverlayView.addSubview(overLayTextLabel)
+        
+        let dismissButton = UIButton (frame: CGRectMake(overlayView.bounds.size.width - 50, 25, 50, 50))
+        dismissButton.setTitle("X", forState: .Normal)
+        dismissButton.addTarget(self, action: "workingWithALoanOfficer:", forControlEvents: .TouchUpInside)
+        dismissButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
+        dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 32)
+        dismissButton.tag = 0
+        searchOverlayView.addSubview(dismissButton)
         
         let attributes = [
             NSForegroundColorAttributeName: UIColor.darkTextColor(),
@@ -1288,6 +1298,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     // MARK:
     // MARK: Parse Login/Sign up
     func loginSignupUser(sender: Int) {
+        PFUser.logOut()
+        
         self.view.addSubview(loadingOverlay)
         
         if sender == 0 {
@@ -1396,13 +1408,13 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
 
                     if (self.hasLoanOfficer) {
                         if (self.officerEmail.characters.count > 0) {
-                            PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
+                            // TODO: Uncomment this!!!!!
+                            /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
                                 print("----- Email LO -----")
-                            }
+                            }*/
                         }
                     }
-                    
-                    
+
                     self.namereg.text = ""
                     self.usernamereg.text = ""
                     self.emailreg.text = ""
@@ -1422,7 +1434,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             if self.model.isValidEmail(emailTextField.text!) {
                 
                 do {
-                    try PFUser.requestPasswordResetForEmail(emailTextField.text!)
+                    try PFUser.requestPasswordResetForEmail((emailTextField.text?.lowercaseString)!)
                     
                 } catch {
                     let alertController = UIAlertController(title: "HomeIn", message: "We apologize but an error has occurred", preferredStyle: .Alert)
@@ -1845,12 +1857,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     }
     
     func checkIfLoggedIn() {
-        if CLLocationManager.authorizationStatus() == .NotDetermined || CLLocationManager.authorizationStatus() == .Restricted || CLLocationManager.authorizationStatus() == .Denied {
-            findBranchOverlay.hidden = false
-        }
-        else {
-            findBranchOverlay.hidden = true
-        }
+        
         
         let user = PFUser.currentUser()
         if (user == nil) {
