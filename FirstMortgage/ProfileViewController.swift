@@ -1032,11 +1032,9 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
                 
                 self.tempArray.removeAll()
                 if (self.officerEmail.characters.count > 0) {
-                    
-                    // TODO: Uncomment this!!!!!
-                    /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.nameTxtField.text!, "email": self.emailTxtField.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
+                    PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.nameTxtField.text!, "email": self.emailTxtField.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
                         print("----- Email LO -----")
-                    }*/
+                    }
                 }
                 self.removeViews(self.scrollView)
             }

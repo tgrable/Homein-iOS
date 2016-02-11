@@ -187,11 +187,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     func activeAgain() {
         if reachability.isConnectedToNetwork() == false {
             findBranchOverlay.hidden = false
-            preQualifiedOverlay.hidden = false
         }
         else {
             findBranchOverlay.hidden = true
-            preQualifiedOverlay.hidden = true
         }
     }
     
@@ -1408,10 +1406,9 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
 
                     if (self.hasLoanOfficer) {
                         if (self.officerEmail.characters.count > 0) {
-                            // TODO: Uncomment this!!!!!
-                            /*PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
+                            PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
                                 print("----- Email LO -----")
-                            }*/
+                            }
                         }
                     }
 
