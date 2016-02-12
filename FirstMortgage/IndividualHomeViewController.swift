@@ -9,14 +9,14 @@
 import UIKit
 import Parse
 
-class IndividualHomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIScrollViewDelegate {
+class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate, UIScrollViewDelegate {
     
     // MARK:
     // MARK: Properties
     
     //Reachability
     let reachability = Reachability()
-    
+    let parseObject = ParseDataObject()
     let model = Model()
     let modelName = UIDevice.currentDevice().modelName
     
@@ -115,6 +115,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
         
+        parseObject.delegate = self
         picker.delegate = self
         buildView()
     }
@@ -129,16 +130,10 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if self.reachability.isConnectedToNetwork() == false {
             if didDisplayNoConnectionMessage != true {
                 if self.reachability.isConnectedToNetwork() == false {
-                    let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection.\n\nAny images added will be saved to the photo library on this device. Once an internet connection is reestablished, images may be added to any existing home.", preferredStyle: .Alert)
                     
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        self.didDisplayNoConnectionMessage = true
-                    }
-                    alertController.addAction(OKAction)
+                    displayMessage("HomeIn", message: "This device currently has no internet connection.\n\nAny images added will be saved to the photo library on this device. Once an internet connection is reestablished, images may be added to any existing home.")
                     
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
-                    }
+                    self.didDisplayNoConnectionMessage = true
                 }
             }
         }
@@ -976,16 +971,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                         let fillerImage = UIImage(named: "default_home") as UIImage?
                         self.defaultImageView.image = fillerImage
                         
-                        let alertController = UIAlertController(title: "HomeIn", message: "There was an error downloading your images.", preferredStyle: .Alert)
-                        
-                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                            // ...
-                        }
-                        alertController.addAction(OKAction)
-                        
-                        self.presentViewController(alertController, animated: true) {
-                            // ...
-                        }
+                        self.displayMessage("HomeIn", message: "There was an error downloading your images.")
                         
                         self.homeObject["imageArray"] = []
                         self.homeObject.saveEventually()
@@ -1554,7 +1540,7 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
                 print("write to album")
             }
 
-            self.newImg = self.scaleImagesForParse(pickedImage)
+            self.newImg = parseObject.scaleImagesForParse(pickedImage)
             self.updateHomeObjectImageArray()
 
         }
@@ -1567,36 +1553,6 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    //MARK:
-    //MARK: Utility Methods
-    func scaleImagesForParse(img: UIImage) -> UIImage {
-        var height = 0.0
-        var width = 0.0
-        
-        if img.size.height > img.size.width {
-            print("Portrait")
-            height = 736 / Double(img.size.height)
-            width = 414 / Double(img.size.width)
-        }
-        else {
-            print("Landscape")
-            height = 414 / Double(img.size.height)
-            width = 736 / Double(img.size.width)
-        }
-        
-        let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(CGFloat(width), CGFloat(height)))
-        let hasAlpha = false
-        let scale: CGFloat = 1.0 // Automatically use scale factor of main screen
-        
-        UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
-        img.drawInRect(CGRect(origin: CGPointZero, size: size))
-        
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return scaledImage
     }
     
     func updateHomeObjectImageArray() {
@@ -1655,68 +1611,12 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
         if self.reachability.isConnectedToNetwork() {
             dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
                 self.homeObject["imageArray"] = self.imageArray
-                
-                self.homeObject.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-                    self.myHomesView.removeFromSuperview()
-                    self.homeTray.removeFromSuperview()
-                    self.calcTray.removeFromSuperview()
-                    self.saveDeleteTray.removeFromSuperview()
-                    self.buildView()
-                    
-                    self.activityIndicator.stopAnimating()
-                    self.loadingOverlay.hidden = true
-                    
-                    if (success) {
-                        self.homeObject.pinInBackground()
-                        
-                        let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
-                        
-                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                            
-                            self.didEnterEditMode = false
-                        }
-                        alertController.addAction(OKAction)
-                        
-                        self.presentViewController(alertController, animated: true) {
-                            // ...
-                        }
-                    }
-                    else {
-                        let errorString = error!.userInfo["error"] as? String
-                        
-                        let alertController = UIAlertController(title: "HomeIn", message: errorString, preferredStyle: .Alert)
-                        
-                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                            // ...
-                        }
-                        alertController.addAction(OKAction)
-                    }
-                }
+                self.parseObject.saveHomeWithBlock(self.homeObject)
             }
         }
         else {
-            self.homeObject.saveEventually()
-            self.myHomesView.removeFromSuperview()
-            self.homeTray.removeFromSuperview()
-            self.calcTray.removeFromSuperview()
-            self.saveDeleteTray.removeFromSuperview()
-            self.buildView()
-            
-            self.activityIndicator.stopAnimating()
-            self.loadingOverlay.hidden = true
-            
-            self.homeObject.pinInBackground()
-            
-            let alertController = UIAlertController(title: "HomeIn", message: "Your home was saved.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                
-                self.didEnterEditMode = false
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
+            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                self.parseObject.saveHomeEventually(self.homeObject)
             }
         }
     }
@@ -1816,6 +1716,43 @@ class IndividualHomeViewController: UIViewController, UIImagePickerControllerDel
     func removeViews(views: UIView) {
         for view in views.subviews {
             view.removeFromSuperview()
+        }
+    }
+    
+    // MARK:
+    // MARK: ParseDataObject Delegate Methods
+    func saveSucceeded() {
+        self.myHomesView.removeFromSuperview()
+        self.homeTray.removeFromSuperview()
+        self.calcTray.removeFromSuperview()
+        self.saveDeleteTray.removeFromSuperview()
+        self.buildView()
+        
+        self.activityIndicator.stopAnimating()
+        self.loadingOverlay.hidden = true
+        
+        self.displayMessage("HomeIn", message: "Your home was saved.")
+        self.didEnterEditMode = false
+    }
+    
+    func saveFailed(errorMessage: String) {
+        // TODO: Revisit this
+        displayMessage("HomeIn", message: "An error occurred trying to add this home.")
+    }
+    
+    // MARK:
+    // MARK: UIAlert Method (Generic)
+    func displayMessage(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
 }

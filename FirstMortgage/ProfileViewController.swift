@@ -9,12 +9,12 @@
 import UIKit
 import Parse
 
-class ProfileViewController: UIViewController, UITextFieldDelegate {
+class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDelegate {
     // MARK:
     // MARK: Properties
     let model = Model()
     let modelName = UIDevice.currentDevice().modelName
-    
+    let parseObject = ParseDataObject()
     //Reachability
     let reachability = Reachability()
     
@@ -69,6 +69,8 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        parseObject.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -217,16 +219,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         getUserAndLoInfo()
         
         if self.reachability.isConnectedToNetwork() == false {
-            let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection.\n\nUpdating a loan officer will not be possible until an internet connection is reestablished.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
-            }
+            displayMessage("HomeIn", message: "This device currently has no internet connection.\n\nUpdating a loan officer will not be possible until an internet connection is reestablished.")
         }
         else {
             if (self.loanOfficerArray.count <= 0) {
@@ -599,16 +592,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             }
         }
         catch {
-            let alertController = UIAlertController(title: "HomeIn", message: "An error occurred getting the loan officer information.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                // ...
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
-            }
+            displayMessage("HomeIn", message: "An error occurred getting the loan officer information.")
         }
     }
     
@@ -907,16 +891,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
             buildSeachOverlay(loanOfficerArray)
             
             if (searchText.characters.count > 0) {
-                let alertController = UIAlertController(title: "HomeIn", message: "We could not find any loan officers with that name.", preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    // ...
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
+                displayMessage("HomeIn", message: "We could not find any loan officers with that name.")
             }
         }
     }
@@ -998,59 +973,18 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     }
     
     // MARK: 
-    // MARK: Parse
+    // MARK: Update User Information
     func saveLoanOfficerToParse(nid: String, name: String, url: String) {
         loadingOverlay.hidden = false
         activityIndicator.startAnimating()
         
+        user!["name"] = (nameTxtField.text != "") ? nameTxtField.text : user!["name"]
+        user!["email"] = (emailTxtField.text != "") ? emailTxtField.text?.lowercaseString : user!["email"]
         user!["officerNid"] = Int(nid)
         user!["officerName"] = name
         user!["officerURL"] = url
         
-        user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-            if (success) {
-                self.removeViews(self.profileView)
-                
-                self.singleLoView.removeFromSuperview()
-                self.removeViews(self.singleLoView)
-                
-                let dictString = String(format: "loanOfficerDictfor%@", (self.user?.objectId)!)
-                let defaults = NSUserDefaults.standardUserDefaults()
-                defaults.removeObjectForKey(dictString)
-                
-                self.buildProfileView()
-                self.getUserAndLoInfo()
-                self.editModeLabel.textColor = UIColor.whiteColor()
-                self.overlayView.hidden = true
-                
-                self.nameTxtField.resignFirstResponder()
-                self.emailTxtField.resignFirstResponder()
-                self.searchTxtField.resignFirstResponder()
-                
-                self.loadingOverlay.hidden = true
-                self.activityIndicator.stopAnimating()
-                
-                self.tempArray.removeAll()
-                if (self.officerEmail.characters.count > 0) {
-                    PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.nameTxtField.text!, "email": self.emailTxtField.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
-                        print("----- Email LO -----")
-                    }
-                }
-                self.removeViews(self.scrollView)
-            }
-            else {
-                let alertController = UIAlertController(title: "HomeIn", message: String(format: "%@", error!), preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    // ...
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
-            }
-        }
+        parseObject.saveUser(user!, officerEmail: officerEmail)
     }
     
     func removeLoanOfficerFromParseUser() {
@@ -1063,41 +997,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         user!["officerName"] = ""
         user!["officerNid"] = 0
         
-        user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-            if (success) {
-                
-                let dictString = String(format: "loanOfficerDictfor%@", (self.user?.objectId)!)
-                
-                let defaults = NSUserDefaults.standardUserDefaults()
-                defaults.removeObjectForKey(dictString)
-                
-                let alertController = UIAlertController(title: "HomeIn", message: "Your loan officer information was updated.", preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    self.nameTxtField.enabled = false
-                    self.emailTxtField.enabled = false
-                    self.loButton.enabled = false
-                    
-                    self.isTextFieldEnabled = false
-                    self.editIcon.image = UIImage(named: "edit_icon")
-                    self.editModeLabel.textColor = UIColor.whiteColor()
-                    
-                    self.singleLoView.removeFromSuperview()
-                    self.buildNoLoCard()
-                    
-                    self.loadingOverlay.hidden = true
-                    self.activityIndicator.stopAnimating()
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
-            }
-            else {
-                
-            }
-        }
+        parseObject.saveUser(user!, officerEmail: officerEmail)
     }
     
     func updateUser(sender: UIButton) {
@@ -1107,60 +1007,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         user!["name"] = (nameTxtField.text != "") ? nameTxtField.text : user!["name"]
         user!["email"] = (emailTxtField.text != "") ? emailTxtField.text?.lowercaseString : user!["email"]
         
-        if reachability.isConnectedToNetwork() {
-            user!.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-                
-                var message = ""
-                if (success) {
-                    message = "Your profile information was updated."
-                }
-                else {
-                    message = String(format: "There was an error updating your profile information. %@", error!)
-                }
-                
-                let alertController = UIAlertController(title: "HomeIn", message: message, preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    self.nameTxtField.enabled = false
-                    self.emailTxtField.enabled = false
-                    self.loButton.enabled = false
-                    
-                    self.isTextFieldEnabled = false
-                    self.editIcon.image = UIImage(named: "edit_icon")
-                    self.editModeLabel.textColor = UIColor.whiteColor()
-                    
-                    self.loadingOverlay.hidden = true
-                    self.activityIndicator.stopAnimating()
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
-            }
-        }
-        else {
-            user?.saveEventually()
-            let alertController = UIAlertController(title: "HomeIn", message: "Your profile information was updated.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                self.nameTxtField.enabled = false
-                self.emailTxtField.enabled = false
-                self.loButton.enabled = false
-                
-                self.isTextFieldEnabled = false
-                self.editIcon.image = UIImage(named: "edit_icon")
-                self.editModeLabel.textColor = UIColor.whiteColor()
-                
-                self.loadingOverlay.hidden = true
-                self.activityIndicator.stopAnimating()
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
-            }
-        }
+        parseObject.saveUser(user!, officerEmail: "")
     }
     
     // MARK: 
@@ -1214,9 +1061,7 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
         textField.becomeFirstResponder()
         searchLoanOfficerArray(textField.text!)
     }
-    
-    
-    
+
     func allowEdit(sender: UIButton) {
         calculateView.alpha = 1
         calculateArrow.alpha = 1
@@ -1311,6 +1156,82 @@ class ProfileViewController: UIViewController, UITextFieldDelegate {
     func removeViews(views: UIView) {
         for view in views.subviews {
             view.removeFromSuperview()
+        }
+    }
+    
+    // MARK:
+    // MARK: ParseDataObject Delegate Methods
+    func saveSucceeded() {
+        removeViews(self.profileView)
+        
+        singleLoView.removeFromSuperview()
+        removeViews(self.singleLoView)
+        
+        // TODO: Revisit this
+        /*let dictString = String(format: "loanOfficerDictfor%@", (self.user?.objectId)!)
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.removeObjectForKey(dictString)*/
+        
+        buildProfileView()
+        getUserAndLoInfo()
+        editModeLabel.textColor = UIColor.whiteColor()
+        overlayView.hidden = true
+        
+        nameTxtField.resignFirstResponder()
+        emailTxtField.resignFirstResponder()
+        searchTxtField.resignFirstResponder()
+        
+        loadingOverlay.hidden = true
+        activityIndicator.stopAnimating()
+        
+        tempArray.removeAll()
+        removeViews(scrollView)
+        
+        displayMessage("HomeIn", message: "Your profile information was updated.")
+        
+        /****************************************/
+        nameTxtField.enabled = false
+        emailTxtField.enabled = false
+        loButton.enabled = false
+        isTextFieldEnabled = false
+        editIcon.image = UIImage(named: "edit_icon")
+        editModeLabel.textColor = UIColor.whiteColor()
+        singleLoView.removeFromSuperview()
+        
+        //user!["officerNid"] = Int(nid)
+        var loNid = 0
+        if let _ = user!["officerNid"] {
+            loNid = user!["officerNid"] as! Int
+        }
+        
+        if loNid == 0 {
+            let dictString = String(format: "loanOfficerDictfor%@", (self.user?.objectId)!)
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.removeObjectForKey(dictString)
+            
+            buildNoLoCard()
+        }
+    }
+    
+    func saveFailed(errorMessage: String) {
+        
+        // TODO: Revisit this
+        displayMessage("HomeIn", message: "An error occurred trying to add this home.")
+    }
+    
+    // MARK:
+    // MARK: UIAlert Method (Generic)
+    func displayMessage(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
 }

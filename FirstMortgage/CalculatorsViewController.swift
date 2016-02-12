@@ -16,36 +16,36 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     let modelName = UIDevice.currentDevice().modelName
     
     // UIView
-    let calcView = UIView() as UIView
-    let calcWindowView = UIView() as UIView
+    let calcView = UIView()
+    let calcWindowView = UIView()
     
     // UIScrollView
-    let scrollView = UIScrollView() as UIScrollView
+    let scrollView = UIScrollView()
     
     //UIImageView
-    var imageView = UIImageView() as UIImageView
+    var imageView = UIImageView()
     
     // UITextField
-    let mortLoanAmountTxtField = UITextField() as UITextField
-    let mortMortgageTxtField = UITextField() as UITextField
-    let mortInterestTxtField = UITextField() as UITextField
-    let mortDownPaymentTxtField = UITextField() as UITextField
+    let mortLoanAmountTxtField = UITextField()
+    let mortMortgageTxtField = UITextField()
+    let mortInterestTxtField = UITextField()
+    let mortDownPaymentTxtField = UITextField()
     
     // UITextField
-    let loanAmountTxtField = UITextField() as UITextField
-    let mortgageTextField = UITextField() as UITextField
-    let interestTextField = UITextField() as UITextField
-    let currentYearTxtField = UITextField() as UITextField
-    let newMortgageTextField = UITextField() as UITextField
-    let newInterestTextField = UITextField() as UITextField
+    let loanAmountTxtField = UITextField()
+    let mortgageTextField = UITextField()
+    let interestTextField = UITextField()
+    let currentYearTxtField = UITextField()
+    let newMortgageTextField = UITextField()
+    let newInterestTextField = UITextField()
    
     // UILabel
-    var paymentLabel = UILabel() as UILabel
-    var refiPaymentLabel = UILabel() as UILabel
+    var paymentLabel = UILabel()
+    var refiPaymentLabel = UILabel()
     
-    var isMortgageCalc = Bool() as Bool
+    var isMortgageCalc = Bool()
 
-    var titleLabel = String() as String
+    var titleLabel = String()
     var estimatedPaymentDefault = 1865.78
     var estimatedOriginalPaymentDefault = 2047.96
     var refiPaymentDefault = 1735.52

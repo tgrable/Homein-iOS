@@ -9,49 +9,44 @@
 import UIKit
 import Parse
 
-class MyHomesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
+class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDataSource, UITableViewDelegate {
+    
     // MARK:
     // MARK: Properties
     let model = Model()
     let modelName = UIDevice.currentDevice().modelName
-
-    //Reachability
+    let parseObject = ParseDataObject()
     let reachability = Reachability()
     
     @IBOutlet weak var homeTableView: UITableView!
     let basicCellIdentifier = "BasicCell"
     
-    let myHomesView = UIView()
-    let sortTrayView = UIView()
-    let dismissView = UIView()
-    let sortTrayGradientLayer = CAGradientLayer()
+    var sortTrayView: UIView?
+    var dismissView: UIView?
     
     var imageView = UIImageView()
     var sortDirIcon = UIImageView()
-    
-    var isSmallerScreen = Bool()
-    var isSortTrayOpen = Bool()
-    var sortAscending = Bool()
-    
-    var sortNameAscending = Bool()
-    var sortRatingAscending = Bool()
-    var sortPriceAscending = Bool()
     
     var sortNameDirection = UIImageView()
     var sortRatingDirection = UIImageView()
     var sortPriceDirection = UIImageView()
     
     let sortDirectionButton = UIButton()
-    let sortNameButton = UIButton ()
-    let sortPriceButton = UIButton ()
-    let sortRatingButton = UIButton ()
+    let sortNameButton = UIButton()
+    let sortPriceButton = UIButton()
+    let sortRatingButton = UIButton()
     
     let swipeRec = UISwipeGestureRecognizer()
     
-    var sortCriteria = String()
+    var isSmallerScreen: Bool = false
+    var isSortTrayOpen: Bool = false
+    var sortAscending: Bool = false
+    var sortNameAscending: Bool = false
+    var sortRatingAscending: Bool = false
+    var sortPriceAscending: Bool = false
+    var alreadyDisplayedAlert: Bool = false
     
-    var alreadyDisplayedAlert = Bool()
+    var sortCriteria: String = "createdAt"
     
     // Parse
     var userHomes = [PFObject]()
@@ -62,19 +57,15 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        parseObject.delegate = self
+
         homeTableView.delegate = self
         homeTableView.dataSource = self
-        
-        sortAscending = false
-        sortNameAscending = false
-        sortRatingAscending = false
-        sortPriceAscending = false
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         
-        sortCriteria = "createdAt"
         getAllHomesForUser(sortCriteria, sortDirection: sortAscending)
         buildView()
         
@@ -100,14 +91,14 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK:
     // MARK: Build Views
     func buildView() {
-        myHomesView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, 185))
+        let myHomesView = UIView(frame: CGRectMake(0, 0, self.view.bounds.size.width, 185))
         myHomesView.backgroundColor = model.lightGrayColor
         myHomesView.hidden = false
         self.view.addSubview(myHomesView)
         
         let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
-        imageView.frame = (frame: CGRectMake((myHomesView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
+        let imageView = UIImageView(frame: CGRectMake((myHomesView.bounds.size.width / 2) - 79.5, 25, 159, 47.5))
         imageView.image = fmcLogo
         myHomesView.addSubview(imageView)
         
@@ -180,22 +171,23 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func showSortTray() {
-        dismissView.frame = (frame: CGRectMake(0, 185, self.view.bounds.size.width, self.view.bounds.height))
-        dismissView.backgroundColor = model.lightGrayColor
-        dismissView.alpha = 0.0
-        dismissView.hidden = true
-        self.view.addSubview(dismissView)
+        dismissView = UIView(frame: CGRectMake(0, 185, self.view.bounds.size.width, self.view.bounds.height))
+        dismissView!.backgroundColor = model.lightGrayColor
+        dismissView!.alpha = 0.0
+        dismissView!.hidden = true
+        self.view.addSubview(dismissView!)
         
-        sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 200))
-        sortTrayGradientLayer.frame = sortTrayView.bounds
+        sortTrayView = UIView(frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 200))
+        let sortTrayGradientLayer = CAGradientLayer()
+        sortTrayGradientLayer.frame = self.sortTrayView!.bounds
         sortTrayGradientLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
-        sortTrayView.layer.insertSublayer(sortTrayGradientLayer, atIndex: 0)
-        sortTrayView.layer.addSublayer(sortTrayGradientLayer)
-        sortTrayView.hidden = false
-        self.view.addSubview(sortTrayView)
+        sortTrayView!.layer.insertSublayer(sortTrayGradientLayer, atIndex: 0)
+        sortTrayView!.layer.addSublayer(sortTrayGradientLayer)
+        sortTrayView!.hidden = false
+        self.view.addSubview(sortTrayView!)
         
         // UILabel
-        let sortByLabel = UILabel(frame: CGRectMake(15, 5, sortTrayView.bounds.size.width - 65, 0))
+        let sortByLabel = UILabel(frame: CGRectMake(15, 5, sortTrayView!.bounds.size.width - 65, 0))
         sortByLabel.text = "SORT BY"
         //myHomesLabel.font = UIFont(name: listItem.titleLabel.font.fontName, size: 24)
         sortByLabel.textAlignment = NSTextAlignment.Left
@@ -203,21 +195,21 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortByLabel.font = UIFont(name: "forza-light", size: 25)
         sortByLabel.textColor = UIColor.whiteColor()
         sortByLabel.sizeToFit()
-        sortTrayView.addSubview(sortByLabel)
+        sortTrayView!.addSubview(sortByLabel)
         
         let dividerView = UIView(frame: CGRectMake(15, 37, self.view.bounds.size.width - 30, 1))
         dividerView.backgroundColor = UIColor.whiteColor()
         dividerView.hidden = false
-        sortTrayView.addSubview(dividerView)
+        sortTrayView!.addSubview(dividerView)
         
         let nameImage = UIImage(named: "home_icon") as UIImage?
         // UIImageView
         let nameImageView = UIImageView(frame: CGRectMake(15, 50, 30, 30))
         nameImageView.image = nameImage
-        sortTrayView.addSubview(nameImageView)
+        sortTrayView!.addSubview(nameImageView)
         
         // UIButton
-        sortNameButton.frame = (frame: CGRectMake(50, 45, sortTrayView.bounds.size.width - 50, 40))
+        sortNameButton.frame = (frame: CGRectMake(50, 45, sortTrayView!.bounds.size.width - 50, 40))
         sortNameButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortNameButton.setTitle("NAME", forState: .Normal)
         sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -225,21 +217,21 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortNameButton.contentHorizontalAlignment = .Left
         sortNameButton.tag = 0
         sortNameButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-        sortTrayView.addSubview(sortNameButton)
+        sortTrayView!.addSubview(sortNameButton)
         
         // UIImageView
-        sortNameDirection.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 75, 40, 45, 45))
+        sortNameDirection.frame = (frame: CGRectMake(sortTrayView!.bounds.size.width - 75, 40, 45, 45))
         sortNameDirection.image = UIImage(named: "expand_white") as UIImage?
-        sortTrayView.addSubview(sortNameDirection)
+        sortTrayView!.addSubview(sortNameDirection)
         
         let starImage = UIImage(named: "Star_empty-01") as UIImage?
         // UIImageView
         let ratingImageView = UIImageView(frame: CGRectMake(15, 95, 30, 30))
         ratingImageView.image = starImage
-        sortTrayView.addSubview(ratingImageView)
+        sortTrayView!.addSubview(ratingImageView)
         
         // UIButton
-        sortRatingButton.frame = (frame: CGRectMake(50, 90, sortTrayView.bounds.size.width - 50, 40))
+        sortRatingButton.frame = (frame: CGRectMake(50, 90, sortTrayView!.bounds.size.width - 50, 40))
         sortRatingButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortRatingButton.setTitle("RATING", forState: .Normal)
         sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -247,21 +239,21 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortRatingButton.contentHorizontalAlignment = .Left
         sortRatingButton.tag = 0
         sortRatingButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-        sortTrayView.addSubview(sortRatingButton)
+        sortTrayView!.addSubview(sortRatingButton)
         
         // UIImageView
-        sortRatingDirection.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 75, 85, 45, 45))
+        sortRatingDirection.frame = (frame: CGRectMake(sortTrayView!.bounds.size.width - 75, 85, 45, 45))
         sortRatingDirection.image = UIImage(named: "expand_white") as UIImage?
-        sortTrayView.addSubview(sortRatingDirection)
+        sortTrayView!.addSubview(sortRatingDirection)
         
         let priceImage = UIImage(named: "Money_icon-04") as UIImage?
         // UIImageView
         let priceImageView = UIImageView(frame: CGRectMake(15, 140, 30, 30))
         priceImageView.image = priceImage
-        sortTrayView.addSubview(priceImageView)
+        sortTrayView!.addSubview(priceImageView)
         
         // UIButton
-        sortPriceButton.frame = (frame: CGRectMake(50, 135, sortTrayView.bounds.size.width, 40))
+        sortPriceButton.frame = (frame: CGRectMake(50, 135, sortTrayView!.bounds.size.width, 40))
         sortPriceButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
         sortPriceButton.setTitle("PRICE", forState: .Normal)
         sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -269,35 +261,34 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         sortPriceButton.contentHorizontalAlignment = .Left
         sortPriceButton.tag = 0
         sortPriceButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-        sortTrayView.addSubview(sortPriceButton)
+        sortTrayView!.addSubview(sortPriceButton)
         
         // UIImageView
-        sortPriceDirection.frame = (frame: CGRectMake(sortTrayView.bounds.size.width - 75, 130, 45, 45))
+        sortPriceDirection.frame = (frame: CGRectMake(sortTrayView!.bounds.size.width - 75, 130, 45, 45))
         sortPriceDirection.image = UIImage(named: "expand_white") as UIImage?
-        sortTrayView.addSubview(sortPriceDirection)
+        sortTrayView!.addSubview(sortPriceDirection)
         
         let dismissSwipe = UISwipeGestureRecognizer()
         dismissSwipe.direction = UISwipeGestureRecognizerDirection.Down
         dismissSwipe.addTarget(self, action: "showHideSortTray")
-        dismissView.userInteractionEnabled = true
-        dismissView.addGestureRecognizer(dismissSwipe)
+        dismissView!.userInteractionEnabled = true
+        dismissView!.addGestureRecognizer(dismissSwipe)
         
         swipeRec.direction = UISwipeGestureRecognizerDirection.Down
         swipeRec.addTarget(self, action: "showHideSortTray")
-        sortTrayView.userInteractionEnabled = true
-        sortTrayView.addGestureRecognizer(swipeRec)
+        sortTrayView!.userInteractionEnabled = true
+        sortTrayView!.addGestureRecognizer(swipeRec)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: "showHideSortTray")
-        dismissView.addGestureRecognizer(tapGesture)
+        dismissView!.addGestureRecognizer(tapGesture)
     }
 
     func showHideSortTray() {
         if (!isSortTrayOpen) {
             UIView.animateWithDuration(0.4, animations: {
-                self.dismissView.hidden = false
-                self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height - 175, self.view.bounds.size.width, 175))
-                self.sortTrayGradientLayer.frame = self.sortTrayGradientLayer.bounds
-                self.dismissView.alpha = 0.25
+                self.dismissView!.hidden = false
+                self.sortTrayView!.frame = (frame: CGRectMake(0, self.view.bounds.size.height - 175, self.view.bounds.size.width, 175))
+                self.dismissView!.alpha = 0.25
                 }, completion: {
                     (value: Bool) in
                     self.isSortTrayOpen = true
@@ -305,13 +296,12 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         }
         else {
             UIView.animateWithDuration(0.4, animations: {
-                self.sortTrayView.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 175))
-                self.sortTrayGradientLayer.frame = self.sortTrayGradientLayer.bounds
-                self.dismissView.alpha = 0.0
+                self.sortTrayView!.frame = (frame: CGRectMake(0, self.view.bounds.size.height, self.view.bounds.size.width, 175))
+                self.dismissView!.alpha = 0.0
                 }, completion: {
                     (value: Bool) in
                     self.isSortTrayOpen = false
-                    self.dismissView.hidden = true
+                    self.dismissView!.hidden = true
             })
         }
     }
@@ -324,7 +314,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             sortNameButton.setTitleColor(model.darkGrayColor, forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            if (sortNameAscending) {
+            if sortNameAscending {
                 sortNameDirection.image = UIImage(named: "expand_white_up") as UIImage?
                 getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortNameAscending)
                 sortNameAscending = false
@@ -339,7 +329,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortPriceButton.setTitleColor(model.darkGrayColor, forState: .Normal)
             sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            if (sortPriceAscending) {
+            if sortPriceAscending {
                 sortPriceDirection.image = UIImage(named: "expand_white_up") as UIImage?
                 getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortPriceAscending)
                 sortPriceAscending = false
@@ -353,7 +343,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
             sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
             sortRatingButton.setTitleColor(model.darkGrayColor, forState: .Normal)
-            if (sortRatingAscending) {
+            if sortRatingAscending {
                 sortRatingDirection.image = UIImage(named: "expand_white_up") as UIImage?
                 getAllHomesForUser(sortCriteria.lowercaseString, sortDirection: sortRatingAscending)
                 sortRatingAscending = false
@@ -373,45 +363,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     // MARK:
     // MARK: Parse Method
     func getAllHomesForUser(sortOrder: String, sortDirection: Bool) {
-        sortAscending = sortDirection
-        let query = PFQuery(className:"Home")
-        query.whereKey("user", equalTo:PFUser.currentUser()!)
-        if sortAscending {
-            query.orderByAscending(sortOrder)
-        }
-        else {
-            query.orderByDescending(sortOrder)
-        }
-        if self.reachability.isConnectedToNetwork() == false {
-            query.fromLocalDatastore()
-        }
-        query.findObjectsInBackgroundWithBlock {
-            (objects: [PFObject]?, error: NSError?) -> Void in
-            if error == nil {
-                // The find succeeded.
-                // Do something with the found objects
-                self.userHomes.removeAll()
-                for object in objects! {
-                    self.userHomes.append(object)
-                }
-                self.homeTableView.reloadData()
-                
-                PFObject.pinAllInBackground(objects)
-                
-            } else {
-                // Log details of the failure
-                let alertController = UIAlertController(title: "HomeIn", message: String(format: "%@", error!.userInfo), preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-    
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
-            }
-        }
+        parseObject.getAllHomesForUser(sortOrder, sortDirection: sortDirection, fromLocalDataStore: reachability.isConnectedToNetwork())
     }
     
     // MARK:
@@ -444,9 +396,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
         
         return cell
     }
-    
-    
-    
+
     func setBackgroungImageForCell(cell:BasicCell, indexPath:NSIndexPath) {
         let row = indexPath.row
         let item = self.userHomes[row] as PFObject
@@ -468,17 +418,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
                     }
                     else {
                         if self.alreadyDisplayedAlert != true {
-                            let alertController = UIAlertController(title: "HomeIn", message: "There was an error downloading some of your images.", preferredStyle: .Alert)
-                            
-                            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                                // ...
-                            }
-                            alertController.addAction(OKAction)
-                            
-                            self.presentViewController(alertController, animated: true) {
-                                // ...
-                            }
-                            
+                            self.displayMessage("HomeIn", message: "There was an error downloading some of your images.")
                             self.alreadyDisplayedAlert = true
                         }
                         
@@ -645,17 +585,7 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func deleteHomeObject(homeObject: PFObject) {
         homeObject.deleteEventually()
-        
-        let alertController = UIAlertController(title: "HomeIn", message: "The home was deleted", preferredStyle: .Alert)
-        
-        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-            
-        }
-        alertController.addAction(OKAction)
-        
-        self.presentViewController(alertController, animated: true) {
-            // ...
-        }
+        displayMessage("HomeIn", message: "The home was deleted")
     }
     
     // MARK:
@@ -683,6 +613,36 @@ class MyHomesViewController: UIViewController, UITableViewDataSource, UITableVie
     func removeViews(views: UIView) {
         for view in views.subviews {
             view.removeFromSuperview()
+        }
+    }
+    
+    // MARK:
+    // MARK: ParseDataObject Delegate Methods
+    func querySecceededWithObjects(objects: [PFObject]) {
+        self.userHomes.removeAll()
+        for object in objects {
+            self.userHomes.append(object)
+        }
+        self.homeTableView.reloadData()
+    }
+    
+    func queryFailed(errorMessage: String) {
+        displayMessage("HomeIn", message: String(format: "%@", errorMessage))
+    }
+    
+    // MARK:
+    // MARK: UIAlert Method (Generic)
+    func displayMessage(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
 }

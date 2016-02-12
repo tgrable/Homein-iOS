@@ -9,13 +9,12 @@
 import UIKit
 import Parse
 
-class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate {
+class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelegate, CLLocationManagerDelegate {
     // MARK:
     // MARK: Properties
     var model = Model()
     let modelName = UIDevice.currentDevice().modelName
-    
-    //Reachability
+    let parseObject = ParseDataObject()
     let reachability = Reachability()
     
     //UIView
@@ -98,6 +97,8 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"activeAgain", name: UIApplicationWillEnterForegroundNotification, object:nil)
         
+        parseObject.delegate = self
+        
         didDisplayNoConnectionMessage = false
         
         if (PFUser.currentUser() != nil) {
@@ -120,6 +121,10 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         buildCreateAccountView()
         buildLoginView()
         buildSignUpView()
+        
+        if isUserLoggedIn == false {
+            
+        }
         
         loadingOverlay.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.size.height))
         loadingOverlay.backgroundColor = UIColor.darkGrayColor()
@@ -220,9 +225,6 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         let width = Double(self.view.bounds.size.width)
         
         var fullButtonheight = (self.view.bounds.size.width / 2) * 0.75
-        /*if (modelName.rangeOfString("iPad") != nil) {
-            fullButtonheight = (self.view.bounds.size.width / 2) - 225
-        }*/
         
         if (self.view.bounds.size.width >= 768) {
             fullButtonheight = (self.view.bounds.size.width / 2) - 225
@@ -1302,41 +1304,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         
         if sender == 0 {
             if (username.text!.isEmpty != true && password.text!.isEmpty != true) {
-                PFUser.logInWithUsernameInBackground(username.text!, password:password.text!) {
-                    (user: PFUser?, error: NSError?) -> Void in
-                    if user != nil {
-                        self.isUserLoggedIn = true
-                        
-                        self.username.text = ""
-                        self.password.text = ""
-                        
-                        self.username.resignFirstResponder()
-                        self.password.resignFirstResponder()
-                        
-                        self.contentScrollView.contentOffset.y = 0
-                        
-                        self.isLoginViewOpen = true
-                        self.caView.hidden = true
-                        self.myHomesOverlay.hidden = true
-                        self.addAHomeOverlay.hidden = true
-                        
-                        self.checkIfLoggedIn()
-                        self.showHideLoginView()
-                    }
-                    else {
-                        let message = error!.localizedDescription as String
-                        let alertController = UIAlertController(title: "HomeIn", message: message, preferredStyle: .Alert)
-                        
-                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                            // ...
-                        }
-                        alertController.addAction(OKAction)
-                        
-                        self.presentViewController(alertController, animated: true) {
-                            // ...
-                        }
-                    }
-                }
+                parseObject.loginPFUser(username.text!, password: password.text!)
             }
         }
         else if sender == 1 {
@@ -1358,74 +1326,14 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                 user["officerURL"] = officerURL
             }
             
-            user.signUpInBackgroundWithBlock {
-                (succeeded: Bool, error: NSError?) -> Void in
-                if let error = error {
-
-                    self.removeViews(self.overlayView)
-                    self.activityIndicator.startAnimating()
-                    self.loadingOverlay.hidden = true
-                    
-                    let errorString = error.userInfo["error"] as? String
-                    
-                    let alertController = UIAlertController(title: "HomeIn", message: errorString, preferredStyle: .Alert)
-                    
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        self.searchOverlayView.hidden = true
-                    }
-                    alertController.addAction(OKAction)
-                    
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
-                    }
-                } else {
-                    // Hooray! Let them use the app now.
-                    self.isUserLoggedIn = true
-                    
-                    self.namereg.resignFirstResponder()
-                    self.emailreg.resignFirstResponder()
-                    self.usernamereg.resignFirstResponder()
-                    self.passwordreg.resignFirstResponder()
-                    self.confirmpasswordreg.resignFirstResponder()
-                    
-                    self.contentScrollView.contentOffset.y = 0
-                    
-                    self.myHomesOverlay.hidden = true
-                    self.addAHomeOverlay.hidden = true
-                    
-                    self.checkIfLoggedIn()
-                    self.searchOverlayView.removeFromSuperview()
-                    self.caView.removeFromSuperview()
-                    self.showHideSignUpView()
-                    
-                    self.activityIndicator.stopAnimating()
-                    self.loadingOverlay.hidden = true
-                    
-                    self.didComeFromAccountPage = true
-                    self.performSegueWithIdentifier("profileViewController", sender: nil)
-
-                    if (self.hasLoanOfficer) {
-                        if (self.officerEmail.characters.count > 0) {
-                            PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : self.namereg.text!, "email": self.emailreg.text!, "officer" : self.officerEmail]) { (result: AnyObject?, error: NSError?) in
-                                print("----- Email LO -----")
-                            }
-                        }
-                    }
-
-                    self.namereg.text = ""
-                    self.usernamereg.text = ""
-                    self.emailreg.text = ""
-                    self.passwordreg.text = ""
-                    self.confirmpasswordreg.text = ""
-                }
-            }
+            parseObject.signUpPFUser(user)
         }
     }
     
     func forgotPassord() {
         let alertController = UIAlertController(title: "HomeIn", message: "Please enter your email address.", preferredStyle: .Alert)
         
-        let loginAction = UIAlertAction(title: "Submit", style: .Default) { (_) in
+        let submitAction = UIAlertAction(title: "Submit", style: .Default) { (_) in
             let emailTextField = alertController.textFields![0] as UITextField
             
             if self.model.isValidEmail(emailTextField.text!) {
@@ -1434,44 +1342,16 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                     try PFUser.requestPasswordResetForEmail((emailTextField.text?.lowercaseString)!)
                     
                 } catch {
-                    let alertController = UIAlertController(title: "HomeIn", message: "We apologize but an error has occurred", preferredStyle: .Alert)
-                    
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        // ...
-                    }
-                    alertController.addAction(OKAction)
-                    
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
-                    }
+                    self.displayMessage("HomeIn", message: "We apologize but an error has occurred.")
                 }
-                
-                let alertController = UIAlertController(title: "HomeIn", message: "An email has been sent to the email address provided with instructions to reset your password.", preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    // ...
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
+                self.displayMessage("HomeIn", message: "An email has been sent to the email address provided with instructions to reset your password.")
             }
             else {
-                let alertController = UIAlertController(title: "HomeIn", message: "Please Enter a valid email.", preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    // ...
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
+                self.displayMessage("HomeIn", message: "Please Enter a valid email.")
             }
             
         }
-        loginAction.enabled = false
+        submitAction.enabled = false
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
         
@@ -1479,11 +1359,11 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
             textField.placeholder = "Email Address"
             
             NSNotificationCenter.defaultCenter().addObserverForName(UITextFieldTextDidChangeNotification, object: textField, queue: NSOperationQueue.mainQueue()) { (notification) in
-                loginAction.enabled = textField.text != ""
+                submitAction.enabled = textField.text != ""
             }
         }
         
-        alertController.addAction(loginAction)
+        alertController.addAction(submitAction)
         alertController.addAction(cancelAction)
         
         self.presentViewController(alertController, animated: true) {
@@ -1590,16 +1470,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
     func workingWithALoanOfficer(sender: UIButton) {
         switch sender.tag {
         case 0:
-            let alertController = UIAlertController(title: "HomeIn", message: "Some features of this app may be unavailable until you select a loan officer. You will be able to select a loan officer on your profile page.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                self.loginSignupUser(1)
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
-            }
+            displayMessage("HomeIn", message: "Some features of this app may be unavailable until you select a loan officer. You will be able to select a loan officer on your profile page.")
         case 1:
             buildLoanOfficerSeachOverLay(loanOfficerArray)
         default:
@@ -1837,25 +1708,15 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
         }
         else {
             buildLoanOfficerSeachOverLay(loanOfficerArray)
-            
+
             if (searchText.characters.count > 0) {
-                let alertController = UIAlertController(title: "HomeIn", message: "We could not find any loan officers with that name.", preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    // ...
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
+                displayMessage("HomeIn", message: "We could not find any loan officers with that name.")
             }
         }
     }
     
     func checkIfLoggedIn() {
-        
-        
+
         let user = PFUser.currentUser()
         if (user == nil) {
             
@@ -1911,16 +1772,7 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                 self.loginSignupUser(0)
             }
             else {
-                let alertController = UIAlertController(title: "HomeIn", message: "Plaese make sure you have filled out all the required fields.", preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    // ...
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
+                displayMessage("HomeIn", message: "Plaese make sure you have filled out all the required fields.")
             }
         }
         else {
@@ -1937,62 +1789,117 @@ class HomeViewController: UIViewController, UITextFieldDelegate, CLLocationManag
                             buildOverlay()
                         }
                         else {
-                            let alertController = UIAlertController(title: "HomeIn", message: "Please Enter a valid email.", preferredStyle: .Alert)
-                            
-                            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                                // ...
-                            }
-                            alertController.addAction(OKAction)
-                            
-                            self.presentViewController(alertController, animated: true) {
-                                // ...
-                            }
+                            displayMessage("HomeIn", message: "Please Enter a valid email.")
                         }
                     }
                     else {
-                        let alertController = UIAlertController(title: "HomeIn", message: "Your password needs to be at least 6 characters long.", preferredStyle: .Alert)
-                        
-                        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                            // ...
-                        }
-                        alertController.addAction(OKAction)
-                        
-                        self.presentViewController(alertController, animated: true) {
-                            // ...
-                        }
+                        displayMessage("HomeIn", message: "Your password needs to be at least 6 characters long.")
                     }
                 }
                 else {
-                    let alertController = UIAlertController(title: "HomeIn", message: "Your passwords do not match.", preferredStyle: .Alert)
-                    
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        // ...
-                    }
-                    alertController.addAction(OKAction)
-                    
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
-                    }
+                    displayMessage("HomeIn", message:  "Your passwords do not match.")
                 }
             }
             else {
-                let alertController = UIAlertController(title: "HomeIn", message: "Plaese make sure you have filled out all the required fields.", preferredStyle: .Alert)
-                
-                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                    // ...
-                }
-                alertController.addAction(OKAction)
-                
-                self.presentViewController(alertController, animated: true) {
-                    // ...
-                }
+                displayMessage("HomeIn", message: "Plaese make sure you have filled out all the required fields.")
             }
         }
     }
     
+    // MARK:
+    // MARK: Memory Management
     func removeViews(views: UIView) {
         for view in views.subviews {
             view.removeFromSuperview()
+        }
+    }
+    
+    // MARK:
+    // MARK: ParseDataObject Delegate Methods
+    func loginSucceeded() {
+        self.isUserLoggedIn = true
+        
+        self.username.text = ""
+        self.password.text = ""
+        
+        self.username.resignFirstResponder()
+        self.password.resignFirstResponder()
+        
+        self.contentScrollView.contentOffset.y = 0
+        
+        self.isLoginViewOpen = true
+        self.caView.hidden = true
+        self.myHomesOverlay.hidden = true
+        self.addAHomeOverlay.hidden = true
+        
+        self.checkIfLoggedIn()
+        self.showHideLoginView()
+    }
+    
+    func loginFailed(errorMessage: String) {
+        self.displayMessage("HomeIn", message: errorMessage)
+    }
+    
+    func signupSucceeded() {
+        self.isUserLoggedIn = true
+        
+        self.namereg.resignFirstResponder()
+        self.emailreg.resignFirstResponder()
+        self.usernamereg.resignFirstResponder()
+        self.passwordreg.resignFirstResponder()
+        self.confirmpasswordreg.resignFirstResponder()
+        
+        self.contentScrollView.contentOffset.y = 0
+        
+        self.myHomesOverlay.hidden = true
+        self.addAHomeOverlay.hidden = true
+        
+        self.checkIfLoggedIn()
+        self.searchOverlayView.removeFromSuperview()
+        self.caView.removeFromSuperview()
+        self.showHideSignUpView()
+        
+        self.activityIndicator.stopAnimating()
+        self.loadingOverlay.hidden = true
+        
+        self.didComeFromAccountPage = true
+        self.performSegueWithIdentifier("profileViewController", sender: nil)
+        
+        if (self.hasLoanOfficer) {
+            if (self.officerEmail.characters.count > 0) {
+                parseObject.emailLoanOfficer(self.namereg.text!, email: self.emailreg.text!, loanOfficer: self.officerEmail)
+            }
+        }
+        
+        self.namereg.text = ""
+        self.usernamereg.text = ""
+        self.emailreg.text = ""
+        self.passwordreg.text = ""
+        self.confirmpasswordreg.text = ""
+    }
+    
+    func signupFailed(errorMessage: String) {
+        self.removeViews(self.overlayView)
+        self.activityIndicator.startAnimating()
+        self.loadingOverlay.hidden = true
+        
+        self.displayMessage("HomeIn", message: errorMessage)
+        self.searchOverlayView.hidden = true
+    }
+    
+    // MARK:
+    // MARK: UIAlert Method (Generic)
+    func displayMessage(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
 }

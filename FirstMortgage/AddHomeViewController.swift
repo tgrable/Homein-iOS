@@ -9,14 +9,14 @@
 import UIKit
 import Parse
 
-class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
+class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
 
     // MARK:
     // MARK: Properties
     
     //Reachability
     let reachability = Reachability()
-    
+    let parseObject = ParseDataObject()
     let model = Model()
     let modelName = UIDevice.currentDevice().modelName
     
@@ -70,6 +70,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
         
+        parseObject.delegate = self
         picker.delegate = self
         
         isSmallerScreen = false
@@ -90,16 +91,10 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         if self.reachability.isConnectedToNetwork() == false {
             if didDisplayNoConnectionMessage != true {
                 if self.reachability.isConnectedToNetwork() == false {
-                    let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection.\n\nAny images added will be saved to the photo library on this device. Once an internet connection is reestablished, images may be added to any existing home.", preferredStyle: .Alert)
                     
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        self.didDisplayNoConnectionMessage = true
-                    }
-                    alertController.addAction(OKAction)
+                    displayMessage("HomeIn", message: "This device currently has no internet connection.\n\nAny images added will be saved to the photo library on this device. Once an internet connection is reestablished, images may be added to any existing home.")
                     
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
-                    }
+                    self.didDisplayNoConnectionMessage = true
                 }
             }
         }
@@ -623,7 +618,7 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
 
             img = pickedImage
-            self.img = self.scaleImagesForParse(self.img)
+            self.img = parseObject.scaleImagesForParse(self.img)
             imageScrollArray.insert(self.img, atIndex: 0)
             
             addImagesToImageScrollArray()
@@ -647,32 +642,6 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func scaleImagesForParse(img: UIImage) -> UIImage {
-        var height = 0.0
-        var width = 0.0
-        
-        if img.size.height > img.size.width {
-            height = 736 / Double(img.size.height)
-            width = 414 / Double(img.size.width)
-        }
-        else {
-            height = 414 / Double(img.size.height)
-            width = 736 / Double(img.size.width)
-        }
-        
-        let size = CGSizeApplyAffineTransform(img.size, CGAffineTransformMakeScale(CGFloat(width), CGFloat(height)))
-        let hasAlpha = false
-        let scale: CGFloat = 1.0 // Automatically use scale factor of main screen
-        
-        UIGraphicsBeginImageContextWithOptions(size, !hasAlpha, scale)
-        img.drawInRect(CGRect(origin: CGPointZero, size: size))
-        
-        let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return scaledImage
     }
 
     func selectWhereToGetImage(sender: UIButton) {
@@ -736,87 +705,20 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
                 if self.reachability.isConnectedToNetwork() {
                     home["imageArray"] = self.imageArray
                     
-                    home.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
-                        if (success) {
-                            home.pinInBackground()
-                            
-                            self.homeNameTxtField.text = ""
-                            self.homePriceTxtField.text = ""
-                            self.homeAddressTxtField.text = ""
-                            self.sqFeetTxtField.text = ""
-                            self.descTxtView.text = ""
-                            self.imageView.image = nil
-                            
-                            for i in 0...4 {
-                                let button = self.ratingButtonArray[i] as UIButton
-                                button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
-                            }
-                            
-                            self.activityIndicator.stopAnimating()
-                            
-                            let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
-                            
-                            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                                self.overlayView.hidden = true
-                                self.performSegueWithIdentifier("addHomeToTableView", sender: nil)
-                            }
-                            
-                            alertController.addAction(OKAction)
-                            
-                            self.presentViewController(alertController, animated: true) {
-                                // ...
-                            }
-                            
-                        }
-                        else {
-                            let alertController = UIAlertController(title: "HomeIn", message: "An error occurred trying to add this home.", preferredStyle: .Alert)
-                            
-                            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                                
-                            }
-                            alertController.addAction(OKAction)
-                            
-                            self.presentViewController(alertController, animated: true) {
-                                // ...
-                            }
-                        }
-                    }
+                    self.parseObject.saveHomeWithBlock(home)
                 }
                 else {
-                    home.saveEventually()
-                    
-                    let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
-                    
-                    let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                        self.overlayView.hidden = true
-                        self.performSegueWithIdentifier("addHomeToTableView", sender: nil)
-                    }
-                    
-                    alertController.addAction(OKAction)
-                    
-                    self.presentViewController(alertController, animated: true) {
-                        // ...
-                    }
-                    
-                    self.overlayView.hidden = true
-                    self.activityIndicator.stopAnimating()
+                    self.parseObject.saveHomeEventually(home)
                 }
             }
         }
         else {
-            let alertController = UIAlertController(title: "HomeIn", message: "Please enter a name for this home.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
-            }
+            displayMessage("HomeIn", message: "Please enter a name for this home.")
         }
     }
 
+    // MARK:
+    // MARK: Actions
     func setRating(sender: UIButton) {
         tapGesture()
         
@@ -836,6 +738,8 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
         }
     }
     
+    // MARK:
+    // MARK: NSNotification
     func keyboardWillAppear(notification: NSNotification){
         if (modelName.rangeOfString("iPad") != nil) {
             scrollView.contentSize = CGSize(width: scrollView.bounds.size.width, height: 1550)
@@ -874,6 +778,59 @@ class AddHomeViewController: UIViewController, UIImagePickerControllerDelegate, 
     func removeViews(views: UIView) {
         for view in views.subviews {
             view.removeFromSuperview()
+        }
+    }
+    
+    // MARK:
+    // MARK: ParseDataObject Delegate Methods
+    func saveSucceeded() {
+        print("homeWasSaved Delegate Method was called")
+        
+        homeNameTxtField.text = ""
+        homePriceTxtField.text = ""
+        homeAddressTxtField.text = ""
+        sqFeetTxtField.text = ""
+        descTxtView.text = ""
+        imageView.image = nil
+        
+        for i in 0...4 {
+            let button = self.ratingButtonArray[i] as UIButton
+            button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
+        }
+        
+        self.activityIndicator.stopAnimating()
+        
+        let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            self.overlayView.hidden = true
+            self.performSegueWithIdentifier("addHomeToTableView", sender: nil)
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
+        }
+    }
+    
+    func saveFailed(errorMessage: String) {
+        displayMessage("HomeIn", message: "An error occurred trying to add this home.")
+    }
+
+    // MARK:
+    // MARK: UIAlert Method (Generic)
+    func displayMessage(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
 }

@@ -115,12 +115,11 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     deinit {
         print("deinit being called in FindBranchViewController")
-        branchArray.removeAll()
+        /*branchArray.removeAll()
         filteredArray.removeAll()
         stateArray.removeAll()
         stateDictionary.removeAll()
-        
-        removeViews(self.view)
+        removeViews(self.view)*/
     }
     
     func checkIfLocationServicesEnabled() {
@@ -618,7 +617,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK: - Navigation
     func navigateBackHome(sender: UIButton) {
         homeButton.enabled = false
-        navigationController?.popViewControllerAnimated(true)
+        self.navigationController!.popToRootViewControllerAnimated(true)
     }
     
     func mapButtonPressed(sender: UIButton) {
