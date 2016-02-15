@@ -483,16 +483,13 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         let defaults = NSUserDefaults.standardUserDefaults()
         if let loDict = defaults.dictionaryForKey(dictString) {
             if let _ = loDict["nmls"] {
-                print("1")
                 buildLoanOfficerCard(loDict as! Dictionary<String, String>, yVal: 110, count: 0, view: profileView, isSingleView: true)
             }
             else {
-                print("2")
                 getLoInfoFromDictionary()
             }
         }
         else {
-            print("3")
             getLoInfoFromDictionary()
         }
         
@@ -1167,11 +1164,6 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         singleLoView.removeFromSuperview()
         removeViews(self.singleLoView)
         
-        // TODO: Revisit this
-        /*let dictString = String(format: "loanOfficerDictfor%@", (self.user?.objectId)!)
-        let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.removeObjectForKey(dictString)*/
-        
         buildProfileView()
         getUserAndLoInfo()
         editModeLabel.textColor = UIColor.whiteColor()
@@ -1196,9 +1188,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         isTextFieldEnabled = false
         editIcon.image = UIImage(named: "edit_icon")
         editModeLabel.textColor = UIColor.whiteColor()
-        singleLoView.removeFromSuperview()
-        
-        //user!["officerNid"] = Int(nid)
+
         var loNid = 0
         if let _ = user!["officerNid"] {
             loNid = user!["officerNid"] as! Int
@@ -1214,9 +1204,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     }
     
     func saveFailed(errorMessage: String) {
-        
-        // TODO: Revisit this
-        displayMessage("HomeIn", message: "An error occurred trying to add this home.")
+        displayMessage("HomeIn", message: String(format: "An error occurred trying to save your information.\n %@", errorMessage))
     }
     
     // MARK:

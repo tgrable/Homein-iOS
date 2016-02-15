@@ -1736,8 +1736,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     }
     
     func saveFailed(errorMessage: String) {
-        // TODO: Revisit this
-        displayMessage("HomeIn", message: "An error occurred trying to add this home.")
+        displayMessage("HomeIn", message: String(format: "An error occurred trying to add this home.\n %@", errorMessage))
     }
     
     // MARK:

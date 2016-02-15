@@ -108,7 +108,6 @@ class ParseDataObject: NSObject {
         user.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
             if (success) {
                 if (officerEmail.characters.count > 0) {
-                    // TODO: Test this!
                     self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
                 }
                 self.delegate?.saveSucceeded!()

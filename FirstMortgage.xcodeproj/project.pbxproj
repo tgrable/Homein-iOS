@@ -11,7 +11,6 @@
 		2CF9697A1C4BDA890000D77B /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF969791C4BDA890000D77B /* ModelTest.swift */; };
 		4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */; };
 		4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */; };
-		4F1ED5141C1B790900E40F4B /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F1ED5131C1B790900E40F4B /* ParseUI.framework */; };
 		4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */; };
 		4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */; };
 		4FADCA6B1C0E2A29000186A8 /* FORZA-LIGHT.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA5B1C0DEC26000186A8 /* FORZA-LIGHT.OTF */; };
@@ -27,8 +26,6 @@
 		4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */; };
 		4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */; };
 		4FAF3D0E1BE10AAE00A89A9A /* FindBranchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */; };
-		4FAF3D121BE10CF200A89A9A /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D101BE10CF200A89A9A /* Bolts.framework */; };
-		4FAF3D131BE10CF200A89A9A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D111BE10CF200A89A9A /* Parse.framework */; };
 		4FAF3D151BE10D1100A89A9A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D141BE10D1100A89A9A /* AudioToolbox.framework */; };
 		4FAF3D171BE10D1900A89A9A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D161BE10D1900A89A9A /* CFNetwork.framework */; };
 		4FAF3D191BE10D2100A89A9A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D181BE10D2100A89A9A /* CoreGraphics.framework */; };
@@ -40,6 +37,8 @@
 		4FAF3D271BE10D6600A89A9A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D261BE10D6600A89A9A /* libsqlite3.tbd */; };
 		4FAF3D291BE10D6F00A89A9A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D281BE10D6F00A89A9A /* Accounts.framework */; };
 		4FAF3D2B1BE10D7500A89A9A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D2A1BE10D7500A89A9A /* Social.framework */; };
+		4FB5893D1C72689B0019A6F0 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB5893B1C72689B0019A6F0 /* Bolts.framework */; };
+		4FB5893E1C72689B0019A6F0 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB5893C1C72689B0019A6F0 /* Parse.framework */; };
 		4FC4C94C1C3B2FB0007BDCC0 /* FORZA-MEDIUM.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA5D1C0DEC26000186A8 /* FORZA-MEDIUM.OTF */; };
 		4FD9549F1C6E2441003829EC /* ParseDataObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FD9549E1C6E2441003829EC /* ParseDataObject.swift */; };
 		4FD9EEE71C4E868D003918A8 /* add_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 4FD9EE971C4E868C003918A8 /* add_grey.png */; };
@@ -152,7 +151,6 @@
 		2CF969791C4BDA890000D77B /* ModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
 		4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = FirstMortgage/DeviceExtension.swift; sourceTree = "<group>"; };
-		4F1ED5131C1B790900E40F4B /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = frameworks/ParseUI.framework; sourceTree = "<group>"; };
 		4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicCell.swift; path = FirstMortgage/BasicCell.swift; sourceTree = "<group>"; };
 		4F4A70F11BFD33A1009FDD79 /* IndividualHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IndividualHomeViewController.swift; sourceTree = "<group>"; };
 		4FADCA551C0DEC26000186A8 /* FORZA-BLACK.OTF */ = {isa = PBXFileReference; lastKnownFileType = file; name = "FORZA-BLACK.OTF"; path = "fonts/FORZA-BLACK.OTF"; sourceTree = "<group>"; };
@@ -185,8 +183,6 @@
 		4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddHomeViewController.swift; sourceTree = "<group>"; };
 		4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorsViewController.swift; sourceTree = "<group>"; };
 		4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FindBranchViewController.swift; sourceTree = "<group>"; };
-		4FAF3D101BE10CF200A89A9A /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = frameworks/Bolts.framework; sourceTree = "<group>"; };
-		4FAF3D111BE10CF200A89A9A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = frameworks/Parse.framework; sourceTree = "<group>"; };
 		4FAF3D141BE10D1100A89A9A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		4FAF3D161BE10D1900A89A9A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		4FAF3D181BE10D2100A89A9A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -198,6 +194,8 @@
 		4FAF3D261BE10D6600A89A9A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		4FAF3D281BE10D6F00A89A9A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		4FAF3D2A1BE10D7500A89A9A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		4FB5893B1C72689B0019A6F0 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = frameworks/Bolts.framework; sourceTree = "<group>"; };
+		4FB5893C1C72689B0019A6F0 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = frameworks/Parse.framework; sourceTree = "<group>"; };
 		4FD9549E1C6E2441003829EC /* ParseDataObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ParseDataObject.swift; path = FirstMortgage/ParseDataObject.swift; sourceTree = "<group>"; };
 		4FD9EE971C4E868C003918A8 /* add_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = add_grey.png; path = images/add_grey.png; sourceTree = "<group>"; };
 		4FD9EE981C4E868C003918A8 /* add_grey@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add_grey@2x.png"; path = "images/add_grey@2x.png"; sourceTree = "<group>"; };
@@ -295,17 +293,16 @@
 				4FAF3D2B1BE10D7500A89A9A /* Social.framework in Frameworks */,
 				4FAF3D291BE10D6F00A89A9A /* Accounts.framework in Frameworks */,
 				4FAF3D271BE10D6600A89A9A /* libsqlite3.tbd in Frameworks */,
+				4FB5893D1C72689B0019A6F0 /* Bolts.framework in Frameworks */,
 				4FAF3D251BE10D5D00A89A9A /* libz.tbd in Frameworks */,
 				4FAF3D231BE10D5500A89A9A /* SystemConfiguration.framework in Frameworks */,
+				4FB5893E1C72689B0019A6F0 /* Parse.framework in Frameworks */,
 				4FAF3D1F1BE10D3E00A89A9A /* Security.framework in Frameworks */,
 				4FAF3D1D1BE10D3100A89A9A /* QuartzCore.framework in Frameworks */,
 				4FAF3D1B1BE10D2800A89A9A /* CoreLocation.framework in Frameworks */,
 				4FAF3D191BE10D2100A89A9A /* CoreGraphics.framework in Frameworks */,
 				4FAF3D171BE10D1900A89A9A /* CFNetwork.framework in Frameworks */,
 				4FAF3D151BE10D1100A89A9A /* AudioToolbox.framework in Frameworks */,
-				4F1ED5141C1B790900E40F4B /* ParseUI.framework in Frameworks */,
-				4FAF3D131BE10CF200A89A9A /* Parse.framework in Frameworks */,
-				4FAF3D121BE10CF200A89A9A /* Bolts.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -503,7 +500,8 @@
 		4FAF3D0F1BE10CB700A89A9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4F1ED5131C1B790900E40F4B /* ParseUI.framework */,
+				4FB5893B1C72689B0019A6F0 /* Bolts.framework */,
+				4FB5893C1C72689B0019A6F0 /* Parse.framework */,
 				4FAF3D2A1BE10D7500A89A9A /* Social.framework */,
 				4FAF3D281BE10D6F00A89A9A /* Accounts.framework */,
 				4FAF3D261BE10D6600A89A9A /* libsqlite3.tbd */,
@@ -515,8 +513,6 @@
 				4FAF3D181BE10D2100A89A9A /* CoreGraphics.framework */,
 				4FAF3D161BE10D1900A89A9A /* CFNetwork.framework */,
 				4FAF3D141BE10D1100A89A9A /* AudioToolbox.framework */,
-				4FAF3D101BE10CF200A89A9A /* Bolts.framework */,
-				4FAF3D111BE10CF200A89A9A /* Parse.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -930,8 +926,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -950,8 +946,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

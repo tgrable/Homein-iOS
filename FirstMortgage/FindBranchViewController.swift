@@ -15,24 +15,8 @@ import Contacts
 class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
     // MARK:
-    // MARK: Properties
-    
-    // Custom Color
-    // Custom Color
-    let lightGrayColor = UIColor(red: 224/255, green: 224/255, blue: 224/255, alpha: 1)
-    let darkGrayColor = UIColor(red: 62/255, green: 65/255, blue: 69/255, alpha: 1)
-    
-    let lightBlueColor = UIColor(red: 83/255, green: 135/255, blue: 186/255, alpha: 1)
-    let darkBlueColor = UIColor(red: 53/255, green: 103/255, blue: 160/255, alpha: 1)
-    
-    let lightOrangeColor = UIColor(red: 238/255, green: 155/255, blue: 78/255, alpha: 1)
-    let darkOrangeColor = UIColor(red: 222/255, green: 123/255, blue: 37/255, alpha: 1)
-    
-    let lightGreenColor = UIColor(red: 184.0/255.0, green: 189.0/255.0, blue: 70.0/255.0, alpha: 1)
-    let darkGreenColor = UIColor(red: 154.0/255.0, green: 166.0/255.0, blue: 65.0/255.0, alpha: 1)
-    
-    let lightRedColor = UIColor(red: 204.0/255.0, green: 69.0/255.0, blue: 67.0/255.0, alpha: 1)
-    let darkRedColor = UIColor(red: 174.0/255.0, green: 58.0/255.0, blue: 55.0/255.0, alpha: 1)
+    // MARK: Properties    
+    let model = Model()
     
     let addHomeView = UIView() as UIView
     let pickerView = UIView()
@@ -120,6 +104,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         stateArray.removeAll()
         stateDictionary.removeAll()
         removeViews(self.view)
+        
+        locationManager.stopUpdatingLocation()
     }
     
     func checkIfLocationServicesEnabled() {
@@ -172,7 +158,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     func buildView() {
         addHomeView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
-        addHomeView.backgroundColor = lightGrayColor
+        addHomeView.backgroundColor = model.lightGrayColor
         addHomeView.hidden = false
         self.view.addSubview(addHomeView)
         
@@ -202,7 +188,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         let addHomeBannerView = UIView(frame: CGRectMake(0, 135, addHomeView.bounds.size.width, 50))
         let addHomeBannerGradientLayer = CAGradientLayer()
         addHomeBannerGradientLayer.frame = addHomeBannerView.bounds
-        addHomeBannerGradientLayer.colors = [lightRedColor.CGColor, darkRedColor.CGColor]
+        addHomeBannerGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
         addHomeBannerView.layer.insertSublayer(addHomeBannerGradientLayer, atIndex: 0)
         addHomeBannerView.layer.addSublayer(addHomeBannerGradientLayer)
         addHomeBannerView.hidden = false
@@ -336,11 +322,11 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
 
                 self.stateArray = self.removeDuplicates(states)
                 
-                let center = NSNotificationCenter.defaultCenter()
+                /*let center = NSNotificationCenter.defaultCenter()
                 center.addObserverForName(nil, object: nil, queue: nil) { notification in
                     //print("\(notification.name): \(notification.userInfo ?? [:])")
                     self.statesPicker.reloadAllComponents()
-                }
+                }*/
                 self.getUsersAdministrativeArea()
             }
             catch {
@@ -383,8 +369,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                     
                     if let _ = placemark.administrativeArea {
                         let state = placemark.administrativeArea
-                        print("state: ", state)
-                        
+
                         if (CLLocationManager.authorizationStatus() == .AuthorizedAlways || CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse) {
                             self.findBranchesInMyState(state!)
                         }
@@ -556,7 +541,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             phoneLabel.text = String(format: "%@", pl)
             phoneLabel.numberOfLines = 0
             phoneLabel.sizeToFit()
-            phoneLabel.textColor = darkBlueColor
+            phoneLabel.textColor = model.darkBlueColor
             branchView.addSubview(phoneLabel)
             offset += phoneLabel.bounds.size.height
             

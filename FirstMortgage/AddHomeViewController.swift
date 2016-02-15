@@ -815,7 +815,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
     }
     
     func saveFailed(errorMessage: String) {
-        displayMessage("HomeIn", message: "An error occurred trying to add this home.")
+        displayMessage("HomeIn", message: String(format: "An error occurred trying to add this home. %@", errorMessage))
     }
 
     // MARK:
