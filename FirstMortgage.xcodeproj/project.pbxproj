@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		2CD798611C3233710052C18C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD798601C3233710052C18C /* Reachability.swift */; };
 		2CF9697A1C4BDA890000D77B /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF969791C4BDA890000D77B /* ModelTest.swift */; };
+		4C1F19C31C7380E800AA8B15 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1F19C21C7380E800AA8B15 /* VideosViewController.swift */; };
+		4C1F19C51C73812D00AA8B15 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */; };
+		4CD790541C73A77C0014A7F0 /* YouTubePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */; };
+		4CD790561C73AC540014A7F0 /* videoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790551C73AC540014A7F0 /* videoModel.swift */; };
+		4CD790631C73B94F0014A7F0 /* Assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4CD790601C73B94F0014A7F0 /* Assets.bundle */; };
+		4CD790641C73B94F0014A7F0 /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790621C73B94F0014A7F0 /* YTPlayerView.m */; };
 		4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */; };
 		4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */; };
 		4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */; };
@@ -149,6 +155,14 @@
 /* Begin PBXFileReference section */
 		2CD798601C3233710052C18C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = FirstMortgage/Reachability.swift; sourceTree = "<group>"; };
 		2CF969791C4BDA890000D77B /* ModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
+		4C1F19C21C7380E800AA8B15 /* VideosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosViewController.swift; sourceTree = "<group>"; };
+		4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubePlayer.swift; sourceTree = "<group>"; };
+		4CD790551C73AC540014A7F0 /* videoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = videoModel.swift; path = FirstMortgage/videoModel.swift; sourceTree = "<group>"; };
+		4CD7905F1C73B94D0014A7F0 /* FirstMortgage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FirstMortgage-Bridging-Header.h"; sourceTree = "<group>"; };
+		4CD790601C73B94F0014A7F0 /* Assets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Assets.bundle; sourceTree = "<group>"; };
+		4CD790611C73B94F0014A7F0 /* YTPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YTPlayerView.h; sourceTree = "<group>"; };
+		4CD790621C73B94F0014A7F0 /* YTPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YTPlayerView.m; sourceTree = "<group>"; };
 		4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = FirstMortgage/DeviceExtension.swift; sourceTree = "<group>"; };
 		4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicCell.swift; path = FirstMortgage/BasicCell.swift; sourceTree = "<group>"; };
@@ -469,6 +483,7 @@
 				4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */,
 				4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */,
 				4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */,
+				4C1F19C21C7380E800AA8B15 /* VideosViewController.swift */,
 				4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */,
 				4FAF3CD51BE106EB00A89A9A /* Main.storyboard */,
 				4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */,
@@ -520,7 +535,14 @@
 		4FB616321BFB764B0057414C /* Supporting Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4CD7905F1C73B94D0014A7F0 /* FirstMortgage-Bridging-Header.h */,
+				4CD790601C73B94F0014A7F0 /* Assets.bundle */,
+				4CD790611C73B94F0014A7F0 /* YTPlayerView.h */,
+				4CD790621C73B94F0014A7F0 /* YTPlayerView.m */,
+				4CD790551C73AC540014A7F0 /* videoModel.swift */,
+				4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */,
 				4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */,
+				4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */,
 				4FADCA6C1C0E2B7E000186A8 /* Model.swift */,
 				4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */,
 				2CD798601C3233710052C18C /* Reachability.swift */,
@@ -592,13 +614,13 @@
 		4FAF3CC61BE106EB00A89A9A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0710;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Trekk Design";
 				TargetAttributes = {
 					4FAF3CCD1BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = BS4LR4L547;
+						DevelopmentTeam = 64783LG3JR;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -692,6 +714,7 @@
 				4FD9EF0B1C4E868D003918A8 /* edit_icon@3x.png in Resources */,
 				4FD9EF151C4E868D003918A8 /* hide_keyboard.png in Resources */,
 				4FD9EF2B1C4E868D003918A8 /* sort_icon.png in Resources */,
+				4CD790631C73B94F0014A7F0 /* Assets.bundle in Resources */,
 				4FD9EF191C4E868D003918A8 /* home_in.png in Resources */,
 				4FD9EF171C4E868D003918A8 /* home_icon@2x.png in Resources */,
 				4FD9EF0A1C4E868D003918A8 /* edit_icon@2x.png in Resources */,
@@ -773,14 +796,19 @@
 			files = (
 				4FAF3D041BE1085400A89A9A /* HomeViewController.swift in Sources */,
 				4FADCA6D1C0E2B7E000186A8 /* Model.swift in Sources */,
+				4CD790641C73B94F0014A7F0 /* YTPlayerView.m in Sources */,
 				4FAF3D061BE1093600A89A9A /* MyHomesViewController.swift in Sources */,
+				4C1F19C51C73812D00AA8B15 /* SwiftyJSON.swift in Sources */,
 				4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */,
 				4FD9549F1C6E2441003829EC /* ParseDataObject.swift in Sources */,
 				4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */,
 				4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */,
+				4CD790541C73A77C0014A7F0 /* YouTubePlayer.swift in Sources */,
 				4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */,
 				4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */,
 				4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */,
+				4CD790561C73AC540014A7F0 /* videoModel.swift in Sources */,
+				4C1F19C31C7380E800AA8B15 /* VideosViewController.swift in Sources */,
 				4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */,
 				2CD798611C3233710052C18C /* Reachability.swift in Sources */,
 				4FAF3D0E1BE10AAE00A89A9A /* FindBranchViewController.swift in Sources */,
@@ -926,6 +954,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -939,6 +968,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "FirstMortgage-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -946,6 +977,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				ENABLE_BITCODE = NO;
@@ -959,6 +991,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "FirstMortgage-Bridging-Header.h";
 			};
 			name = Release;
 		};

@@ -31,6 +31,7 @@
                         <segue destination="WC7-sR-FnP" kind="show" identifier="calculatorsViewController" id="3i0-TD-4wl"/>
                         <segue destination="WjO-Qv-XXm" kind="show" identifier="findBranchViewController" id="wdS-jz-ihI"/>
                         <segue destination="zhq-D3-wKW" kind="show" identifier="profileViewController" id="Q2H-dU-Qsa"/>
+                        <segue destination="MC4-n4-p6z" kind="show" identifier="viewAvailableVideos" id="bui-la-54T"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Oh5-aP-mbl" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -90,6 +91,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kNN-F4-btc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3830" y="603"/>
+        </scene>
+        <!--Videos View Controller-->
+        <scene sceneID="hgh-i5-zt5">
+            <objects>
+                <viewController id="MC4-n4-p6z" customClass="VideosViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="llJ-o7-FzG"/>
+                        <viewControllerLayoutGuide type="bottom" id="wpD-Jh-6I3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0dK-n6-87f">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l6A-TO-het" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3653" y="1365"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="rPJ-Q4-ltT">
@@ -314,7 +333,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4ES-60-oa4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3050" y="603"/>
+            <point key="canvasLocation" x="3050" y="515"/>
         </scene>
         <!--Add Home View Controller-->
         <scene sceneID="fqS-Ov-f7L">
@@ -335,7 +354,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tpd-uK-sV0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3050" y="1354"/>
+            <point key="canvasLocation" x="2770" y="1506"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="phJ-wO-Vqr">
@@ -361,7 +380,7 @@
         <image name="overlay.png" width="128" height="128"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="Kze-Tm-IIt"/>
         <segue reference="a3N-fD-XZ6"/>
-        <segue reference="Xrc-RK-Ivf"/>
     </inferredMetricsTieBreakers>
 </document>

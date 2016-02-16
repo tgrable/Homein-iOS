@@ -108,7 +108,7 @@ class ParseDataObject: NSObject {
         user.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
             if (success) {
                 if (officerEmail.characters.count > 0) {
-                    self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
+//                    self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
                 }
                 self.delegate?.saveSucceeded!()
             }
@@ -118,12 +118,13 @@ class ParseDataObject: NSObject {
             }
         }
     }
-    
-    func emailLoanOfficer(name: String, email: String, loanOfficer: String) {
-        PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : name, "email": email, "officer" : loanOfficer]) { (result: AnyObject?, error: NSError?) in
-            print("----- Email LO -----")
-        }
-    }
+//    
+//    func emailLoanOfficer(name: String, email: String, loanOfficer: String) {
+//        // comment out when playing around - DONT FORGET 
+//        PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : name, "email": email, "officer" : loanOfficer]) { (result: AnyObject?, error: NSError?) in
+//            print("----- Email LO -----")
+//        }
+//    }
     
     // MARK:
     // MARK: Utility Methods

@@ -377,7 +377,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         // UILabel
         let refiCalculatorLabel = UILabel(frame: CGRectMake(0, labelDist, refiCalculatorView.bounds.size.width, 48))
-        refiCalculatorLabel.text = "REFINANCING\nCALCULATOR"
+        refiCalculatorLabel.text = "VIDEOS"
+        //TODO: update video button with new asset 
         refiCalculatorLabel.font = UIFont(name: "forza-light", size: 18)
         refiCalculatorLabel.textAlignment = NSTextAlignment.Center
         refiCalculatorLabel.numberOfLines = 2
@@ -1390,8 +1391,9 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             isMortgageCalc = true
             performSegueWithIdentifier("calculatorsViewController", sender: nil)
         case 3:
-            isMortgageCalc = false
-            performSegueWithIdentifier("calculatorsViewController", sender: nil)
+//            isMortgageCalc = false
+//            performSegueWithIdentifier("calculatorsViewController", sender: nil)
+            performSegueWithIdentifier("viewAvailableVideos", sender: nil)
         case 4:
             performSegueWithIdentifier("findBranchViewController", sender: nil)
         case 5:
@@ -1532,6 +1534,13 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             let destViewController: CalculatorsViewController = segue.destinationViewController as! CalculatorsViewController
             destViewController.isMortgageCalc = isMortgageCalc
         }
+        
+        if segue.identifier == "viewAvailableVideos" {
+            let destViewController: VideosViewController = segue.destinationViewController as! VideosViewController
+            destViewController.cameFromHomeScreen = true
+        }
+        
+        
     }
     
     // MARK:
@@ -1867,7 +1876,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         if (self.hasLoanOfficer) {
             if (self.officerEmail.characters.count > 0) {
-                parseObject.emailLoanOfficer(self.namereg.text!, email: self.emailreg.text!, loanOfficer: self.officerEmail)
+//                parseObject.emailLoanOfficer(self.namereg.text!, email: self.emailreg.text!, loanOfficer: self.officerEmail)
+                //TODO: Uncomment email code 
             }
         }
         
