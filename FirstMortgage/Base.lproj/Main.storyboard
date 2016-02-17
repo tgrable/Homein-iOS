@@ -95,7 +95,7 @@
         <!--Videos View Controller-->
         <scene sceneID="hgh-i5-zt5">
             <objects>
-                <viewController id="MC4-n4-p6z" customClass="VideosViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="MC4-n4-p6z" customClass="VideosViewController" customModule="FirstMortgage" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="llJ-o7-FzG"/>
                         <viewControllerLayoutGuide type="bottom" id="wpD-Jh-6I3"/>

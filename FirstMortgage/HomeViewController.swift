@@ -9,6 +9,8 @@
 import UIKit
 import Parse
 
+
+
 class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelegate, CLLocationManagerDelegate {
     // MARK:
     // MARK: Properties
@@ -29,6 +31,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     let myHomesOverlay = UIView()
     let addAHomeOverlay = UIView()
     let preQualifiedOverlay = UIView()
+    let videoOverlay = UIView()
     let findBranchOverlay = UIView()
     
     //UIScrollView
@@ -156,6 +159,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             loginOverlay.alpha = 0.45
             loginButton.addSubview(loginOverlay)
         }
+        
+
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -192,9 +197,11 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     func activeAgain() {
         if reachability.isConnectedToNetwork() == false {
             findBranchOverlay.hidden = false
+            videoOverlay.hidden = false
         }
         else {
             findBranchOverlay.hidden = true
+            videoOverlay.hidden = true
         }
     }
     
@@ -336,7 +343,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
 
         yIconOffset = (Double(mortgageCalculatorView.bounds.size.height) / 2.0) - 36
         labelDist = CGFloat((Double(mortgageCalculatorView.bounds.size.height) / 2.0) + 10)
-        
+        // ********* calcIcn is now the video_icon ******* //
         let calcIcn = UIImage(named: "calculator_icon") as UIImage?
         let calcIcon = UIImageView(frame: CGRectMake((mortgageCalculatorView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
         calcIcon.image = calcIcn
@@ -362,6 +369,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         mortgageCalculatorView.addSubview(mortgageCalculatorButton)
         
         /********************************************************* Refinance Calculator Button ********************************************************************/
+         /***************************************** NO LONGER REFINACE!!!! This is now the video button!!! ********************************************************/
         // UIView
         let refiCalculatorView = UIView(frame: CGRectMake((self.view.bounds.size.width / 2) + 10, CGFloat(offset), (self.view.bounds.size.width / 2) - 20, height))
         let refiCalculatorGradientLayer = CAGradientLayer()
@@ -371,20 +379,25 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         refiCalculatorView.layer.addSublayer(refiCalculatorGradientLayer)
         scrollView.addSubview(refiCalculatorView)
         
-        let calcIconTwo = UIImageView(frame: CGRectMake((refiCalculatorView.bounds.size.width / 2) - 18, CGFloat(yIconOffset), 36, 36))
-        calcIconTwo.image = calcIcn
+        
+       
+        let videoIcn = UIImage(named: "video_icon") as UIImage?
+        
+        let calcIconTwo = UIImageView(frame: CGRectMake((refiCalculatorView.bounds.size.width / 2) - 25, CGFloat(yIconOffset)-10,  55, 55))
+        calcIconTwo.image = videoIcn
         refiCalculatorView.addSubview(calcIconTwo)
         
         // UILabel
         let refiCalculatorLabel = UILabel(frame: CGRectMake(0, labelDist, refiCalculatorView.bounds.size.width, 48))
         refiCalculatorLabel.text = "VIDEOS"
-        //TODO: update video button with new asset 
+
         refiCalculatorLabel.font = UIFont(name: "forza-light", size: 18)
         refiCalculatorLabel.textAlignment = NSTextAlignment.Center
         refiCalculatorLabel.numberOfLines = 2
         refiCalculatorLabel.textColor = UIColor.whiteColor()
         refiCalculatorView.addSubview(refiCalculatorLabel)
         
+        // This now goes to the videos section - I left the button name the same for the sake of simplicity
         refiCalculatorButton.frame = (frame: CGRectMake(0, 0, refiCalculatorView.bounds.size.width, refiCalculatorView.bounds.size.height))
         refiCalculatorButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
         refiCalculatorButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
@@ -394,10 +407,23 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         refiCalculatorButton.tag = 3
         refiCalculatorView.addSubview(refiCalculatorButton)
         
+        videoOverlay.frame = (frame: CGRectMake(0, 0, refiCalculatorView.bounds.width, refiCalculatorView.bounds.size.height))
+        videoOverlay.backgroundColor = UIColor.darkGrayColor()
+        videoOverlay.alpha = 0.45
+        videoOverlay.hidden = true
+        refiCalculatorView.addSubview(videoOverlay)
+        
+        if (reachability.isConnectedToNetwork() == false) {
+            videoOverlay.hidden = false
+            
+        }
+        
         offset = (((width / 2) * 0.75) + (width / 2)) + 15
         /*if (modelName.rangeOfString("iPad") != nil) {
             offset = Double(self.view.bounds.size.width / 2) - 225 + Double(self.view.bounds.size.width / 2) - 215.0 + 10.0;
         }*/
+        
+        
         
         if (self.view.bounds.size.width >= 768) {
             offset = Double(self.view.bounds.size.width / 2) - 225 + Double(self.view.bounds.size.width / 2) - 215.0 + 10.0;
@@ -439,12 +465,13 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         findBranchOverlay.frame = (frame: CGRectMake(0, 0, findBranchView.bounds.width, findBranchView.bounds.size.height))
         findBranchOverlay.backgroundColor = UIColor.darkGrayColor()
         findBranchOverlay.alpha = 0.45
-        findBranchOverlay.hidden = true
+        findBranchOverlay.hidden = false
         findBranchView.addSubview(findBranchOverlay)
         
-        if (reachability.isConnectedToNetwork() == false) {
-            findBranchOverlay.hidden = false
-        }
+        
+//        if (reachability.isConnectedToNetwork() == false) {
+//            findBranchOverlay.hidden = false
+//        }
         
         /********************************************************* Get Prequalified Button ********************************************************************/
          // UIView
@@ -490,6 +517,14 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         }
         
         scrollView.contentSize = CGSize(width: self.view.bounds.size.width, height: ((self.view.bounds.size.width / 2) * 2) + (135 + 15))
+        
+        
+        
+        if (modelName.rangeOfString("iPad") != nil) {
+            scrollView.scrollEnabled = false
+        }
+        
+        
         
         userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
         userButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
@@ -561,6 +596,9 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         contentScrollView.frame = (frame: CGRectMake(0, 40, caView.bounds.size.width, caView.bounds.size.height - 50))
         contentScrollView.backgroundColor = UIColor.clearColor()
         caView.addSubview(contentScrollView)
+        
+        
+       
         
         let descLabel = UILabel (frame: CGRectMake(15, 10, contentScrollView.bounds.size.width - 30, 0))
         descLabel.textAlignment = NSTextAlignment.Left
@@ -1538,6 +1576,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         if segue.identifier == "viewAvailableVideos" {
             let destViewController: VideosViewController = segue.destinationViewController as! VideosViewController
             destViewController.cameFromHomeScreen = true
+            
+            
         }
         
         
@@ -1876,8 +1916,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         if (self.hasLoanOfficer) {
             if (self.officerEmail.characters.count > 0) {
-//                parseObject.emailLoanOfficer(self.namereg.text!, email: self.emailreg.text!, loanOfficer: self.officerEmail)
-                //TODO: Uncomment email code 
+                parseObject.emailLoanOfficer(self.namereg.text!, email: self.emailreg.text!, loanOfficer: self.officerEmail)
+
             }
         }
         
