@@ -90,10 +90,19 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     //UIActivityIndicatorView
     var activityIndicator = UIActivityIndicatorView()
     
+    let manager = CLLocationManager()
+    
     // MARK:
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+            if CLLocationManager.authorizationStatus() == .NotDetermined {
+                self.manager.requestWhenInUseAuthorization()
+            }
+            
+        }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"activeAgain", name: UIApplicationWillEnterForegroundNotification, object:nil)
         
@@ -121,11 +130,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         buildCreateAccountView()
         buildLoginView()
         buildSignUpView()
-        
-        if isUserLoggedIn == false {
-            
-        }
-        
+
         loadingOverlay.frame = (frame: CGRectMake(0, 0, self.view.bounds.width, self.view.bounds.size.height))
         loadingOverlay.backgroundColor = UIColor.darkGrayColor()
         loadingOverlay.alpha = 0.85

@@ -26,7 +26,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     var imageView = UIImageView() as UIImageView
     
     let locationManager = CLLocationManager()
-    
     var currentLocation = CLLocation()
     var coords: CLLocationCoordinate2D?
 
@@ -42,9 +41,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     var stateToCheck = String() as String
     
     var stateLocatorTimer: NSTimer!
-    var timerHasFired: Bool!
-    var geoLocatorHasFired: Bool!
     var locationServicesIsAllowed = Bool()
+    var timerHasFired = false
+    var geoLocatorHasFired = false
+    var didFireRunLocationSearch = false
     
     // UIPickerView
     let statesPicker = UIPickerView() as UIPickerView
@@ -55,20 +55,25 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector:"checkIfLocationServicesEnabled", name:UIApplicationWillEnterForegroundNotification, object:nil)
+        
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if let _ = defaults.objectForKey("branchOfficeArray") {
+            stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
+        }
+        
+        print(stateArray)
 
         createStateDictionary()
         buildView()
         
         statesPicker.delegate = self
         statesPicker.dataSource = self
+        
+        checkIfLocationServicesEnabled()
     }
     
     override func viewWillAppear(animated: Bool) {
         
-        checkIfLocationServicesEnabled()
-        
-        geoLocatorHasFired = false
-        timerHasFired = false
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -109,32 +114,32 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     func checkIfLocationServicesEnabled() {
-        let manager = CLLocationManager()
-        
-        if CLLocationManager.authorizationStatus() == .NotDetermined {
-            manager.requestWhenInUseAuthorization()
-        }
-        
         if CLLocationManager.locationServicesEnabled() {
             switch(CLLocationManager.authorizationStatus()) {
             case .AuthorizedAlways, .AuthorizedWhenInUse:
                 locationServicesIsAllowed = true
-                
-                locationManager.delegate = self
-                locationManager.desiredAccuracy = kCLLocationAccuracyBest
-                locationManager.distanceFilter = 10;
-                locationManager.requestWhenInUseAuthorization()
-                locationManager.startUpdatingLocation()
-                
-                runLocationSearch()
-                
             default:
                 locationServicesIsAllowed = false
+            }
+        }
+        
+        if locationServicesIsAllowed {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.distanceFilter = 10;
+            locationManager.requestWhenInUseAuthorization()
+            locationManager.startUpdatingLocation()
+            
+            if didFireRunLocationSearch == false {
+                runLocationSearch()
             }
         }
     }
     
     func runLocationSearch() {
+        
+        didFireRunLocationSearch = true
+        
         activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.Gray)
         activityIndicator.center = view.center
         addHomeView.addSubview(activityIndicator)
@@ -321,12 +326,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 }
 
                 self.stateArray = self.removeDuplicates(states)
-                
-                /*let center = NSNotificationCenter.defaultCenter()
-                center.addObserverForName(nil, object: nil, queue: nil) { notification in
-                    //print("\(notification.name): \(notification.userInfo ?? [:])")
-                    self.statesPicker.reloadAllComponents()
-                }*/
                 self.getUsersAdministrativeArea()
             }
             catch {
@@ -343,16 +342,20 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 // Do not add a duplicate element.
             }
             else {
-                // Add value to the set.
-                encountered.insert(value)
-                // ... Append the value.
-                result.append(value)
+                if value.characters.count == 2{
+                    // Add value to the set.
+                    encountered.insert(value)
+                    // ... Append the value.
+                    result.append(value)
+                }
             }
         }
         
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.removeObjectForKey("branchOfficeArray")
         defaults.setObject(result, forKey: "branchOfficeArray")
+
+        statesPicker.reloadAllComponents()
         
         return result
     }
@@ -389,11 +392,13 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
 
     func runTimedCode() {
-        timerHasFired = true
-        if geoLocatorHasFired == false {
-            statesPicker.reloadAllComponents()
-            activityIndicator.stopAnimating()
-            showHideSortTray()
+        if stateArray.count > 0 {
+            timerHasFired = true
+            if geoLocatorHasFired == false {
+                statesPicker.reloadAllComponents()
+                activityIndicator.stopAnimating()
+                showHideSortTray()
+            }
         }
     }
     
@@ -411,13 +416,17 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             }
             else {
                 activityIndicator.stopAnimating()
+
+                statesPicker.reloadAllComponents()
                 showHideSortTray()
             }
         }
         else {
             activityIndicator.stopAnimating()
+            
+            statesPicker.reloadAllComponents()
             showHideSortTray()
-            self.printLocations(filterStateArray)
+            printLocations(filterStateArray)
         }
     }
     
@@ -452,8 +461,11 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                             newBranchArray.append(branch)
                             
                             if (count == filteredBranchArray.count) {
-                                newBranchArray.sortInPlace({ $0["distanceFromMe"] < $1["distanceFromMe"] })
+       
+                                newBranchArray.sortInPlace({ Double($0["distanceFromMe"]!)! < Double($1["distanceFromMe"]!) })
+                                
                                 self.printLocations(newBranchArray)
+
                             }
                         }
                     })
@@ -594,7 +606,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK: - Action Methods
     func searchNewState(sender: UIButton) {
         findBranchesInMyState(stateToCheck)
-        //activityIndicator.startAnimating()
+        
+        statesPicker.reloadAllComponents()
         showHideSortTray()
     }
     

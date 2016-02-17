@@ -37,6 +37,7 @@
 		4FAF3D271BE10D6600A89A9A /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D261BE10D6600A89A9A /* libsqlite3.tbd */; };
 		4FAF3D291BE10D6F00A89A9A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D281BE10D6F00A89A9A /* Accounts.framework */; };
 		4FAF3D2B1BE10D7500A89A9A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FAF3D2A1BE10D7500A89A9A /* Social.framework */; };
+		4FAF93E61C74D5E6005DA480 /* default.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 4FAF93E51C74D5E6005DA480 /* default.gpx */; };
 		4FB5893D1C72689B0019A6F0 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB5893B1C72689B0019A6F0 /* Bolts.framework */; };
 		4FB5893E1C72689B0019A6F0 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4FB5893C1C72689B0019A6F0 /* Parse.framework */; };
 		4FC4C94C1C3B2FB0007BDCC0 /* FORZA-MEDIUM.OTF in Resources */ = {isa = PBXBuildFile; fileRef = 4FADCA5D1C0DEC26000186A8 /* FORZA-MEDIUM.OTF */; };
@@ -194,6 +195,7 @@
 		4FAF3D261BE10D6600A89A9A /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		4FAF3D281BE10D6F00A89A9A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
 		4FAF3D2A1BE10D7500A89A9A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		4FAF93E51C74D5E6005DA480 /* default.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = default.gpx; sourceTree = "<group>"; };
 		4FB5893B1C72689B0019A6F0 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = frameworks/Bolts.framework; sourceTree = "<group>"; };
 		4FB5893C1C72689B0019A6F0 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = frameworks/Parse.framework; sourceTree = "<group>"; };
 		4FD9549E1C6E2441003829EC /* ParseDataObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ParseDataObject.swift; path = FirstMortgage/ParseDataObject.swift; sourceTree = "<group>"; };
@@ -440,6 +442,7 @@
 			children = (
 				4FAF3CD01BE106EB00A89A9A /* FirstMortgage */,
 				4FB616321BFB764B0057414C /* Supporting Classes */,
+				4FAF93E71C751673005DA480 /* Supporting Files */,
 				4FAF3CE51BE106EB00A89A9A /* FirstMortgageTests */,
 				4FAF3CF01BE106EB00A89A9A /* FirstMortgageUITests */,
 				4FAF3CCF1BE106EB00A89A9A /* Products */,
@@ -515,6 +518,14 @@
 				4FAF3D141BE10D1100A89A9A /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4FAF93E71C751673005DA480 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4FAF93E51C74D5E6005DA480 /* default.gpx */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		4FB616321BFB764B0057414C /* Supporting Classes */ = {
@@ -649,6 +660,7 @@
 				4FD9EF071C4E868D003918A8 /* edit_blue@2x.png in Resources */,
 				4FD9EF021C4E868D003918A8 /* default_lo.png in Resources */,
 				4FD9EEF71C4E868D003918A8 /* camera_icon@2x.png in Resources */,
+				4FAF93E61C74D5E6005DA480 /* default.gpx in Resources */,
 				4FD9EEE71C4E868D003918A8 /* add_grey.png in Resources */,
 				4FD9EF311C4E868D003918A8 /* star-0.png in Resources */,
 				4FD9EEF61C4E868D003918A8 /* camera_icon.png in Resources */,
