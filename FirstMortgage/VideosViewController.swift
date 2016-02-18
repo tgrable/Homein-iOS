@@ -24,9 +24,6 @@ class VideosViewController: UIViewController {
     //UIImageView
     var imageView = UIImageView()
 
-    //UILabel
-    var titleLabel = String()
-    
     // Object Models
     let model = Model()
     
@@ -35,12 +32,14 @@ class VideosViewController: UIViewController {
     
     //Strings
     let youtubeURL = "https://www.youtube.com/watch?v="
+    var titleLabel = "HELPFUL VIDEOS"
+    let errorMessage = "This device currently has no internet connection. An internet connection is required to create a new account or login to an existing account."
+//    let JSONurlString = "http://dev-fmc-cunningham.pantheon.io/app-video-json" /* This one is FOR TESTING ONLY */
+    let JSONurlString = "https://www.firstmortgageco.com/app-video-json"  /* This one is REAL*/
+
     
     //NSArray
     var videoList = [videoModel]()
-    
-    //Int
-    var itemCount = 0
     
     //NSTimers
     var loadTimer: NSTimer!
@@ -50,6 +49,12 @@ class VideosViewController: UIViewController {
     
     //CGRect
     var frame = CGRect()
+    
+    //UIlabel
+    var bannerLabel = UILabel()
+    
+    //UIImageView
+    var calcIcon = UIImageView()
     
     //MARK:
     //MARK: JSON Parse and object creation
@@ -67,7 +72,7 @@ class VideosViewController: UIViewController {
             loadViewTimer()
         }else {
             // this will likely never get called
-            let alertController = UIAlertController(title: "HomeIn", message: "This device currently has no internet connection. An internet connection is required to create a new account or login to an existing account.", preferredStyle: .Alert)
+            let alertController = UIAlertController(title: "HomeIn", message: errorMessage, preferredStyle: .Alert)
             
             let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                 self.spinner.stopAnimating()
@@ -97,11 +102,11 @@ class VideosViewController: UIViewController {
     }
     
     func parseJSON(){
-        guard let videoURLData = NSURL(string: "http://dev-fmc-cunningham.pantheon.io/app-video-json") else {
+        guard let videoURLData = NSURL(string: JSONurlString) else {
             print("unable to load video data from URL")
             return
             
-            /* REAL JSON FEED: https://www.firstmortgageco.com/app-video-json */
+            
         }
         
         let videoJSONData = NSData(contentsOfURL: videoURLData)
@@ -117,7 +122,7 @@ class VideosViewController: UIViewController {
             
             
             for i in 0...readableJSON.count - 1{
-                //                 print("\(youtubeURL)" + "\(readableJSON[i,"YouTube ID"])")
+                //                 print("\(youtubeBaseURL)" + "\(readableJSON[i,"YouTube ID"])")
                 
                 let results = readableJSON[i]
                 
@@ -136,16 +141,6 @@ class VideosViewController: UIViewController {
                 
                 print(newVideoInstance.videoYoutubeID)
                 
-//                frame = CGRect(x: -300, y: -300, width: 0, height: 0)
-                
-                
-                
-                if (modelName.rangeOfString("iPad") != nil) {
-                    
-                }else {
-                    
-                }
-                
                 if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
                     var result = UIScreen.mainScreen().bounds.size
                     let scale = UIScreen.mainScreen().scale
@@ -163,23 +158,17 @@ class VideosViewController: UIViewController {
                         print("iPhone 5/5s")
                         self.frame = CGRect(x: 0, y: CGFloat(yLocation) + 20, width: self.view.bounds.size.width, height: self.view.bounds.size.height/3)
                     }
-                }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-                    print("iPad")
-                    self.frame = CGRect(x: 0, y: CGFloat(yLocation) + 20, width: self.view.bounds.size.width, height: self.view.bounds.size.height/3)
-
-                }
+                    }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                        print("iPad")
+                        self.frame = CGRect(x: 0, y: CGFloat(yLocation) + 20, width: self.view.bounds.size.width, height: self.view.bounds.size.height/3)
+                    }
                 
                 
                 let video = YTPlayerView.init(frame: frame)
                 video.alpha = 0
                 
                 self.scrollView.addSubview(video)
-                
-                
-            
-                
-                
-                
+
                 video.loadWithVideoId(newVideoInstance.videoYoutubeID)
                 video.backgroundColor = UIColor.yellowColor()
                 
@@ -219,35 +208,21 @@ class VideosViewController: UIViewController {
                         titleLabel.frame = CGRectMake(10, 310, self.view.bounds.size.width,100)
                         titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/35)
                     }
-                
-                
-                
-
-//                titleLabel.frame = CGRectMake(10,145, self.view.bounds.size.width,100)
+                // Video object labels
                 titleLabel.textColor = UIColor.blackColor()
-                
                 titleLabel.textAlignment = .Left
                 titleLabel.text = newVideoInstance.title
                 titleLabel.alpha = 0
                 video.addSubview(titleLabel)
                 
                 let descLabel: UILabel = UILabel()
-                
                 descLabel.textColor = UIColor.blackColor()
-                
                 descLabel.textAlignment = .Left
                 descLabel.text = newVideoInstance.description
                 print(newVideoInstance.description)
-//                                    descLabel.text = "This is a very long sentence. This sentence is very long. This sentence should wrap."
                 descLabel.numberOfLines = 2
                 descLabel.lineBreakMode = .ByWordWrapping
                 descLabel.alpha = 0
-                
-                if (modelName.rangeOfString("iPad") != nil) {
-                    
-                }else{
-                   
-                }
                 video.addSubview(descLabel)
                 
                 if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
@@ -312,24 +287,14 @@ class VideosViewController: UIViewController {
                     titleLabel.alpha = 1.0
                     descLabel.alpha = 1.0
                     }, completion: nil)
-                
-                
-                
             }
-            
-            
             
             view.userInteractionEnabled = true
             loadTimer.invalidate()
             spinner.startAnimating()
             spinner.removeFromSuperview()
-            
-            
         }
     }
-    
-    
-
     
     //MARK:
     //MARK: Views
@@ -345,11 +310,8 @@ class VideosViewController: UIViewController {
         scrollView.backgroundColor = UIColor.clearColor()
         videosView.addSubview(scrollView)
         
-        scrollView.setContentOffset(CGPoint(x: 300, y: 300), animated: true)
+//        scrollView.setContentOffset(CGPoint(x: 300, y: 300), animated: true)
 
-        
-        
-     
         
         let fmcLogo = UIImage(named: "home_in") as UIImage?
         // UIImageView
@@ -384,19 +346,46 @@ class VideosViewController: UIViewController {
         videoBannerView.hidden = false
         videosView.addSubview(videoBannerView)
         
+        
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            var result = UIScreen.mainScreen().bounds.size
+            let scale = UIScreen.mainScreen().scale
+            result = CGSizeMake(result.width * scale, result.height * scale);
+            if result.height == 1334 /*6*/{
+                print("iPhone 6")
+                 bannerLabel = UILabel(frame: CGRectMake(100, 0, videosView.bounds.size.width - 50, 50))
+                 bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/15)
+                 calcIcon = UIImageView(frame: CGRectMake(60, 4, 40, 40))
+            }else if result.height == 960 /*4s*/ {
+                print("iPhone 4s")
+                 bannerLabel = UILabel(frame: CGRectMake(90, 0, videosView.bounds.size.width - 50, 50))
+                 bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/15)
+                 calcIcon = UIImageView(frame: CGRectMake(50, 4, 40, 40))
+            }else if result.height == 2208 /*6+*/{
+                print("iPhone 6+")
+                 bannerLabel = UILabel(frame: CGRectMake(110, 0, videosView.bounds.size.width - 50, 50))
+                 bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/15)
+                 calcIcon = UIImageView(frame: CGRectMake(65, 4, 40, 40))
+            }else if result.height == 1136 /*5/5s*/{
+                print("iPhone 5/5s")
+                 bannerLabel = UILabel(frame: CGRectMake(90, 0, videosView.bounds.size.width - 50, 50))
+                 bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/15)
+                 calcIcon = UIImageView(frame: CGRectMake(50, 4, 40, 40))
+            }
+        }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            print("iPad")
+                 bannerLabel = UILabel(frame: CGRectMake(275, 0, videosView.bounds.size.width - 50, 50))
+                 calcIcon = UIImageView(frame: CGRectMake(230, 4, 40, 40))
+                 bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/25)
+                }
 
-        
         let calcIcn = UIImage(named: "video_icon") as UIImage?
-        let calcIcon = UIImageView(frame: CGRectMake(130, 4, 40, 40))
-        
         calcIcon.image = calcIcn
         videoBannerView.addSubview(calcIcon)
-        
-        titleLabel = "VIDEOS"
 
-        let bannerLabel = UILabel(frame: CGRectMake(175, 0, videosView.bounds.size.width - 50, 50))
+       
         bannerLabel.text = titleLabel
-        bannerLabel.font = UIFont(name: "forza-light", size: CGFloat(22))
         bannerLabel.textAlignment = NSTextAlignment.Left
         bannerLabel.textColor = UIColor.whiteColor()
         videoBannerView.addSubview(bannerLabel)

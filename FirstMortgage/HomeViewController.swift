@@ -389,7 +389,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         // UILabel
         let refiCalculatorLabel = UILabel(frame: CGRectMake(0, labelDist, refiCalculatorView.bounds.size.width, 48))
-        refiCalculatorLabel.text = "VIDEOS"
+        refiCalculatorLabel.text = "HELPFUL\nVIDEOS"
 
         refiCalculatorLabel.font = UIFont(name: "forza-light", size: 18)
         refiCalculatorLabel.textAlignment = NSTextAlignment.Center
@@ -1916,8 +1916,11 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         if (self.hasLoanOfficer) {
             if (self.officerEmail.characters.count > 0) {
+                
+
                 parseObject.emailLoanOfficer(self.namereg.text!, email: self.emailreg.text!, loanOfficer: self.officerEmail)
 
+                
             }
         }
         

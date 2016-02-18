@@ -120,7 +120,7 @@ class ParseDataObject: NSObject {
     }
     
     func emailLoanOfficer(name: String, email: String, loanOfficer: String) {
-        // comment out when playing around - DONT FORGET 
+
         PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : name, "email": email, "officer" : loanOfficer]) { (result: AnyObject?, error: NSError?) in
             print("----- Email LO -----")
         }
