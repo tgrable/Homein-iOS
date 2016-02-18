@@ -470,13 +470,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         findBranchOverlay.frame = (frame: CGRectMake(0, 0, findBranchView.bounds.width, findBranchView.bounds.size.height))
         findBranchOverlay.backgroundColor = UIColor.darkGrayColor()
         findBranchOverlay.alpha = 0.45
-        findBranchOverlay.hidden = false
+        findBranchOverlay.hidden = true
         findBranchView.addSubview(findBranchOverlay)
-        
-        
-//        if (reachability.isConnectedToNetwork() == false) {
-//            findBranchOverlay.hidden = false
-//        }
         
         /********************************************************* Get Prequalified Button ********************************************************************/
          // UIView
