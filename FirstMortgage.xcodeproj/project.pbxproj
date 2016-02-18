@@ -466,6 +466,7 @@
 				4CD7906B1C74D2840014A7F0 /* default.gpx */,
 				4FAF3CD01BE106EB00A89A9A /* FirstMortgage */,
 				4FB616321BFB764B0057414C /* Supporting Classes */,
+				4FAF93E71C751673005DA480 /* Supporting Files */,
 				4FAF3CE51BE106EB00A89A9A /* FirstMortgageTests */,
 				4FAF3CF01BE106EB00A89A9A /* FirstMortgageUITests */,
 				4FAF3CCF1BE106EB00A89A9A /* Products */,
@@ -542,6 +543,13 @@
 				4FAF3D141BE10D1100A89A9A /* AudioToolbox.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4FAF93E71C751673005DA480 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		4FB616321BFB764B0057414C /* Supporting Classes */ = {
