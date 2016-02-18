@@ -1201,21 +1201,29 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
                 }, completion: nil)
         }
         else if textField == loanAmountTxtField {
+            userDidEnterEditMode()
+            
             UIView.animateWithDuration(0.4, animations: {
                 self.scrollView.contentOffset.y = 800
                 }, completion: nil)
         }
         else if textField == mortgageTxtField {
+            userDidEnterEditMode()
+            
             UIView.animateWithDuration(0.4, animations: {
                 self.scrollView.contentOffset.y = 850
                 }, completion: nil)
         }
         else if textField == interestTxtField {
+            userDidEnterEditMode()
+            
             UIView.animateWithDuration(0.4, animations: {
                 self.scrollView.contentOffset.y = 900
                 }, completion: nil)
         }
         else if textField == downPaymentTxtField {
+            userDidEnterEditMode()
+            
             UIView.animateWithDuration(0.4, animations: {
                 self.scrollView.contentOffset.y = 950
                 }, completion: nil)
@@ -1533,22 +1541,30 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     //MARK:
     //MARK: UIImagePickerController Delegates
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            img = pickedImage
-            if (picker.sourceType.rawValue == 1) {
-                UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
-                print("write to album")
+        
+        if(UIImagePickerController .isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera)) {
+            if let pickedImage = info[UIImagePickerControllerOriginalImage] as? UIImage {
+                img = pickedImage
+                if (picker.sourceType.rawValue == 1) {
+                    UIImageWriteToSavedPhotosAlbum(img, nil, nil, nil)
+                    print("write to album")
+                }
+                
+                self.newImg = parseObject.scaleImagesForParse(pickedImage)
+                self.updateHomeObjectImageArray()
+                self.userDidEnterEditMode()
+                
             }
-
-            self.newImg = parseObject.scaleImagesForParse(pickedImage)
-            self.updateHomeObjectImageArray()
-
+            else {
+                print(info[UIImagePickerControllerMediaMetadata])
+                print(picker.sourceType.rawValue)
+            }
+            dismissViewControllerAnimated(true, completion: nil)
         }
         else {
-            print(info[UIImagePickerControllerMediaMetadata])
-            print(picker.sourceType.rawValue)
+            displayMessage("HomeIn", message: "There is no camera available on this device.")
         }
-        dismissViewControllerAnimated(true, completion: nil)
+        
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
@@ -1753,5 +1769,33 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         self.presentViewController(alertController, animated: true) {
             // ...
         }
+    }
+    
+    func userDidEnterEditMode() {
+        didEnterEditMode = true
+        saveView.hidden = false
+        saveButton.hidden = false
+        saveButton.enabled = true
+        
+        homeNameTxtField.enabled = true
+        homePriceTxtField.enabled = true
+        homeAddressTxtField.enabled = true
+        bedsTxtField.enabled = true
+        bathsTxtField.enabled = true
+        sqFeetTxtField.enabled = true
+        descTxtView.editable = true
+        
+        homeNameTxtField.hidden = false
+        homeNameBorderView.hidden = true
+        homeNameLabel.hidden = true
+        
+        homeAddressTxtField.hidden = false
+        homeAddressBorderView.hidden = true
+        homeAddressLabel.hidden = true
+        
+        isTextFieldEnabled = true
+        editIcon.image = UIImage(named: "edit_red")
+        
+        editModeLabel.textColor = model.lightRedColor
     }
 }

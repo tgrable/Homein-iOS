@@ -1035,13 +1035,12 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         overlayView.backgroundColor = model.lightGrayColor
         self.view.addSubview(overlayView)
         
-        let overLayTextLabel = UILabel(frame: CGRectMake(15, 75, overlayView.bounds.size.width - 30, 0))
+        let overLayTextLabel = UILabel(frame: CGRectMake(15, 75, overlayView.bounds.size.width - 30, 100))
         overLayTextLabel.text = "Are you currently working with a loan officer?"
         overLayTextLabel.textAlignment = NSTextAlignment.Center
         overLayTextLabel.textColor = UIColor.darkTextColor()
         overLayTextLabel.font = UIFont(name: "forza-light", size: 32)
-        overLayTextLabel.numberOfLines = 0
-        overLayTextLabel.sizeToFit()
+        overLayTextLabel.numberOfLines = 3
         overlayView.addSubview(overLayTextLabel)
         
         // UIView
@@ -1516,7 +1515,16 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     func workingWithALoanOfficer(sender: UIButton) {
         switch sender.tag {
         case 0:
-            displayMessage("HomeIn", message: "Some features of this app may be unavailable until you select a loan officer. You will be able to select a loan officer on your profile page.")
+            let alertController = UIAlertController(title: "HomeIn", message: "Some features of this app may be unavailable until you select a loan officer. You will be able to select a loan officer on your profile page.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                self.loginSignupUser(1)
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
         case 1:
             buildLoanOfficerSeachOverLay(loanOfficerArray)
         default:
