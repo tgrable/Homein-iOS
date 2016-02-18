@@ -1515,16 +1515,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     func workingWithALoanOfficer(sender: UIButton) {
         switch sender.tag {
         case 0:
-            let alertController = UIAlertController(title: "HomeIn", message: "Some features of this app may be unavailable until you select a loan officer. You will be able to select a loan officer on your profile page.", preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                self.loginSignupUser(1)
-            }
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                // ...
-            }
+            hasLoanOfficer = false;
+            loginSignupUser(1)
         case 1:
             buildLoanOfficerSeachOverLay(loanOfficerArray)
         default:
@@ -1935,6 +1927,18 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
                 parseObject.emailLoanOfficer(self.namereg.text!, email: self.emailreg.text!, loanOfficer: self.officerEmail)
 
                 
+            }
+        }
+        else {
+            let alertController = UIAlertController(title: "HomeIn", message: "Some features of this app may be unavailable until you select a loan officer. You will be able to select a loan officer on your profile page.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                
+            }
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
             }
         }
         
