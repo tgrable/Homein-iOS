@@ -579,9 +579,10 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         var offset = descLabel.bounds.size.height + 25.0 as CGFloat
         
         var benLabelFontSize = 18 as CGFloat
-        if modelName.rangeOfString("5") != nil{
+        if modelName.rangeOfString("5") != nil || modelName.rangeOfString("4s") != nil {
             benLabelFontSize = 16
         }
+
         let benLabel = UILabel (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 24))
         benLabel.textAlignment = NSTextAlignment.Center
         benLabel.textColor = model.lightOrangeColor
@@ -672,11 +673,16 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         getStartedArrow.textColor = UIColor.whiteColor()
         getStartedView.addSubview(getStartedArrow)
         
+        var buttonFontSize = 23 as CGFloat
+        if modelName.rangeOfString("4s") != nil || modelName.rangeOfString("5") != nil{
+            buttonFontSize = 21
+        }
+        
         getStartedButton.frame = (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
         getStartedButton.setTitle("CREATE AN ACCOUNT", forState: .Normal)
         getStartedButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-        getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: 23)
+        getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: buttonFontSize)
         contentScrollView.addSubview(getStartedButton)
         
         let btnImg = UIImage(named: "right_shadow") as UIImage?

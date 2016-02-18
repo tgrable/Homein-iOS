@@ -357,7 +357,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         changeLoView.addSubview(changeLoArrow)
         
         var fontSize = 25
-        if modelName.rangeOfString("5") != nil{
+        if modelName.rangeOfString("5") != nil || modelName.rangeOfString("4s") != nil {
             fontSize = 20
         }
         

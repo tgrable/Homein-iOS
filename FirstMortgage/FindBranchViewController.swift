@@ -17,6 +17,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK:
     // MARK: Properties    
     let model = Model()
+    let modelName = UIDevice.currentDevice().modelName
     
     let addHomeView = UIView() as UIView
     let pickerView = UIView()
@@ -219,8 +220,13 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         pickerView.backgroundColor = UIColor.clearColor()
         addHomeView.addSubview(pickerView)
         
+        var textLocation = 75 as CGFloat
+        if modelName.rangeOfString("4s") != nil {
+            textLocation = 160
+        }
+        
         // UILabel
-        let messageLabel = UILabel(frame: CGRectMake(25, 75, addHomeView.bounds.size.width - 50, 0))
+        let messageLabel = UILabel(frame: CGRectMake(25, textLocation, addHomeView.bounds.size.width - 50, 0))
         messageLabel.text = "Please select a state from the list below to find a branch near you."
         messageLabel.font = UIFont(name: "forza-light", size: 25)
         messageLabel.textAlignment = NSTextAlignment.Left
