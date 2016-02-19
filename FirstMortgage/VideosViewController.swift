@@ -66,6 +66,8 @@ class VideosViewController: UIViewController {
          buildView()
         
         
+         print(self.view.bounds.size.height)
+        
         
         if (reachability.isConnectedToNetwork() == true) {
             showActivityIndicator()
@@ -157,6 +159,9 @@ class VideosViewController: UIViewController {
                     }else if result.height == 1136 /*5/5s*/{
                         print("iPhone 5/5s")
                         self.frame = CGRect(x: 0, y: CGFloat(yLocation) + 20, width: self.view.bounds.size.width, height: self.view.bounds.size.height/3)
+                    }else if result.height == 2001 {
+                        print("zoomed in iPhone six plus")
+                        self.frame = CGRect(x: 0, y: CGFloat(yLocation) + 20, width: self.view.bounds.size.width, height: self.view.bounds.size.height/3)
                     }
                     }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
                         print("iPad")
@@ -174,40 +179,6 @@ class VideosViewController: UIViewController {
                 
                 let titleLabel: UILabel = UILabel()
                 
-                if (modelName.rangeOfString("iPad") != nil) {
-                    
-                    print("iPad Detected")
-                }else {
-                    
-                }
-                
-                if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
-                    var result = UIScreen.mainScreen().bounds.size
-                    let scale = UIScreen.mainScreen().scale
-                    result = CGSizeMake(result.width * scale, result.height * scale);
-                    if result.height == 1334 /*6*/{
-                        print("iPhone 6")
-                        titleLabel.frame = CGRectMake(10, 190, self.view.bounds.size.width,100)
-                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
-                    }else if result.height == 960 /*4s*/ {
-                        print("iPhone 4s")
-                        titleLabel.frame = CGRectMake(10, 120, self.view.bounds.size.width,100)
-                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
-                        
-                    }else if result.height == 2208 /*6+*/{
-                        print("iPhone 6+")
-                        titleLabel.frame = CGRectMake(10, 210, self.view.bounds.size.width,100)
-                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
-                    }else if result.height == 1136 /*5/5s*/{
-                        print("iPhone 5/5s")
-                        titleLabel.frame = CGRectMake(10, 155, self.view.bounds.size.width,100)
-                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
-                    }
-                    }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-                        print("iPad")
-                        titleLabel.frame = CGRectMake(10, 310, self.view.bounds.size.width,100)
-                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/35)
-                    }
                 // Video object labels
                 titleLabel.textColor = UIColor.blackColor()
                 titleLabel.textAlignment = .Left
@@ -231,26 +202,61 @@ class VideosViewController: UIViewController {
                     result = CGSizeMake(result.width * scale, result.height * scale);
                     if result.height == 1334 /*6*/{
                         print("iPhone 6")
+                        titleLabel.frame = CGRectMake(10, 190, self.view.bounds.size.width,100)
+                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
+                    }else if result.height == 960 /*4s*/ {
+                        print("iPhone 4s")
+                        titleLabel.frame = CGRectMake(10, 120, self.view.bounds.size.width,100)
+                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
+                        
+                    }else if result.height == 2208 /*6+*/{
+                        print("iPhone 6+")
+                        titleLabel.frame = CGRectMake(10, 210, self.view.bounds.size.width,100)
+                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
+                    }else if result.height == 1136 /*5/5s*/{
+                        print("iPhone 5/5s")
+                        titleLabel.frame = CGRectMake(10, 155, self.view.bounds.size.width,100)
+                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
+                    }else if result.height == 2001 /*Zoomed in iPhone 6+*/{
+                        titleLabel.frame = CGRectMake(10, 190, self.view.bounds.size.width,100)
+                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
+                    }
+                    }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                        print("iPad")
+                        titleLabel.frame = CGRectMake(10, 310, self.view.bounds.size.width,100)
+                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/35)
+                    }
+             
+                
+                if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+                    var result = UIScreen.mainScreen().bounds.size
+                    let scale = UIScreen.mainScreen().scale
+                    result = CGSizeMake(result.width * scale, result.height * scale);
+                    if result.height == 1334 /*6*/{
+                        print("iPhone 6")
                         descLabel.frame = CGRectMake(10, 210, self.view.bounds.size.width, 100)
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
                     }else if result.height == 960 /*4s*/ {
                         print("iPhone 4s")
-                         descLabel.frame = CGRectMake(10, 135, self.view.bounds.size.width, 100)
-                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
+                        descLabel.frame = CGRectMake(10, 135, self.view.bounds.size.width - 20, 100)
+                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/35)
                     }else if result.height == 2208 /*6+*/{
                         print("iPhone 6+")
-                        descLabel.frame = CGRectMake(10, 230, self.view.bounds.size.width, 100)
+                        descLabel.frame = CGRectMake(10, 235, self.view.bounds.size.width, 100)
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
                     }else if result.height == 1136 /*5/5s*/{
                         print("iPhone 5/5s")
-                         descLabel.frame = CGRectMake(10, 175, self.view.bounds.size.width, 100)
-                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
+                        descLabel.frame = CGRectMake(10, 175, self.view.bounds.size.width, 100)
+                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
+                    }else if result.height == 2001 /*Zoomed in iPhone 6+*/{
+                        descLabel.frame = CGRectMake(10, 210, self.view.bounds.size.width, 100)
+                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
                     }
-                }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                    }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
                     print("iPad")
-                        descLabel.frame = CGRectMake(10, 330, self.view.bounds.size.width, 100)
-                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/50)
-                }
+                        descLabel.frame = CGRectMake(10, 335, self.view.bounds.size.width, 100)
+                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/60)
+                    }
                 
 
                 
@@ -262,24 +268,27 @@ class VideosViewController: UIViewController {
                     if result.height == 1334 /*6*/{
                         print("iPhone 6")
                         yLocation += 280
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 340)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 375)
                     }else if result.height == 960 /*4s*/ {
                         print("iPhone 4s")
                         yLocation += 200
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 260)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 295)
                     }else if result.height == 2208 /*6+*/{
                         print("iPhone 6+")
                         yLocation += 300
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 360)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 395)
                     }else if result.height == 1136 /*5/5s*/{
                         print("iPhone 5/5s")
                         yLocation += 240
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 300)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 335)
+                    }else if result.height == 2001 /*Zoomed in iPhone 6+*/{
+                        yLocation += 290
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 385)
                     }
                 }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
                     print("iPad")
                     yLocation += 400
-                    self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 465 )
+                    self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 470 )
                 }
               
                 UIView.animateWithDuration(1.0, delay: 0.0, options: .CurveEaseIn, animations: { () -> Void in
@@ -372,9 +381,12 @@ class VideosViewController: UIViewController {
                  bannerLabel = UILabel(frame: CGRectMake(90, 0, videosView.bounds.size.width - 50, 50))
                  bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/15)
                  calcIcon = UIImageView(frame: CGRectMake(50, 4, 40, 40))
-            }
-        }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            print("iPad")
+            }else if result.height == 2001 /*Zoomed in iPhone 6+*/{
+                 bannerLabel = UILabel(frame: CGRectMake(110, 0, videosView.bounds.size.width - 50, 50))
+                 bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/15)
+                 calcIcon = UIImageView(frame: CGRectMake(65, 4, 40, 40))            }
+            }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                print("iPad")
                  bannerLabel = UILabel(frame: CGRectMake(275, 0, videosView.bounds.size.width - 50, 50))
                  calcIcon = UIImageView(frame: CGRectMake(230, 4, 40, 40))
                  bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/25)

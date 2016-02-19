@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		2CD798611C3233710052C18C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD798601C3233710052C18C /* Reachability.swift */; };
 		2CF9697A1C4BDA890000D77B /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF969791C4BDA890000D77B /* ModelTest.swift */; };
-		4C1F19C31C7380E800AA8B15 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1F19C21C7380E800AA8B15 /* VideosViewController.swift */; };
 		4C1F19C51C73812D00AA8B15 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */; };
 		4CD790541C73A77C0014A7F0 /* YouTubePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */; };
 		4CD790561C73AC540014A7F0 /* videoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790551C73AC540014A7F0 /* videoModel.swift */; };
@@ -19,6 +18,7 @@
 		4CD790691C74BD650014A7F0 /* video_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD790661C74BD650014A7F0 /* video_icon@2x.png */; };
 		4CD7906A1C74BD650014A7F0 /* video_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD790671C74BD650014A7F0 /* video_icon@3x.png */; };
 		4CD7906C1C74D2840014A7F0 /* default.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 4CD7906B1C74D2840014A7F0 /* default.gpx */; };
+		4CD790D71C77755E0014A7F0 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790D61C77755E0014A7F0 /* VideosViewController.swift */; };
 		4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */; };
 		4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */; };
 		4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */; };
@@ -160,7 +160,6 @@
 /* Begin PBXFileReference section */
 		2CD798601C3233710052C18C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = FirstMortgage/Reachability.swift; sourceTree = "<group>"; };
 		2CF969791C4BDA890000D77B /* ModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
-		4C1F19C21C7380E800AA8B15 /* VideosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosViewController.swift; sourceTree = "<group>"; };
 		4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubePlayer.swift; sourceTree = "<group>"; };
 		4CD790551C73AC540014A7F0 /* videoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = videoModel.swift; path = FirstMortgage/videoModel.swift; sourceTree = "<group>"; };
@@ -172,6 +171,7 @@
 		4CD790661C74BD650014A7F0 /* video_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_icon@2x.png"; sourceTree = "<group>"; };
 		4CD790671C74BD650014A7F0 /* video_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_icon@3x.png"; sourceTree = "<group>"; };
 		4CD7906B1C74D2840014A7F0 /* default.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = default.gpx; sourceTree = "<group>"; };
+		4CD790D61C77755E0014A7F0 /* VideosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosViewController.swift; sourceTree = "<group>"; };
 		4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = FirstMortgage/DeviceExtension.swift; sourceTree = "<group>"; };
 		4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicCell.swift; path = FirstMortgage/BasicCell.swift; sourceTree = "<group>"; };
@@ -497,7 +497,7 @@
 				4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */,
 				4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */,
 				4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */,
-				4C1F19C21C7380E800AA8B15 /* VideosViewController.swift */,
+				4CD790D61C77755E0014A7F0 /* VideosViewController.swift */,
 				4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */,
 				4FAF3CD51BE106EB00A89A9A /* Main.storyboard */,
 				4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */,
@@ -643,7 +643,6 @@
 				TargetAttributes = {
 					4FAF3CCD1BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = BS4LR4L547;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -822,6 +821,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CD790D71C77755E0014A7F0 /* VideosViewController.swift in Sources */,
 				4FAF3D041BE1085400A89A9A /* HomeViewController.swift in Sources */,
 				4FADCA6D1C0E2B7E000186A8 /* Model.swift in Sources */,
 				4CD790641C73B94F0014A7F0 /* YTPlayerView.m in Sources */,
@@ -836,7 +836,6 @@
 				4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */,
 				4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */,
 				4CD790561C73AC540014A7F0 /* videoModel.swift in Sources */,
-				4C1F19C31C7380E800AA8B15 /* VideosViewController.swift in Sources */,
 				4F4A70F21BFD33A1009FDD79 /* IndividualHomeViewController.swift in Sources */,
 				2CD798611C3233710052C18C /* Reachability.swift in Sources */,
 				4FAF3D0E1BE10AAE00A89A9A /* FindBranchViewController.swift in Sources */,
