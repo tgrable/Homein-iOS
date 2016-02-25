@@ -10,6 +10,8 @@
 		2CD798611C3233710052C18C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD798601C3233710052C18C /* Reachability.swift */; };
 		2CF9697A1C4BDA890000D77B /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF969791C4BDA890000D77B /* ModelTest.swift */; };
 		4C1F19C51C73812D00AA8B15 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */; };
+		4CBB7AD21C7F931B00E6FEB8 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBB7AD01C7F931B00E6FEB8 /* Fabric.framework */; };
+		4CBB7AD31C7F931B00E6FEB8 /* Answers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */; };
 		4CD790541C73A77C0014A7F0 /* YouTubePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */; };
 		4CD790561C73AC540014A7F0 /* videoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790551C73AC540014A7F0 /* videoModel.swift */; };
 		4CD790631C73B94F0014A7F0 /* Assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4CD790601C73B94F0014A7F0 /* Assets.bundle */; };
@@ -161,6 +163,8 @@
 		2CD798601C3233710052C18C /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Reachability.swift; path = FirstMortgage/Reachability.swift; sourceTree = "<group>"; };
 		2CF969791C4BDA890000D77B /* ModelTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelTest.swift; sourceTree = "<group>"; };
 		4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		4CBB7AD01C7F931B00E6FEB8 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Answers.framework; sourceTree = "<group>"; };
 		4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubePlayer.swift; sourceTree = "<group>"; };
 		4CD790551C73AC540014A7F0 /* videoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = videoModel.swift; path = FirstMortgage/videoModel.swift; sourceTree = "<group>"; };
 		4CD7905F1C73B94D0014A7F0 /* FirstMortgage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FirstMortgage-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -314,6 +318,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CBB7AD31C7F931B00E6FEB8 /* Answers.framework in Frameworks */,
 				4FAF3D2B1BE10D7500A89A9A /* Social.framework in Frameworks */,
 				4FAF3D291BE10D6F00A89A9A /* Accounts.framework in Frameworks */,
 				4FAF3D271BE10D6600A89A9A /* libsqlite3.tbd in Frameworks */,
@@ -321,6 +326,7 @@
 				4FAF3D251BE10D5D00A89A9A /* libz.tbd in Frameworks */,
 				4FAF3D231BE10D5500A89A9A /* SystemConfiguration.framework in Frameworks */,
 				4FB5893E1C72689B0019A6F0 /* Parse.framework in Frameworks */,
+				4CBB7AD21C7F931B00E6FEB8 /* Fabric.framework in Frameworks */,
 				4FAF3D1F1BE10D3E00A89A9A /* Security.framework in Frameworks */,
 				4FAF3D1D1BE10D3100A89A9A /* QuartzCore.framework in Frameworks */,
 				4FAF3D1B1BE10D2800A89A9A /* CoreLocation.framework in Frameworks */,
@@ -558,6 +564,8 @@
 		4FB616321BFB764B0057414C /* Supporting Classes */ = {
 			isa = PBXGroup;
 			children = (
+				4CBB7AD01C7F931B00E6FEB8 /* Fabric.framework */,
+				4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */,
 				4CD7905F1C73B94D0014A7F0 /* FirstMortgage-Bridging-Header.h */,
 				4CD790601C73B94F0014A7F0 /* Assets.bundle */,
 				4CD790611C73B94F0014A7F0 /* YTPlayerView.h */,
@@ -585,6 +593,7 @@
 				4FAF3CCB1BE106EB00A89A9A /* Frameworks */,
 				4FAF3CCC1BE106EB00A89A9A /* Resources */,
 				4FD6F42A1C1242D8004FDDC0 /* ShellScript */,
+				4CBB7ACF1C7F92D900E6FEB8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -801,6 +810,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4CBB7ACF1C7F92D900E6FEB8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run e5dbfb078f14b5275fab841aae4db0f20e63681d dc39886d0923a7d9ba80be8f649edac63602de5aa761619132ab71d0e3ebd1e3";
+		};
 		4FD6F42A1C1242D8004FDDC0 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -988,6 +1010,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/frameworks",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = FirstMortgage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -1011,6 +1034,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/frameworks",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = FirstMortgage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

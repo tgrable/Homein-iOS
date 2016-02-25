@@ -9,6 +9,8 @@
 import UIKit
 import Parse
 import Bolts
+import Fabric
+import Answers
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -29,6 +31,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
             
             PFACL.setDefaultACL(PFACL(), withAccessForCurrentUser: true)
+            
+            Fabric.with([Answers.self])
+            
+            
         }
         return true
     }

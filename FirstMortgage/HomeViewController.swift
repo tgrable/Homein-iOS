@@ -8,6 +8,7 @@
 
 import UIKit
 import Parse
+import Answers
 
 
 
@@ -152,6 +153,15 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         activityIndicator.center = view.center
         loadingOverlay.addSubview(activityIndicator)
         
+        
+        /*************************** Fabric Analytics *********************************************/
+        
+        // TODO: Move this method and customize the name and parameters to track your key metrics
+        //       Use your own string attributes to track common values over time
+        //       Use your own number attributes to track median value over time
+        Answers.logCustomEventWithName("Video Played", customAttributes: ["Category":"Comedy", "Length":350])
+
+        
         /*************************** was in viewDidAppear *****************************************/
         if reachability.isConnectedToNetwork() == false {
             let getStartedOverlay = UIView(frame: CGRectMake(0, 0, getStartedButton.bounds.width, getStartedButton.bounds.size.height))
@@ -173,6 +183,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         isLoginViewOpen = false
         checkIfLoggedIn()
+        
+        
     }
     
     override func viewDidAppear(animated: Bool) {
