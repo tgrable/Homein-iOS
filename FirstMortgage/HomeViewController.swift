@@ -102,6 +102,12 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //MARK:
+        //MARK: THIS WILL AUTOMATICALLY CRASH THE APP LEAVE THIS ALONE UNLESS CRASHLYTICS TESTING
+        /*************************** Fabric Crashlytics *********************************************/
+        //        Crashlytics.sharedInstance().crash()
+        /***************************  End Fabric Crashlytics *********************************************/
+        
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             if CLLocationManager.authorizationStatus() == .NotDetermined {
                 self.manager.requestWhenInUseAuthorization()
