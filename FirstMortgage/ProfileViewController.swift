@@ -8,6 +8,8 @@
 
 import UIKit
 import Parse
+import Answers
+import Crashlytics
 
 class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDelegate {
     // MARK:
@@ -1159,6 +1161,11 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     // MARK:
     // MARK: ParseDataObject Delegate Methods
     func saveSucceeded() {
+        /*************************** Fabric Analytics *********************************************/
+                Answers.logCustomEventWithName("User_Profile_Updated", customAttributes: ["Category":"User_Action"])
+                print("User_Profile_Updated")
+        /************************* End Fabric Analytics *******************************************/
+        
         removeViews(self.profileView)
         
         singleLoView.removeFromSuperview()

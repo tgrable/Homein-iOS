@@ -11,6 +11,8 @@ import Parse
 import Bolts
 import Fabric
 import Answers
+import Crashlytics
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -32,7 +34,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             PFACL.setDefaultACL(PFACL(), withAccessForCurrentUser: true)
             
-            Fabric.with([Answers.self])
+
+            Fabric.with([Answers.self, Crashlytics.self])
+
             
             
         }

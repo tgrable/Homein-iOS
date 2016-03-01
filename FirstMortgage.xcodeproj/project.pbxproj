@@ -10,8 +10,10 @@
 		2CD798611C3233710052C18C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD798601C3233710052C18C /* Reachability.swift */; };
 		2CF9697A1C4BDA890000D77B /* ModelTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CF969791C4BDA890000D77B /* ModelTest.swift */; };
 		4C1F19C51C73812D00AA8B15 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */; };
+		4C9041BA1C85FCE800A5C1D2 /* Answers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */; };
 		4CBB7AD21C7F931B00E6FEB8 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBB7AD01C7F931B00E6FEB8 /* Fabric.framework */; };
-		4CBB7AD31C7F931B00E6FEB8 /* Answers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */; };
+		4CBB7AD51C7F9B0E00E6FEB8 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB7AD41C7F9B0E00E6FEB8 /* VideosViewController.swift */; };
+		4CBB7AD71C7F9CE000E6FEB8 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBB7AD61C7F9CE000E6FEB8 /* Crashlytics.framework */; };
 		4CD790541C73A77C0014A7F0 /* YouTubePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */; };
 		4CD790561C73AC540014A7F0 /* videoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790551C73AC540014A7F0 /* videoModel.swift */; };
 		4CD790631C73B94F0014A7F0 /* Assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4CD790601C73B94F0014A7F0 /* Assets.bundle */; };
@@ -20,7 +22,6 @@
 		4CD790691C74BD650014A7F0 /* video_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD790661C74BD650014A7F0 /* video_icon@2x.png */; };
 		4CD7906A1C74BD650014A7F0 /* video_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4CD790671C74BD650014A7F0 /* video_icon@3x.png */; };
 		4CD7906C1C74D2840014A7F0 /* default.gpx in Resources */ = {isa = PBXBuildFile; fileRef = 4CD7906B1C74D2840014A7F0 /* default.gpx */; };
-		4CD790D71C77755E0014A7F0 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790D61C77755E0014A7F0 /* VideosViewController.swift */; };
 		4F18EA6E1C209CDF009764D2 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */; };
 		4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */; };
 		4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */; };
@@ -165,6 +166,8 @@
 		4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		4CBB7AD01C7F931B00E6FEB8 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Answers.framework; sourceTree = "<group>"; };
+		4CBB7AD41C7F9B0E00E6FEB8 /* VideosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosViewController.swift; sourceTree = "<group>"; };
+		4CBB7AD61C7F9CE000E6FEB8 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 		4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubePlayer.swift; sourceTree = "<group>"; };
 		4CD790551C73AC540014A7F0 /* videoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = videoModel.swift; path = FirstMortgage/videoModel.swift; sourceTree = "<group>"; };
 		4CD7905F1C73B94D0014A7F0 /* FirstMortgage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FirstMortgage-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -175,7 +178,6 @@
 		4CD790661C74BD650014A7F0 /* video_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_icon@2x.png"; sourceTree = "<group>"; };
 		4CD790671C74BD650014A7F0 /* video_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "video_icon@3x.png"; sourceTree = "<group>"; };
 		4CD7906B1C74D2840014A7F0 /* default.gpx */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = default.gpx; sourceTree = "<group>"; };
-		4CD790D61C77755E0014A7F0 /* VideosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosViewController.swift; sourceTree = "<group>"; };
 		4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		4F1ED5111C1B325900E40F4B /* DeviceExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DeviceExtension.swift; path = FirstMortgage/DeviceExtension.swift; sourceTree = "<group>"; };
 		4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BasicCell.swift; path = FirstMortgage/BasicCell.swift; sourceTree = "<group>"; };
@@ -318,8 +320,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CBB7AD31C7F931B00E6FEB8 /* Answers.framework in Frameworks */,
+				4C9041BA1C85FCE800A5C1D2 /* Answers.framework in Frameworks */,
 				4FAF3D2B1BE10D7500A89A9A /* Social.framework in Frameworks */,
+				4CBB7AD71C7F9CE000E6FEB8 /* Crashlytics.framework in Frameworks */,
 				4FAF3D291BE10D6F00A89A9A /* Accounts.framework in Frameworks */,
 				4FAF3D271BE10D6600A89A9A /* libsqlite3.tbd in Frameworks */,
 				4FB5893D1C72689B0019A6F0 /* Bolts.framework in Frameworks */,
@@ -503,7 +506,7 @@
 				4FAF3D071BE1094900A89A9A /* AddHomeViewController.swift */,
 				4FAF3D091BE109F800A89A9A /* CalculatorsViewController.swift */,
 				4F18EA6D1C209CDF009764D2 /* ProfileViewController.swift */,
-				4CD790D61C77755E0014A7F0 /* VideosViewController.swift */,
+				4CBB7AD41C7F9B0E00E6FEB8 /* VideosViewController.swift */,
 				4FAF3D0D1BE10AAE00A89A9A /* FindBranchViewController.swift */,
 				4FAF3CD51BE106EB00A89A9A /* Main.storyboard */,
 				4FAF3CD81BE106EB00A89A9A /* Assets.xcassets */,
@@ -535,6 +538,9 @@
 		4FAF3D0F1BE10CB700A89A9A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4CBB7AD61C7F9CE000E6FEB8 /* Crashlytics.framework */,
+				4CBB7AD01C7F931B00E6FEB8 /* Fabric.framework */,
+				4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */,
 				4FB5893B1C72689B0019A6F0 /* Bolts.framework */,
 				4FB5893C1C72689B0019A6F0 /* Parse.framework */,
 				4FAF3D2A1BE10D7500A89A9A /* Social.framework */,
@@ -564,8 +570,6 @@
 		4FB616321BFB764B0057414C /* Supporting Classes */ = {
 			isa = PBXGroup;
 			children = (
-				4CBB7AD01C7F931B00E6FEB8 /* Fabric.framework */,
-				4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */,
 				4CD7905F1C73B94D0014A7F0 /* FirstMortgage-Bridging-Header.h */,
 				4CD790601C73B94F0014A7F0 /* Assets.bundle */,
 				4CD790611C73B94F0014A7F0 /* YTPlayerView.h */,
@@ -592,8 +596,8 @@
 				4FAF3CCA1BE106EB00A89A9A /* Sources */,
 				4FAF3CCB1BE106EB00A89A9A /* Frameworks */,
 				4FAF3CCC1BE106EB00A89A9A /* Resources */,
-				4FD6F42A1C1242D8004FDDC0 /* ShellScript */,
 				4CBB7ACF1C7F92D900E6FEB8 /* ShellScript */,
+				4FD6F42A1C1242D8004FDDC0 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -652,6 +656,7 @@
 				TargetAttributes = {
 					4FAF3CCD1BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 64783LG3JR;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -843,7 +848,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CD790D71C77755E0014A7F0 /* VideosViewController.swift in Sources */,
+				4CBB7AD51C7F9B0E00E6FEB8 /* VideosViewController.swift in Sources */,
 				4FAF3D041BE1085400A89A9A /* HomeViewController.swift in Sources */,
 				4FADCA6D1C0E2B7E000186A8 /* Model.swift in Sources */,
 				4CD790641C73B94F0014A7F0 /* YTPlayerView.m in Sources */,
@@ -1006,6 +1011,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

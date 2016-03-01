@@ -8,6 +8,8 @@
 
 import UIKit
 import Parse
+import Answers
+import Crashlytics
 
 class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, UITextViewDelegate {
 
@@ -706,9 +708,18 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
                     home["imageArray"] = self.imageArray
                     
                     self.parseObject.saveHomeWithBlock(home)
+                    
+                    /*************************** Fabric Analytics *********************************************/
+                    Answers.logCustomEventWithName("Created_New_Home_Entry_With_Connection", customAttributes: ["Category":"User_Action"])
+                    print("Created_New_Home_Entry_With_Connection")
+                    /************************* End Fabric Analytics *******************************************/
                 }
                 else {
                     self.parseObject.saveHomeEventually(home)
+                    /*************************** Fabric Analytics *********************************************/
+                    Answers.logCustomEventWithName("Created_New_Home_Entry_With_NO_Connection", customAttributes: ["Category":"User_Action"])
+                    print("Created_New_Home_Entry_With_NO_Connection")
+                    /************************* End Fabric Analytics *******************************************/
                 }
             }
         }

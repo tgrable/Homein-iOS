@@ -9,6 +9,7 @@
 import UIKit
 import Parse
 import Answers
+import Crashlytics
 
 
 
@@ -154,14 +155,6 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         loadingOverlay.addSubview(activityIndicator)
         
         
-        /*************************** Fabric Analytics *********************************************/
-        
-        // TODO: Move this method and customize the name and parameters to track your key metrics
-        //       Use your own string attributes to track common values over time
-        //       Use your own number attributes to track median value over time
-        Answers.logCustomEventWithName("Video Played", customAttributes: ["Category":"Comedy", "Length":350])
-
-        
         /*************************** was in viewDidAppear *****************************************/
         if reachability.isConnectedToNetwork() == false {
             let getStartedOverlay = UIView(frame: CGRectMake(0, 0, getStartedButton.bounds.width, getStartedButton.bounds.size.height))
@@ -225,7 +218,20 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     // MARK:
     // MARK: Build Views
     func buildHomeView() {
-      
+        
+        /*************************** Fabric Analytics *********************************************/
+
+        Answers.logContentViewWithName("Main_View_Displayed",
+            contentType: nil,
+            contentId: nil,
+            customAttributes: [:])
+        
+        print("Main Menu Display Logged -> Fabric")
+        
+
+        
+        /************************* End Fabric Analytics *******************************************/
+        
         homeView.frame = (frame: CGRectMake(0, 85, self.view.bounds.size.width, self.view.bounds.size.height - 85))
         homeView.backgroundColor = model.lightGrayColor
         homeView.hidden = false
@@ -1296,6 +1302,13 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         if (!isRegisterViewOpen) {
             if self.isLoginViewOpen == false {
                 self.loginView.frame = (frame: CGRectMake(self.view.bounds.size.width * -1, self.view.bounds.height, self.view.bounds.width  * 2, self.view.bounds.height))
+                
+                /*************************** Fabric Analytics *********************************************/
+                Answers.logCustomEventWithName("SignUp_View_Displayed", customAttributes: ["Category":"User_Action"])
+                print("SignUp_View_Displayed")
+                /************************* End Fabric Analytics *******************************************/
+
+
             }
             
             UIView.animateWithDuration(0.4, animations: {
@@ -1309,6 +1322,13 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         }
         else {
             UIView.animateWithDuration(0.4, animations: {
+
+                
+                /*************************** Fabric Analytics *********************************************/
+                Answers.logCustomEventWithName("SignUp_View_Dismissed", customAttributes: ["Category":"User_Action"])
+                print("SignUp_View_Dismissed")
+                /************************* End Fabric Analytics *******************************************/
+
                 self.loginView.frame = (frame: CGRectMake(self.view.bounds.size.width * -1, self.view.bounds.height, self.view.bounds.width  * 2, self.view.bounds.height))
                 }, completion: {
                     (value: Bool) in
@@ -1396,11 +1416,20 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
                 
                 do {
                     try PFUser.requestPasswordResetForEmail((emailTextField.text?.lowercaseString)!)
+
                     
                 } catch {
                     self.displayMessage("HomeIn", message: "We apologize but an error has occurred.")
                 }
                 self.displayMessage("HomeIn", message: "An email has been sent to the email address provided with instructions to reset your password.")
+    
+                
+                /*************************** Fabric Analytics *********************************************/
+                Answers.logCustomEventWithName("Password_Reset_Email_Requested", customAttributes: ["Category":"User_Action"])
+                print("Password_Reset_Email_Requested")
+                /************************* End Fabric Analytics *******************************************/
+
+
             }
             else {
                 self.displayMessage("HomeIn", message: "Please Enter a valid email.")
@@ -1428,6 +1457,13 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     }
     
     func continueWithoutLogin(sender: UIButton) {
+        
+        /*************************** Fabric Analytics *********************************************/
+        Answers.logCustomEventWithName("No_Login_Creds_Entered_Signup_Bypassed", customAttributes: ["Category":"User_Action"])
+        print("No_Login_Creds_Entered_Signup_Bypassed")
+        /************************* End Fabric Analytics *******************************************/
+
+        
         didContinueWithOut = true
         
         self.checkIfLoggedIn()
@@ -1440,22 +1476,50 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         switch sender.tag {
         case 0:
             performSegueWithIdentifier("myHomesViewController", sender: nil)
+            
+            /*************************** Fabric Analytics *********************************************/
+            Answers.logCustomEventWithName("Nav_to_My_Homes", customAttributes: ["Category":"User_Action"])
+            print("Navigate to MyHomes")
+            /************************* End Fabric Analytics *******************************************/
+            
         case 1:
             performSegueWithIdentifier("addHomeViewController", sender: nil)
+            /*************************** Fabric Analytics *********************************************/
+            Answers.logCustomEventWithName("Nav_to_addHome_View", customAttributes: ["Category":"User_Action"])
+            print("Navigate to addHomes View")
+            /************************* End Fabric Analytics *******************************************/
         case 2:
             isMortgageCalc = true
             performSegueWithIdentifier("calculatorsViewController", sender: nil)
+            /*************************** Fabric Analytics *********************************************/
+            Answers.logCustomEventWithName("Nav_to_Calc_View", customAttributes: ["Category":"User_Action"])
+            print("Navigate to Calc")
+            /************************* End Fabric Analytics *******************************************/
         case 3:
 //            isMortgageCalc = false
 //            performSegueWithIdentifier("calculatorsViewController", sender: nil)
             performSegueWithIdentifier("viewAvailableVideos", sender: nil)
+            
+            /*************************** Fabric Analytics *********************************************/
+            Answers.logCustomEventWithName("Nav_to_Video_View", customAttributes: ["Category":"User_Action"])
+            print("Navigate to Videos")
+            /************************* End Fabric Analytics *******************************************/
         case 4:
             performSegueWithIdentifier("findBranchViewController", sender: nil)
+            /*************************** Fabric Analytics *********************************************/
+            Answers.logCustomEventWithName("Nav_to_Find_Branch", customAttributes: ["Category":"User_Action"])
+            print("Navigate to Branch Locator")
+            /************************* End Fabric Analytics *******************************************/
         case 5:
             if let user = PFUser.currentUser() {
                 if let url = user["officerURL"] {
                     let urlPath = url as! String
                     UIApplication.sharedApplication().openURL(NSURL(string: urlPath)!)
+                    /*************************** Fabric Analytics *********************************************/
+                    Answers.logCustomEventWithName("User_Dismiss_App_For_Prequalification", customAttributes: ["Category":"User_Action"])
+                    print("Navigate to Branch Locator")
+                    /************************* End Fabric Analytics *******************************************/
+                    
                 }
             }
             
@@ -1797,6 +1861,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             }
             else {
                 userButton.enabled = true
+
+                
             }
             
             myHomesOverlay.hidden = false
@@ -1804,6 +1870,10 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             preQualifiedOverlay.hidden = false
         }
         else {
+            
+            
+            
+            
             userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
             userButton.setTitle("", forState: .Normal)
             userButton.setBackgroundImage(UIImage(named: "profile_icon"), forState: .Normal)
@@ -1884,6 +1954,14 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     // MARK:
     // MARK: ParseDataObject Delegate Methods
     func loginSucceeded() {
+        
+        /*************************** Fabric Analytics *********************************************/
+        Answers.logLoginWithMethod("Parse",
+            success: true,
+            customAttributes: nil)
+        print("Registered_User_login")
+        /************************* End Fabric Analytics *******************************************/
+
         self.isUserLoggedIn = true
         
         self.username.text = ""
@@ -1908,6 +1986,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     }
     
     func signupSucceeded() {
+   
         self.isUserLoggedIn = true
         
         self.namereg.resignFirstResponder()
@@ -1962,6 +2041,12 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     }
     
     func signupFailed(errorMessage: String) {
+        
+        /*************************** Fabric Analytics *********************************************/
+            Answers.logCustomEventWithName("SignUp_Attempt_Failed", customAttributes: ["Category":"User_Action"])
+            print("SignUp_Attempt_Failed")
+        /************************* End Fabric Analytics *******************************************/
+        
         self.removeViews(self.overlayView)
         self.activityIndicator.startAnimating()
         self.loadingOverlay.hidden = true

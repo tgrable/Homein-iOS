@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Answers
+import Crashlytics
 
 
 class VideosViewController: UIViewController {
@@ -63,6 +65,13 @@ class VideosViewController: UIViewController {
         super.viewDidLoad()
         view.userInteractionEnabled = false
         
+        //MARK:
+        //MARK: THIS WILL AUTOMATICALLY CRASH THE APP LEAVE THIS ALONE UNLESS CRASHLYTICS TESTING
+        /*************************** Fabric Crashlytics *********************************************/
+//        Crashlytics.sharedInstance().crash()       
+        /***************************  End Fabric Crashlytics *********************************************/
+
+        
          buildView()
         
         
@@ -107,8 +116,6 @@ class VideosViewController: UIViewController {
         guard let videoURLData = NSURL(string: JSONurlString) else {
             print("unable to load video data from URL")
             return
-            
-            
         }
         
         let videoJSONData = NSData(contentsOfURL: videoURLData)
@@ -165,7 +172,16 @@ class VideosViewController: UIViewController {
                     }
                     }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
                         print("iPad")
-                        self.frame = CGRect(x: 0, y: CGFloat(yLocation) + 20, width: self.view.bounds.size.width, height: self.view.bounds.size.height/3)
+
+                        if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                            self.frame = CGRect(x: 0, y: CGFloat(yLocation) + 20, width: self.view.bounds.size.width, height: self.view.bounds.size.height/3)
+                            print("iPad Pro !!!!!!!!!!!!!")
+                        }else {
+                            self.frame = CGRect(x: 0, y: CGFloat(yLocation) + 20, width: self.view.bounds.size.width, height: self.view.bounds.size.height/3)
+                            print("NOT iPAD PRO")
+                        }
+                    
+                    
                     }
                 
                 
@@ -222,10 +238,21 @@ class VideosViewController: UIViewController {
                         titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/20)
                     }
                     }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                    
+                    if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                        print("iPad Pro!!!")
+                        titleLabel.frame = CGRectMake(10, 420, self.view.bounds.size.width,100)
+                        titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/35)
+
+                    }else {
                         print("iPad")
                         titleLabel.frame = CGRectMake(10, 310, self.view.bounds.size.width,100)
                         titleLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/35)
+
                     }
+
+                    
+                }
              
                 
                 if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
@@ -253,10 +280,22 @@ class VideosViewController: UIViewController {
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
                     }
                     }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-                    print("iPad")
+                    
+                    if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                        print("iPad Pro!!!!")
+                        descLabel.frame = CGRectMake(10, 450, self.view.bounds.size.width, 100)
+                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/60)
+                        
+                    }else {
+                        print("iPad")
                         descLabel.frame = CGRectMake(10, 335, self.view.bounds.size.width, 100)
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/60)
+
+                        
                     }
+
+                   
+                }
                 
 
                 
@@ -286,9 +325,23 @@ class VideosViewController: UIViewController {
                         self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 385)
                     }
                 }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-                    print("iPad")
-                    yLocation += 400
-                    self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 470 )
+                    
+                    if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                        print("iPad Pro!!!!")
+                        yLocation += 550
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 560 )
+
+                        
+                    }else {
+                        print("iPad")
+                        yLocation += 400
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 470 )
+
+                        
+                        
+                    }
+
+                    
                 }
               
                 UIView.animateWithDuration(1.0, delay: 0.0, options: .CurveEaseIn, animations: { () -> Void in
@@ -386,10 +439,23 @@ class VideosViewController: UIViewController {
                  bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/15)
                  calcIcon = UIImageView(frame: CGRectMake(65, 4, 40, 40))            }
             }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+
+            
+            if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                print("iPad Pro!!!!")
+                bannerLabel = UILabel(frame: CGRectMake(350, 0, videosView.bounds.size.width - 50, 50))
+                calcIcon = UIImageView(frame: CGRectMake(310, 4, 40, 40))
+                bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/25)
+                
+                
+                
+            }else {
                 print("iPad")
-                 bannerLabel = UILabel(frame: CGRectMake(275, 0, videosView.bounds.size.width - 50, 50))
-                 calcIcon = UIImageView(frame: CGRectMake(230, 4, 40, 40))
-                 bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/25)
+                bannerLabel = UILabel(frame: CGRectMake(275, 0, videosView.bounds.size.width - 50, 50))
+                calcIcon = UIImageView(frame: CGRectMake(230, 4, 40, 40))
+                bannerLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/25)
+                
+            }
                 }
 
         let calcIcn = UIImage(named: "video_icon") as UIImage?

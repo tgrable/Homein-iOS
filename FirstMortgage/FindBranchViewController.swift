@@ -11,6 +11,8 @@ import CoreLocation
 import AddressBook
 import MapKit
 import Contacts
+import Answers
+import Crashlytics
 
 class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIPickerViewDataSource, UIPickerViewDelegate {
 
@@ -611,6 +613,12 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK:
     // MARK: - Action Methods
     func searchNewState(sender: UIButton) {
+        
+        /*************************** Fabric Analytics *********************************************/
+                Answers.logCustomEventWithName("User_Search_State_Manually", customAttributes: ["Category":"User_Action"])
+                print("User_Search_State_Manually")
+        /************************* End Fabric Analytics *******************************************/
+        
         findBranchesInMyState(stateToCheck)
         
         statesPicker.reloadAllComponents()

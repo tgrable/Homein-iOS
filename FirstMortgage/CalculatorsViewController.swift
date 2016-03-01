@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Answers
+import Crashlytics
 
 class CalculatorsViewController: UIViewController, UITextFieldDelegate {
 
@@ -790,6 +792,10 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
                 interest = Double(mortInterestTxtField.text!)!
             }
         }
+        /*************************** Fabric Analytics *********************************************/
+                Answers.logCustomEventWithName("Mortgages_Calculated", customAttributes: ["Category":"User_Action"])
+                print("Mortgages_Calculated")
+        /************************* End Fabric Analytics *******************************************/
         
         paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: 0.0))
     }
