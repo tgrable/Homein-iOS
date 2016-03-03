@@ -35,7 +35,7 @@ class VideosViewController: UIViewController {
     //Strings
     let youtubeURL = "https://www.youtube.com/watch?v="
     var titleLabel = "HELPFUL VIDEOS"
-    let errorMessage = "This device currently has no internet connection. An internet connection is required to create a new account or login to an existing account."
+    let errorMessage = "This device currently has no internet connection. An internet connection is required to view videos."
 //    let JSONurlString = "http://dev-fmc-cunningham.pantheon.io/app-video-json" /* This one is FOR TESTING ONLY */
     let JSONurlString = "https://www.firstmortgageco.com/app-video-json"  /* This one is REAL*/
 
