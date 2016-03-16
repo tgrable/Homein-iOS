@@ -297,6 +297,13 @@ class VideosViewController: UIViewController {
                    
                 }
                 
+                var sizeOfContent: CGFloat = 0
+                let lLast: UIView = scrollView.subviews.last!
+                let wd: CGFloat = lLast.frame.origin.y
+                let ht: CGFloat = lLast.frame.size.height + 225
+                sizeOfContent = wd + ht
+
+                
 
                 
           
@@ -307,38 +314,36 @@ class VideosViewController: UIViewController {
                     if result.height == 1334 /*6*/{
                         print("iPhone 6")
                         yLocation += 280
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 375)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, sizeOfContent)
                     }else if result.height == 960 /*4s*/ {
                         print("iPhone 4s")
                         yLocation += 200
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 295)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, sizeOfContent)
                     }else if result.height == 2208 /*6+*/{
                         print("iPhone 6+")
                         yLocation += 300
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 395)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, sizeOfContent)
                     }else if result.height == 1136 /*5/5s*/{
                         print("iPhone 5/5s")
                         yLocation += 240
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 335)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, sizeOfContent)
                     }else if result.height == 2001 /*Zoomed in iPhone 6+*/{
                         yLocation += 290
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 385)
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, sizeOfContent)
                     }
                 }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
                     
                     if  UIScreen.mainScreen().bounds.size.height == 1366 {
                         print("iPad Pro!!!!")
                         yLocation += 550
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 560 )
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, sizeOfContent)
 
                         
                     }else {
                         print("iPad")
                         yLocation += 400
-                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, CGFloat(self.videoList.count) * 470 )
+                        self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, sizeOfContent )
 
-                        
-                        
                     }
 
                     

@@ -247,6 +247,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         whiteBar.backgroundColor = UIColor.whiteColor()
         homeView.addSubview(whiteBar)
         
+        
+        
         let backgroundImage = UIImage(named: "homebackground") as UIImage?
         // UIImageView
         let backgroundImageView = UIImageView(frame: CGRectMake(0, 50, self.view.bounds.size.width, self.view.bounds.size.height - 135))
@@ -558,6 +560,119 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         whiteBar.addSubview(userButton)
         
         checkIfLoggedIn()
+        
+        var termsAndConditionsContainerViewFrame = CGRect()
+        var termsAndConditionsButtonViewFrame = CGRect()
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            var result = UIScreen.mainScreen().bounds.size
+            let scale = UIScreen.mainScreen().scale
+            result = CGSizeMake(result.width * scale, result.height * scale);
+            if result.height == 1334 /*6*/{
+                print("iPhone 6")
+                termsAndConditionsContainerViewFrame = CGRect(x: 10, y: -5 , width: 300, height: 50)
+                termsAndConditionsButtonViewFrame = CGRect(x:-5, y: 10 , width: 150, height: 50)
+
+            
+            }else if result.height == 960 /*4s*/ {
+                print("iPhone 4s")
+                termsAndConditionsContainerViewFrame = CGRect(x: 10, y: -5 , width: 300, height: 50)
+                termsAndConditionsButtonViewFrame = CGRect(x:-25, y: 5 , width: 150, height: 50)
+                
+            }else if result.height == 2208 /*6 PLUS*/{
+                print("iPhone 6 PLUS")
+                termsAndConditionsContainerViewFrame = CGRect(x: 10, y: -5 , width: 300, height: 50)
+                termsAndConditionsButtonViewFrame = CGRect(x:-5, y: 10 , width: 150, height: 50)
+                
+            }else if result.height == 1136 /*5/5s*/{
+                print("iPhone 5/5s")
+                termsAndConditionsContainerViewFrame = CGRect(x: 10, y: -5 , width: 300, height: 50)
+                termsAndConditionsButtonViewFrame = CGRect(x:-25, y: 5 , width: 150, height: 50)
+            }else if result.height == 2001 {
+                print("zoomed in iPhone six plus")
+                termsAndConditionsContainerViewFrame = CGRect(x: 10, y: -5 , width: 300, height: 50)
+                termsAndConditionsButtonViewFrame = CGRect(x:-5, y: 10 , width: 150, height: 50)
+                
+            }
+        }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            print("iPad")
+            
+            if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                print("iPad Pro !!!!!!!!!!!!!")
+                termsAndConditionsContainerViewFrame = CGRect(x: 10, y: -5 , width: 300, height: 50)
+                termsAndConditionsButtonViewFrame = CGRect(x:-5, y: 10 , width: 150, height: 50)
+            }else {
+                print("NOT iPAD PRO")
+                termsAndConditionsContainerViewFrame = CGRect(x: 10, y: -5 , width: 300, height: 50)
+                termsAndConditionsButtonViewFrame = CGRect(x:-5, y: 10 , width: 150, height: 50)
+            }
+            
+            
+        }
+
+
+        let termsAndConditionsContentView = UILabel(frame: termsAndConditionsContainerViewFrame)
+        termsAndConditionsContentView.backgroundColor = UIColor.clearColor()
+        termsAndConditionsContentView.text = "By using the HomeIn App you agree to our"
+        
+        whiteBar.addSubview(termsAndConditionsContentView)
+        
+        let termsAndConditionsButton = UIButton(frame: termsAndConditionsButtonViewFrame)
+        termsAndConditionsButton.setTitle("terms and conditions", forState: .Normal)
+        termsAndConditionsButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        
+        termsAndConditionsButton.addTarget(self, action: "termsAndConditions", forControlEvents: .TouchUpInside)
+        whiteBar.addSubview(termsAndConditionsButton)
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            var result = UIScreen.mainScreen().bounds.size
+            let scale = UIScreen.mainScreen().scale
+            result = CGSizeMake(result.width * scale, result.height * scale);
+            if result.height == 1334 /*6*/{
+                print("iPhone 6")
+                termsAndConditionsContentView.font = UIFont(name: "forza-light", size: 12)
+                termsAndConditionsButton.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+                
+            }else if result.height == 960 /*4s*/ {
+                print("iPhone 4s")
+                termsAndConditionsContentView.font = UIFont(name: "forza-light", size: 8)
+                termsAndConditionsButton.titleLabel?.font = UIFont(name: "forza-light", size: 8)
+                
+            }else if result.height == 2208 /*6 PLUS*/{
+                print("iPhone 6 PLUS")
+                termsAndConditionsContentView.font = UIFont(name: "forza-light", size: 12)
+                termsAndConditionsButton.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+            }else if result.height == 1136 /*5/5s*/{
+                print("iPhone 5/5s")
+                termsAndConditionsContentView.font = UIFont(name: "forza-light", size: 8)
+                termsAndConditionsButton.titleLabel?.font = UIFont(name: "forza-light", size: 8)
+                
+            }else if result.height == 2001 {
+                print("zoomed in iPhone six plus")
+                termsAndConditionsContentView.font = UIFont(name: "forza-light", size: 12)
+                termsAndConditionsButton.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+                
+            }
+        }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            print("iPad")
+            
+            if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                print("iPad Pro !!!!!!!!!!!!!")
+                termsAndConditionsContentView.font = UIFont(name: "forza-light", size: 12)
+                termsAndConditionsButton.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+            }else {
+                print("NOT iPAD PRO")
+                termsAndConditionsContentView.font = UIFont(name: "forza-light", size: 12)
+                termsAndConditionsButton.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+            }
+            
+            
+        }
+
+        
+        
+        
+        
     }
     
     func buildCreateAccountView() {
@@ -1037,6 +1152,121 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         closeSignUpFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
         signUpView.addSubview(closeSignUpFormButton)
         
+        
+        var termsFrame = CGRect()
+        var termsButtonFrame = CGRect()
+        
+        
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            var result = UIScreen.mainScreen().bounds.size
+            let scale = UIScreen.mainScreen().scale
+            result = CGSizeMake(result.width * scale, result.height * scale);
+            if result.height == 1334 /*6*/{
+                print("iPhone 6")
+                termsFrame = CGRect(x: 70, y: closeSignUpFormButton.frame.origin.y + 50, width: 300, height: 20)
+                termsButtonFrame = CGRect(x: 68, y: closeSignUpFormButton.frame.origin.y + 70, width: 125, height: 20)
+            }else if result.height == 960 /*4s*/ {
+                print("iPhone 4s")
+                
+                termsFrame = CGRect(x: 10, y: signUpButton.frame.origin.y - 20 , width: 300, height: 20)
+                termsButtonFrame = CGRect(x: 147, y: signUpButton.frame.origin.y - 20 , width: 125, height: 20)
+            }else if result.height == 2208 /*6 PLUS*/{
+                print("iPhone 6 PLUS")
+                termsFrame = CGRect(x: 30, y: closeSignUpFormButton.frame.origin.y + 50, width: self.view.bounds.size.width, height: 20)
+                termsButtonFrame = CGRect(x: 267, y: closeSignUpFormButton.frame.origin.y + 50, width: 125, height: 20)
+            }else if result.height == 1136 /*5/5s*/{
+                print("iPhone 5/5s")
+                
+                termsFrame = CGRect(x: 40, y: closeSignUpFormButton.frame.origin.y + 35, width: 300, height: 20)
+                termsButtonFrame = CGRect(x: 38, y: closeSignUpFormButton.frame.origin.y + 50, width: 125, height: 20)
+                
+            }else if result.height == 2001 {
+                print("zoomed in iPhone six plus")
+                
+                termsFrame = CGRect(x: 10, y: closeSignUpFormButton.frame.origin.y + 50, width: self.view.bounds.size.width, height: 20)
+                termsButtonFrame = CGRect(x: 245, y: closeSignUpFormButton.frame.origin.y + 50, width: 125, height: 20)
+              
+            }
+        }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            print("iPad")
+            
+            if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                print("iPad Pro !!!!!!!!!!!!!")
+                termsFrame = CGRect(x: 280, y: closeSignUpFormButton.frame.origin.y + 50, width: self.view.bounds.size.width, height: 20)
+                termsButtonFrame = CGRect(x: 590, y: closeSignUpFormButton.frame.origin.y + 50, width: 175, height: 20)
+
+            }else {
+                print("NOT iPAD PRO")
+                termsFrame = CGRect(x: 210, y: closeSignUpFormButton.frame.origin.y + 50, width: self.view.bounds.size.width, height: 20)
+                termsButtonFrame = CGRect(x: 445, y: closeSignUpFormButton.frame.origin.y + 50, width: 125, height: 20)
+            }
+            
+            
+        }
+        
+        let termsAndConditions = UILabel(frame:termsFrame)
+        let termsLink = UIButton(frame: termsButtonFrame)
+
+        termsAndConditions.text = "By using the HomeIn App you agree to our"
+        
+        termsAndConditions.textColor = UIColor.blackColor()
+        signUpView.addSubview(termsAndConditions)
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            var result = UIScreen.mainScreen().bounds.size
+            let scale = UIScreen.mainScreen().scale
+            result = CGSizeMake(result.width * scale, result.height * scale);
+            if result.height == 1334 /*6*/{
+                print("iPhone 6")
+                termsAndConditions.font = UIFont(name: "forza-light", size: 12)
+                termsLink.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+            }else if result.height == 960 /*4s*/ {
+                print("iPhone 4s")
+                termsAndConditions.font = UIFont(name: "forza-light", size: 8)
+                termsLink.titleLabel?.font = UIFont(name: "forza-light", size: 8)
+
+            }else if result.height == 2208 /*6 PLUS*/{
+                print("iPhone 6 PLUS")
+                termsAndConditions.font = UIFont(name: "forza-light", size: 12)
+                termsLink.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+                
+            }else if result.height == 1136 /*5/5s*/{
+                print("iPhone 5/5s")
+                termsAndConditions.font = UIFont(name: "forza-light", size: 12)
+                termsLink.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+                
+            }else if result.height == 2001 {
+                print("zoomed in iPhone six plus")
+                termsAndConditions.font = UIFont(name: "forza-light", size: 12)
+                termsLink.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+                
+            }
+        }else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            print("iPad")
+            
+            if  UIScreen.mainScreen().bounds.size.height == 1366 {
+                print("iPad Pro !!!!!!!!!!!!!")
+                termsAndConditions.font = UIFont(name: "forza-light", size: 16)
+                termsLink.titleLabel?.font = UIFont(name: "forza-light", size: 16)
+
+            }else {
+                print("NOT iPAD PRO")
+                termsAndConditions.font = UIFont(name: "forza-light", size: 12)
+                termsLink.titleLabel?.font = UIFont(name: "forza-light", size: 12)
+
+            }
+            
+            
+        }
+        
+        
+        termsLink.setTitle("terms and conditions.", forState: .Normal)
+        termsLink.addTarget(self, action: "termsAndConditions", forControlEvents: .TouchUpInside)
+        
+        termsLink.setTitleColor(UIColor.blueColor(), forState: .Normal)
+        signUpView.addSubview(termsLink)
+        
         swipeRec.direction = UISwipeGestureRecognizerDirection.Right
         swipeRec.addTarget(self, action: "swipeBackToLogin")
         signUpView.addGestureRecognizer(swipeRec)
@@ -1050,6 +1280,19 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         let statusBarView = UIView(frame: CGRectMake(0, 0, self.view.bounds.width, 25))
         statusBarView.backgroundColor = model.lightGrayColor
         self.view.addSubview(statusBarView)
+    }
+    
+    func termsAndConditions(){
+        
+        print("terms and conditions tapped")
+        let urlString = "https://www.firstmortgageco.com/privacy-policy"
+        
+        guard let URL = NSURL(string: urlString) else {
+            print("unable to open terms and conditions URL")
+            return
+        }
+        
+        UIApplication.sharedApplication().openURL(URL)
     }
     
     // MARK:
