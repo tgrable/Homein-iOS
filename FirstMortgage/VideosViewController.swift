@@ -283,13 +283,13 @@ class VideosViewController: UIViewController {
                     
                     if  UIScreen.mainScreen().bounds.size.height == 1366 {
                         print("iPad Pro!!!!")
-                        descLabel.frame = CGRectMake(10, 450, self.view.bounds.size.width, 100)
+                        descLabel.frame = CGRectMake(10, 450, self.view.bounds.size.width - 200, 100)
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/60)
                         
                     }else {
                         print("iPad")
-                        descLabel.frame = CGRectMake(10, 335, self.view.bounds.size.width, 100)
-                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/60)
+                        descLabel.frame = CGRectMake(10, 335, self.view.bounds.size.width - 200, 100)
+                        descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/80)
 
                         
                     }

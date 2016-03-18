@@ -17,10 +17,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loadscreen_background.png" translatesAutoresizingMaskIntoConstraints="NO" id="bfq-yq-46E">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loadbackground.png" translatesAutoresizingMaskIntoConstraints="NO" id="bfq-yq-46E">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loadscreen_overlay.png" translatesAutoresizingMaskIntoConstraints="NO" id="KjF-ol-7Kx">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loadscreenoverlay.png" translatesAutoresizingMaskIntoConstraints="NO" id="KjF-ol-7Kx">
                                 <rect key="frame" x="108" y="44" width="384" height="512"/>
                             </imageView>
                         </subviews>
@@ -41,7 +41,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="loadscreen_background.png" width="384" height="512"/>
-        <image name="loadscreen_overlay.png" width="384" height="512"/>
+        <image name="loadbackground.png" width="384" height="512"/>
+        <image name="loadscreenoverlay.png" width="384" height="512"/>
     </resources>
 </document>
