@@ -35,8 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             PFACL.setDefaultACL(PFACL(), withAccessForCurrentUser: true)
             
 
-            Fabric.with([Answers.self, Crashlytics.self])
-
+//            Fabric.with([Answers.self, Crashlytics.self])
+            
+  
+//            Fabric.sharedSDK().debug = true
+//            Fabric.with([Crashlytics.self()])
             
             
         }

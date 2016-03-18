@@ -796,32 +796,33 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
     // MARK: ParseDataObject Delegate Methods
     func saveSucceeded() {
         print("homeWasSaved Delegate Method was called")
-        
-        homeNameTxtField.text = ""
-        homePriceTxtField.text = ""
-        homeAddressTxtField.text = ""
-        sqFeetTxtField.text = ""
-        descTxtView.text = ""
-        imageView.image = nil
-        
-        for i in 0...4 {
-            let button = self.ratingButtonArray[i] as UIButton
-            button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
-        }
-        
-        self.activityIndicator.stopAnimating()
-        
-        let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
-        
-        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-            self.overlayView.hidden = true
-            self.performSegueWithIdentifier("addHomeToTableView", sender: nil)
-        }
-        
-        alertController.addAction(OKAction)
-        
-        self.presentViewController(alertController, animated: true) {
-            // ...
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            self.homeNameTxtField.text = ""
+            self.homePriceTxtField.text = ""
+            self.homeAddressTxtField.text = ""
+            self.sqFeetTxtField.text = ""
+            //        descTxtView.text = ""
+            self.imageView.image = nil
+            
+            for i in 0...4 {
+                let button = self.ratingButtonArray[i] as UIButton
+                button.setImage(UIImage(named: "star_off_icon"), forState: .Normal)
+            }
+            
+            self.activityIndicator.stopAnimating()
+            
+            let alertController = UIAlertController(title: "HomeIn", message: "This house has been added.", preferredStyle: .Alert)
+            
+            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                self.overlayView.hidden = true
+                self.performSegueWithIdentifier("addHomeToTableView", sender: nil)
+            }
+            
+            alertController.addAction(OKAction)
+            
+            self.presentViewController(alertController, animated: true) {
+                // ...
+            }
         }
     }
     

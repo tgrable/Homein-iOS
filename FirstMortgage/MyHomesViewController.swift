@@ -365,7 +365,17 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
     func getAllHomesForUser(sortOrder: String, sortDirection: Bool) {
         // TODO: revisit this. 
         //parseObject.getAllHomesForUser(sortOrder, sortDirection: sortDirection, fromLocalDataStore: reachability.isConnectedToNetwork())
-        parseObject.getAllHomesForUser(sortOrder, sortDirection: sortDirection, fromLocalDataStore: false)
+        
+        var notConnected = false
+        
+        if !reachability.isConnectedToNetwork() {
+            
+            notConnected = true
+            print("not connected")
+            
+        }
+        
+        parseObject.getAllHomesForUser(sortOrder, sortDirection: sortDirection, fromLocalDataStore: notConnected)
     }
     
     // MARK:

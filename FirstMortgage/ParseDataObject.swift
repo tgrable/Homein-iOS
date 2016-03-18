@@ -108,8 +108,8 @@ class ParseDataObject: NSObject {
         user.saveInBackgroundWithBlock { (success: Bool, error: NSError?) -> Void in
             if (success) {
                 if (officerEmail.characters.count > 0) {
-                    
-                    self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
+                    //TODO: DONT FUCKING FORGET TO UNCOMMENT THIS SHIZZ
+//                    self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
                 }
                 self.delegate?.saveSucceeded!()
             }
@@ -118,6 +118,12 @@ class ParseDataObject: NSObject {
                 self.delegate?.saveFailed!(errorString!)
             }
         }
+    }
+    
+    func saveUserEventually(user: PFUser, officerEmail: String) {
+        user.saveEventually()
+        delegate?.saveSucceeded!()
+//        self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
     }
     
     func emailLoanOfficer(name: String, email: String, loanOfficer: String) {

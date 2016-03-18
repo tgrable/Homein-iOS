@@ -49,6 +49,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     var geoLocatorHasFired = false
     var didFireRunLocationSearch = false
     
+    let errorMessage = "This device currently has no internet connection. An internet connection is required to view videos."
+    
     // UIPickerView
     let statesPicker = UIPickerView() as UIPickerView
     
@@ -157,8 +159,31 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         }
         else {
             let defaults = NSUserDefaults.standardUserDefaults()
-            stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
-            branchArray = defaults.objectForKey("branchOfficeArrayDict") as! Array<Dictionary<String, String>>
+            if let _ = defaults.objectForKey("branchOfficeArray") {
+                stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
+            }
+            else {
+                // this will likely never get called
+                let alertController = UIAlertController(title: "HomeIn", message: errorMessage, preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    
+                    self.navigationController?.popViewControllerAnimated(true)
+                    
+                }
+                
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    
+                }
+                
+            }
+            if let _ = defaults.objectForKey("branchOfficeArrayDict") {
+                branchArray = defaults.objectForKey("branchOfficeArrayDict") as! Array<Dictionary<String, String>>
+            }
+//            stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
+//            branchArray = defaults.objectForKey("branchOfficeArrayDict") as! Array<Dictionary<String, String>>
             
             runTimedCode()
         }
@@ -290,8 +315,11 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     func getBranchJson() {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             var states = [String]()
-            let endpoint = NSURL(string: "https://www.firstmortgageco.com/branch-json")
-            let data = NSData(contentsOfURL: endpoint!)
+            guard let endpoint = NSURL(string: "https://www.firstmortgageco.com/branch-json") else {
+                print("Unable to get URL")
+                return
+            }
+            let data = NSData(contentsOfURL: endpoint)
             do {
                 let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
                 if let nodes = json as? NSArray {

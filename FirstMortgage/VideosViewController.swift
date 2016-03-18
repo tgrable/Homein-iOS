@@ -67,9 +67,9 @@ class VideosViewController: UIViewController {
         
         //MARK:
         //MARK: THIS WILL AUTOMATICALLY CRASH THE APP LEAVE THIS ALONE UNLESS CRASHLYTICS TESTING
-        /*************************** Fabric Crashlytics *********************************************/
+       /************************** Fabric Crashlytics ********************************************/
 //        Crashlytics.sharedInstance().crash()       
-        /***************************  End Fabric Crashlytics *********************************************/
+        /**************************  End Fabric Crashlytics ********************************************/
 
         
          buildView()
@@ -86,11 +86,11 @@ class VideosViewController: UIViewController {
             let alertController = UIAlertController(title: "HomeIn", message: errorMessage, preferredStyle: .Alert)
             
             let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                self.spinner.stopAnimating()
-                self.spinner.removeFromSuperview()
-                self.loadTimer.invalidate()
+                
+                self.navigationController?.popViewControllerAnimated(true)
                 
             }
+            
             alertController.addAction(OKAction)
             
             self.presentViewController(alertController, animated: true) {

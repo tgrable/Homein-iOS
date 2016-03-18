@@ -983,7 +983,13 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         user!["officerName"] = name
         user!["officerURL"] = url
         
-        parseObject.saveUser(user!, officerEmail: officerEmail)
+        
+        if reachability.isConnectedToNetwork() {
+            parseObject.saveUser(user!, officerEmail: officerEmail)
+        }
+        else {
+            parseObject.saveUserEventually(user!, officerEmail: officerEmail)
+        }
     }
     
     func removeLoanOfficerFromParseUser() {
@@ -996,7 +1002,13 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         user!["officerName"] = ""
         user!["officerNid"] = 0
         
-        parseObject.saveUser(user!, officerEmail: officerEmail)
+        if reachability.isConnectedToNetwork() {
+            parseObject.saveUser(user!, officerEmail: officerEmail)
+        }
+        else {
+            parseObject.saveUserEventually(user!, officerEmail: officerEmail)
+        }
+        
     }
     
     func updateUser(sender: UIButton) {
@@ -1006,7 +1018,13 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         user!["name"] = (nameTxtField.text != "") ? nameTxtField.text : user!["name"]
         user!["email"] = (emailTxtField.text != "") ? emailTxtField.text?.lowercaseString : user!["email"]
         
-        parseObject.saveUser(user!, officerEmail: "")
+        if reachability.isConnectedToNetwork() {
+            parseObject.saveUser(user!, officerEmail: "")
+        }
+        else {
+            parseObject.saveUserEventually(user!, officerEmail: "")
+        }
+        
     }
     
     // MARK: 
