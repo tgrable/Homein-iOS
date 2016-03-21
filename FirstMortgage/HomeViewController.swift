@@ -102,6 +102,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        print(NSUserDefaults.standardUserDefaults().dictionaryRepresentation());
+        
         //MARK:
         //MARK: THIS WILL AUTOMATICALLY CRASH THE APP LEAVE THIS ALONE UNLESS CRASHLYTICS TESTING
         /*************************** Fabric Crashlytics *********************************************/
@@ -676,22 +678,62 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     }
     
     func buildCreateAccountView() {
+        print("buildCreateAccountView()")
+        
         let defaults = NSUserDefaults.standardUserDefaults()
-        if (defaults.objectForKey("loanOfficerArray") != nil) {
+        
+        //Check if loanOfficerArrayDateSet is set in NSUserDefaults
+        if (defaults.objectForKey("loanOfficerArrayDateSet") != nil) {
+            let now = NSDate()
+            let setDate = defaults.objectForKey("loanOfficerArrayDateSet") as! NSDate
             
-            if let _ = defaults.objectForKey("loanOfficerArray") {
-                // now val is not nil and the Optional has been unwrapped, so use it
-                let val = defaults.objectForKey("loanOfficerArray")
-                let firstLo = val![0] as! Dictionary<String, String>
-                if let _ = firstLo["nmls"] {
-                    self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
-                    self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+            let order = NSCalendar.currentCalendar().compareDate(now, toDate: setDate,
+                toUnitGranularity: .Day)
+            
+            //order == .OrderedDescending the date has expired and JSON data needs to be fetched again.
+            if order == .OrderedDescending {
+                print("order == .OrderedDescending")
+                
+                if reachability.isConnectedToNetwork() {
+                    getBranchJSON()
                 }
                 else {
-                    if reachability.isConnectedToNetwork() {
-                        getBranchJSON()
+                    
+                    //Check if loanOfficerArray is set in NSUserDefaults
+                    if (defaults.objectForKey("loanOfficerArray") != nil) {
+                        if let _ = defaults.objectForKey("loanOfficerArray") {
+                            
+                            // now val is not nil and the Optional has been unwrapped, so use it
+                            let val = defaults.objectForKey("loanOfficerArray")
+                            let firstLo = val![0] as! Dictionary<String, String>
+                            
+                            //Check that the nmls field has been set
+                            //this was added later so there is a chance som users will not have this field set.
+                            if let _ = firstLo["nmls"] {
+                                self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
+                                self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+                            }
+                            else {
+                                if reachability.isConnectedToNetwork() {
+                                    getBranchJSON()
+                                }
+                            }
+                        }
+                        else {
+                            if reachability.isConnectedToNetwork() {
+                                getBranchJSON()
+                            }
+                        }
+                    }
+                    else {
+                        if reachability.isConnectedToNetwork() {
+                            getBranchJSON()
+                        }
                     }
                 }
+            }
+            else {
+                print("order != .OrderedDescending")
             }
         }
         else {
@@ -1492,6 +1534,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     }
     
     func getBranchJSON() {
+        print("getBranchJSON()")
+        
         loadingOverlay.hidden = false
         activityIndicator.startAnimating()
         
@@ -1509,6 +1553,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             }
         }
 
+        let now = NSDate()
+        defaults.setObject(now, forKey: "loanOfficerArrayDateSet")
         defaults.setObject(self.loanOfficerArray, forKey: "loanOfficerArray")
         
         self.activityIndicator.stopAnimating()

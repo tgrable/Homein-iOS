@@ -217,37 +217,58 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     }
 
     override func viewDidAppear(animated: Bool) {
+        
+        print("\(loanOfficerArray.count)")
 
         getUserAndLoInfo()
+        let defaults = NSUserDefaults.standardUserDefaults()
         
         if self.reachability.isConnectedToNetwork() == false {
+            if (defaults.objectForKey("loanOfficerArray") != nil) {
+                print("From NSUserDefaults")
+                
+                self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
+                self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+            }
+            
             displayMessage("HomeIn", message: "This device currently has no internet connection.\n\nUpdating a loan officer will not be possible until an internet connection is reestablished.")
         }
         else {
-            if (self.loanOfficerArray.count <= 0) {
-                let defaults = NSUserDefaults.standardUserDefaults()
-                if (defaults.objectForKey("loanOfficerArray") != nil) {
-                    self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
-                    self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
-                }
-                else {
-                    dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                        let nodes = self.model.getBranchLoanOfficers()
-                        
-                        self.loanOfficerArray.removeAll()
-                        self.tempArray.removeAll()
-                        
-                        for node in nodes {
-                            if let nodeDict = node as? NSDictionary {
-                                self.loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
-                                self.tempArray.append(nodeDict as! Dictionary<String, String>)
-                            }
+            
+            if (defaults.objectForKey("loanOfficerArray") != nil) {
+                print("From NSUserDefaults")
+                
+                self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
+                self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+            }
+            else {
+                print("From NSUserDefaults")
+                
+                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                    let nodes = self.model.getBranchLoanOfficers()
+                    
+                    self.loanOfficerArray.removeAll()
+                    self.tempArray.removeAll()
+                    
+                    for node in nodes {
+                        if let nodeDict = node as? NSDictionary {
+                            self.loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
+                            self.tempArray.append(nodeDict as! Dictionary<String, String>)
                         }
-
-                        defaults.setObject(self.loanOfficerArray, forKey: "loanOfficerArray")
                     }
+                    
+                    let now = NSDate()
+                    defaults.setObject(now, forKey: "loanOfficerArrayDateSet")
+                    defaults.setObject(self.loanOfficerArray, forKey: "loanOfficerArray")
                 }
             }
+            
+//            if (self.loanOfficerArray.count <= 0) {
+//                print("self.loanOfficerArray.count <= 0")
+//            }
+//            else {
+//                print("self.loanOfficerArray.count >= 0")
+//            }
         }
     }
     
@@ -488,11 +509,15 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                 buildLoanOfficerCard(loDict as! Dictionary<String, String>, yVal: 110, count: 0, view: profileView, isSingleView: true)
             }
             else {
-                getLoInfoFromDictionary()
+                if reachability.isConnectedToNetwork() {
+                    getLoInfoFromDictionary()
+                }
             }
         }
         else {
-            getLoInfoFromDictionary()
+            if reachability.isConnectedToNetwork() {
+                getLoInfoFromDictionary()
+            }
         }
         
         loActivityIndicator.stopAnimating()
@@ -500,38 +525,66 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     
     func getLoInfoFromDictionary() {
         var userLo = ""
-        if let _ = user!["officerName"] {
-            userLo = user!["officerName"] as! String
-            
-            if userLo.characters.count > 0 {
-                let filteredArray = loanOfficerArray.filter({
-                    $0["name"] == userLo
-                })
+        if loanOfficerArray.count > 0 {
+            if let _ = user!["officerName"] {
+                userLo = user!["officerName"] as! String
                 
-                var nodeDict = Dictionary<String, String>()
-                nodeDict["nid"] = filteredArray[0]["nid"]
-                nodeDict["email"] = filteredArray[0]["email"]
-                nodeDict["mobile"] = filteredArray[0]["mobile"]
-                nodeDict["office"] = filteredArray[0]["office"]
-                nodeDict["url"] = filteredArray[0]["url"]
-                nodeDict["name"] = filteredArray[0]["name"]
-                nodeDict["image"] = filteredArray[0]["image"]
-                nodeDict["nmls"] = filteredArray[0]["nmls"]
-                
-                let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
-                
-                let defaults = NSUserDefaults.standardUserDefaults()
-                defaults.removeObjectForKey(dictString)
-                defaults.setObject(nodeDict, forKey: dictString)
-                
-                buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+                if userLo.characters.count > 0 {
+                    let filteredArray = loanOfficerArray.filter({
+                        $0["name"] == userLo
+                    })
+                    
+                    var nodeDict = Dictionary<String, String>()
+                    nodeDict["nid"] = filteredArray[0]["nid"]
+                    nodeDict["email"] = filteredArray[0]["email"]
+                    nodeDict["mobile"] = filteredArray[0]["mobile"]
+                    nodeDict["office"] = filteredArray[0]["office"]
+                    nodeDict["url"] = filteredArray[0]["url"]
+                    nodeDict["name"] = filteredArray[0]["name"]
+                    nodeDict["image"] = filteredArray[0]["image"]
+                    nodeDict["nmls"] = filteredArray[0]["nmls"]
+                    
+                    let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
+                    
+                    let defaults = NSUserDefaults.standardUserDefaults()
+                    defaults.removeObjectForKey(dictString)
+                    defaults.setObject(nodeDict, forKey: dictString)
+                    
+                    buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+                }
+                else {
+                    buildNoLoCard()
+                }
             }
             else {
                 buildNoLoCard()
             }
         }
         else {
-            buildNoLoCard()
+            if reachability.isConnectedToNetwork() {
+                UpdateLoanOfficerArray()
+            }
+        }
+    }
+    
+    func UpdateLoanOfficerArray() {
+        let endpoint = NSURL(string: "https://www.firstmortgageco.com/loan-officers-json")
+        let data = NSData(contentsOfURL: endpoint!)
+        do {
+            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
+            if let nodes = json as? NSArray {
+                for node in nodes {
+                    if let nodeDict = node as? NSDictionary {
+                        loanOfficerArray.append(nodeDict as! Dictionary<String, String>)
+                        tempArray.append(nodeDict as! Dictionary<String, String>)
+                    }
+                }
+                
+                getLoInfoFromDictionary()
+            }
+        }
+        catch {
+            displayMessage("HomeIn", message: "An error occurred getting the loan officer information.")
         }
     }
     
@@ -1124,6 +1177,11 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                     let hvc = self.storyboard!.instantiateViewControllerWithIdentifier("homeViewController") as! HomeViewController
                     hvc.isUserLoggedIn = false
                     hvc.isLoginViewOpen = false
+                    
+                    //Remove all NSUserDefaults on logout
+                    for key in Array(NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys) {
+                        NSUserDefaults.standardUserDefaults().removeObjectForKey(key)
+                    }
                     
                     self.navigationController!.popToRootViewControllerAnimated(true)
                 }

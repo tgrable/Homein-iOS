@@ -123,14 +123,13 @@ class ParseDataObject: NSObject {
     func saveUserEventually(user: PFUser, officerEmail: String) {
         user.saveEventually()
         delegate?.saveSucceeded!()
-//        self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
     }
     
     func emailLoanOfficer(name: String, email: String, loanOfficer: String) {
 
-        PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : name, "email": email, "officer" : loanOfficer]) { (result: AnyObject?, error: NSError?) in
-            print("----- Email LO -----")
-        }
+//        PFCloud.callFunctionInBackground("loanOfficer", withParameters: ["name" : name, "email": email, "officer" : loanOfficer]) { (result: AnyObject?, error: NSError?) in
+//            print("----- Email LO -----")
+//        }
     }
     
     // MARK:
