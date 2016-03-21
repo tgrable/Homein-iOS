@@ -49,7 +49,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     var geoLocatorHasFired = false
     var didFireRunLocationSearch = false
     
-    let errorMessage = "This device currently has no internet connection. An internet connection is required to view videos."
+    let errorMessage = "This device currently has no internet connection. An internet connection is required to use this feature."
     
     // UIPickerView
     let statesPicker = UIPickerView() as UIPickerView
@@ -163,7 +163,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
             }
             else {
-                // this will likely never get called
+
                 let alertController = UIAlertController(title: "HomeIn", message: errorMessage, preferredStyle: .Alert)
                 
                 let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
