@@ -1169,8 +1169,33 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             
             self.navigationController!.popToRootViewControllerAnimated(true)
         case 1:
-            PFUser.logOutInBackgroundWithBlock { (error: NSError?) -> Void in
-                if (error == nil) {
+            
+            if reachability.isConnectedToNetwork() {
+                PFUser.logOutInBackgroundWithBlock { (error: NSError?) -> Void in
+                    if (error == nil) {
+                        let hvc = self.storyboard!.instantiateViewControllerWithIdentifier("homeViewController") as! HomeViewController
+                        hvc.isUserLoggedIn = false
+                        hvc.isLoginViewOpen = false
+                        
+                        //Remove all NSUserDefaults on logout
+                        for key in Array(NSUserDefaults.standardUserDefaults().dictionaryRepresentation().keys) {
+                            NSUserDefaults.standardUserDefaults().removeObjectForKey(key)
+                        }
+                        
+                        self.navigationController!.popToRootViewControllerAnimated(true)
+                    }
+                    else {
+                        print("logout error: ", error?.userInfo)
+                    }
+                }
+            }
+            else {
+                
+                let alertController = UIAlertController(title: "Homein", message: "You currently do not have an internt connection. Please wait while we try to log you out.", preferredStyle: .Alert)
+                
+                let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+                    PFUser.logOut()
+                    
                     let hvc = self.storyboard!.instantiateViewControllerWithIdentifier("homeViewController") as! HomeViewController
                     hvc.isUserLoggedIn = false
                     hvc.isLoginViewOpen = false
@@ -1182,10 +1207,14 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                     
                     self.navigationController!.popToRootViewControllerAnimated(true)
                 }
-                else {
-                    print("logout error: ", error?.userInfo)
+                
+                alertController.addAction(OKAction)
+                
+                self.presentViewController(alertController, animated: true) {
+                    
                 }
             }
+
         default:
             break
         }
