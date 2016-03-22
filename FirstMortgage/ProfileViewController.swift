@@ -217,33 +217,25 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     }
 
     override func viewDidAppear(animated: Bool) {
-        
-        print("\(loanOfficerArray.count)")
-
         getUserAndLoInfo()
         let defaults = NSUserDefaults.standardUserDefaults()
         
         if self.reachability.isConnectedToNetwork() == false {
             if (defaults.objectForKey("loanOfficerArray") != nil) {
-                print("From NSUserDefaults")
-                
                 self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
                 self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
             }
+            getLoInfoFromDictionary()
             
             displayMessage("HomeIn", message: "This device currently has no internet connection.\n\nUpdating a loan officer will not be possible until an internet connection is reestablished.")
         }
         else {
             
             if (defaults.objectForKey("loanOfficerArray") != nil) {
-                print("From NSUserDefaults")
-                
                 self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
                 self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
             }
             else {
-                print("From NSUserDefaults")
-                
                 dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
                     let nodes = self.model.getBranchLoanOfficers()
                     
@@ -534,23 +526,28 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                         $0["name"] == userLo
                     })
                     
-                    var nodeDict = Dictionary<String, String>()
-                    nodeDict["nid"] = filteredArray[0]["nid"]
-                    nodeDict["email"] = filteredArray[0]["email"]
-                    nodeDict["mobile"] = filteredArray[0]["mobile"]
-                    nodeDict["office"] = filteredArray[0]["office"]
-                    nodeDict["url"] = filteredArray[0]["url"]
-                    nodeDict["name"] = filteredArray[0]["name"]
-                    nodeDict["image"] = filteredArray[0]["image"]
-                    nodeDict["nmls"] = filteredArray[0]["nmls"]
-                    
-                    let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
-                    
-                    let defaults = NSUserDefaults.standardUserDefaults()
-                    defaults.removeObjectForKey(dictString)
-                    defaults.setObject(nodeDict, forKey: dictString)
-                    
-                    buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+                    if filteredArray.count > 0 {
+                        var nodeDict = Dictionary<String, String>()
+                        nodeDict["nid"] = filteredArray[0]["nid"]
+                        nodeDict["email"] = filteredArray[0]["email"]
+                        nodeDict["mobile"] = filteredArray[0]["mobile"]
+                        nodeDict["office"] = filteredArray[0]["office"]
+                        nodeDict["url"] = filteredArray[0]["url"]
+                        nodeDict["name"] = filteredArray[0]["name"]
+                        nodeDict["image"] = filteredArray[0]["image"]
+                        nodeDict["nmls"] = filteredArray[0]["nmls"]
+                        
+                        let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
+                        
+                        let defaults = NSUserDefaults.standardUserDefaults()
+                        defaults.removeObjectForKey(dictString)
+                        defaults.setObject(nodeDict, forKey: dictString)
+                        
+                        buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+                    }
+                    else {
+                        buildNoLoCard()
+                    }
                 }
                 else {
                     buildNoLoCard()

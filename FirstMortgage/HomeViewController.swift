@@ -678,8 +678,6 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     }
     
     func buildCreateAccountView() {
-        print("buildCreateAccountView()")
-        
         let defaults = NSUserDefaults.standardUserDefaults()
         
         //Check if loanOfficerArrayDateSet is set in NSUserDefaults
@@ -692,17 +690,13 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             
             //order == .OrderedDescending the date has expired and JSON data needs to be fetched again.
             if order == .OrderedDescending {
-                print("order == .OrderedDescending")
-                
                 if reachability.isConnectedToNetwork() {
                     getBranchJSON()
                 }
                 else {
-                    
                     //Check if loanOfficerArray is set in NSUserDefaults
                     if (defaults.objectForKey("loanOfficerArray") != nil) {
                         if let _ = defaults.objectForKey("loanOfficerArray") {
-                            
                             // now val is not nil and the Optional has been unwrapped, so use it
                             let val = defaults.objectForKey("loanOfficerArray")
                             let firstLo = val![0] as! Dictionary<String, String>
@@ -733,7 +727,9 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
                 }
             }
             else {
-                print("order != .OrderedDescending")
+                if reachability.isConnectedToNetwork() {
+                    getBranchJSON()
+                }
             }
         }
         else {
@@ -1534,8 +1530,6 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     }
     
     func getBranchJSON() {
-        print("getBranchJSON()")
-        
         loadingOverlay.hidden = false
         activityIndicator.startAnimating()
         
