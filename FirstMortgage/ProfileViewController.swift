@@ -1191,7 +1191,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             }
             else {
                 
-                let alertController = UIAlertController(title: "Homein", message: "You currently do not have an internt connection. Please wait while we try to log you out.", preferredStyle: .Alert)
+                let alertController = UIAlertController(title: "HomeIn", message: "You currently do not have an internet connection. Please wait while we try to log you out.", preferredStyle: .Alert)
                 
                 let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
                     PFUser.logOut()
