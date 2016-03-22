@@ -261,7 +261,7 @@ class VideosViewController: UIViewController {
                     result = CGSizeMake(result.width * scale, result.height * scale);
                     if result.height == 1334 /*6*/{
                         print("iPhone 6")
-                        descLabel.frame = CGRectMake(10, 210, self.view.bounds.size.width, 100)
+                        descLabel.frame = CGRectMake(10, 210, self.view.bounds.size.width - 50, 100)
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
                     }else if result.height == 960 /*4s*/ {
                         print("iPhone 4s")
@@ -269,11 +269,11 @@ class VideosViewController: UIViewController {
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/35)
                     }else if result.height == 2208 /*6+*/{
                         print("iPhone 6+")
-                        descLabel.frame = CGRectMake(10, 235, self.view.bounds.size.width, 100)
+                        descLabel.frame = CGRectMake(10, 235, self.view.bounds.size.width - 50, 100)
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
                     }else if result.height == 1136 /*5/5s*/{
                         print("iPhone 5/5s")
-                        descLabel.frame = CGRectMake(10, 175, self.view.bounds.size.width, 100)
+                        descLabel.frame = CGRectMake(10, 175, self.view.bounds.size.width - 50, 100)
                         descLabel.font = UIFont(name: "forza-light", size: self.view.bounds.size.width/33)
                     }else if result.height == 2001 /*Zoomed in iPhone 6+*/{
                         descLabel.frame = CGRectMake(10, 210, self.view.bounds.size.width, 100)
