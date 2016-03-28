@@ -112,8 +112,8 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(IndividualHomeViewController.keyboardWillAppear(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(IndividualHomeViewController.keyboardWillDisappear(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
         parseObject.delegate = self
         picker.delegate = self
@@ -182,7 +182,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         
         // UIButton
         hideKeyboardButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 40, 40))
-        hideKeyboardButton.addTarget(self, action: "tapGesture", forControlEvents: .TouchUpInside)
+        hideKeyboardButton.addTarget(self, action: #selector(IndividualHomeViewController.tapGesture), forControlEvents: .TouchUpInside)
         hideKeyboardButton.setImage(UIImage(named: "hide_keyboard"), forState: .Normal)
         hideKeyboardButton.backgroundColor = UIColor.clearColor()
         hideKeyboardButton.tag = 0
@@ -192,7 +192,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
-        homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        homeButton.addTarget(self, action: #selector(IndividualHomeViewController.navigateBackHome(_:)), forControlEvents: .TouchUpInside)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
         homeButton.tag = 0
@@ -266,7 +266,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         calcBannerView.addSubview(expandIcon)
         
         let calcBannerButton = UIButton(frame: CGRectMake(0, 0, calcBannerView.bounds.size.width, calcBannerView.bounds.size.height))
-        calcBannerButton.addTarget(self, action: "showHideCalcTray:", forControlEvents: .TouchUpInside)
+        calcBannerButton.addTarget(self, action: #selector(IndividualHomeViewController.showHideCalcTray(_:)), forControlEvents: .TouchUpInside)
         calcBannerButton.backgroundColor = UIColor.clearColor()
         calcBannerView.addSubview(calcBannerButton)
         
@@ -473,7 +473,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         homeTray.addSubview(addIcon)
         
         let addImagesButton = UIButton (frame: CGRectMake(homeTray.bounds.size.width - 120, CGFloat(buttonY), 60, 50))
-        addImagesButton.addTarget(self, action: "selectWhereToGetImage:", forControlEvents: .TouchUpInside)
+        addImagesButton.addTarget(self, action: #selector(IndividualHomeViewController.selectWhereToGetImage(_:)), forControlEvents: .TouchUpInside)
         addImagesButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         addImagesButton.backgroundColor = UIColor.clearColor()
         addImagesButton.tag = 0
@@ -486,7 +486,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         homeTray.addSubview(editIcon)
         
         editButton.frame = (frame: CGRectMake(homeTray.bounds.size.width - 60, CGFloat(buttonY), 60, 50))
-        editButton.addTarget(self, action: "allowEdit:", forControlEvents: .TouchUpInside)
+        editButton.addTarget(self, action: #selector(IndividualHomeViewController.allowEdit(_:)), forControlEvents: .TouchUpInside)
         editButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         editButton.backgroundColor = UIColor.clearColor()
         editButton.tag = 0
@@ -505,7 +505,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         for i in 1...5 {
             // UIButton
             let ratingButton = UIButton(frame: CGRectMake(CGFloat(10 + xOffset), CGFloat(y), 35, 35))
-            ratingButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
+            ratingButton.addTarget(self, action: #selector(IndividualHomeViewController.setRating(_:)), forControlEvents: .TouchUpInside)
             ratingButton.backgroundColor = model.darkBlueColor
             if i <= userRating {
                 ratingButton.setImage(UIImage(named: "star_on_icon"), forState: .Normal)
@@ -794,7 +794,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         
         // UIButton
         let calculateButton = UIButton (frame: CGRectMake(25, 0, calculateView.bounds.size.width - 25, 50))
-        calculateButton.addTarget(self, action: "calculateMortgagePaymentButtonPress:", forControlEvents: .TouchUpInside)
+        calculateButton.addTarget(self, action: #selector(IndividualHomeViewController.calculateMortgagePaymentButtonPress(_:)), forControlEvents: .TouchUpInside)
         calculateButton.setTitle("CALCULATE", forState: .Normal)
         calculateButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         calculateButton.backgroundColor = UIColor.clearColor()
@@ -861,7 +861,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         
         // UIButton
         let deleteButton = UIButton (frame: CGRectMake(0, 0, deleteView.bounds.size.width, deleteView.bounds.size.height))
-        deleteButton.addTarget(self, action: "deleteHome:", forControlEvents: .TouchUpInside)
+        deleteButton.addTarget(self, action: #selector(IndividualHomeViewController.deleteHome(_:)), forControlEvents: .TouchUpInside)
         deleteButton.setTitle("DELETE HOME", forState: .Normal)
         deleteButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         deleteButton.backgroundColor = UIColor.clearColor()
@@ -888,7 +888,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         
         // UIButton
         saveButton.frame = (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
-        saveButton.addTarget(self, action: "updateHomeObject", forControlEvents: .TouchUpInside)
+        saveButton.addTarget(self, action: #selector(IndividualHomeViewController.updateHomeObject), forControlEvents: .TouchUpInside)
         saveButton.setTitle("SAVE HOME", forState: .Normal)
         saveButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         saveButton.backgroundColor = UIColor.clearColor()
@@ -960,7 +960,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
                             
                             let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
                             overlayButton.backgroundColor = UIColor.clearColor()
-                            overlayButton.addTarget(self, action: "showImageOverlay:", forControlEvents: .TouchUpInside)
+                            overlayButton.addTarget(self, action: #selector(IndividualHomeViewController.showImageOverlay(_:)), forControlEvents: .TouchUpInside)
                             self.scrollView.addSubview(overlayButton)
                             
                             self.imageOverlay(self.imageArray)
@@ -1020,7 +1020,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         overlayView.addSubview(imageIndexLabel)
         
         let closeButton = UIButton(frame: CGRectMake(self.view.bounds.size.width - 50, 25, 50, 50))
-        closeButton.addTarget(self, action: "hideImageOverlay:", forControlEvents: .TouchUpInside)
+        closeButton.addTarget(self, action: #selector(IndividualHomeViewController.hideImageOverlay(_:)), forControlEvents: .TouchUpInside)
         closeButton.setTitle("X", forState: .Normal)
         closeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         closeButton.backgroundColor = UIColor.clearColor()
@@ -1029,7 +1029,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         overlayView.addSubview(closeButton)
         
         deleteDefaultButton.frame = (frame: CGRectMake(10, self.view.bounds.size.height - 125, self.view.bounds.size.width - 20, 50))
-        deleteDefaultButton.addTarget(self, action: "deleteImageFromArray:", forControlEvents: .TouchUpInside)
+        deleteDefaultButton.addTarget(self, action: #selector(IndividualHomeViewController.deleteImageFromArray(_:)), forControlEvents: .TouchUpInside)
         deleteDefaultButton.backgroundColor = model.lightRedColor
         deleteDefaultButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         deleteDefaultButton.setTitle("DELETE IMAGE", forState: .Normal)
@@ -1037,7 +1037,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         overlayView.addSubview(deleteDefaultButton)
         
         saveImageDefaultButton.frame = (frame: CGRectMake(10, self.view.bounds.size.height - 65, self.view.bounds.size.width - 20, 50))
-        saveImageDefaultButton.addTarget(self, action: "setImageAsDefault:", forControlEvents: .TouchUpInside)
+        saveImageDefaultButton.addTarget(self, action: #selector(IndividualHomeViewController.setImageAsDefault(_:)), forControlEvents: .TouchUpInside)
         saveImageDefaultButton.backgroundColor = model.lightRedColor
         saveImageDefaultButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         saveImageDefaultButton.setTitle("SET AS DEFAULT", forState: .Normal)
@@ -1076,13 +1076,13 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
             // In this case, tell the scroll view to animate to the closest index
             if (targetContentOffset.memory.x > scrollLocation) {
                 if imageIndex < imageArray.count - 1 {
-                    imageIndex++
+                    imageIndex += 1
                     scrollLocation = imageWidth * CGFloat(imageIndex)
                 }
             }
             else {
                 if imageIndex > 0 {
-                    imageIndex--
+                    imageIndex -= 1
                     scrollLocation = imageWidth * CGFloat(imageIndex)
                 }
             }
@@ -1093,7 +1093,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
             // Evaluate to the nearest index
             // Err towards closer a index by forcing a slightly closer target offset
             if imageIndex < imageArray.count - 1 {
-                imageIndex++
+                imageIndex += 1
                 scrollLocation = imageWidth * CGFloat(imageIndex)
             }
         }
@@ -1103,7 +1103,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
             // Evaluate to the nearest index
             // Err towards closer a index by forcing a slightly closer target offset
             if imageIndex > 0 {
-                imageIndex--
+                imageIndex -= 1
                 scrollLocation = imageWidth * CGFloat(imageIndex)
             }
         }
@@ -1592,7 +1592,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
             
             let overlayButton = UIButton(frame: CGRectMake(0, 0, self.scrollView.bounds.size.width, 250))
             overlayButton.backgroundColor = UIColor.clearColor()
-            overlayButton.addTarget(self, action: "showImageOverlay:", forControlEvents: .TouchUpInside)
+            overlayButton.addTarget(self, action: #selector(IndividualHomeViewController.showImageOverlay(_:)), forControlEvents: .TouchUpInside)
             self.scrollView.addSubview(overlayButton)
         }
     }
@@ -1752,6 +1752,8 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     }
     
     func saveFailed(errorMessage: String) {
+        loadingOverlay.hidden = true
+        activityIndicator.stopAnimating()
         displayMessage("HomeIn", message: String(format: "An error occurred trying to add this home.\n %@", errorMessage))
     }
     

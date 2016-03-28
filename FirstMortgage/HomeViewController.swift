@@ -117,7 +117,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             
         }
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"activeAgain", name: UIApplicationWillEnterForegroundNotification, object:nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(HomeViewController.activeAgain), name: UIApplicationWillEnterForegroundNotification, object:nil)
         
         parseObject.delegate = self
         
@@ -125,6 +125,14 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         if (PFUser.currentUser() != nil) {
             self.isUserLoggedIn = true
+//            PFUser.becomeInBackground((PFUser.currentUser()?.sessionToken)!, block: {
+//                (user: PFUser?, error: NSError?) -> Void in
+//                if error != nil {
+//                    print("The token could not be validated.")
+//                } else {
+//                    print("The current user is now set to user.")
+//                }
+//            })
         }
         else {
             self.isUserLoggedIn = false
@@ -299,7 +307,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         // UIButton
         myHomesButton.frame = (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
-        myHomesButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
+        myHomesButton.addTarget(self, action: #selector(HomeViewController.navigateToOtherViews(_:)), forControlEvents: .TouchUpInside)
         myHomesButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         myHomesButton.backgroundColor = UIColor.clearColor()
         myHomesButton.layer.borderWidth = 2
@@ -338,7 +346,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         addHomesView.addSubview(addHomesLabel)
         
         addAHomeButton.frame = (frame: CGRectMake(0, 0, myHomesView.bounds.size.width, myHomesView.bounds.size.height))
-        addAHomeButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
+        addAHomeButton.addTarget(self, action: #selector(HomeViewController.navigateToOtherViews(_:)), forControlEvents: .TouchUpInside)
         addAHomeButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         addAHomeButton.backgroundColor = UIColor.clearColor()
         addAHomeButton.layer.borderWidth = 2
@@ -393,7 +401,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         // UIButton
         mortgageCalculatorButton.frame = (frame: CGRectMake(0, 0, mortgageCalculatorView.bounds.size.width, mortgageCalculatorView.bounds.size.height))
-        mortgageCalculatorButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
+        mortgageCalculatorButton.addTarget(self, action: #selector(HomeViewController.navigateToOtherViews(_:)), forControlEvents: .TouchUpInside)
         mortgageCalculatorButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         mortgageCalculatorButton.backgroundColor = UIColor.clearColor()
         mortgageCalculatorButton.layer.borderWidth = 2
@@ -432,7 +440,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         // This now goes to the videos section - I left the button name the same for the sake of simplicity
         refiCalculatorButton.frame = (frame: CGRectMake(0, 0, refiCalculatorView.bounds.size.width, refiCalculatorView.bounds.size.height))
-        refiCalculatorButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
+        refiCalculatorButton.addTarget(self, action: #selector(HomeViewController.navigateToOtherViews(_:)), forControlEvents: .TouchUpInside)
         refiCalculatorButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         refiCalculatorButton.backgroundColor = UIColor.clearColor()
         refiCalculatorButton.layer.borderWidth = 2
@@ -487,7 +495,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         findBranchView.addSubview(findBranchLabel)
         
         findBranchButton.frame = (frame: CGRectMake(0, 0, findBranchView.bounds.size.width, findBranchView.bounds.size.height))
-        findBranchButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
+        findBranchButton.addTarget(self, action: #selector(HomeViewController.navigateToOtherViews(_:)), forControlEvents: .TouchUpInside)
         findBranchButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         findBranchButton.backgroundColor = UIColor.clearColor()
         findBranchButton.layer.borderWidth = 2
@@ -526,7 +534,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         preQualifiedView.addSubview(preQualifiedLabel)
         
         preQualifiedButton.frame = (frame: CGRectMake(0, 0, preQualifiedView.bounds.size.width, preQualifiedView.bounds.size.height))
-        preQualifiedButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
+        preQualifiedButton.addTarget(self, action: #selector(HomeViewController.navigateToOtherViews(_:)), forControlEvents: .TouchUpInside)
         preQualifiedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         preQualifiedButton.backgroundColor = UIColor.clearColor()
         preQualifiedButton.layer.borderWidth = 2
@@ -555,10 +563,11 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         
         userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
-        userButton.addTarget(self, action: "navigateToOtherViews:", forControlEvents: .TouchUpInside)
+        userButton.addTarget(self, action: #selector(HomeViewController.navigateToOtherViews(_:)), forControlEvents: .TouchUpInside)
         userButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         userButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         userButton.contentHorizontalAlignment = .Right
+        userButton.tag = 99
         whiteBar.addSubview(userButton)
         
         checkIfLoggedIn()
@@ -623,7 +632,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         termsAndConditionsButton.setTitle("terms and conditions", forState: .Normal)
         termsAndConditionsButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         
-        termsAndConditionsButton.addTarget(self, action: "termsAndConditions", forControlEvents: .TouchUpInside)
+        termsAndConditionsButton.addTarget(self, action: #selector(HomeViewController.termsAndConditions), forControlEvents: .TouchUpInside)
         whiteBar.addSubview(termsAndConditionsButton)
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
@@ -699,7 +708,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
                         if let _ = defaults.objectForKey("loanOfficerArray") {
                             // now val is not nil and the Optional has been unwrapped, so use it
                             let val = defaults.objectForKey("loanOfficerArray")
-                            let firstLo = val![0] as! Dictionary<String, String>
+                            let firstLo = val!.values!!.first! as! Dictionary<String, String> // FIXME: This doesnt seem right
                             
                             //Check that the nmls field has been set
                             //this was added later so there is a chance som users will not have this field set.
@@ -891,7 +900,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         getStartedButton.frame = (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
         getStartedButton.setTitle("CREATE AN ACCOUNT", forState: .Normal)
-        getStartedButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        getStartedButton.addTarget(self, action: #selector(HomeViewController.showHideSignUpView), forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: buttonFontSize)
         contentScrollView.addSubview(getStartedButton)
@@ -921,7 +930,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         loginButton.frame = (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
         loginButton.setTitle("LOGIN", forState: .Normal)
-        loginButton.addTarget(self, action: "showHideLoginView", forControlEvents: .TouchUpInside)
+        loginButton.addTarget(self, action: #selector(HomeViewController.showHideLoginView), forControlEvents: .TouchUpInside)
         loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         loginButton.titleLabel!.font = UIFont(name: "forza-light", size: 24)
         contentScrollView.addSubview(loginButton)
@@ -936,7 +945,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let continueWithoutButton = UIButton (frame: CGRectMake(15, offset, contentScrollView.bounds.size.width - 30, 40))
         continueWithoutButton.setTitle("CONTINUE WITHOUT", forState: .Normal)
-        continueWithoutButton.addTarget(self, action: "continueWithoutLogin:", forControlEvents: .TouchUpInside)
+        continueWithoutButton.addTarget(self, action: #selector(HomeViewController.continueWithoutLogin(_:)), forControlEvents: .TouchUpInside)
         continueWithoutButton.setTitleColor(model.darkBlueColor, forState: .Normal)
         continueWithoutButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
         contentScrollView.addSubview(continueWithoutButton)
@@ -955,7 +964,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let dismissButton = UIButton (frame: CGRectMake(0, 25, 50, 50))
         dismissButton.setTitle("X", forState: .Normal)
-        dismissButton.addTarget(self, action: "showHideLoginView", forControlEvents: .TouchUpInside)
+        dismissButton.addTarget(self, action: #selector(HomeViewController.showHideLoginView), forControlEvents: .TouchUpInside)
         dismissButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 32)
         loginView.addSubview(dismissButton)
@@ -1014,7 +1023,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let loginButton = UIButton (frame: CGRectMake(0, 250, self.view.bounds.size.width, 50))
         loginButton.setTitle("LOGIN", forState: .Normal)
-        loginButton.addTarget(self, action: "checkInputFieldsButtonPress:", forControlEvents: .TouchUpInside)
+        loginButton.addTarget(self, action: #selector(HomeViewController.checkInputFieldsButtonPress(_:)), forControlEvents: .TouchUpInside)
         loginButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         loginButton.backgroundColor = model.darkBlueColor
         loginButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
@@ -1023,7 +1032,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let getStartedButton = UIButton (frame: CGRectMake(0, 310, self.view.bounds.size.width, 50))
         getStartedButton.setTitle("CREATE AN ACCOUNT", forState: .Normal)
-        getStartedButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        getStartedButton.addTarget(self, action: #selector(HomeViewController.showHideSignUpView), forControlEvents: .TouchUpInside)
         getStartedButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         getStartedButton.backgroundColor = model.lightRedColor
         getStartedButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
@@ -1031,20 +1040,20 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let forGotPasswordFormButton = UIButton (frame: CGRectMake(0, 370, contentScrollView.bounds.size.width / 2, 30))
         forGotPasswordFormButton.setTitle("FORGOT PASSWORD?", forState: .Normal)
-        forGotPasswordFormButton.addTarget(self, action: "forgotPassord", forControlEvents: .TouchUpInside)
+        forGotPasswordFormButton.addTarget(self, action: #selector(HomeViewController.forgotPassord), forControlEvents: .TouchUpInside)
         forGotPasswordFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
         forGotPasswordFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 15)
         loginView.addSubview(forGotPasswordFormButton)
         
         let closeSignUpFormButton = UIButton (frame: CGRectMake(contentScrollView.bounds.size.width / 2, 370, contentScrollView.bounds.size.width / 2, 30))
         closeSignUpFormButton.setTitle("CLOSE LOGIN FORM", forState: .Normal)
-        closeSignUpFormButton.addTarget(self, action: "showHideLoginView", forControlEvents: .TouchUpInside)
+        closeSignUpFormButton.addTarget(self, action: #selector(HomeViewController.showHideLoginView), forControlEvents: .TouchUpInside)
         closeSignUpFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
         closeSignUpFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 15)
         loginView.addSubview(closeSignUpFormButton)
         
         swipeRecLog.direction = UISwipeGestureRecognizerDirection.Down
-        swipeRecLog.addTarget(self, action: "swipeDownToMoveLoginViewDown")
+        swipeRecLog.addTarget(self, action: #selector(HomeViewController.swipeDownToMoveLoginViewDown))
         loginView.addGestureRecognizer(swipeRecLog)
         
         signUpView.userInteractionEnabled = true
@@ -1065,7 +1074,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let dismissButton = UIButton (frame: CGRectMake(0, 25, 50, 50))
         dismissButton.setTitle("X", forState: .Normal)
-        dismissButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        dismissButton.addTarget(self, action: #selector(HomeViewController.showHideSignUpView), forControlEvents: .TouchUpInside)
         dismissButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 32)
         signUpView.addSubview(dismissButton)
@@ -1176,7 +1185,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let signUpButton = UIButton (frame: CGRectMake(0, 425, self.view.bounds.size.width, 50))
         signUpButton.setTitle("SIGN UP", forState: .Normal)
-        signUpButton.addTarget(self, action: "checkInputFieldsButtonPress:", forControlEvents: .TouchUpInside)
+        signUpButton.addTarget(self, action: #selector(HomeViewController.checkInputFieldsButtonPress(_:)), forControlEvents: .TouchUpInside)
         signUpButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         signUpButton.backgroundColor = model.darkBlueColor
         signUpButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
@@ -1185,7 +1194,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let closeSignUpFormButton = UIButton (frame: CGRectMake(15, 475, contentScrollView.bounds.size.width - 30, 40))
         closeSignUpFormButton.setTitle("CLOSE SIGNUP FORM", forState: .Normal)
-        closeSignUpFormButton.addTarget(self, action: "showHideSignUpView", forControlEvents: .TouchUpInside)
+        closeSignUpFormButton.addTarget(self, action: #selector(HomeViewController.showHideSignUpView), forControlEvents: .TouchUpInside)
         closeSignUpFormButton.setTitleColor(model.darkBlueColor, forState: .Normal)
         closeSignUpFormButton.titleLabel!.font = UIFont(name: "forza-light", size: 16)
         signUpView.addSubview(closeSignUpFormButton)
@@ -1300,17 +1309,17 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         
         termsLink.setTitle("terms and conditions.", forState: .Normal)
-        termsLink.addTarget(self, action: "termsAndConditions", forControlEvents: .TouchUpInside)
+        termsLink.addTarget(self, action: #selector(HomeViewController.termsAndConditions), forControlEvents: .TouchUpInside)
         
         termsLink.setTitleColor(UIColor.blueColor(), forState: .Normal)
         signUpView.addSubview(termsLink)
         
         swipeRec.direction = UISwipeGestureRecognizerDirection.Right
-        swipeRec.addTarget(self, action: "swipeBackToLogin")
+        swipeRec.addTarget(self, action: #selector(HomeViewController.swipeBackToLogin))
         signUpView.addGestureRecognizer(swipeRec)
         
         swipeRecReg.direction = UISwipeGestureRecognizerDirection.Down
-        swipeRecReg.addTarget(self, action: "swipeDownToMoveSignUpViewDown")
+        swipeRecReg.addTarget(self, action: #selector(HomeViewController.swipeDownToMoveSignUpViewDown))
         signUpView.addGestureRecognizer(swipeRecReg)
         
         signUpView.userInteractionEnabled = true
@@ -1360,7 +1369,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         // UIButton
         let noButton = UIButton (frame: CGRectMake(0, 0, noView.bounds.size.width, 50))
-        noButton.addTarget(self, action: "workingWithALoanOfficer:", forControlEvents: .TouchUpInside)
+        noButton.addTarget(self, action: #selector(HomeViewController.workingWithALoanOfficer(_:)), forControlEvents: .TouchUpInside)
         noButton.setTitle("NO", forState: .Normal)
         noButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         noButton.backgroundColor = UIColor.clearColor()
@@ -1381,7 +1390,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         // UIButton
         let yesButton = UIButton (frame: CGRectMake(0, 0, yesView.bounds.size.width, 50))
-        yesButton.addTarget(self, action: "workingWithALoanOfficer:", forControlEvents: .TouchUpInside)
+        yesButton.addTarget(self, action: #selector(HomeViewController.workingWithALoanOfficer(_:)), forControlEvents: .TouchUpInside)
         yesButton.setTitle("YES", forState: .Normal)
         yesButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         yesButton.backgroundColor = UIColor.clearColor()
@@ -1416,7 +1425,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         let dismissButton = UIButton (frame: CGRectMake(overlayView.bounds.size.width - 50, 25, 50, 50))
         dismissButton.setTitle("X", forState: .Normal)
-        dismissButton.addTarget(self, action: "workingWithALoanOfficer:", forControlEvents: .TouchUpInside)
+        dismissButton.addTarget(self, action: #selector(HomeViewController.workingWithALoanOfficer(_:)), forControlEvents: .TouchUpInside)
         dismissButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 32)
         dismissButton.tag = 0
@@ -1438,7 +1447,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         searchTxtField.keyboardType = UIKeyboardType.Default
         searchTxtField.tag = 999
         searchTxtField.font = UIFont(name: "forza-light", size: 22)
-        searchTxtField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        searchTxtField.addTarget(self, action: #selector(HomeViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         searchOverlayView.addSubview(searchTxtField)
         
         scrollView.frame = (frame: CGRectMake(0, 145, overlayView.bounds.size.width, overlayView.bounds.size.height - 135))
@@ -1451,7 +1460,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             
             scrollView.contentSize = CGSize(width: overlayView.bounds.size.width, height: CGFloat(loArray.count * 175))
             yVal += 175
-            count++
+            count += 1
         }
     }
     
@@ -1519,7 +1528,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         // UIButton
         let selectButton = UIButton (frame: CGRectMake(0, 0, loView.bounds.size.width, loView.bounds.size.height))
-        selectButton.addTarget(self, action: "setLoanOfficer:", forControlEvents: .TouchUpInside)
+        selectButton.addTarget(self, action: #selector(HomeViewController.setLoanOfficer(_:)), forControlEvents: .TouchUpInside)
         selectButton.backgroundColor = UIColor.clearColor()
         selectButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
         selectButton.contentHorizontalAlignment = .Right
@@ -1820,6 +1829,10 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         default:
             print("Default")
         }
+        
+//        for symbol: String in NSThread.callStackSymbols() {
+//            NSLog("%@", symbol)
+//        }
     }
     
     func loginSignupUserButtonPress(sender: UIButton) {
@@ -2159,10 +2172,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             preQualifiedOverlay.hidden = false
         }
         else {
-            
-            
-            
-            
+
             userButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 34, 40))
             userButton.setTitle("", forState: .Normal)
             userButton.setBackgroundImage(UIImage(named: "profile_icon"), forState: .Normal)

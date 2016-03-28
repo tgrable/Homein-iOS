@@ -34,13 +34,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             PFACL.setDefaultACL(PFACL(), withAccessForCurrentUser: true)
             
+            if let user = PFUser.currentUser() {
+//                user.setObject(Tracker.sharedInstance().getUserIdentifier(), forKey: "localUserIdentifier")
+                user.saveInBackgroundWithBlock({ (success, error) -> Void in
+                    if let error = error {
+//                        Tracker.sharedInstance().trackParseError(error)
+                        // reset the user by clearing out the keychain items
+                        print("\(error)")
+                        PFUser.logOut()
+                    }
+                    else if success {
+                        let installation = PFInstallation.currentInstallation()
+                        installation.setObject(user, forKey: "user")
+                        installation.saveInBackground()
+                    }
+                })
+            }
 
-            Fabric.with([Answers.self, Crashlytics.self])
+//            Fabric.with([Answers.self, Crashlytics.self])
             
   
 //            Fabric.sharedSDK().debug = true
 //            Fabric.with([Crashlytics.self()])
             
+
             
         }
         return true

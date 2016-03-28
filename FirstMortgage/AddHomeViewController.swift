@@ -69,8 +69,8 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(AddHomeViewController.keyboardWillAppear(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(AddHomeViewController.keyboardWillDisappear(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
         parseObject.delegate = self
         picker.delegate = self
@@ -143,7 +143,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
         
         // UIButton
         let addHomePhotoButton = UIButton (frame: CGRectMake(whiteBar.bounds.size.width - 100, 0, 100, 50))
-        addHomePhotoButton.addTarget(self, action: "selectWhereToGetImage:", forControlEvents: .TouchUpInside)
+        addHomePhotoButton.addTarget(self, action: #selector(AddHomeViewController.selectWhereToGetImage(_:)), forControlEvents: .TouchUpInside)
         addHomePhotoButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         addHomePhotoButton.backgroundColor = UIColor.clearColor()
         addHomePhotoButton.tag = 0
@@ -151,7 +151,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
         
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
-        homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        homeButton.addTarget(self, action: #selector(AddHomeViewController.navigateBackHome(_:)), forControlEvents: .TouchUpInside)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
         homeButton.tag = 0
@@ -159,7 +159,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
         
         // UIButton
         hideKeyboardButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 110, 10, 40, 40))
-        hideKeyboardButton.addTarget(self, action: "tapGesture", forControlEvents: .TouchUpInside)
+        hideKeyboardButton.addTarget(self, action: #selector(AddHomeViewController.tapGesture), forControlEvents: .TouchUpInside)
         hideKeyboardButton.setImage(UIImage(named: "hide_keyboard"), forState: .Normal)
         hideKeyboardButton.backgroundColor = UIColor.clearColor()
         hideKeyboardButton.tag = 0
@@ -273,7 +273,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
         for i in 1...5 {
             // UIButton
             let ratingButton = UIButton (frame: CGRectMake(CGFloat(10 + xOffset), CGFloat(y), 35, 35))
-            ratingButton.addTarget(self, action: "setRating:", forControlEvents: .TouchUpInside)
+            ratingButton.addTarget(self, action: #selector(AddHomeViewController.setRating(_:)), forControlEvents: .TouchUpInside)
             ratingButton.backgroundColor = model.darkBlueColor
             ratingButton.setImage(starImage, forState: .Normal)
             ratingButton.tag = i
@@ -419,7 +419,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
         
         // UIButton
         saveButton.frame = (frame: CGRectMake(0, 0, saveView.bounds.size.width, saveView.bounds.size.height))
-        saveButton.addTarget(self, action: "addNewHome:", forControlEvents: .TouchUpInside)
+        saveButton.addTarget(self, action: #selector(AddHomeViewController.addNewHome(_:)), forControlEvents: .TouchUpInside)
         saveButton.setTitle("SAVE HOME", forState: .Normal)
         saveButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         saveButton.backgroundColor = UIColor.clearColor()
@@ -434,7 +434,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
         btnView.image = btnImg
         saveView.addSubview(btnView)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(AddHomeViewController.tapGesture))
         scrollView.addGestureRecognizer(tapGesture)
         
         overlayView.frame = (frame: CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))
@@ -827,6 +827,8 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
     }
     
     func saveFailed(errorMessage: String) {
+        overlayView.hidden = true
+        activityIndicator.stopAnimating()
         displayMessage("HomeIn", message: String(format: "An error occurred trying to add this home. %@", errorMessage))
     }
 

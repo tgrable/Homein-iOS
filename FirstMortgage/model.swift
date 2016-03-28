@@ -123,7 +123,7 @@ class Model: NSObject {
             if count <= 9 {
                 finalString.append(i)
             }
-            count++
+            count += 1
         }
         return finalString
     }

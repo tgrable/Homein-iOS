@@ -120,7 +120,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         whiteBar.addSubview(editIcon)
         
         editButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 60, 0, 60, 50))
-        editButton.addTarget(self, action: "allowEdit:", forControlEvents: .TouchUpInside)
+        editButton.addTarget(self, action: #selector(ProfileViewController.allowEdit(_:)), forControlEvents: .TouchUpInside)
         editButton.setTitleColor(UIColor.blueColor(), forState: .Normal)
         editButton.backgroundColor = UIColor.clearColor()
         editButton.tag = 0
@@ -128,7 +128,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(5, 0, 100, 50))
-        homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        homeButton.addTarget(self, action: #selector(ProfileViewController.navigateBackHome(_:)), forControlEvents: .TouchUpInside)
         if (didComeFromAccountPage) {
             homeButton.setTitle("HOME", forState: .Normal)
         }
@@ -183,7 +183,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
         let dismissButton = UIButton (frame: CGRectMake(overlayView.bounds.size.width - 50, 25, 50, 50))
         dismissButton.setTitle("X", forState: .Normal)
-        dismissButton.addTarget(self, action: "dismissOverlayView:", forControlEvents: .TouchUpInside)
+        dismissButton.addTarget(self, action: #selector(ProfileViewController.dismissOverlayView(_:)), forControlEvents: .TouchUpInside)
         dismissButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         dismissButton.titleLabel!.font = UIFont(name: "forza-light", size: 32)
         overlayView.addSubview(dismissButton)
@@ -201,7 +201,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         searchTxtField.autocapitalizationType = .Words
         searchTxtField.tag = 999
         searchTxtField.font = UIFont(name: "forza-light", size: 22)
-        searchTxtField.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
+        searchTxtField.addTarget(self, action: #selector(ProfileViewController.textFieldDidChange(_:)), forControlEvents: UIControlEvents.EditingChanged)
         overlayView.addSubview(searchTxtField)
         
         scrollView.frame = (frame: CGRectMake(0, 145, overlayView.bounds.size.width, overlayView.bounds.size.height - 135))
@@ -334,7 +334,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
         // UIButton
         let logOutButton = UIButton (frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
-        logOutButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        logOutButton.addTarget(self, action: #selector(ProfileViewController.navigateBackHome(_:)), forControlEvents: .TouchUpInside)
         logOutButton.setTitle("LOG OUT", forState: .Normal)
         logOutButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         logOutButton.backgroundColor = UIColor.clearColor()
@@ -378,7 +378,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
         // UIButton
         let changeLoButton = UIButton(frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
-        changeLoButton.addTarget(self, action: "showSearchOverLay:", forControlEvents: .TouchUpInside)
+        changeLoButton.addTarget(self, action: #selector(ProfileViewController.showSearchOverLay(_:)), forControlEvents: .TouchUpInside)
         changeLoButton.setTitle("CHANGE LOAN OFFICER", forState: .Normal)
         changeLoButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         changeLoButton.backgroundColor = UIColor.clearColor()
@@ -422,7 +422,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                 
                 // UIButton
                 let deleteLoButton = UIButton(frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
-                deleteLoButton.addTarget(self, action: "removeLoanOfficerFromParseUser", forControlEvents: .TouchUpInside)
+                deleteLoButton.addTarget(self, action: #selector(ProfileViewController.removeLoanOfficerFromParseUser), forControlEvents: .TouchUpInside)
                 deleteLoButton.setTitle("DELETE LOAN OFFICER", forState: .Normal)
                 deleteLoButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
                 deleteLoButton.backgroundColor = UIColor.clearColor()
@@ -463,7 +463,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
         // UIButton
         updateUserButton.frame = (frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
-        updateUserButton.addTarget(self, action: "updateUser:", forControlEvents: .TouchUpInside)
+        updateUserButton.addTarget(self, action: #selector(ProfileViewController.updateUser(_:)), forControlEvents: .TouchUpInside)
         updateUserButton.setTitle("SAVE USER", forState: .Normal)
         updateUserButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         updateUserButton.backgroundColor = UIColor.clearColor()
@@ -622,7 +622,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             
             self.scrollView.contentSize = CGSize(width: self.profileView.bounds.size.width, height: CGFloat(loArray.count * 175))
             yVal += 175
-            count++
+            count += 1
         }
     }
 
@@ -719,7 +719,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             singleLoView.addSubview(officeLabel)
             
             let officeButton = UIButton (frame: CGRectMake(115, CGFloat(offset), singleLoView.bounds.size.width - 120, officeLabel.bounds.size.height))
-            officeButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
+            officeButton.addTarget(self, action: #selector(ProfileViewController.phoneButtonPressed(_:)), forControlEvents: .TouchUpInside)
             officeButton.backgroundColor = UIColor.clearColor()
             officeButton.setTitle(model.cleanPhoneNumnerString(officePhone), forState: .Normal)
             officeButton.setTitleColor(UIColor.clearColor(), forState: .Normal)
@@ -752,7 +752,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             singleLoView.addSubview(mobileLabel)
             
             let mobileButton = UIButton (frame: CGRectMake(115, CGFloat(offset), singleLoView.bounds.size.width - 120, mobileLabel.bounds.size.height))
-            mobileButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
+            mobileButton.addTarget(self, action: #selector(ProfileViewController.phoneButtonPressed(_:)), forControlEvents: .TouchUpInside)
             mobileButton.backgroundColor = UIColor.clearColor()
             mobileButton.setTitle(model.cleanPhoneNumnerString(mobilePhone), forState: .Normal)
             mobileButton.setTitleColor(UIColor.clearColor(), forState: .Normal)
@@ -785,7 +785,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                 email = nodeDict["email"]!
             }
             let emailButton = UIButton (frame: CGRectMake(15, CGFloat(offset), singleLoView.bounds.size.width - 30, 24))
-            emailButton.addTarget(self, action: "emailButtonPressed:", forControlEvents: .TouchUpInside)
+            emailButton.addTarget(self, action: #selector(ProfileViewController.emailButtonPressed(_:)), forControlEvents: .TouchUpInside)
             emailButton.backgroundColor = UIColor.clearColor()
             emailButton.setTitle(email as String, forState: .Normal)
             emailButton.setTitleColor(UIColor.clearColor(), forState: .Normal)
@@ -908,7 +908,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             
             // UIButton
             let selectButton = UIButton (frame: CGRectMake(0, 0, loView.bounds.size.width, h))
-            selectButton.addTarget(self, action: "setLoanOfficer:", forControlEvents: .TouchUpInside)
+            selectButton.addTarget(self, action: #selector(ProfileViewController.setLoanOfficer(_:)), forControlEvents: .TouchUpInside)
             selectButton.backgroundColor = UIColor.clearColor()
             selectButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
             selectButton.contentHorizontalAlignment = .Right
@@ -994,14 +994,17 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             
             if let nodeImage = dict["image"] {
                 if let nid = dict["nid"] {
-                    dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                        let urlString = nodeImage as String
-                        if let checkedUrl = NSURL(string: urlString) {
-                            let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
-                            let image = UIImage(data: data!)
-                            var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
-                            documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
-                            UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
+                    
+                    if reachability.isConnectedToNetwork() {
+                        dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                            let urlString = nodeImage as String
+                            if let checkedUrl = NSURL(string: urlString) {
+                                let data = NSData(contentsOfURL: checkedUrl) //make sure your image in this url does exist, otherwise unwrap in a if let check
+                                let image = UIImage(data: data!)
+                                var documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as String
+                                documentsPath = String(format: "%@/%@.png", documentsPath, nid as String)
+                                UIImageJPEGRepresentation(image!,1.0)!.writeToFile(documentsPath, atomically: true)
+                            }
                         }
                     }
                 }
@@ -1313,7 +1316,9 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     }
     
     func saveFailed(errorMessage: String) {
-        displayMessage("HomeIn", message: String(format: "An error occurred trying to save your information.\n %@", errorMessage))
+        loadingOverlay.hidden = true
+        activityIndicator.stopAnimating()
+        displayMessage("HomeIn", message: String(format: "An error occurred trying to save your information.  If you continue to see this message you may need to log out of the app and log back in. \n %@", errorMessage))
     }
     
     // MARK:

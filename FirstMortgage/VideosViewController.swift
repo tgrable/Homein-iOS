@@ -103,7 +103,7 @@ class VideosViewController: UIViewController {
     }
     
     func loadViewTimer(){
-        loadTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: "parseJSON", userInfo: nil, repeats: false)
+        loadTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(VideosViewController.parseJSON), userInfo: nil, repeats: false)
         
 
     }
@@ -397,7 +397,7 @@ class VideosViewController: UIViewController {
         
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
-        homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        homeButton.addTarget(self, action: #selector(VideosViewController.navigateBackHome(_:)), forControlEvents: .TouchUpInside)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
         homeButton.tag = 0

@@ -113,7 +113,7 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
 
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
-        homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        homeButton.addTarget(self, action: #selector(MyHomesViewController.navigateBackHome(_:)), forControlEvents: .TouchUpInside)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
         homeButton.tag = 0
@@ -126,7 +126,7 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
         
         // UIButton
         let addButton = UIButton (frame: CGRectMake(whiteBar.bounds.size.width - 50, 0, 50, 50))
-        addButton.addTarget(self, action: "addNewHome:", forControlEvents: .TouchUpInside)
+        addButton.addTarget(self, action: #selector(MyHomesViewController.addNewHome(_:)), forControlEvents: .TouchUpInside)
         addButton.backgroundColor = UIColor.clearColor()
         addButton.tag = 0
         whiteBar.addSubview(addButton)
@@ -149,7 +149,7 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
         
         // UIButton
         let sortButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
-        sortButton.addTarget(self, action: "showHideSortTray", forControlEvents: .TouchUpInside)
+        sortButton.addTarget(self, action: #selector(MyHomesViewController.showHideSortTray), forControlEvents: .TouchUpInside)
         sortButton.backgroundColor = UIColor.clearColor()
         sortButton.tag = 0
         addHomeBannerView.addSubview(sortButton)
@@ -210,7 +210,7 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
         
         // UIButton
         sortNameButton.frame = (frame: CGRectMake(50, 45, sortTrayView!.bounds.size.width - 50, 40))
-        sortNameButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
+        sortNameButton.addTarget(self, action: #selector(MyHomesViewController.setSortOrder(_:)), forControlEvents: .TouchUpInside)
         sortNameButton.setTitle("NAME", forState: .Normal)
         sortNameButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         sortNameButton.backgroundColor = UIColor.clearColor()
@@ -232,7 +232,7 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
         
         // UIButton
         sortRatingButton.frame = (frame: CGRectMake(50, 90, sortTrayView!.bounds.size.width - 50, 40))
-        sortRatingButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
+        sortRatingButton.addTarget(self, action: #selector(MyHomesViewController.setSortOrder(_:)), forControlEvents: .TouchUpInside)
         sortRatingButton.setTitle("RATING", forState: .Normal)
         sortRatingButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         sortRatingButton.backgroundColor = UIColor.clearColor()
@@ -254,7 +254,7 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
         
         // UIButton
         sortPriceButton.frame = (frame: CGRectMake(50, 135, sortTrayView!.bounds.size.width, 40))
-        sortPriceButton.addTarget(self, action: "setSortOrder:", forControlEvents: .TouchUpInside)
+        sortPriceButton.addTarget(self, action: #selector(MyHomesViewController.setSortOrder(_:)), forControlEvents: .TouchUpInside)
         sortPriceButton.setTitle("PRICE", forState: .Normal)
         sortPriceButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         sortPriceButton.backgroundColor = UIColor.clearColor()
@@ -270,16 +270,16 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
         
         let dismissSwipe = UISwipeGestureRecognizer()
         dismissSwipe.direction = UISwipeGestureRecognizerDirection.Down
-        dismissSwipe.addTarget(self, action: "showHideSortTray")
+        dismissSwipe.addTarget(self, action: #selector(MyHomesViewController.showHideSortTray))
         dismissView!.userInteractionEnabled = true
         dismissView!.addGestureRecognizer(dismissSwipe)
         
         swipeRec.direction = UISwipeGestureRecognizerDirection.Down
-        swipeRec.addTarget(self, action: "showHideSortTray")
+        swipeRec.addTarget(self, action: #selector(MyHomesViewController.showHideSortTray))
         sortTrayView!.userInteractionEnabled = true
         sortTrayView!.addGestureRecognizer(swipeRec)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: "showHideSortTray")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(MyHomesViewController.showHideSortTray))
         dismissView!.addGestureRecognizer(tapGesture)
     }
 

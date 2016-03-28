@@ -60,8 +60,8 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillAppear:", name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"keyboardWillDisappear:", name: UIKeyboardWillHideNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(CalculatorsViewController.keyboardWillAppear(_:)), name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(CalculatorsViewController.keyboardWillDisappear(_:)), name: UIKeyboardWillHideNotification, object: nil)
         
         buildView()
         
@@ -109,7 +109,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         // UIButton
         hideKeyboardButton.frame = (frame: CGRectMake(whiteBar.bounds.size.width - 50, 5, 40, 40))
-        hideKeyboardButton.addTarget(self, action: "tapGesture", forControlEvents: .TouchUpInside)
+        hideKeyboardButton.addTarget(self, action: #selector(CalculatorsViewController.tapGesture), forControlEvents: .TouchUpInside)
         hideKeyboardButton.setImage(UIImage(named: "hide_keyboard"), forState: .Normal)
         hideKeyboardButton.backgroundColor = UIColor.clearColor()
         hideKeyboardButton.tag = 0
@@ -119,7 +119,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         // UIButton
         let homeButton = UIButton (frame: CGRectMake(0, 0, 50, 50))
-        homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        homeButton.addTarget(self, action: #selector(CalculatorsViewController.navigateBackHome(_:)), forControlEvents: .TouchUpInside)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
         homeButton.tag = 0
@@ -300,7 +300,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         // UIButton
         let calculateButton = UIButton (frame: CGRectMake(25, 0, calculateView.bounds.size.width - 25, 50))
-        calculateButton.addTarget(self, action: "calculateMortgagePaymentButtonPress:", forControlEvents: .TouchUpInside)
+        calculateButton.addTarget(self, action: #selector(CalculatorsViewController.calculateMortgagePaymentButtonPress(_:)), forControlEvents: .TouchUpInside)
         calculateButton.setTitle("CALCULATE", forState: .Normal)
         calculateButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         calculateButton.backgroundColor = UIColor.clearColor()
@@ -344,10 +344,10 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         noteLabel.textAlignment = NSTextAlignment.Left
         scrollView.addSubview(noteLabel)
         
-        let mortTapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        let mortTapGesture = UITapGestureRecognizer(target: self, action: #selector(CalculatorsViewController.tapGesture))
         mortView.addGestureRecognizer(mortTapGesture)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(CalculatorsViewController.tapGesture))
         scrollView.addGestureRecognizer(tapGesture)
         
         scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 525)
@@ -597,7 +597,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         
         // UIButton
         let calculateButton = UIButton (frame: CGRectMake(25, 0, calculateView.bounds.size.width - 25, 50))
-        calculateButton.addTarget(self, action: "calculateRefinanceButtonPress:", forControlEvents: .TouchUpInside)
+        calculateButton.addTarget(self, action: #selector(CalculatorsViewController.calculateRefinanceButtonPress(_:)), forControlEvents: .TouchUpInside)
         calculateButton.setTitle("CALCULATE", forState: .Normal)
         calculateButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         calculateButton.backgroundColor = UIColor.clearColor()
@@ -674,10 +674,10 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
             scrollView.addSubview(disclaimerLabel)
         }
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(CalculatorsViewController.tapGesture))
         scrollView.addGestureRecognizer(tapGesture)
         
-        let refiTapGesture = UITapGestureRecognizer(target: self, action: "tapGesture")
+        let refiTapGesture = UITapGestureRecognizer(target: self, action: #selector(CalculatorsViewController.tapGesture))
         refiCalcView.addGestureRecognizer(refiTapGesture)
         
         scrollView.contentSize = CGSize(width: calcView.bounds.size.width, height: 725)

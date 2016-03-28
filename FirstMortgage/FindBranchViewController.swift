@@ -59,14 +59,12 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector:"checkIfLocationServicesEnabled", name:UIApplicationWillEnterForegroundNotification, object:nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(FindBranchViewController.checkIfLocationServicesEnabled), name:UIApplicationWillEnterForegroundNotification, object:nil)
         
         let defaults = NSUserDefaults.standardUserDefaults()
         if let _ = defaults.objectForKey("branchOfficeArray") {
             stateArray = defaults.objectForKey("branchOfficeArray") as! Array<String>
         }
-        
-        print(stateArray)
 
         createStateDictionary()
         buildView()
@@ -153,7 +151,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         buildPickerViewTray()
         
         if reachability.isConnectedToNetwork() {
-            stateLocatorTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: "runTimedCode", userInfo: nil, repeats: false)
+            stateLocatorTimer = NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(FindBranchViewController.runTimedCode), userInfo: nil, repeats: false)
             
             getBranchJson()
         }
@@ -212,7 +210,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         
         // UIButton
         homeButton.frame = (frame: CGRectMake(0, 0, 50, 50))
-        homeButton.addTarget(self, action: "navigateBackHome:", forControlEvents: .TouchUpInside)
+        homeButton.addTarget(self, action: #selector(FindBranchViewController.navigateBackHome(_:)), forControlEvents: .TouchUpInside)
         homeButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         homeButton.backgroundColor = UIColor.clearColor()
         homeButton.tag = 0
@@ -263,7 +261,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         
         // UIButton
         let selectButton = UIButton (frame: CGRectMake(addHomeView.bounds.size.width - 125, 250, 100, 50))
-        selectButton.addTarget(self, action: "searchNewState:", forControlEvents: .TouchUpInside)
+        selectButton.addTarget(self, action: #selector(FindBranchViewController.searchNewState(_:)), forControlEvents: .TouchUpInside)
         selectButton.setTitle("SELECT", forState: .Normal)
         selectButton.setTitleColor(UIColor.darkTextColor(), forState: .Normal)
         selectButton.backgroundColor = UIColor.clearColor()
@@ -470,16 +468,31 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
         var count = 0;
         
         var newBranchArray = Array<Dictionary<String, String>>()
+        
         for var branch in filteredBranchArray {
             if (count < 25) {
                 let geocoder = CLGeocoder()
                 let branchLocation = String(format: "%@, %@, USA", branch["address"]!, branch["state"]!)
                 var distance = 0.0
+                
                 dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                    
+                    print(branchLocation)
+                    
                     geocoder.geocodeAddressString(branchLocation, completionHandler: {(placemarks, error) -> Void in
+                        
+                        
                         if((error) != nil){
-                            print("Geocoder Error", error)
-                            count++
+                            count += 1
+                            print("Geocoder Error: ", error!)
+                            
+                            if (count == filteredBranchArray.count) {
+                                
+                                newBranchArray.sortInPlace({ Double($0["distanceFromMe"]!)! < Double($1["distanceFromMe"]!) })
+                                
+                                self.printLocations(newBranchArray)
+                                
+                            }
                         }
                         
                         if let placemark = placemarks?.first {
@@ -492,12 +505,11 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                             branch["distanceFromMe"] = String(format:"%f", distance)
                             branch["lat"] = String(format:"%f", lat)
                             branch["long"] = String(format:"%f", long)
-                            count++
+                            count += 1
                             
                             newBranchArray.append(branch)
-                            
                             if (count == filteredBranchArray.count) {
-       
+                                
                                 newBranchArray.sortInPlace({ Double($0["distanceFromMe"]!)! < Double($1["distanceFromMe"]!) })
                                 
                                 self.printLocations(newBranchArray)
@@ -570,7 +582,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                     offset += milesLabel.bounds.size.height
                     
                     let locationButton = UIButton(frame: CGRectMake(0, 0, branchView.bounds.size.width, offset))
-                    locationButton.addTarget(self, action: "mapButtonPressed:", forControlEvents: .TouchUpInside)
+                    locationButton.addTarget(self, action: #selector(FindBranchViewController.mapButtonPressed(_:)), forControlEvents: .TouchUpInside)
                     locationButton.backgroundColor = UIColor.clearColor()
                     locationButton.tag = count
                     branchView.addSubview(locationButton)
@@ -623,14 +635,14 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 }
             }
             let phoneButton = UIButton(frame: CGRectMake(12, offset - 27, branchView.bounds.size.width / 2, 20))
-            phoneButton.addTarget(self, action: "phoneButtonPressed:", forControlEvents: .TouchUpInside)
+            phoneButton.addTarget(self, action: #selector(FindBranchViewController.phoneButtonPressed(_:)), forControlEvents: .TouchUpInside)
             phoneButton.backgroundColor = UIColor.clearColor()
             phoneButton.tag = count
             phoneButton.enabled = btnEnabled
             branchView.addSubview(phoneButton)
             
             yOffset += offset + 30
-            count++
+            count += 1
         }
 
         scrollView.contentSize = CGSize(width: addHomeView.bounds.size.width, height: CGFloat(filteredBranchArray.count * 135))
@@ -641,7 +653,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     // MARK:
     // MARK: - Action Methods
     func searchNewState(sender: UIButton) {
-        
         /*************************** Fabric Analytics *********************************************/
                 Answers.logCustomEventWithName("User_Search_State_Manually", customAttributes: ["Category":"User_Action"])
                 print("User_Search_State_Manually")
