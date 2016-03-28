@@ -105,6 +105,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        displayMessage("HomeIn", message: "Your device is low on memory and may need to shut down this app.")
     }
     
     deinit {

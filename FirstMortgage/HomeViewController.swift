@@ -101,9 +101,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     // MARK: View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-//        print(NSUserDefaults.standardUserDefaults().dictionaryRepresentation());
-        
+
         //MARK:
         //MARK: THIS WILL AUTOMATICALLY CRASH THE APP LEAVE THIS ALONE UNLESS CRASHLYTICS TESTING
         /*************************** Fabric Crashlytics *********************************************/
@@ -125,14 +123,6 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         
         if (PFUser.currentUser() != nil) {
             self.isUserLoggedIn = true
-//            PFUser.becomeInBackground((PFUser.currentUser()?.sessionToken)!, block: {
-//                (user: PFUser?, error: NSError?) -> Void in
-//                if error != nil {
-//                    print("The token could not be validated.")
-//                } else {
-//                    print("The current user is now set to user.")
-//                }
-//            })
         }
         else {
             self.isUserLoggedIn = false
@@ -218,6 +208,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        displayMessage("HomeIn", message: "Your device is low on memory and may need to shut down this app.")
     }
     
     func activeAgain() {
@@ -708,7 +699,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
                         if let _ = defaults.objectForKey("loanOfficerArray") {
                             // now val is not nil and the Optional has been unwrapped, so use it
                             let val = defaults.objectForKey("loanOfficerArray")
-                            let firstLo = val!.values!!.first! as! Dictionary<String, String> // FIXME: This doesnt seem right
+                            let firstLo = val!.values!!.first as! Dictionary<String, String> // TODO: This doesnt seem right
                             
                             //Check that the nmls field has been set
                             //this was added later so there is a chance som users will not have this field set.
@@ -1794,10 +1785,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             print("Navigate to Calc")
             /************************* End Fabric Analytics *******************************************/
         case 3:
-//            isMortgageCalc = false
-//            performSegueWithIdentifier("calculatorsViewController", sender: nil)
             performSegueWithIdentifier("viewAvailableVideos", sender: nil)
-            
             /*************************** Fabric Analytics *********************************************/
             Answers.logCustomEventWithName("Nav_to_Video_View", customAttributes: ["Category":"User_Action"])
             print("Navigate to Videos")
@@ -1829,10 +1817,6 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         default:
             print("Default")
         }
-        
-//        for symbol: String in NSThread.callStackSymbols() {
-//            NSLog("%@", symbol)
-//        }
     }
     
     func loginSignupUserButtonPress(sender: UIButton) {

@@ -78,6 +78,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        displayMessage("HomeIn", message: "Your device is low on memory and may need to shut down this app.")
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -498,7 +499,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         let defaults = NSUserDefaults.standardUserDefaults()
         if let loDict = defaults.dictionaryForKey(dictString) {
             if let _ = loDict["nmls"] {
-                buildLoanOfficerCard(loDict as! Dictionary<String, String>, yVal: 110, count: 0, view: profileView, isSingleView: true)
+                buildLoanOfficerCard(loDict as! Dictionary<String, String>, yVal: 110, cardCount: 0, view: profileView, isSingleView: true)
             }
             else {
                 if reachability.isConnectedToNetwork() {
@@ -543,7 +544,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                         defaults.removeObjectForKey(dictString)
                         defaults.setObject(nodeDict, forKey: dictString)
                         
-                        buildLoanOfficerCard(nodeDict, yVal: 110, count: 0, view: profileView, isSingleView: true)
+                        buildLoanOfficerCard(nodeDict, yVal: 110, cardCount: 0, view: profileView, isSingleView: true)
                     }
                     else {
                         buildNoLoCard()
@@ -618,7 +619,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         for loanOfficer in loArray {
             let nodeDict = loanOfficer as NSDictionary
 
-            self.buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count, view: self.scrollView, isSingleView: false)
+            self.buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), cardCount: count, view: self.scrollView, isSingleView: false)
             
             self.scrollView.contentSize = CGSize(width: self.profileView.bounds.size.width, height: CGFloat(loArray.count * 175))
             yVal += 175
@@ -645,8 +646,9 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         }
     }
     
-    func buildLoanOfficerCard(nodeDict: Dictionary<String, String>, yVal: CGFloat, var count: Int, view: UIView, isSingleView: Bool) -> UIView {
+    func buildLoanOfficerCard(nodeDict: Dictionary<String, String>, yVal: CGFloat, cardCount: Int, view: UIView, isSingleView: Bool) -> UIView {
         
+        var count = cardCount
         if isSingleView {
             count = 999
         }
@@ -1100,15 +1102,6 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     // MARK: UITextFieldDelegate
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField.tag == 999 {
-            if (textField.text != "") {
-                searchLoanOfficerArray(searchTxtField.text!)
-                tempArray.removeAll()
-                nameTxtField.resignFirstResponder()
-                emailTxtField.resignFirstResponder()
-                searchTxtField.resignFirstResponder()
-                searchTxtField.text = ""
-            }
-            
             textField.resignFirstResponder()
         }
         else if textField == nameTxtField {

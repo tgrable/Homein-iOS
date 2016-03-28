@@ -76,6 +76,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        displayMessage("HomeIn", message: "Your device is low on memory and may need to shut down this app.")
     }
     
     deinit {
@@ -895,6 +896,22 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    // MARK:
+    // MARK: UIAlert Method (Generic)
+    func displayMessage(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
+        }
+    }
 
     // MARK:
     // MARK: Memory Management

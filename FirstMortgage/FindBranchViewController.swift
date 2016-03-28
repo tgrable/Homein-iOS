@@ -103,6 +103,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        displayMessage("HomeIn", message: "Your device is low on memory and may need to shut down this app.")
     }
     
     deinit {
@@ -311,6 +312,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
 
     func getBranchJson() {
+        print("getBranchJson()")
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             var states = [String]()
             guard let endpoint = NSURL(string: "https://www.firstmortgageco.com/branch-json") else {
@@ -327,7 +329,13 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                             
                             if let streetName = nodeDict["street"] as? String {
                                 //branch!.address = streetName
-                                branch["address"] = streetName
+                                if streetName.rangeOfString("22601 N 19th Ave") != nil {
+                                    let newString = streetName.stringByReplacingOccurrencesOfString("th", withString: "")
+                                    branch["address"] = newString
+                                }
+                                else {
+                                    branch["address"] = streetName
+                                }
                             }
                             if let city = nodeDict["city"] as? String {
                                 //branch!.city = city
@@ -474,13 +482,9 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                 let geocoder = CLGeocoder()
                 let branchLocation = String(format: "%@, %@, USA", branch["address"]!, branch["state"]!)
                 var distance = 0.0
-                
+
                 dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                    
-                    print(branchLocation)
-                    
                     geocoder.geocodeAddressString(branchLocation, completionHandler: {(placemarks, error) -> Void in
-                        
                         
                         if((error) != nil){
                             count += 1
@@ -503,8 +507,15 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                             distance = self.currentLocation.distanceFromLocation(clObj) * 0.000621371;
                             
                             branch["distanceFromMe"] = String(format:"%f", distance)
-                            branch["lat"] = String(format:"%f", lat)
-                            branch["long"] = String(format:"%f", long)
+                            if branchLocation.rangeOfString("22601 N 19 Ave") != nil {
+                                branch["lat"] = String(format:"%f", 33.691627)
+                                branch["long"] = String(format:"%f", -112.099141)
+                            }
+                            else {
+                                branch["lat"] = String(format:"%f", lat)
+                                branch["long"] = String(format:"%f", long)
+                            }
+                            
                             count += 1
                             
                             newBranchArray.append(branch)
@@ -542,6 +553,10 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             var address = ""
             if let _ = branch["address"] {
                 address = branch["address"]!
+                if address.rangeOfString("22601 N 19 Ave") != nil {
+                    let newString = address.stringByReplacingOccurrencesOfString("19", withString: "19th")
+                    address = newString
+                }
             }
             let addressLabel = UILabel (frame: CGRectMake(15, 10, branchView.bounds.size.width - 30, 0))
             addressLabel.font = UIFont(name: "forza-light", size: 24)
@@ -697,9 +712,17 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     func openMapForPlace(branch: [String:String]) {
-        let coords = CLLocationCoordinate2DMake(Double(branch["lat"]!)!, Double(branch["long"]!)!)
         
-        let address : [String : AnyObject] = [CNPostalAddressStreetKey as String: branch["address"]!, CNPostalAddressCityKey as String: branch["city"]!, CNPostalAddressStateKey as String: branch["state"]!, CNPostalAddressCountryKey as String: "US"]
+        var newBranch = branch as Dictionary<String, String>
+        let streetName = newBranch["address"]! as String
+        if streetName.rangeOfString("22601 N 19 Ave") != nil {
+            let newString = streetName.stringByReplacingOccurrencesOfString("19", withString: "19th")
+            newBranch["address"] = newString
+        }
+
+        let coords = CLLocationCoordinate2DMake(Double(newBranch["lat"]!)!, Double(newBranch["long"]!)!)
+        
+        let address : [String : AnyObject] = [CNPostalAddressStreetKey as String: newBranch["address"]!, CNPostalAddressCityKey as String: newBranch["city"]!, CNPostalAddressStateKey as String: newBranch["state"]!, CNPostalAddressCountryKey as String: "US"]
         
         let place = MKPlacemark(coordinate: coords, addressDictionary: address)
         let mapItem = MKMapItem(placemark: place)
@@ -707,7 +730,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     func openPhoneApp(phoneNumber: String) {
-        UIApplication.sharedApplication().openURL(NSURL(string: String(format: "tel://%", phoneNumber))!)
+        print(NSURL(string: String(format: "tel:%@", phoneNumber))!)
+        UIApplication.sharedApplication().openURL(NSURL(string: String(format: "tel:8152622388", phoneNumber))!)
     }
     
     // MARK:
@@ -833,6 +857,22 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     func removeViews(views: UIView) {
         for view in views.subviews {
             view.removeFromSuperview()
+        }
+    }
+    
+    // MARK:
+    // MARK: UIAlert Method (Generic)
+    func displayMessage(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            // ...
         }
     }
     

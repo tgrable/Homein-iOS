@@ -142,6 +142,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        displayMessage("HomeIn", message: "Your device is low on memory and may need to shut down this app.")
     }
     
     deinit {
@@ -1624,6 +1625,9 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         self.homeObject["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : self.homeObject["desc"]
         self.homeObject["monthlyPayment"] = self.estimatedPaymentDefault
         
+        print(self.homeObject["baths"])
+        
+        
         if self.reachability.isConnectedToNetwork() {
             dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
                 self.homeObject["imageArray"] = self.imageArray
@@ -1738,17 +1742,19 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     // MARK:
     // MARK: ParseDataObject Delegate Methods
     func saveSucceeded() {
-        self.myHomesView.removeFromSuperview()
-        self.homeTray.removeFromSuperview()
-        self.calcTray.removeFromSuperview()
-        self.saveDeleteTray.removeFromSuperview()
-        self.buildView()
-        
-        self.activityIndicator.stopAnimating()
-        self.loadingOverlay.hidden = true
-        
-        self.displayMessage("HomeIn", message: "Your home was saved.")
-        self.didEnterEditMode = false
+         dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            self.myHomesView.removeFromSuperview()
+            self.homeTray.removeFromSuperview()
+            self.calcTray.removeFromSuperview()
+            self.saveDeleteTray.removeFromSuperview()
+            self.buildView()
+            
+            self.activityIndicator.stopAnimating()
+            self.loadingOverlay.hidden = true
+            
+            self.displayMessage("HomeIn", message: "Your home was saved.")
+            self.didEnterEditMode = false
+        }
     }
     
     func saveFailed(errorMessage: String) {

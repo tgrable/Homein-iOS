@@ -81,6 +81,7 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+        displayMessage("HomeIn", message: "Your device is low on memory and may need to shut down this app.")
     }
     
     deinit {
@@ -363,9 +364,6 @@ class MyHomesViewController: UIViewController, ParseDataDelegate, UITableViewDat
     // MARK:
     // MARK: Parse Method
     func getAllHomesForUser(sortOrder: String, sortDirection: Bool) {
-        // TODO: revisit this. 
-        //parseObject.getAllHomesForUser(sortOrder, sortDirection: sortDirection, fromLocalDataStore: reachability.isConnectedToNetwork())
-        
         var notConnected = false
         
         if !reachability.isConnectedToNetwork() {
