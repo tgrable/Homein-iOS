@@ -82,7 +82,7 @@ class VideosViewController: UIViewController {
             showActivityIndicator()
             loadViewTimer()
         }else {
-            // this will likely never get called
+            
             let alertController = UIAlertController(title: "HomeIn", message: errorMessage, preferredStyle: .Alert)
             
             let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in

@@ -48,8 +48,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 })
             }
-
-            Fabric.with([Answers.self, Crashlytics.self])
+            //TODO: UNCOMMENT FABRIC
+            //TODO: UNCOMMENT FABRIC
+            //TODO: UNCOMMENT FABRIC
+            //TODO: UNCOMMENT FABRIC
+            //TODO: UNCOMMENT FABRIC
+            //TODO: I repeated this to makes sure I don't forget :-O 
+//            Fabric.with([Answers.self, Crashlytics.self])
             
   
 //            Fabric.sharedSDK().debug = true

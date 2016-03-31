@@ -2168,7 +2168,12 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             if reachability.isConnectedToNetwork() {
                 var url = ""
                 if var _ = user!["officerURL"] {
-                    url = user!["officerURL"] as! String
+                    //TODO: This looks correct, DOUBLE CHECK BEFORE DEPLOYMENT 
+                    let officerURL = user!["officerURL"] as! String
+                    let trimmedOfficerURL = officerURL.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+
+//                    url = user!["officerURL"] as! String
+                    url = trimmedOfficerURL
                 }
                 if (url.characters.count > 0) {
                     preQualifiedOverlay.hidden = true
