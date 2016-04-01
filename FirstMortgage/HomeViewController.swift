@@ -1681,8 +1681,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             let user = PFUser()
             
             user["name"] = namereg.text
-            //TODO: Come back to this - lower case strings require parse change
-            user.username = usernamereg.text/*?.lowercaseString*/
+            user.username = usernamereg.text
             user.password = passwordreg.text
             user.email = emailreg.text
 
@@ -2272,7 +2271,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
     }
     
     func loginFailed(errorMessage: String) {
-        self.displayMessage("HomeIn", message: errorMessage)
+        let errorMessageString = String(format: "%@ \n Username and password are case sensitive.", errorMessage)
+        self.displayMessage("HomeIn", message: errorMessageString)
     }
     
     func signupSucceeded() {
