@@ -1681,7 +1681,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             let user = PFUser()
             
             user["name"] = namereg.text
-            user.username = usernamereg.text
+            //TODO: Come back to this - lower case strings require parse change
+            user.username = usernamereg.text/*?.lowercaseString*/
             user.password = passwordreg.text
             user.email = emailreg.text
 
@@ -1800,7 +1801,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             if let user = PFUser.currentUser() {
                 if let url = user["officerURL"] {
                     let urlPath = url as! String
-                    UIApplication.sharedApplication().openURL(NSURL(string: urlPath)!)
+                    let cleanUrlPath = urlPath.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                    UIApplication.sharedApplication().openURL(NSURL(string: cleanUrlPath)!)
                     /*************************** Fabric Analytics *********************************************/
                     Answers.logCustomEventWithName("User_Dismiss_App_For_Prequalification", customAttributes: ["Category":"User_Action"])
                     print("Navigate to Branch Locator")
