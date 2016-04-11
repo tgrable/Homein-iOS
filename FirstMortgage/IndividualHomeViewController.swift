@@ -1158,6 +1158,12 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
                     bathsTxtField.text = String(format: "%.1f", bath)
                 }
             }
+            else {
+                if !isNumeric(bathsTxtField.text!) {
+                    displayMessage("HomeIn", message: "Please enter a valid number of bathrooms")
+                    bathsTxtField.text = String(format: "%.1f", 0.0)
+                }
+            }
         }
         else if textField == sqFeetTxtField {
             if sqFeetTxtField.text == "" {
@@ -1462,35 +1468,49 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     func calculateMortgagePaymentButtonPress(sender: UIButton) {
         tapGesture()
         
-        var saleAmount = 250000.0
-        if loanAmountTxtField.text?.isEmpty != true {
-            saleAmount = Double(loanAmountTxtField.text!)!
-        }
-        
-        var mortgage = 30.0
-        if mortgageTxtField.text?.isEmpty != true {
-            mortgage = Double(mortgageTxtField.text!)!
-        }
-        
-        var interest = 3.5
-        if interestTxtField.text?.isEmpty != true {
-            if (Double(interestTxtField.text!) == 0.0) {
-                interest = 0.01
+        if isNumeric(interestTxtField.text!) {
+            var saleAmount = 250000.0
+            if loanAmountTxtField.text?.isEmpty != true {
+                saleAmount = Double(loanAmountTxtField.text!)!
             }
-            else {
-                interest = Double(interestTxtField.text!)!
+            
+            var mortgage = 30.0
+            if mortgageTxtField.text?.isEmpty != true {
+                mortgage = Double(mortgageTxtField.text!)!
             }
+            
+            var interest = 3.5
+            if interestTxtField.text?.isEmpty != true {
+                if (Double(interestTxtField.text!) == 0.0) {
+                    interest = 0.01
+                }
+                else {
+                    interest = Double(interestTxtField.text!)!
+                }
+            }
+            
+            var downPayment = 5000.0
+            if downPaymentTxtField.text?.isEmpty != true {
+                downPayment = Double(downPaymentTxtField.text!)!
+            }
+            
+            let loan = saleAmount - downPayment
+            
+            estimatedPaymentDefault = model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: 0.0)
+            paymentLabel.text = String(format:"$%.2f / MONTH", estimatedPaymentDefault)
         }
-        
-        var downPayment = 5000.0
-        if downPaymentTxtField.text?.isEmpty != true {
-            downPayment = Double(downPaymentTxtField.text!)!
+        else {
+            displayMessage("HomeIn", message: "Please enter a valid interest rate.")
         }
-        
-        let loan = saleAmount - downPayment
-        
-        estimatedPaymentDefault = model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: 0.0)
-        paymentLabel.text = String(format:"$%.2f / MONTH", estimatedPaymentDefault)
+    }
+    
+    func isNumeric(a: String) -> Bool {
+        if let _ = Double(a) {
+            return true
+        }
+        else {
+            return false
+        }
     }
     
     func deleteImageFromArray(sender: UIButton) {
@@ -1601,43 +1621,44 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     //MARK:
     //MARK: Parse Update Object
     func updateHomeObject() {
-        print("updateHomeObject")
-        loadingOverlay.hidden = false
-        activityIndicator.startAnimating()
-        
-        self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
-        var price = "0"
-        if let _ = self.homePriceTxtField.text {
-            price = self.homePriceTxtField.text! as String
-        }
-        if price.rangeOfString(",") != nil{
-            price = price.stringByReplacingOccurrencesOfString(",", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        }
-        if price.rangeOfString("$") != nil{
-            price = price.stringByReplacingOccurrencesOfString("$", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
-        }
-        self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(price) : self.homeObject["price"]
-        self.homeObject["rating"] = self.userRating
-        self.homeObject["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : self.homeObject["beds"]
-        self.homeObject["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : self.homeObject["baths"]
-        self.homeObject["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : self.homeObject["footage"]
-        self.homeObject["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : self.homeObject["address"]
-        self.homeObject["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : self.homeObject["desc"]
-        self.homeObject["monthlyPayment"] = self.estimatedPaymentDefault
-        
-        print(self.homeObject["baths"])
-        
-        
-        if self.reachability.isConnectedToNetwork() {
-            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                self.homeObject["imageArray"] = self.imageArray
-                self.parseObject.saveHomeWithBlock(self.homeObject)
+        if self.bathsTxtField.text == "" || isNumeric(self.bathsTxtField.text!) {
+            loadingOverlay.hidden = false
+            activityIndicator.startAnimating()
+            
+            self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
+            var price = "0"
+            if let _ = self.homePriceTxtField.text {
+                price = self.homePriceTxtField.text! as String
+            }
+            if price.rangeOfString(",") != nil{
+                price = price.stringByReplacingOccurrencesOfString(",", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            }
+            if price.rangeOfString("$") != nil{
+                price = price.stringByReplacingOccurrencesOfString("$", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+            }
+            self.homeObject["price"] = (self.homePriceTxtField.text != "") ? Double(price) : self.homeObject["price"]
+            self.homeObject["rating"] = self.userRating
+            self.homeObject["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : self.homeObject["beds"]
+            self.homeObject["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : self.homeObject["baths"]
+            self.homeObject["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : self.homeObject["footage"]
+            self.homeObject["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : self.homeObject["address"]
+            self.homeObject["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : self.homeObject["desc"]
+            self.homeObject["monthlyPayment"] = self.estimatedPaymentDefault
+            
+            if self.reachability.isConnectedToNetwork() {
+                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                    self.homeObject["imageArray"] = self.imageArray
+                    self.parseObject.saveHomeWithBlock(self.homeObject)
+                }
+            }
+            else {
+                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                    self.parseObject.saveHomeEventually(self.homeObject)
+                }
             }
         }
         else {
-            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                self.parseObject.saveHomeEventually(self.homeObject)
-            }
+            displayMessage("HomeIn", message: "Please enter a valid number of bathrooms")
         }
     }
     

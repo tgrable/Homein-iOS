@@ -688,44 +688,59 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
     // MARK: Parse
     func addNewHome(sender: UIButton) {
         if (self.homeNameTxtField.text != "") {
-            saveButton.enabled = false
-            overlayView.hidden = false
-            activityIndicator.startAnimating()
-            
-            dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
-                let home = PFObject(className: "Home")
+            if self.bathsTxtField.text == "" || isNumeric(self.bathsTxtField.text!) {
                 
-                home["user"] = PFUser.currentUser()
-                home["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : "Home"
-                home["price"] = (self.homePriceTxtField.text != "") ? Double(self.homePriceTxtField.text!) : 0
-                home["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : ""
-                home["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : 0
-                home["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : 0
-                home["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : 0
-                home["rating"] = self.ratingDefault
-                home["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : "Default home description"
-
-                if self.reachability.isConnectedToNetwork() {
-                    home["imageArray"] = self.imageArray
+                saveButton.enabled = false
+                overlayView.hidden = false
+                activityIndicator.startAnimating()
+                
+                dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
+                    let home = PFObject(className: "Home")
                     
-                    self.parseObject.saveHomeWithBlock(home)
+                    home["user"] = PFUser.currentUser()
+                    home["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : "Home"
+                    home["price"] = (self.homePriceTxtField.text != "") ? Double(self.homePriceTxtField.text!) : 0
+                    home["address"] = (self.homeAddressTxtField.text != "") ? self.homeAddressTxtField.text : ""
+                    home["beds"] = (self.bedsTxtField.text != "") ? Double(self.bedsTxtField.text!) : 0
+                    home["baths"] = (self.bathsTxtField.text != "") ? Double(self.bathsTxtField.text!) : 0
+                    home["footage"] = (self.sqFeetTxtField.text != "") ? Double(self.sqFeetTxtField.text!) : 0
+                    home["rating"] = self.ratingDefault
+                    home["desc"] = (self.descTxtView.text != "") ? self.descTxtView.text : "Default home description"
                     
-                    /*************************** Fabric Analytics *********************************************/
-                    Answers.logCustomEventWithName("Created_New_Home_Entry_With_Connection", customAttributes: ["Category":"User_Action"])
-                    print("Created_New_Home_Entry_With_Connection")
-                    /************************* End Fabric Analytics *******************************************/
+                    if self.reachability.isConnectedToNetwork() {
+                        home["imageArray"] = self.imageArray
+                        
+                        self.parseObject.saveHomeWithBlock(home)
+                        
+                        /*************************** Fabric Analytics *********************************************/
+                        Answers.logCustomEventWithName("Created_New_Home_Entry_With_Connection", customAttributes: ["Category":"User_Action"])
+                        print("Created_New_Home_Entry_With_Connection")
+                        /************************* End Fabric Analytics *******************************************/
+                    }
+                    else {
+                        self.parseObject.saveHomeEventually(home)
+                        /*************************** Fabric Analytics *********************************************/
+                        Answers.logCustomEventWithName("Created_New_Home_Entry_With_NO_Connection", customAttributes: ["Category":"User_Action"])
+                        print("Created_New_Home_Entry_With_NO_Connection")
+                        /************************* End Fabric Analytics *******************************************/
+                    }
                 }
-                else {
-                    self.parseObject.saveHomeEventually(home)
-                    /*************************** Fabric Analytics *********************************************/
-                    Answers.logCustomEventWithName("Created_New_Home_Entry_With_NO_Connection", customAttributes: ["Category":"User_Action"])
-                    print("Created_New_Home_Entry_With_NO_Connection")
-                    /************************* End Fabric Analytics *******************************************/
-                }
+            }
+            else {
+                displayMessage("HomeIn", message: "Please enter a valid number of bathrooms")
             }
         }
         else {
             displayMessage("HomeIn", message: "Please enter a name for this home.")
+        }
+    }
+    
+    func isNumeric(a: String) -> Bool {
+        if let _ = Double(a) {
+            return true
+        }
+        else {
+            return false
         }
     }
 

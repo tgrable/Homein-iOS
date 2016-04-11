@@ -766,39 +766,53 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     // MARK: Action Methods
     func calculateMortgagePaymentButtonPress(sender: UIButton) {
         tapGesture()
-        
-        var saleAmount = 250000.0
-        if mortLoanAmountTxtField.text?.isEmpty != true {
-            saleAmount = Double(mortLoanAmountTxtField.text!)!
-        }
-        
-        var downPayment = 5000.0
-        if mortDownPaymentTxtField.text?.isEmpty != true {
-            downPayment = Double(mortDownPaymentTxtField.text!)!
-        }
-        
-        let loan = saleAmount - downPayment
-        
-        var mortgage = 30.0
-        if mortMortgageTxtField.text?.isEmpty != true {
-            mortgage = Double(mortMortgageTxtField.text!)!
-        }
-        
-        var interest = 3.5
-        if mortInterestTxtField.text?.isEmpty != true {
-            if (Double(mortInterestTxtField.text!) == 0.0) {
-                interest = 0.01
+
+        if isNumeric(mortInterestTxtField.text!) {
+            var saleAmount = 250000.0
+            if mortLoanAmountTxtField.text?.isEmpty != true {
+                saleAmount = Double(mortLoanAmountTxtField.text!)!
             }
-            else {
-                interest = Double(mortInterestTxtField.text!)!
+            
+            var downPayment = 5000.0
+            if mortDownPaymentTxtField.text?.isEmpty != true {
+                downPayment = Double(mortDownPaymentTxtField.text!)!
             }
+            
+            let loan = saleAmount - downPayment
+            
+            var mortgage = 30.0
+            if mortMortgageTxtField.text?.isEmpty != true {
+                mortgage = Double(mortMortgageTxtField.text!)!
+            }
+            
+            var interest = 3.5
+            if mortInterestTxtField.text?.isEmpty != true {
+                if (Double(mortInterestTxtField.text!) == 0.0) {
+                    interest = 0.01
+                }
+                else {
+                    interest = Double(mortInterestTxtField.text!)!
+                }
+            }
+            /*************************** Fabric Analytics *********************************************/
+            Answers.logCustomEventWithName("Mortgages_Calculated", customAttributes: ["Category":"User_Action"])
+            print("Mortgages_Calculated")
+            /************************* End Fabric Analytics *******************************************/
+            
+            paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: 0.0))
         }
-        /*************************** Fabric Analytics *********************************************/
-                Answers.logCustomEventWithName("Mortgages_Calculated", customAttributes: ["Category":"User_Action"])
-                print("Mortgages_Calculated")
-        /************************* End Fabric Analytics *******************************************/
-        
-        paymentLabel.text = String(format:"$%.2f / MONTH", model.calculateMortgagePayment(loan, interest: interest, mortgage: mortgage, taxes: 0.0))
+        else {
+            displayMessage("HomeIn", message: "Please enter a valid interest rate.")
+        }
+    }
+    
+    func isNumeric(a: String) -> Bool {
+        if let _ = Double(a) {
+            return true
+        }
+        else {
+            return false
+        }
     }
     
     func calculateRefinanceButtonPress(sender: UIButton) {
