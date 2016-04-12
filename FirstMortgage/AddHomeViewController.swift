@@ -688,7 +688,7 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
     // MARK: Parse
     func addNewHome(sender: UIButton) {
         if (self.homeNameTxtField.text != "") {
-            if self.bathsTxtField.text == "" || isNumeric(self.bathsTxtField.text!) {
+            if self.bathsTxtField.text == "" || model.isNumeric(self.bathsTxtField.text!) {
                 
                 saveButton.enabled = false
                 overlayView.hidden = false
@@ -732,15 +732,6 @@ class AddHomeViewController: UIViewController, ParseDataDelegate, UIImagePickerC
         }
         else {
             displayMessage("HomeIn", message: "Please enter a name for this home.")
-        }
-    }
-    
-    func isNumeric(a: String) -> Bool {
-        if let _ = Double(a) {
-            return true
-        }
-        else {
-            return false
         }
     }
 

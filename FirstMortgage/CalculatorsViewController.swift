@@ -767,7 +767,7 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
     func calculateMortgagePaymentButtonPress(sender: UIButton) {
         tapGesture()
 
-        if isNumeric(mortInterestTxtField.text!) {
+        if model.isNumeric(mortInterestTxtField.text!) {
             var saleAmount = 250000.0
             if mortLoanAmountTxtField.text?.isEmpty != true {
                 saleAmount = Double(mortLoanAmountTxtField.text!)!
@@ -803,15 +803,6 @@ class CalculatorsViewController: UIViewController, UITextFieldDelegate {
         }
         else {
             displayMessage("HomeIn", message: "Please enter a valid interest rate.")
-        }
-    }
-    
-    func isNumeric(a: String) -> Bool {
-        if let _ = Double(a) {
-            return true
-        }
-        else {
-            return false
         }
     }
     

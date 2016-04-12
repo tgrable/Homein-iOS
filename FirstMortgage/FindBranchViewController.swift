@@ -347,7 +347,8 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
                             }
                             if let phone = nodeDict["phone"] as? String {
                                 //branch!.phone = self.cleanPhoneNumnerString(phone)
-                                branch["phone"] = self.cleanPhoneNumnerString(phone)
+                                branch["phone"] = self.model.cleanPhoneNumnerString(phone)
+                                print(self.model.cleanPhoneNumnerString(phone))
                             }
                             
                             if let nmls = nodeDict["nmls"] as? String {
@@ -607,7 +608,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
             var pl = ""
             if let _ = branch["phone"] {
                 if (branch["phone"]!.characters.count > 0) {
-                    pl = formatPhoneString(branch["phone"]!)
+                    pl = model.formatPhoneString(branch["phone"]!)
                 }
             }
             let phoneLabel = UILabel (frame: CGRectMake(15, offset + 10, branchView.bounds.size.width - 30, 0))
@@ -694,7 +695,7 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     func phoneButtonPressed(sender: UIButton) {
         let branch = self.filteredArray[sender.tag]
         
-        let alertController = UIAlertController(title: "HomeIn", message: String(format: "Call %@", formatPhoneString(branch["phone"]!)), preferredStyle: .Alert)
+        let alertController = UIAlertController(title: "HomeIn", message: String(format: "Call %@", model.formatPhoneString(branch["phone"]!)), preferredStyle: .Alert)
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (action) in
             // ...
@@ -777,24 +778,6 @@ class FindBranchViewController: UIViewController, CLLocationManagerDelegate, UIP
     
     // MARK:
     // MARK: - Utility Methods
-    func cleanPhoneNumnerString(phoneNumber: String) -> String {
-        let stringArray = phoneNumber.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
-        let newString = stringArray.joinWithSeparator("")
-        return newString
-    }
-    
-    func formatPhoneString(phoneString: String) -> String {
-        let stringArray = phoneString.componentsSeparatedByCharactersInSet(NSCharacterSet.decimalDigitCharacterSet().invertedSet)
-        let newString = stringArray.joinWithSeparator("")
-        let finalString = cleanPhoneNumnerString(newString)
-        
-        let areaCode = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(0), end: finalString.endIndex.advancedBy(-7)))
-        let prefix = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(3), end: finalString.endIndex.advancedBy(-4)))
-        let number = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(6), end: finalString.endIndex.advancedBy(0)))
-        
-        return String(format: "(%@) %@-%@", areaCode, prefix, number)
-    }
-    
     func createStateDictionary() {
         stateDictionary = [
             "AL":"Alabama",

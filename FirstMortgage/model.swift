@@ -133,10 +133,23 @@ class Model: NSObject {
         let newString = stringArray.joinWithSeparator("")
         let finalString = cleanPhoneNumnerString(newString)
         
-        let areaCode = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(0), end: finalString.endIndex.advancedBy(-7)))
-        let prefix = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(3), end: finalString.endIndex.advancedBy(-4)))
-        let number = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(6), end: finalString.endIndex.advancedBy(0)))
+        let areaCode = finalString.substringWithRange(finalString.startIndex.advancedBy(0)..<finalString.endIndex.advancedBy(-7))
+        let prefix = finalString.substringWithRange(finalString.startIndex.advancedBy(3)..<finalString.endIndex.advancedBy(-4))
+        let number = finalString.substringWithRange(finalString.startIndex.advancedBy(6)..<finalString.endIndex.advancedBy(0))
+        
+//        let areaCode = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(0), end: finalString.endIndex.advancedBy(-7)))
+//        let prefix = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(3), end: finalString.endIndex.advancedBy(-4)))
+//        let number = finalString.substringWithRange(Range<String.Index>(start: finalString.startIndex.advancedBy(6), end: finalString.endIndex.advancedBy(0)))
         
         return String(format: "(%@) %@-%@", areaCode, prefix, number)
+    }
+    
+    func isNumeric(a: String) -> Bool {
+        if let _ = Double(a) {
+            return true
+        }
+        else {
+            return false
+        }
     }
 }

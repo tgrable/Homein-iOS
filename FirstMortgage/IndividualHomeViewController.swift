@@ -1159,7 +1159,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
                 }
             }
             else {
-                if !isNumeric(bathsTxtField.text!) {
+                if !model.isNumeric(bathsTxtField.text!) {
                     displayMessage("HomeIn", message: "Please enter a valid number of bathrooms")
                     bathsTxtField.text = String(format: "%.1f", 0.0)
                 }
@@ -1468,7 +1468,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     func calculateMortgagePaymentButtonPress(sender: UIButton) {
         tapGesture()
         
-        if isNumeric(interestTxtField.text!) {
+        if model.isNumeric(interestTxtField.text!) {
             var saleAmount = 250000.0
             if loanAmountTxtField.text?.isEmpty != true {
                 saleAmount = Double(loanAmountTxtField.text!)!
@@ -1501,15 +1501,6 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         }
         else {
             displayMessage("HomeIn", message: "Please enter a valid interest rate.")
-        }
-    }
-    
-    func isNumeric(a: String) -> Bool {
-        if let _ = Double(a) {
-            return true
-        }
-        else {
-            return false
         }
     }
     
@@ -1621,7 +1612,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     //MARK:
     //MARK: Parse Update Object
     func updateHomeObject() {
-        if self.bathsTxtField.text == "" || isNumeric(self.bathsTxtField.text!) {
+        if self.bathsTxtField.text == "" || model.isNumeric(self.bathsTxtField.text!) {
             loadingOverlay.hidden = false
             activityIndicator.startAnimating()
             
