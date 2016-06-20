@@ -67,19 +67,21 @@ class Model: NSObject {
     
     func getBranchLoanOfficers() -> NSArray {
         let endpoint = NSURL(string: "https://www.firstmortgageco.com/loan-officers-json")
-        let data = NSData(contentsOfURL: endpoint!)
-        do {
-            let json = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers)
-            if let nodes = json as? NSArray {
-                return nodes
+        if let data = NSData(contentsOfURL: endpoint!) {
+            do {
+                let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers)
+                if let nodes = json as? NSArray {
+                    return nodes
+                }
             }
+            catch {
+                print("error serializing JSON: \(error)")
+            }
+            
         }
-        catch {
-            print("error serializing JSON: \(error)")
-        }
+        
         return []
     }
-
     
     func deviceWidth() -> CGFloat {
         //modelName.rangeOfString("5")
