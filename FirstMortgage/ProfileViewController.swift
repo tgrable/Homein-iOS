@@ -616,15 +616,29 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
         scrollView.contentOffset.y = 0
         overlayView.hidden = false
-        for loanOfficer in loArray {
-            let nodeDict = loanOfficer as NSDictionary
-
-            self.buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), cardCount: count, view: self.scrollView, isSingleView: false)
-            
-            self.scrollView.contentSize = CGSize(width: self.profileView.bounds.size.width, height: CGFloat(loArray.count * 175))
-            yVal += 175
-            count += 1
+        if loArray.count > 0 {
+            for loanOfficer in loArray {
+                let nodeDict = loanOfficer as NSDictionary
+                
+                self.buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), cardCount: count, view: self.scrollView, isSingleView: false)
+                
+                self.scrollView.contentSize = CGSize(width: self.profileView.bounds.size.width, height: CGFloat(loArray.count * 175))
+                yVal += 175
+                count += 1
+            }
         }
+        else {
+            // UILabel
+            let noLOTextLabel = UILabel(frame: CGRectMake(15, 50, overlayView.bounds.size.width - 80, 0))
+            noLOTextLabel.text = "We apologize but an error has occurred while getting the loan officer data. Please use the the X in the top right to close this window."
+            noLOTextLabel.textAlignment = NSTextAlignment.Left
+            noLOTextLabel.textColor = UIColor.darkTextColor()
+            noLOTextLabel.font = UIFont(name: "forza-light", size: 16)
+            noLOTextLabel.numberOfLines = 0
+            noLOTextLabel.sizeToFit()
+            self.scrollView.addSubview(noLOTextLabel)
+        }
+
     }
 
     func getBranchLoanOfficers() {

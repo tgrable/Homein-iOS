@@ -1445,13 +1445,26 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         scrollView.backgroundColor = UIColor.clearColor()
         searchOverlayView.addSubview(scrollView)
         
-        for loanOfficer in loArray {
-            let nodeDict = loanOfficer as NSDictionary
-            buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count)
-            
-            scrollView.contentSize = CGSize(width: overlayView.bounds.size.width, height: CGFloat(loArray.count * 175))
-            yVal += 175
-            count += 1
+        if loArray.count > 0 {
+            for loanOfficer in loArray {
+                let nodeDict = loanOfficer as NSDictionary
+                buildLoanOfficerCard(nodeDict as! Dictionary<String, String>, yVal: CGFloat(yVal), count: count)
+                
+                scrollView.contentSize = CGSize(width: overlayView.bounds.size.width, height: CGFloat(loArray.count * 175))
+                yVal += 175
+                count += 1
+            }
+        }
+        else {
+            // UILabel
+            let noLOTextLabel = UILabel(frame: CGRectMake(15, 150, overlayView.bounds.size.width - 80, 0))
+            noLOTextLabel.text = "We apologize but an error has occurred while getting the loan officer data. Please use the the X in the top right to close this window and continue with the sign up process."
+            noLOTextLabel.textAlignment = NSTextAlignment.Left
+            noLOTextLabel.textColor = UIColor.darkTextColor()
+            noLOTextLabel.font = UIFont(name: "forza-light", size: 16)
+            noLOTextLabel.numberOfLines = 0
+            noLOTextLabel.sizeToFit()
+            searchOverlayView.addSubview(noLOTextLabel)
         }
     }
     
