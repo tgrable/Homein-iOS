@@ -183,12 +183,12 @@ class VideosViewController: UIViewController {
                         
                     }
 
-                    let video = YouTubePlayerView(frame: frame)
+                    let video = YTPlayerView(frame: frame)
                     video.alpha = 0
                     
                     self.scrollView.addSubview(video)
                     
-                    video.loadVideoID(newVideoInstance.videoYoutubeID)
+                    video.loadWithVideoId(newVideoInstance.videoYoutubeID)
                     video.backgroundColor = UIColor.yellowColor()
                     
                     let titleLabel: UILabel = UILabel()

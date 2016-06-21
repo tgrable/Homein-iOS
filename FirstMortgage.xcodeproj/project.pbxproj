@@ -14,7 +14,6 @@
 		4CBB7AD21C7F931B00E6FEB8 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBB7AD01C7F931B00E6FEB8 /* Fabric.framework */; };
 		4CBB7AD51C7F9B0E00E6FEB8 /* VideosViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB7AD41C7F9B0E00E6FEB8 /* VideosViewController.swift */; };
 		4CBB7AD71C7F9CE000E6FEB8 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CBB7AD61C7F9CE000E6FEB8 /* Crashlytics.framework */; };
-		4CD790541C73A77C0014A7F0 /* YouTubePlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */; };
 		4CD790561C73AC540014A7F0 /* videoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790551C73AC540014A7F0 /* videoModel.swift */; };
 		4CD790631C73B94F0014A7F0 /* Assets.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4CD790601C73B94F0014A7F0 /* Assets.bundle */; };
 		4CD790641C73B94F0014A7F0 /* YTPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4CD790621C73B94F0014A7F0 /* YTPlayerView.m */; };
@@ -168,7 +167,6 @@
 		4CBB7AD11C7F931B00E6FEB8 /* Answers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Answers.framework; sourceTree = "<group>"; };
 		4CBB7AD41C7F9B0E00E6FEB8 /* VideosViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideosViewController.swift; sourceTree = "<group>"; };
 		4CBB7AD61C7F9CE000E6FEB8 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
-		4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubePlayer.swift; sourceTree = "<group>"; };
 		4CD790551C73AC540014A7F0 /* videoModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = videoModel.swift; path = FirstMortgage/videoModel.swift; sourceTree = "<group>"; };
 		4CD7905F1C73B94D0014A7F0 /* FirstMortgage-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FirstMortgage-Bridging-Header.h"; sourceTree = "<group>"; };
 		4CD790601C73B94F0014A7F0 /* Assets.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Assets.bundle; sourceTree = "<group>"; };
@@ -575,7 +573,6 @@
 				4CD790611C73B94F0014A7F0 /* YTPlayerView.h */,
 				4CD790621C73B94F0014A7F0 /* YTPlayerView.m */,
 				4CD790551C73AC540014A7F0 /* videoModel.swift */,
-				4CD790531C73A77C0014A7F0 /* YouTubePlayer.swift */,
 				4F4A70EF1BFCDE8C009FDD79 /* BasicCell.swift */,
 				4C1F19C41C73812D00AA8B15 /* SwiftyJSON.swift */,
 				4FADCA6C1C0E2B7E000186A8 /* Model.swift */,
@@ -656,7 +653,6 @@
 				TargetAttributes = {
 					4FAF3CCD1BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
-						DevelopmentTeam = T93U3CE238;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -861,7 +857,6 @@
 				4FD9549F1C6E2441003829EC /* ParseDataObject.swift in Sources */,
 				4FAF3D081BE1094900A89A9A /* AddHomeViewController.swift in Sources */,
 				4FAF3D0A1BE109F800A89A9A /* CalculatorsViewController.swift in Sources */,
-				4CD790541C73A77C0014A7F0 /* YouTubePlayer.swift in Sources */,
 				4F4A70F01BFCDE8C009FDD79 /* BasicCell.swift in Sources */,
 				4FAF3CD21BE106EB00A89A9A /* AppDelegate.swift in Sources */,
 				4F1ED5121C1B325900E40F4B /* DeviceExtension.swift in Sources */,
