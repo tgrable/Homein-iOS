@@ -26,8 +26,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             Parse.enableLocalDatastore()
             
             // Initialize Parse.
-            Parse.setApplicationId("oc8vD41spZ2C9BZdxTP9uVmngI88bTnIJVA99xMZ",
-                clientKey: "yUeoRTYblcdr8UJe6tJFg2u1kcA9KOuRsCwBccfd")
+//            Parse.setApplicationId("oc8vD41spZ2C9BZdxTP9uVmngI88bTnIJVA99xMZ",
+//                clientKey: "yUeoRTYblcdr8UJe6tJFg2u1kcA9KOuRsCwBccfd")
+            
+            let configuration = ParseClientConfiguration {
+                $0.applicationId = "oc8vD41spZ2C9BZdxTP9uVmngI88bTnIJVA99xMZ"
+                $0.clientKey = "yUeoRTYblcdr8UJe6tJFg2u1kcA9KOuRsCwBccfd"
+                $0.server = "http://fmc-homein.herokuapp.com/parse"
+            }
+            Parse.initializeWithConfiguration(configuration)
             
             // [Optional] Track statistics around application opens.
             PFAnalytics.trackAppOpenedWithLaunchOptions(launchOptions)
