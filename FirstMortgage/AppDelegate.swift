@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         dispatch_async(dispatch_get_global_queue(Int(QOS_CLASS_USER_INITIATED.rawValue), 0)) {
             // [Optional] Power your app with Local Datastore. For more info, go to
             // https://parse.com/docs/ios_guide#localdatastore/iOS
-            Parse.enableLocalDatastore()
+//            Parse.enableLocalDatastore()
             
             // Initialize Parse.
 //            Parse.setApplicationId("oc8vD41spZ2C9BZdxTP9uVmngI88bTnIJVA99xMZ",

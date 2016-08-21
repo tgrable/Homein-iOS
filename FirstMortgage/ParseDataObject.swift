@@ -74,10 +74,9 @@ class ParseDataObject: NSObject {
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
-                var object: [PFObject]?
-                if let _ = object {
+                if let _ = objects {
                     PFObject.pinAllInBackground(objects)
-                    self.delegate?.querySecceededWithObjects!(object!)
+                    self.delegate?.querySecceededWithObjects!(objects!)
                 }
                 
             } else {
