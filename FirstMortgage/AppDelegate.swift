@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 $0.applicationId = "oc8vD41spZ2C9BZdxTP9uVmngI88bTnIJVA99xMZ"
                 $0.clientKey = "yUeoRTYblcdr8UJe6tJFg2u1kcA9KOuRsCwBccfd"
                 $0.server = "http://fmc-homein.herokuapp.com/parse"
+                $0.localDatastoreEnabled = true
             }
             Parse.initializeWithConfiguration(configuration)
             
@@ -56,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
             }
 
-            Fabric.with([Answers.self, Crashlytics.self])
+//            Fabric.with([Answers.self, Crashlytics.self])
             
   
 //            Fabric.sharedSDK().debug = true
