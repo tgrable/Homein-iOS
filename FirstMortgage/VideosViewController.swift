@@ -11,7 +11,7 @@ import Answers
 import Crashlytics
 
 
-class VideosViewController: UIViewController {
+class VideosViewController: UIViewController, YTPlayerViewDelegate {
     
     let reachability = Reachability()
     
@@ -58,12 +58,16 @@ class VideosViewController: UIViewController {
     //UIImageView
     var calcIcon = UIImageView()
     
+    // Video Object Array 
+    var videoArray: Array<String> = []
+    
     //MARK:
     //MARK: JSON Parse and object creation
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.userInteractionEnabled = false
+        videoArray.removeAll()
         
         //MARK:
         //MARK: THIS WILL AUTOMATICALLY CRASH THE APP LEAVE THIS ALONE UNLESS CRASHLYTICS TESTING
@@ -101,6 +105,12 @@ class VideosViewController: UIViewController {
         
         
     }
+    
+//    func playerView(playerView: YTPlayerView!, didChangeToState state: YTPlayerState) {
+//        
+//        
+//        print("\(state)")
+//    }
     
     func loadViewTimer(){
         loadTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(VideosViewController.parseJSON), userInfo: nil, repeats: false)
@@ -185,10 +195,12 @@ class VideosViewController: UIViewController {
 
                     let video = YTPlayerView(frame: frame)
                     video.alpha = 0
-                    
+                    video.delegate = self
+                    video.tag = i
                     self.scrollView.addSubview(video)
                     
                     video.loadWithVideoId(newVideoInstance.videoYoutubeID)
+                    videoArray.append(newVideoInstance.videoYoutubeID)
                     video.backgroundColor = UIColor.yellowColor()
                     
                     let titleLabel: UILabel = UILabel()
@@ -521,6 +533,16 @@ class VideosViewController: UIViewController {
     deinit {
         print("deinit being called in VideosViewController")
         removeViews(self.view)
+    }
+    
+    func playerView(playerView: YTPlayerView!, didChangeToState state: YTPlayerState) {
+
+//        print("\( playerView.videoUrl())")
+//        print("\(playerView.playerState())")
+        if playerView.playerState() == .Playing {
+            let currentURL = videoArray[playerView.tag]
+            Answers.logCustomEventWithName("Video Played", customAttributes: ["Youtube ID":"\(currentURL)"])
+        }
     }
     
     // MARK:
