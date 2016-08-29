@@ -20,6 +20,7 @@ class VideosViewController: UIViewController, NetworkDataDelegate {
     // Strings
     var titleLabel = "HELPFUL VIDEOS"
     let errorMessage = "This device currently has no internet connection. An internet connection is required to view videos."
+    let appName = "HomeIn"
 
     // Video Data
     var videoData: NSMutableArray = []
@@ -45,21 +46,7 @@ class VideosViewController: UIViewController, NetworkDataDelegate {
             print("Calling Network data")
             ND.downloadVideoData()
         }else {
-            
-            let alertController = UIAlertController(title: "HomeIn", message: errorMessage, preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                
-                self.navigationController?.popViewControllerAnimated(true)
-                
-            }
-            
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                
-            }
-            
+            addAlert(withThisMessage: errorMessage, andThisTitle: appName)
         }
 
         
@@ -169,28 +156,14 @@ class VideosViewController: UIViewController, NetworkDataDelegate {
             videoData.removeAllObjects()
             ND.downloadVideoData()
         }else {
-            
-            let alertController = UIAlertController(title: "HomeIn", message: errorMessage, preferredStyle: .Alert)
-            
-            let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
-                
-                self.navigationController?.popViewControllerAnimated(true)
-                
-            }
-            
-            alertController.addAction(OKAction)
-            
-            self.presentViewController(alertController, animated: true) {
-                
-            }
-            
+            addAlert(withThisMessage: errorMessage, andThisTitle: appName)
         }
         
 
       
     }
     
-    //MARK:: Delegate Methods
+    //MARK:: NetworkData Delegate Methods
     
     func videoDataLoaded(withThisArray: NSMutableArray) {
         print("network data loaded")
@@ -204,15 +177,33 @@ class VideosViewController: UIViewController, NetworkDataDelegate {
         spinner.stopAnimating()
         collectionView.removeFromSuperview()
     }
-    
 
-    
-    
     
     //MARK:: Navigation
     
     func navigateBackHome(sender: UIButton) {
         navigationController?.popViewControllerAnimated(true)
+    }
+    
+    // UIAlert Controller 
+    
+    func addAlert(withThisMessage message: String, andThisTitle title: String){
+        
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+        
+        let OKAction = UIAlertAction(title: "OK", style: .Default) { (action) in
+            
+            self.navigationController?.popViewControllerAnimated(true)
+            
+        }
+        
+        alertController.addAction(OKAction)
+        
+        self.presentViewController(alertController, animated: true) {
+            
+        }
+
+        
     }
     
     
