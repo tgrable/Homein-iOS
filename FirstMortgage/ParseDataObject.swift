@@ -111,7 +111,7 @@ class ParseDataObject: NSObject {
             if (success) {
                 if (officerEmail.characters.count > 0) {
                     //TODO: COMMENT THIS OUT BEFORE WORKING - THIS WILL SPAM LOAN OFFICERS OTHERWISE 
-                    self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
+//                    self.emailLoanOfficer(user["name"] as! String, email: user["email"] as! String, loanOfficer: officerEmail)
                 }
                 self.delegate?.saveSucceeded!()
             }

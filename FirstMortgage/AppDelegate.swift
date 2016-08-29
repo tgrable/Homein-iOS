@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
             }
 
-//            Fabric.with([Answers.self, Crashlytics.self])
+            Fabric.with([Answers.self, Crashlytics.self])
             
   
 //            Fabric.sharedSDK().debug = true

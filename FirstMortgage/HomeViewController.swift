@@ -1956,8 +1956,8 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
         }
         
         if segue.identifier == "viewAvailableVideos" {
-            let destViewController: VideosViewController = segue.destinationViewController as! VideosViewController
-            destViewController.cameFromHomeScreen = true
+//            let destViewController: VideosViewController = segue.destinationViewController as! VideosViewController
+//            destViewController.cameFromHomeScreen = true
             
             
         }
