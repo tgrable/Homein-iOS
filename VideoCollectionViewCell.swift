@@ -1,9 +1,9 @@
 //
 //  VideoCollectionViewCell.swift
-//  FMCVideo
+//  FirstMortgage
 //
 //  Created by Justin Davis on 8/27/16.
-//  Copyright © 2016 Justin Davis. All rights reserved.
+//
 //
 
 import UIKit

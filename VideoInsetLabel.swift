@@ -1,9 +1,9 @@
 //
 //  VideoInsetLabel.swift
-//  Rockford Public Library
+//  FirstMortgage
 //
-//  Created by Justin Davis on 4/5/16.
-//  Copyright © 2016 Justin Davis. All rights reserved.
+//  Created by Justin Davis on 8/28/201
+//  
 //
 
 import Foundation
