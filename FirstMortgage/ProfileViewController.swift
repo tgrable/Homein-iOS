@@ -8,8 +8,6 @@
 
 import UIKit
 import Parse
-import Answers
-import Crashlytics
 
 class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDelegate {
     // MARK:
@@ -61,7 +59,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     
     var isTextFieldEnabled = Bool()
     var didComeFromAccountPage = Bool()
-
+    
     var activityIndicator = UIActivityIndicatorView()
     let loActivityIndicator = UIActivityIndicatorView()
     
@@ -74,7 +72,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
         parseObject.delegate = self
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -83,7 +81,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     
     override func viewWillAppear(animated: Bool) {
         self.view.backgroundColor = model.lightGrayColor
-
+        
         let attributes = [
             NSForegroundColorAttributeName: UIColor.darkTextColor(),
             NSFontAttributeName : UIFont(name: "forza-light", size: 22)!
@@ -216,7 +214,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
         buildProfileView()
     }
-
+    
     override func viewDidAppear(animated: Bool) {
         getUserAndLoInfo()
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -256,12 +254,12 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                 }
             }
             
-//            if (self.loanOfficerArray.count <= 0) {
-//                print("self.loanOfficerArray.count <= 0")
-//            }
-//            else {
-//                print("self.loanOfficerArray.count >= 0")
-//            }
+            //            if (self.loanOfficerArray.count <= 0) {
+            //                print("self.loanOfficerArray.count <= 0")
+            //            }
+            //            else {
+            //                print("self.loanOfficerArray.count >= 0")
+            //            }
         }
     }
     
@@ -269,7 +267,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         print("deinit being called in ProfileViewController")
     }
     
-    func buildProfileView() {     
+    func buildProfileView() {
         let userView = UIView(frame: CGRectMake(15, 10, profileView.bounds.size.width - 30, 90))
         userView.backgroundColor = UIColor.whiteColor()
         profileView.addSubview(userView)
@@ -301,7 +299,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         if let em = user!["email"] {
             email = em as! String
         }
-
+        
         // UITextField
         emailTxtField.frame = (frame: CGRectMake(15, 50, profileView.bounds.size.width - 30, 30))
         emailTxtField.text = email
@@ -312,7 +310,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         emailTxtField.font = UIFont(name: "forza-light", size: 22)
         emailTxtField.enabled = false
         userView.addSubview(emailTxtField)
-
+        
         buttonOffset = 325
         
         // UIView
@@ -397,49 +395,52 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         if reachability.isConnectedToNetwork() {
             buttonOffset += 60
         }
-
+        
         var userLo = ""
-        if let _ = user!["officerName"] {
-            userLo = user!["officerName"] as! String
-            
-            if userLo.characters.count > 0 {
-                // UIView
-                let deleteLoView = UIView(frame: CGRectMake(15, CGFloat(buttonOffset), profileView.bounds.size.width - 30, 50))
-                let deleteLoGradientLayer = CAGradientLayer()
-                deleteLoGradientLayer.frame = deleteLoView.bounds
-                deleteLoGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
-                deleteLoView.layer.insertSublayer(deleteLoGradientLayer, atIndex: 0)
-                deleteLoView.layer.addSublayer(deleteLoGradientLayer)
-                if reachability.isConnectedToNetwork() {
-                    profileView.addSubview(deleteLoView)
-                }
-                
-                let deleteLoArrow = UILabel(frame: CGRectMake(logOutView.bounds.size.width - 50, 0, 40, 50))
-                deleteLoArrow.textAlignment = NSTextAlignment.Right
-                deleteLoArrow.font = UIFont(name: "forza-light", size: 40)
-                deleteLoArrow.text = ">"
-                deleteLoArrow.textColor = UIColor.whiteColor()
-                deleteLoView.addSubview(deleteLoArrow)
-                
-                // UIButton
-                let deleteLoButton = UIButton(frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
-                deleteLoButton.addTarget(self, action: #selector(ProfileViewController.removeLoanOfficerFromParseUser), forControlEvents: .TouchUpInside)
-                deleteLoButton.setTitle("DELETE LOAN OFFICER", forState: .Normal)
-                deleteLoButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-                deleteLoButton.backgroundColor = UIColor.clearColor()
-                deleteLoButton.titleLabel!.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
-                deleteLoButton.contentHorizontalAlignment = .Left
-                deleteLoButton.tag = 1
-                deleteLoView.addSubview(deleteLoButton)
-                
-                let deleteLoBtnImg = UIImage(named: "right_shadow") as UIImage?
-                // UIImageView
-                let deleteLoBtnView = UIImageView(frame: CGRectMake(0, logOutView.bounds.size.height, logOutView.bounds.size.width, 15))
-                deleteLoBtnView.image = deleteLoBtnImg
-                deleteLoView.addSubview(deleteLoBtnView)
-                
-                if reachability.isConnectedToNetwork() {
-                    buttonOffset += 60
+        if let u = user!["officerName"] as AnyObject! {
+            if u as! NSObject != NSNull() {
+                if let _ = u as? String {
+                    userLo = user!["officerName"] as! String
+                    if userLo.characters.count > 0 {
+                        // UIView
+                        let deleteLoView = UIView(frame: CGRectMake(15, CGFloat(buttonOffset), profileView.bounds.size.width - 30, 50))
+                        let deleteLoGradientLayer = CAGradientLayer()
+                        deleteLoGradientLayer.frame = deleteLoView.bounds
+                        deleteLoGradientLayer.colors = [model.lightRedColor.CGColor, model.darkRedColor.CGColor]
+                        deleteLoView.layer.insertSublayer(deleteLoGradientLayer, atIndex: 0)
+                        deleteLoView.layer.addSublayer(deleteLoGradientLayer)
+                        if reachability.isConnectedToNetwork() {
+                            profileView.addSubview(deleteLoView)
+                        }
+                        
+                        let deleteLoArrow = UILabel(frame: CGRectMake(logOutView.bounds.size.width - 50, 0, 40, 50))
+                        deleteLoArrow.textAlignment = NSTextAlignment.Right
+                        deleteLoArrow.font = UIFont(name: "forza-light", size: 40)
+                        deleteLoArrow.text = ">"
+                        deleteLoArrow.textColor = UIColor.whiteColor()
+                        deleteLoView.addSubview(deleteLoArrow)
+                        
+                        // UIButton
+                        let deleteLoButton = UIButton(frame: CGRectMake(25, 0, profileView.bounds.size.width - 25, 50))
+                        deleteLoButton.addTarget(self, action: #selector(ProfileViewController.removeLoanOfficerFromParseUser), forControlEvents: .TouchUpInside)
+                        deleteLoButton.setTitle("DELETE LOAN OFFICER", forState: .Normal)
+                        deleteLoButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+                        deleteLoButton.backgroundColor = UIColor.clearColor()
+                        deleteLoButton.titleLabel!.font = UIFont(name: "forza-light", size: CGFloat(fontSize))
+                        deleteLoButton.contentHorizontalAlignment = .Left
+                        deleteLoButton.tag = 1
+                        deleteLoView.addSubview(deleteLoButton)
+                        
+                        let deleteLoBtnImg = UIImage(named: "right_shadow") as UIImage?
+                        // UIImageView
+                        let deleteLoBtnView = UIImageView(frame: CGRectMake(0, logOutView.bounds.size.height, logOutView.bounds.size.width, 15))
+                        deleteLoBtnView.image = deleteLoBtnImg
+                        deleteLoView.addSubview(deleteLoBtnView)
+                        
+                        if reachability.isConnectedToNetwork() {
+                            buttonOffset += 60
+                        }
+                    }
                 }
             }
         }
@@ -519,39 +520,44 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     func getLoInfoFromDictionary() {
         var userLo = ""
         if loanOfficerArray.count > 0 {
-            if let _ = user!["officerName"] {
-                userLo = user!["officerName"] as! String
-                
-                if userLo.characters.count > 0 {
-                    let filteredArray = loanOfficerArray.filter({
-                        $0["name"] == userLo
-                    })
-                    
-                    if filteredArray.count > 0 {
-                        var nodeDict = Dictionary<String, String>()
-                        nodeDict["nid"] = filteredArray[0]["nid"]
-                        nodeDict["email"] = filteredArray[0]["email"]
-                        nodeDict["mobile"] = filteredArray[0]["mobile"]
-                        nodeDict["office"] = filteredArray[0]["office"]
-                        nodeDict["url"] = filteredArray[0]["url"]
-                        nodeDict["name"] = filteredArray[0]["name"]
-                        nodeDict["image"] = filteredArray[0]["image"]
-                        nodeDict["nmls"] = filteredArray[0]["nmls"]
+            
+            if let u = user!["officerName"] as AnyObject! {
+                if u as! NSObject != NSNull() {
+                    if let _ = u as? String {
+                        userLo = user!["officerName"] as! String
                         
-                        let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
-                        
-                        let defaults = NSUserDefaults.standardUserDefaults()
-                        defaults.removeObjectForKey(dictString)
-                        defaults.setObject(nodeDict, forKey: dictString)
-                        
-                        buildLoanOfficerCard(nodeDict, yVal: 110, cardCount: 0, view: profileView, isSingleView: true)
+                        if userLo.characters.count > 0 {
+                            let filteredArray = loanOfficerArray.filter({
+                                $0["name"] == userLo
+                            })
+                            
+                            if filteredArray.count > 0 {
+                                var nodeDict = Dictionary<String, String>()
+                                nodeDict["nid"] = filteredArray[0]["nid"]
+                                nodeDict["email"] = filteredArray[0]["email"]
+                                nodeDict["mobile"] = filteredArray[0]["mobile"]
+                                nodeDict["office"] = filteredArray[0]["office"]
+                                nodeDict["url"] = filteredArray[0]["url"]
+                                nodeDict["name"] = filteredArray[0]["name"]
+                                nodeDict["image"] = filteredArray[0]["image"]
+                                nodeDict["nmls"] = filteredArray[0]["nmls"]
+                                
+                                let dictString = String(format: "loanOfficerDictfor%@", (user?.objectId)!)
+                                
+                                let defaults = NSUserDefaults.standardUserDefaults()
+                                defaults.removeObjectForKey(dictString)
+                                defaults.setObject(nodeDict, forKey: dictString)
+                                
+                                buildLoanOfficerCard(nodeDict, yVal: 110, cardCount: 0, view: profileView, isSingleView: true)
+                            }
+                            else {
+                                buildNoLoCard()
+                            }
+                        }
+                        else {
+                            buildNoLoCard()
+                        }
                     }
-                    else {
-                        buildNoLoCard()
-                    }
-                }
-                else {
-                    buildNoLoCard()
                 }
             }
             else {
@@ -638,9 +644,9 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             noLOTextLabel.sizeToFit()
             self.scrollView.addSubview(noLOTextLabel)
         }
-
+        
     }
-
+    
     func getBranchLoanOfficers() {
         let endpoint = NSURL(string: "https://www.firstmortgageco.com/loan-officers-json")
         let data = NSData(contentsOfURL: endpoint!)
@@ -834,7 +840,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             singleLoView.addSubview(shadowView)
         }
         else {
-
+            
             // UIView
             let loView = UIView(frame: CGRectMake(15, yVal, scrollView.bounds.size.width - 30, 150))
             loView.backgroundColor = UIColor.whiteColor()
@@ -888,7 +894,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             officeLabel.font = UIFont(name: "forza-light", size: 18)
             officeLabel.textColor = model.darkBlueColor
             loView.addSubview(officeLabel)
-
+            
             let mobile = UILabel (frame: CGRectMake(15, 95, 65, 24))
             mobile.textAlignment = NSTextAlignment.Left
             mobile.text = String(format: "Mobile: ")
@@ -934,7 +940,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             selectButton.tag = count
             loView.addSubview(selectButton)
         }
-
+        
         return loView
     }
     
@@ -987,12 +993,12 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             if let _ = dict["nid"] {
                 nid = dict["nid"]! as String
             }
-
+            
             var name = ""
             if let _ = dict["name"] {
                 name = dict["name"]! as String
             }
-
+            
             var officerURL = ""
             if let _ = dict["url"] {
                 officerURL = dict["url"]! as String
@@ -1027,7 +1033,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
             }
             
             defaults.synchronize()
-
+            
             nameTxtField.enabled = false
             emailTxtField.enabled = false
             loButton.enabled = false
@@ -1040,7 +1046,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         }
     }
     
-    // MARK: 
+    // MARK:
     // MARK: Update User Information
     func saveLoanOfficerToParse(nid: String, name: String, url: String) {
         loadingOverlay.hidden = false
@@ -1096,7 +1102,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         
     }
     
-    // MARK: 
+    // MARK:
     // MARK: Acctions
     func dismissOverlayView(sender: UIButton) {
         removeViews(scrollView)
@@ -1124,7 +1130,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         else {
             textField.resignFirstResponder()
         }
-
+        
         return true
     }
     
@@ -1138,7 +1144,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         textField.becomeFirstResponder()
         searchLoanOfficerArray(textField.text!)
     }
-
+    
     func allowEdit(sender: UIButton) {
         calculateView.alpha = 1
         calculateArrow.alpha = 1
@@ -1224,12 +1230,12 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
                     
                 }
             }
-
+            
         default:
             break
         }
     }
-
+    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
@@ -1274,8 +1280,8 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
     // MARK: ParseDataObject Delegate Methods
     func saveSucceeded() {
         /*************************** Fabric Analytics *********************************************/
-                Answers.logCustomEventWithName("User_Profile_Updated", customAttributes: ["Category":"User_Action"])
-                print("User_Profile_Updated")
+        //                Answers.logCustomEventWithName("User_Profile_Updated", customAttributes: ["Category":"User_Action"])
+        print("User_Profile_Updated")
         /************************* End Fabric Analytics *******************************************/
         
         removeViews(self.profileView)
@@ -1307,7 +1313,7 @@ class ProfileViewController: UIViewController, ParseDataDelegate, UITextFieldDel
         isTextFieldEnabled = false
         editIcon.image = UIImage(named: "edit_icon")
         editModeLabel.textColor = UIColor.whiteColor()
-
+        
         var loNid = 0
         if let _ = user!["officerNid"] {
             loNid = user!["officerNid"] as! Int

@@ -2181,10 +2181,13 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
             
             if reachability.isConnectedToNetwork() {
                 var url = ""
-                if var _ = user!["officerURL"] {
-                    let officerURL = user!["officerURL"] as! String
-                    let trimmedOfficerURL = officerURL.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-                    url = trimmedOfficerURL
+                if let u = user!["officerURL"] as AnyObject! {
+                    if u as! NSObject != NSNull() {
+                        if let _ = u as? String {
+                            let trimmedOfficerURL = u.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+                            url = trimmedOfficerURL
+                        }
+                    }
                 }
                 if (url.characters.count > 0) {
                     preQualifiedOverlay.hidden = true

@@ -674,6 +674,7 @@
 					4FAF3CCD1BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
 						DevelopmentTeam = T93U3CE238;
+						LastSwiftMigration = 0810;
 						SystemCapabilities = {
 							com.apple.InAppPurchase = {
 								enabled = 0;
@@ -685,10 +686,12 @@
 					};
 					4FAF3CE11BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0810;
 						TestTargetID = 4FAF3CCD1BE106EB00A89A9A;
 					};
 					4FAF3CEC1BE106EB00A89A9A = {
 						CreatedOnToolsVersion = 7.1;
+						LastSwiftMigration = 0810;
 						TestTargetID = 4FAF3CCD1BE106EB00A89A9A;
 					};
 				};
@@ -1035,6 +1038,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = T93U3CE238;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1049,6 +1053,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "FirstMortgage-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -1059,6 +1064,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = T93U3CE238;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1072,6 +1078,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "FirstMortgage-Bridging-Header.h";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -1083,6 +1090,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FirstMortgage.app/FirstMortgage";
 			};
 			name = Debug;
@@ -1095,6 +1103,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FirstMortgage.app/FirstMortgage";
 			};
 			name = Release;
@@ -1106,6 +1115,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgageUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = FirstMortgage;
 				USES_XCTRUNNER = YES;
 			};
@@ -1118,6 +1128,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trekk.FirstMortgageUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = FirstMortgage;
 				USES_XCTRUNNER = YES;
 			};

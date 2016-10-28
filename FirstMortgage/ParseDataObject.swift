@@ -37,8 +37,15 @@ class ParseDataObject: NSObject {
                 self.delegate?.loginSucceeded!()
             }
             else {
-                let errorString = error!.userInfo["error"] as? String
-                self.delegate?.loginFailed!(errorString!)
+                var errorString = ""
+                if let err = error!.userInfo["error"] as AnyObject! {
+                    if err as! NSObject != NSNull() {
+                        if let _ = err as? String {
+                            errorString = err as! String
+                        }
+                    }
+                }
+                self.delegate?.loginFailed!(errorString)
             }
         }
     }
@@ -50,8 +57,15 @@ class ParseDataObject: NSObject {
                 self.delegate?.signupSucceeded!()
             }
             else {
-                let errorString = error!.userInfo["error"] as? String
-                self.delegate?.signupFailed!(errorString!)
+                var errorString = ""
+                if let err = error!.userInfo["error"] as AnyObject! {
+                    if err as! NSObject != NSNull() {
+                        if let _ = err as? String {
+                            errorString = err as! String
+                        }
+                    }
+                }
+                self.delegate?.signupFailed!(errorString)
             }
         }
     }
@@ -80,8 +94,15 @@ class ParseDataObject: NSObject {
                 }
                 
             } else {
-                let errorString = error!.userInfo["error"] as? String
-                self.delegate?.queryFailed!(errorString!)
+                var errorString = ""
+                if let err = error!.userInfo["error"] as AnyObject! {
+                    if err as! NSObject != NSNull() {
+                        if let _ = err as? String {
+                            errorString = err as! String
+                        }
+                    }
+                }
+                self.delegate?.queryFailed!(errorString)
             }
         }
     }
@@ -95,8 +116,15 @@ class ParseDataObject: NSObject {
                 self.delegate?.saveSucceeded!()
             }
             else {
-                let errorString = error!.userInfo["error"] as? String
-                self.delegate?.saveFailed!(errorString!)
+                var errorString = ""
+                if let err = error!.userInfo["error"] as AnyObject! {
+                    if err as! NSObject != NSNull() {
+                        if let _ = err as? String {
+                            errorString = err as! String
+                        }
+                    }
+                }
+                self.delegate?.saveFailed!(errorString)
             }
         }
     }
@@ -116,8 +144,15 @@ class ParseDataObject: NSObject {
                 self.delegate?.saveSucceeded!()
             }
             else {
-                let errorString = error!.userInfo["error"] as? String
-                self.delegate?.saveFailed!(errorString!)
+                var errorString = ""
+                if let err = error!.userInfo["error"] as AnyObject! {
+                    if err as! NSObject != NSNull() {
+                        if let _ = err as? String {
+                            errorString = err as! String                        }
+                    }
+                }
+
+                self.delegate?.saveFailed!(errorString)
             }
         }
     }
@@ -159,6 +194,6 @@ class ParseDataObject: NSObject {
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        return scaledImage
+        return scaledImage!
     }
 }
