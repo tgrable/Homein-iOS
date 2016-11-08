@@ -667,19 +667,12 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
                 termsAndConditionsContentView.font = UIFont(name: "forza-light", size: 12)
                 termsAndConditionsButton.titleLabel?.font = UIFont(name: "forza-light", size: 12)
             }
-            
-            
         }
-
-        
-        
-        
-        
     }
     
     func buildCreateAccountView() {
         let defaults = NSUserDefaults.standardUserDefaults()
-        
+
         //Check if loanOfficerArrayDateSet is set in NSUserDefaults
         if (defaults.objectForKey("loanOfficerArrayDateSet") != nil) {
             let now = NSDate()
@@ -698,18 +691,19 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
                     if (defaults.objectForKey("loanOfficerArray") != nil) {
                         if let _ = defaults.objectForKey("loanOfficerArray") {
                             // now val is not nil and the Optional has been unwrapped, so use it
-                            let val = defaults.objectForKey("loanOfficerArray")
-                            let firstLo = val!.values!!.first as! Dictionary<String, String> // TODO: This doesnt seem right
-                            
-                            //Check that the nmls field has been set
-                            //this was added later so there is a chance som users will not have this field set.
-                            if let _ = firstLo["nmls"] {
-                                self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
-                                self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
-                            }
-                            else {
-                                if reachability.isConnectedToNetwork() {
-                                    getBranchJSON()
+                            let val = defaults.objectForKey("loanOfficerArray") as! Array<Dictionary<String, String>>
+                            if val.count > 0 {
+                                let firstLo = val.first! as Dictionary<String, String> // TODO: This doesnt seem right
+                                //Check that the nmls field has been set
+                                //this was added later so there is a chance some users will not have this field set.
+                                if let _ = firstLo["nmls"] {
+                                    self.loanOfficerArray = defaults.objectForKey("loanOfficerArray") as! Array
+                                    self.tempArray = defaults.objectForKey("loanOfficerArray") as! Array
+                                }
+                                else {
+                                    if reachability.isConnectedToNetwork() {
+                                        getBranchJSON()
+                                    }
                                 }
                             }
                         }
