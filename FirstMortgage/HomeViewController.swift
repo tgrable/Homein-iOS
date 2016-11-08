@@ -693,7 +693,7 @@ class HomeViewController: UIViewController, ParseDataDelegate, UITextFieldDelega
                             // now val is not nil and the Optional has been unwrapped, so use it
                             let val = defaults.objectForKey("loanOfficerArray") as! Array<Dictionary<String, String>>
                             if val.count > 0 {
-                                let firstLo = val.first! as Dictionary<String, String> // TODO: This doesnt seem right
+                                let firstLo = val.first! as Dictionary<String, String>
                                 //Check that the nmls field has been set
                                 //this was added later so there is a chance some users will not have this field set.
                                 if let _ = firstLo["nmls"] {
