@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" initialViewController="01J-lp-oVM">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -14,63 +17,43 @@
                         <viewControllerLayoutGuide type="bottom" id="xb3-aO-Qok"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="startupBG.png" translatesAutoresizingMaskIntoConstraints="NO" id="bfq-yq-46E">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="start.png" translatesAutoresizingMaskIntoConstraints="NO" id="bfq-yq-46E">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="screenOverlay.png" translatesAutoresizingMaskIntoConstraints="NO" id="KjF-ol-7Kx">
-                                <rect key="frame" x="108" y="44" width="384" height="512"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="startupOverlay" translatesAutoresizingMaskIntoConstraints="NO" id="KjF-ol-7Kx">
+                                <rect key="frame" x="-5" y="44" width="384" height="512"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1.3.4" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rip-rv-yRs">
-                                <rect key="frame" x="0.0" y="571" width="600" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1.4.6" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rip-rv-yRs">
+                                <rect key="frame" x="0.0" y="638" width="375" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="bfq-yq-46E" secondAttribute="trailing" constant="-20" id="5LP-Rz-bt7"/>
-                            <constraint firstItem="Rip-rv-yRs" firstAttribute="leading" secondItem="bfq-yq-46E" secondAttribute="leading" id="HMb-0l-BVV"/>
-                            <constraint firstItem="Rip-rv-yRs" firstAttribute="trailing" secondItem="bfq-yq-46E" secondAttribute="trailing" id="QPz-ag-IY6"/>
-                            <constraint firstItem="Rip-rv-yRs" firstAttribute="trailing" secondItem="bfq-yq-46E" secondAttribute="trailing" id="cjZ-nu-p2a"/>
-                            <constraint firstItem="Rip-rv-yRs" firstAttribute="leading" secondItem="bfq-yq-46E" secondAttribute="leading" id="fHo-pf-LvH"/>
-                            <constraint firstItem="bfq-yq-46E" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="-20" id="iiX-t5-Mzg"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Rip-rv-yRs" secondAttribute="bottom" constant="8" symbolic="YES" id="jyr-7V-A36"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="bfq-yq-46E" secondAttribute="bottom" id="m66-vW-dKE"/>
-                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Rip-rv-yRs" secondAttribute="bottom" constant="8" symbolic="YES" id="neE-2H-RCZ"/>
-                            <constraint firstItem="KjF-ol-7Kx" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="nlr-Ls-wrZ"/>
-                            <constraint firstItem="bfq-yq-46E" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-20" id="rwX-bG-T06"/>
-                            <constraint firstItem="KjF-ol-7Kx" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="w9V-zp-gBP"/>
+                            <constraint firstAttribute="trailing" secondItem="Rip-rv-yRs" secondAttribute="trailing" id="DJA-YD-tME"/>
+                            <constraint firstItem="KjF-ol-7Kx" firstAttribute="centerX" secondItem="bfq-yq-46E" secondAttribute="centerX" id="Hmj-kw-f2F"/>
+                            <constraint firstItem="bfq-yq-46E" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="Lqz-8g-gZ7"/>
+                            <constraint firstItem="KjF-ol-7Kx" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="24" id="M43-Xj-aiz"/>
+                            <constraint firstItem="bfq-yq-46E" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="SN2-jr-4Uc"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="Rip-rv-yRs" secondAttribute="bottom" constant="8" id="Szs-OT-BYR"/>
+                            <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="bfq-yq-46E" secondAttribute="bottom" id="h00-Bz-apL"/>
+                            <constraint firstAttribute="trailing" secondItem="bfq-yq-46E" secondAttribute="trailing" id="hOy-XI-CmF"/>
+                            <constraint firstItem="Rip-rv-yRs" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="xfd-aL-qlM"/>
                         </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="HMb-0l-BVV"/>
-                                <exclude reference="cjZ-nu-p2a"/>
-                                <exclude reference="neE-2H-RCZ"/>
-                            </mask>
-                        </variation>
-                        <variation key="heightClass=regular-widthClass=compact">
-                            <mask key="constraints">
-                                <include reference="HMb-0l-BVV"/>
-                                <exclude reference="QPz-ag-IY6"/>
-                                <include reference="cjZ-nu-p2a"/>
-                                <exclude reference="fHo-pf-LvH"/>
-                                <exclude reference="jyr-7V-A36"/>
-                                <include reference="neE-2H-RCZ"/>
-                            </mask>
-                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52" y="374.66266866566718"/>
         </scene>
     </scenes>
     <resources>
-        <image name="screenOverlay.png" width="384" height="512"/>
-        <image name="startupBG.png" width="384" height="512"/>
+        <image name="start.png" width="384" height="512"/>
+        <image name="startupOverlay" width="384" height="512"/>
     </resources>
 </document>
