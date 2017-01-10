@@ -874,30 +874,61 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         deleteButton.tag = 0
         deleteView.addSubview(deleteButton)
         
-        let user = PFUser.currentUser()
-        if let email: String = user!["officerEmail"]! as? String {
-            print(email)
-            
-             let emailView = UIView(frame: CGRectMake(25, 70, calcTray.bounds.size.width - 50, 50))
-            let emailGradLayer = CAGradientLayer()
-            emailGradLayer.frame = emailView.bounds
-            emailGradLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
-            emailView.layer.insertSublayer(emailGradLayer, atIndex: 0)
-            emailView.layer.addSublayer(emailGradLayer)
-            saveDeleteTray.addSubview(emailView)
-            
-            let sendToBrokerButton = UIButton (frame: CGRectMake(0, 0, emailView.bounds.size.width, emailView.bounds.size.height))
-            sendToBrokerButton.addTarget(self, action: #selector(IndividualHomeViewController.sendEmailToBroker), forControlEvents: .TouchUpInside)
-            sendToBrokerButton.setTitle("EMAIL TO LOAN OFFICER", forState: .Normal)
-            sendToBrokerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-            sendToBrokerButton.backgroundColor = UIColor.clearColor()
-            sendToBrokerButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-            sendToBrokerButton.contentHorizontalAlignment = .Center
-            sendToBrokerButton.tag = 0
-            emailView.addSubview(sendToBrokerButton)
-            
-          
-        }
+//        let user = PFUser.currentUser()
+//        
+//        if user!["officerEmail"] != nil && MFMailComposeViewController.canSendMail() {
+//            let emailView = UIView(frame: CGRectMake(25, 70, calcTray.bounds.size.width - 50, 50))
+//            let emailGradLayer = CAGradientLayer()
+//            emailGradLayer.frame = emailView.bounds
+//            emailGradLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
+//            emailView.layer.insertSublayer(emailGradLayer, atIndex: 0)
+//            emailView.layer.addSublayer(emailGradLayer)
+//            saveDeleteTray.addSubview(emailView)
+//            
+//            let sendToBrokerButton = UIButton (frame: CGRectMake(0, 0, emailView.bounds.size.width, emailView.bounds.size.height))
+//            
+//            
+//            sendToBrokerButton.addTarget(self, action: #selector(IndividualHomeViewController.sendEmailToBroker), forControlEvents: .TouchUpInside)
+//            
+//            
+//            sendToBrokerButton.setTitle("EMAIL TO LOAN OFFICER", forState: .Normal)
+//            sendToBrokerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+//            sendToBrokerButton.backgroundColor = UIColor.clearColor()
+//            sendToBrokerButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+//            sendToBrokerButton.contentHorizontalAlignment = .Center
+//            sendToBrokerButton.tag = 0
+//            emailView.addSubview(sendToBrokerButton)
+//
+//        }
+        
+        let emailView = UIView(frame: CGRectMake(25, 70, calcTray.bounds.size.width - 50, 50))
+        let emailGradLayer = CAGradientLayer()
+        emailGradLayer.frame = emailView.bounds
+        emailGradLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
+        emailView.layer.insertSublayer(emailGradLayer, atIndex: 0)
+        emailView.layer.addSublayer(emailGradLayer)
+        saveDeleteTray.addSubview(emailView)
+        
+        let sendToBrokerButton = UIButton (frame: CGRectMake(0, 0, emailView.bounds.size.width, emailView.bounds.size.height))
+        
+        
+        sendToBrokerButton.addTarget(self, action: #selector(IndividualHomeViewController.sendEmailToBroker), forControlEvents: .TouchUpInside)
+        
+        
+        sendToBrokerButton.setTitle("EMAIL TO LOAN OFFICER", forState: .Normal)
+        sendToBrokerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        sendToBrokerButton.backgroundColor = UIColor.clearColor()
+        sendToBrokerButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
+        sendToBrokerButton.contentHorizontalAlignment = .Center
+        sendToBrokerButton.tag = 0
+        emailView.addSubview(sendToBrokerButton)
+        
+//        if let email: String = user!["officerEmail"]! as? String {
+//            print(email)
+//            
+//            
+//          
+//        }
         
         let deleteButtonShadowImg = UIImage(named: "right_shadow") as UIImage?
         // UIImageView
@@ -1854,50 +1885,68 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     }
     
     func sendEmailToBroker(){
+        
+       
        
         let user = PFUser.currentUser()
-        guard let email: String = user!["officerEmail"]! as? String else{
-            return
+//        guard let email: String = user!["officerEmail"]! as? String else{
+//            return
+//        }
+        
+        var currentEmail = ""
+        if let officer = user!["officerEmail"]! as? String {
+            currentEmail = officer
         }
         
-        let mailVC = MFMailComposeViewController()
-        mailVC.mailComposeDelegate = self
-        mailVC.setToRecipients([email])
-        
-        var price = "No Value Provided."
-        
-        if let _ = self.homePriceTxtField.text {
-            price = self.homePriceTxtField.text! as String
-        }
-        
-        var homeName = "No Name Provided."
-        if let _ = homeObject["name"] {
-            homeName = homeObject["name"] as! String
-        }
-        
-        var homeAddress = "No Address Provided"
-        if let _ = homeObject["address"] {
-            homeAddress = homeObject["address"] as! String
-        }
-        
-        var homeDesc = "No Address Provided"
-        if let _ = self.homeObject["desc"] {
-            homeDesc = self.homeObject["desc"] as! String
-        }
-        
-        let currentUser = PFUser.currentUser()
-         
-        mailVC.setSubject("HOMEIN App Saved Home")
-        
-        mailVC.setMessageBody(
-            "Home Name: \(homeName) \n" +
-            "Address: \(homeAddress) \n" +
-            "Price: \(price) \n" +
-            "Comments: \(homeDesc) \n" +
-            "---------------------- \n" +
-            "From HOMEIN User: \(currentUser!.username!)", isHTML: false)
-        
-        presentViewController(mailVC, animated: true, completion: nil)
-        
+        if user!["officerEmail"] != nil && MFMailComposeViewController.canSendMail() {
+            let mailVC = MFMailComposeViewController()
+            mailVC.mailComposeDelegate = self
+            mailVC.setToRecipients([currentEmail])
+            
+            var price = "No Value Provided."
+            
+            if let _ = self.homePriceTxtField.text {
+                price = self.homePriceTxtField.text! as String
+            }
+            
+            var homeName = "No Name Provided."
+            if let _ = homeObject["name"] {
+                homeName = homeObject["name"] as! String
+            }
+            
+            var homeAddress = "No Address Provided"
+            if let _ = homeObject["address"] {
+                homeAddress = homeObject["address"] as! String
+            }
+            
+            var homeDesc = "No Address Provided"
+            if let _ = self.homeObject["desc"] {
+                homeDesc = self.homeObject["desc"] as! String
+            }
+            
+            let currentUser = PFUser.currentUser()
+            
+            mailVC.setSubject("HOMEIN App Saved Home")
+            
+            mailVC.setMessageBody(
+                "Home Name: \(homeName) \n" +
+                    "Address: \(homeAddress) \n" +
+                    "Price: \(price) \n" +
+                    "Comments: \(homeDesc) \n" +
+                    "---------------------- \n" +
+                    "From HOMEIN User: \(currentUser!.username!)", isHTML: false)
+            
+            if MFMailComposeViewController.canSendMail() {
+                presentViewController(mailVC, animated: true, completion: nil)
+            }
+            
+            
+            }else if user!["officerEmail"] != nil && !MFMailComposeViewController.canSendMail() {
+                displayMessage("Unable to send email", message: "Please add an email account to Settings -> Mail if you wish to continue")
+            }else if user!["officerEmail"] == nil && MFMailComposeViewController.canSendMail(){
+                displayMessage("Unable to send email", message: "Please associate with a loan officer if you wish to share infomration about this home.")
+            }else if user!["officerEmail"] == nil && !MFMailComposeViewController.canSendMail() {
+                displayMessage("Unable to send email", message: "You can share this home if you asscociate with a loan officer in your user profile and add an email account to Settings -> Mail.")
+            }
     }
 }
