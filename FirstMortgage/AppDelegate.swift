@@ -57,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 })
             }
             // Fabric - Keep enabled at all times.
-//            Fabric.with([Answers.self, Crashlytics.self])
+            Fabric.with([Answers.self, Crashlytics.self])
             
   
 //            Fabric.sharedSDK().debug = true
