@@ -32,6 +32,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     let homeNameBorderView = UIView()
     let calcBannerView = UIView()
     let calcBannerGradientLayer = CAGradientLayer()
+    var emailView = UIView()
     
     // UIScrollView
     let scrollView = UIScrollView()
@@ -92,6 +93,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     
     let saveView = UIView()
     let saveButton = UIButton ()
+    var sendToBrokerButton = UIButton()
     let editButton = UIButton ()
     let editIcon = UIImageView()
     let saveImageDefaultButton = UIButton()
@@ -874,34 +876,8 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         deleteButton.tag = 0
         deleteView.addSubview(deleteButton)
         
-//        let user = PFUser.currentUser()
-//        
-//        if user!["officerEmail"] != nil && MFMailComposeViewController.canSendMail() {
-//            let emailView = UIView(frame: CGRectMake(25, 70, calcTray.bounds.size.width - 50, 50))
-//            let emailGradLayer = CAGradientLayer()
-//            emailGradLayer.frame = emailView.bounds
-//            emailGradLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
-//            emailView.layer.insertSublayer(emailGradLayer, atIndex: 0)
-//            emailView.layer.addSublayer(emailGradLayer)
-//            saveDeleteTray.addSubview(emailView)
-//            
-//            let sendToBrokerButton = UIButton (frame: CGRectMake(0, 0, emailView.bounds.size.width, emailView.bounds.size.height))
-//            
-//            
-//            sendToBrokerButton.addTarget(self, action: #selector(IndividualHomeViewController.sendEmailToBroker), forControlEvents: .TouchUpInside)
-//            
-//            
-//            sendToBrokerButton.setTitle("EMAIL TO LOAN OFFICER", forState: .Normal)
-//            sendToBrokerButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
-//            sendToBrokerButton.backgroundColor = UIColor.clearColor()
-//            sendToBrokerButton.titleLabel!.font = UIFont(name: "forza-light", size: 25)
-//            sendToBrokerButton.contentHorizontalAlignment = .Center
-//            sendToBrokerButton.tag = 0
-//            emailView.addSubview(sendToBrokerButton)
-//
-//        }
         
-        let emailView = UIView(frame: CGRectMake(25, 70, calcTray.bounds.size.width - 50, 50))
+        emailView = UIView(frame: CGRectMake(25, 70, calcTray.bounds.size.width - 50, 50))
         let emailGradLayer = CAGradientLayer()
         emailGradLayer.frame = emailView.bounds
         emailGradLayer.colors = [model.lightGreenColor.CGColor, model.darkGreenColor.CGColor]
@@ -909,9 +885,7 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         emailView.layer.addSublayer(emailGradLayer)
         saveDeleteTray.addSubview(emailView)
         
-        let sendToBrokerButton = UIButton (frame: CGRectMake(0, 0, emailView.bounds.size.width, emailView.bounds.size.height))
-        
-        
+        sendToBrokerButton = UIButton (frame: CGRectMake(0, 0, emailView.bounds.size.width, emailView.bounds.size.height))
         sendToBrokerButton.addTarget(self, action: #selector(IndividualHomeViewController.sendEmailToBroker), forControlEvents: .TouchUpInside)
         
         
@@ -1434,8 +1408,13 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     func allowEdit(sender: UIButton) {
         didEnterEditMode = true
         saveView.hidden = false
+        
         saveButton.hidden = false
         saveButton.enabled = true
+        
+        sendToBrokerButton.hidden = true
+        sendToBrokerButton.enabled = false
+        emailView.hidden = true
         
         homeNameLabel.text = homeNameTxtField.text
         homeAddressLabel.text = homeAddressTxtField.text
@@ -1674,7 +1653,9 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         if self.bathsTxtField.text == "" || model.isNumeric(self.bathsTxtField.text!) {
             loadingOverlay.hidden = false
             activityIndicator.startAnimating()
-            
+            sendToBrokerButton.hidden = false
+            sendToBrokerButton.enabled = true
+            emailView.hidden = false
             self.homeObject["name"] = (self.homeNameTxtField.text != "") ? self.homeNameTxtField.text : self.homeObject["name"]
             var price = "0"
             if let _ = self.homePriceTxtField.text {
@@ -1814,17 +1795,27 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
     // MARK: ParseDataObject Delegate Methods
     func saveSucceeded() {
          dispatch_async(dispatch_get_main_queue()) { () -> Void in
-            self.myHomesView.removeFromSuperview()
-            self.homeTray.removeFromSuperview()
-            self.calcTray.removeFromSuperview()
-            self.saveDeleteTray.removeFromSuperview()
-            self.buildView()
+//            self.myHomesView.removeFromSuperview()
+//            self.homeTray.removeFromSuperview()
+//            self.calcTray.removeFromSuperview()
+//            self.saveDeleteTray.removeFromSuperview()
+//            self.buildView()
+            
+            self.sendToBrokerButton.hidden = false
+            self.sendToBrokerButton.enabled = true
+            self.emailView.hidden = false
+            
+            self.saveView.hidden = true
+            self.saveButton.enabled = false
+            self.saveButton.hidden = true
             
             self.activityIndicator.stopAnimating()
             self.loadingOverlay.hidden = true
             
             self.displayMessage("HomeIn", message: "Your home was saved.")
             self.didEnterEditMode = false
+            
+            self.userDidExitEditMode()
         }
     }
     
@@ -1856,6 +1847,10 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         saveButton.hidden = false
         saveButton.enabled = true
         
+        emailView.hidden = true
+        sendToBrokerButton.hidden = true
+        sendToBrokerButton.enabled = false
+        
         homeNameTxtField.enabled = true
         homePriceTxtField.enabled = true
         homeAddressTxtField.enabled = true
@@ -1876,6 +1871,38 @@ class IndividualHomeViewController: UIViewController, ParseDataDelegate, UIImage
         editIcon.image = UIImage(named: "edit_red")
         
         editModeLabel.textColor = model.lightRedColor
+    }
+    
+    func userDidExitEditMode() {
+        didEnterEditMode = false
+        saveView.hidden = true
+        saveButton.hidden = true
+        saveButton.enabled = false
+        
+        emailView.hidden = false
+        sendToBrokerButton.hidden = false
+        sendToBrokerButton.enabled = true
+        
+        homeNameTxtField.enabled = false
+        homePriceTxtField.enabled = false
+        homeAddressTxtField.enabled = false
+        bedsTxtField.enabled = false
+        bathsTxtField.enabled = false
+        sqFeetTxtField.enabled = false
+        descTxtView.editable = false
+        
+        homeNameTxtField.hidden = true
+        homeNameBorderView.hidden = false
+        homeNameLabel.hidden = false
+        
+        homeAddressTxtField.hidden = true
+        homeAddressBorderView.hidden = false
+        homeAddressLabel.hidden = true
+        
+        isTextFieldEnabled = false
+        editIcon.image = UIImage(named: "edit_icon")
+        
+        editModeLabel.textColor = UIColor.clearColor()
     }
     
     // MARK: - Email Delegate
